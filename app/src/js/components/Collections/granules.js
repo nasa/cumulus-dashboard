@@ -140,7 +140,7 @@ const CollectionGranules = ({
       <section className="page__section">
         <div className="heading__wrapper--border">
           <h2 className="heading--medium heading--shared-content with-description">
-            {displayCase(granuleStatus || 'all')} Granules
+            {displayCase(granuleStatus || 'all')} Granules{' '}
             <span className="num-title">
               {`${(meta.count && meta.count) || 0}`}
             </span>
