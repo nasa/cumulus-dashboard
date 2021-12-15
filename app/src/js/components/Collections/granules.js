@@ -165,6 +165,7 @@ const CollectionGranules = ({
           <h2 className="heading--medium heading--shared-content with-description">
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             {displayCase(granuleStatus || 'all')} Granules{' '}
 =======
             {`${displayCase(granuleStatus)} ${displayName} `}
@@ -172,6 +173,9 @@ const CollectionGranules = ({
 =======
             {displayCase(granuleStatus || 'all')} Granules
 >>>>>>> Formatting updates
+=======
+            {displayCase(granuleStatus || 'all')} Granules{' '}
+>>>>>>> Fix integration tests
             <span className="num-title">
               {`${(meta.count && meta.count) || 0}`}
             </span>

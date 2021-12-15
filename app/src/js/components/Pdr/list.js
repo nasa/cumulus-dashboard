@@ -51,10 +51,10 @@ const ActivePdrs = ({ match, pdrs, queryParams }) => {
 const ActivePdrs = ({ dispatch, match, pdrs, queryParams }) => {
   const { list } = pdrs;
   const { count, queriedAt } = list.meta;
-  let { params: { status } } = match;
-  status = status === 'active' ? 'running' : status;
+  const { params: { status: paramStatus } } = match;
+  const status = paramStatus === 'active' ? 'running' : paramStatus;
   const query = generateQuery();
-  const displayCaseView = displayCase(status);
+  const displayCaseView = displayCase(paramStatus);
   const breadcrumbConfig = [
     {
       label: 'Dashboard Home',
