@@ -52,12 +52,15 @@ const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
                 )}
               />
               <Route
+<<<<<<< HEAD
                 path="/pdrs/pdr/:pdrName"
                 render={(props) => (
                   <Pdr queryParams={filteredQueryParams} {...props} />
                 )}
               />
               <Route
+=======
+>>>>>>> Updating routing that calculates views
                 path="/pdrs/:status"
                 render={(props) => (
                   <PdrList queryParams={filteredQueryParams} {...props} />

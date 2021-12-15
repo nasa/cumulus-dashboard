@@ -21,6 +21,7 @@ import List from '../Table/Table';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 
+<<<<<<< HEAD
 const generateBreadcrumbConfig = (view) => [
   {
     label: 'Dashboard Home',
@@ -46,6 +47,29 @@ const ActivePdrs = ({ match, pdrs, queryParams }) => {
   const query = generateQuery();
   const displayCaseView = displayCase(paramStatus);
   const breadcrumbConfig = generateBreadcrumbConfig(displayCaseView);
+=======
+const ActivePdrs = ({ dispatch, match, pdrs, queryParams }) => {
+  const { list } = pdrs;
+  const { count, queriedAt } = list.meta;
+  let { params: { status } } = match;
+  status = status === 'active' ? 'running' : status;
+  const query = generateQuery();
+  const displayCaseView = displayCase(status);
+  const breadcrumbConfig = [
+    {
+      label: 'Dashboard Home',
+      href: '/',
+    },
+    {
+      label: 'PDRs',
+      href: '/pdrs',
+    },
+    {
+      label: displayCaseView,
+      active: true,
+    },
+  ];
+>>>>>>> Updating routing that calculates views
 
   function generateQuery() {
     const currentQuery = { ...queryParams };
@@ -98,6 +122,10 @@ const ActivePdrs = ({ match, pdrs, queryParams }) => {
 };
 
 ActivePdrs.propTypes = {
+<<<<<<< HEAD
+=======
+  dispatch: PropTypes.func,
+>>>>>>> Updating routing that calculates views
   match: PropTypes.object,
   pdrs: PropTypes.object,
   queryParams: PropTypes.object,

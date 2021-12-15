@@ -34,7 +34,11 @@ import { workflowOptionNames } from '../../selectors';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ListFilters from '../ListActions/ListFilters';
 
+<<<<<<< HEAD
 const generateBreadcrumbConfig = (view) => [
+=======
+const initialBreadcrumbConfig = [
+>>>>>>> Updating routing that calculates views
   {
     label: 'Dashboard Home',
     href: '/',
@@ -43,10 +47,13 @@ const generateBreadcrumbConfig = (view) => [
     label: 'Granules',
     href: '/granules',
   },
+<<<<<<< HEAD
   {
     label: view,
     active: true,
   },
+=======
+>>>>>>> Updating routing that calculates views
 ];
 
 const AllGranules = ({
@@ -75,7 +82,17 @@ const AllGranules = ({
   const displayCaseView = displayCase(status);
   const tableSortId = status === 'failed' ? 'granuleId' : 'timestamp';
   const errorCount = get(stats, 'count.data.granules.count') || [];
+<<<<<<< HEAD
   const breadcrumbConfig = generateBreadcrumbConfig(displayCaseView);
+=======
+  const breadcrumbConfig = [
+    ...initialBreadcrumbConfig,
+    {
+      label: displayCaseView,
+      active: true,
+    },
+  ];
+>>>>>>> Updating routing that calculates views
 
   useEffect(() => {
     dispatch(listWorkflows());
@@ -158,7 +175,11 @@ const AllGranules = ({
         </section>
         <div className="page__section__header page__section__header-wrapper">
           <h1 className="heading--large heading--shared-content with-description ">
+<<<<<<< HEAD
             {displayCaseView} Granules{' '}
+=======
+            {displayCaseView} Granules
+>>>>>>> Updating routing that calculates views
             <span className="num-title">
               {!Number.isNaN(+count) ? `${tally(count)}` : 0}
             </span>

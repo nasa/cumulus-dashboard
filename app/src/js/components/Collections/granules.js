@@ -48,10 +48,14 @@ const CollectionGranules = ({
   const { list } = granules;
   const { meta } = list;
   const decodedVersion = decodeURIComponent(collectionVersion);
+<<<<<<< HEAD
   const collectionId = getCollectionId({
     name: collectionName,
     version: decodedVersion,
   });
+=======
+  const collectionId = getCollectionId({ name: collectionName, version: decodedVersion });
+>>>>>>> Updating routing that calculates views
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const [selected, setSelected] = useState([]);
@@ -61,10 +65,14 @@ const CollectionGranules = ({
   const breadcrumbConfig = [
     {
       label: 'Collection Granules',
+<<<<<<< HEAD
       href: `${collectionHrefFromNameVersion({
         name: collectionName,
         version: collectionVersion,
       })}/granules`,
+=======
+      href: `${collectionHrefFromNameVersion({ name: collectionName, version: collectionVersion })}/granules`,
+>>>>>>> Updating routing that calculates views
       active: !granuleStatus,
     },
   ];
@@ -150,7 +158,11 @@ const CollectionGranules = ({
       <section className="page__section">
         <div className="heading__wrapper--border">
           <h2 className="heading--medium heading--shared-content with-description">
+<<<<<<< HEAD
             {displayCase(granuleStatus || 'all')} Granules{' '}
+=======
+            {`${displayCase(granuleStatus)} ${displayName} `}
+>>>>>>> Updating routing that calculates views
             <span className="num-title">
               {`${(meta.count && meta.count) || 0}`}
             </span>
