@@ -30,18 +30,26 @@ import List from '../Table/Table';
 import LogViewer from '../Logs/viewer';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
-import statusOptions from '../../utils/status';
-import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ListFilters from '../ListActions/ListFilters';
+
+const initialBreadcrumbConfig = [
+  {
+    label: 'Dashboard Home',
+    href: '/',
+  },
+  {
+    label: 'Granules',
+    href: '/granules',
+  },
+];
 
 const AllGranules = ({
   collections,
   dispatch,
   granules,
-  location,
-  logs,
+  match,
   queryParams,
   workflowOptions,
   stats,
@@ -51,30 +59,25 @@ const AllGranules = ({
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const [selected, setSelected] = useState([]);
   const { dropdowns } = collections;
+  const { dropdowns: providerDropdowns } = providers;
   const { list } = granules;
   const { count, queriedAt } = list.meta;
+  let {
+    params: { status },
+  } = match;
+  status = status === 'processing' ? 'running' : status;
   const logsQuery = { granules__exists: 'true', executions__exists: 'true' };
   const query = generateQuery();
-  const view = getView();
-  const displayCaseView = displayCase(view);
-  const statusOpts = view === 'all' ? statusOptions : null;
-  const tablesortId = view === 'failed' ? 'granuleId' : 'timestamp';
+  const displayCaseView = displayCase(status);
+  const tableSortId = status === 'failed' ? 'granuleId' : 'timestamp';
   const errorCount = get(stats, 'count.data.granules.count') || [];
   const breadcrumbConfig = [
-    {
-      label: 'Dashboard Home',
-      href: '/',
-    },
-    {
-      label: 'Granules',
-      href: '/granules',
-    },
+    ...initialBreadcrumbConfig,
     {
       label: displayCaseView,
       active: true,
     },
   ];
-  const { dropdowns: providerDropdowns } = providers;
 
   useEffect(() => {
     dispatch(listWorkflows());
@@ -90,24 +93,14 @@ const AllGranules = ({
       getCount({
         type: 'granules',
         field: 'error.Error.keyword',
-        sidebarCount: false
+        sidebarCount: false,
       })
     );
   }, [dispatch]);
 
-  function getView() {
-    const { pathname } = location;
-    if (pathname === '/granules/completed') return 'completed';
-    if (pathname === '/granules/processing') return 'running';
-    if (pathname === '/granules/failed') return 'failed';
-    return 'all';
-  }
-
   function generateQuery() {
     const options = { ...queryParams };
-    const currentView = getView();
-    if (currentView !== 'all') options.status = currentView;
-    options.status = currentView;
+    options.status = status;
     return options;
   }
 
@@ -147,14 +140,15 @@ const AllGranules = ({
   function getGranuleErrorTypes() {
     return errorCount.map((e) => ({
       id: e.key,
-      label: e.key
+      label: e.key,
     }));
   }
 
   function updateSelection(selectedIds, currentSelectedRows) {
     const allSelectedRows = selected.concat(currentSelectedRows);
     const selectedRows = selectedIds
-      .map((id) => allSelectedRows.find((g) => id === g.granuleId)).filter(Boolean);
+      .map((id) => allSelectedRows.find((g) => id === g.granuleId))
+      .filter(Boolean);
     setSelected(selectedRows);
   }
 
@@ -166,7 +160,7 @@ const AllGranules = ({
         </section>
         <div className="page__section__header page__section__header-wrapper">
           <h1 className="heading--large heading--shared-content with-description ">
-            {displayCaseView} {strings.granules}{' '}
+            {displayCaseView} Granules
             <span className="num-title">
               {!Number.isNaN(+count) ? `${tally(count)}` : 0}
             </span>
@@ -178,13 +172,13 @@ const AllGranules = ({
         <List
           list={list}
           action={listGranules}
-          tableColumns={view === 'failed' ? errorTableColumns : tableColumns}
+          tableColumns={status === 'failed' ? errorTableColumns : tableColumns}
           query={query}
           bulkActions={generateBulkActions()}
           groupAction={groupAction}
           rowId="granuleId"
           initialHiddenColumns={defaultHiddenColumns}
-          initialSortId={tablesortId}
+          initialSortId={tableSortId}
           filterAction={filterGranules}
           filterClear={clearGranulesFilter}
           onSelect={updateSelection}
@@ -212,18 +206,6 @@ const AllGranules = ({
                 className: 'dropdown--large',
               }}
             />
-            {statusOpts && (
-              <Dropdown
-                options={statusOpts}
-                action={filterGranules}
-                clear={clearGranulesFilter}
-                paramKey="status"
-                label="Status"
-                inputProps={{
-                  placeholder: 'All',
-                }}
-              />
-            )}
             <Dropdown
               getOptions={getOptionsProviderName}
               options={get(providerDropdowns, ['provider', 'options'])}
@@ -236,15 +218,15 @@ const AllGranules = ({
                 className: 'dropdown--medium',
               }}
             />
-            {view === 'failed' && (
+            {status === 'failed' && (
               <Dropdown
                 options={getGranuleErrorTypes()}
                 action={filterGranules}
                 clear={clearGranulesFilter}
-                paramKey='error.Error'
-                label={strings.error_type}
+                paramKey="error.Error"
+                label="Error Type"
                 inputProps={{
-                  placeholder: 'All'
+                  placeholder: 'All',
                 }}
               />
             )}
@@ -264,15 +246,12 @@ AllGranules.propTypes = {
   collections: PropTypes.object,
   dispatch: PropTypes.func,
   granules: PropTypes.object,
-  location: PropTypes.object,
-  logs: PropTypes.object,
+  match: PropTypes.object,
   queryParams: PropTypes.object,
   workflowOptions: PropTypes.array,
   stats: PropTypes.object,
   providers: PropTypes.object,
 };
-
-AllGranules.displayName = strings.all_granules;
 
 export { AllGranules };
 
@@ -280,9 +259,8 @@ export default withRouter(
   connect((state) => ({
     collections: state.collections,
     granules: state.granules,
-    logs: state.logs,
     stats: state.stats,
     workflowOptions: workflowOptionNames(state),
-    providers: state.providers
+    providers: state.providers,
   }))(AllGranules)
 );

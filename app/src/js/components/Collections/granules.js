@@ -34,21 +34,19 @@ import CollectionHeader from './collection-header';
 const CollectionGranules = ({
   dispatch,
   granules,
-  location,
   match,
   queryParams,
   workflowOptions,
   providers
 }) => {
   const { params } = match;
-  const { name: collectionName, version: collectionVersion } = params;
-  const { pathname } = location;
+  const { name: collectionName, version: collectionVersion, status } = params;
+  const granuleStatus = status === 'processing' ? 'running' : status;
   const { list } = granules;
   const { meta } = list;
   const displayName = strings.granules;
   const decodedVersion = decodeURIComponent(collectionVersion);
   const collectionId = getCollectionId({ name: collectionName, version: decodedVersion });
-  const view = getView();
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const [selected, setSelected] = useState([]);
@@ -59,13 +57,13 @@ const CollectionGranules = ({
     {
       label: 'Collection Granules',
       href: `${collectionHrefFromNameVersion({ name: collectionName, version: collectionVersion })}/granules`,
-      active: view === 'all',
+      active: !granuleStatus,
     },
   ];
 
-  if (view !== 'all') {
+  if (granuleStatus) {
     breadcrumbConfig.push({
-      label: displayCase(view),
+      label: displayCase(granuleStatus),
       active: true,
     });
   }
@@ -84,15 +82,8 @@ const CollectionGranules = ({
       ...queryParams,
       collectionId,
     };
-    if (view !== 'all') options.status = view;
+    if (granuleStatus) options.status = granuleStatus;
     return options;
-  }
-
-  function getView() {
-    if (pathname.includes('/granules/completed')) return 'completed';
-    if (pathname.includes('/granules/processing')) return 'running';
-    if (pathname.includes('/granules/failed')) return 'failed';
-    return 'all';
   }
 
   function generateBulkActions() {
@@ -150,7 +141,7 @@ const CollectionGranules = ({
       <section className="page__section">
         <div className="heading__wrapper--border">
           <h2 className="heading--medium heading--shared-content with-description">
-            {`${displayCase(view)} ${displayName} `}
+            {`${displayCase(granuleStatus)} ${displayName} `}
             <span className="num-title">
               {`${(meta.count && meta.count) || 0}`}
             </span>
@@ -179,7 +170,7 @@ const CollectionGranules = ({
             searchKey="granules"
           />
           <ListFilters>
-            {view === 'all' && (
+            {!granuleStatus && (
               <Dropdown
                 options={statusOptions}
                 action={filterGranules}
@@ -213,7 +204,6 @@ const CollectionGranules = ({
 CollectionGranules.propTypes = {
   granules: PropTypes.object,
   dispatch: PropTypes.func,
-  location: PropTypes.object,
   match: PropTypes.object,
   queryParams: PropTypes.object,
   workflowOptions: PropTypes.array,
