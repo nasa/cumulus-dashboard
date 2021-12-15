@@ -160,7 +160,7 @@ const AllGranules = ({
         </section>
         <div className="page__section__header page__section__header-wrapper">
           <h1 className="heading--large heading--shared-content with-description ">
-            {displayCaseView} Granules
+            {displayCaseView} Granules{' '}
             <span className="num-title">
               {!Number.isNaN(+count) ? `${tally(count)}` : 0}
             </span>

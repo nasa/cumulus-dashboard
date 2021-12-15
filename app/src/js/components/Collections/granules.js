@@ -26,7 +26,6 @@ import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import statusOptions from '../../utils/status';
-import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 import ListFilters from '../ListActions/ListFilters';
 import CollectionHeader from './collection-header';
@@ -44,7 +43,6 @@ const CollectionGranules = ({
   const granuleStatus = status === 'processing' ? 'running' : status;
   const { list } = granules;
   const { meta } = list;
-  const displayName = strings.granules;
   const decodedVersion = decodeURIComponent(collectionVersion);
   const collectionId = getCollectionId({ name: collectionName, version: decodedVersion });
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
@@ -52,6 +50,7 @@ const CollectionGranules = ({
   const [selected, setSelected] = useState([]);
   const query = generateQuery();
   const { dropdowns } = providers;
+  console.log(granuleStatus);
 
   const breadcrumbConfig = [
     {
@@ -141,7 +140,7 @@ const CollectionGranules = ({
       <section className="page__section">
         <div className="heading__wrapper--border">
           <h2 className="heading--medium heading--shared-content with-description">
-            {`${displayCase(granuleStatus)} ${displayName} `}
+            {displayCase(granuleStatus || 'all')} Granules
             <span className="num-title">
               {`${(meta.count && meta.count) || 0}`}
             </span>
