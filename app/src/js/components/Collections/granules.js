@@ -29,7 +29,11 @@ import {
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
+<<<<<<< HEAD
 import { granuleStatus as statusOptions } from '../../utils/status';
+=======
+import statusOptions from '../../utils/status';
+>>>>>>> Formatting updates
 import { workflowOptionNames } from '../../selectors';
 import ListFilters from '../ListActions/ListFilters';
 import CollectionHeader from './collection-header';
@@ -61,6 +65,7 @@ const CollectionGranules = ({
   const [selected, setSelected] = useState([]);
   const query = generateQuery();
   const { dropdowns } = providers;
+  console.log(granuleStatus);
 
   const breadcrumbConfig = [
     {
@@ -159,10 +164,14 @@ const CollectionGranules = ({
         <div className="heading__wrapper--border">
           <h2 className="heading--medium heading--shared-content with-description">
 <<<<<<< HEAD
+<<<<<<< HEAD
             {displayCase(granuleStatus || 'all')} Granules{' '}
 =======
             {`${displayCase(granuleStatus)} ${displayName} `}
 >>>>>>> Updating routing that calculates views
+=======
+            {displayCase(granuleStatus || 'all')} Granules
+>>>>>>> Formatting updates
             <span className="num-title">
               {`${(meta.count && meta.count) || 0}`}
             </span>

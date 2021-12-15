@@ -176,10 +176,14 @@ const AllGranules = ({
         <div className="page__section__header page__section__header-wrapper">
           <h1 className="heading--large heading--shared-content with-description ">
 <<<<<<< HEAD
+<<<<<<< HEAD
             {displayCaseView} Granules{' '}
 =======
             {displayCaseView} Granules
 >>>>>>> Updating routing that calculates views
+=======
+            {displayCaseView} Granules{' '}
+>>>>>>> Formatting updates
             <span className="num-title">
               {!Number.isNaN(+count) ? `${tally(count)}` : 0}
             </span>
