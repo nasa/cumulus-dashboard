@@ -25,7 +25,7 @@ import {
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
-import statusOptions from '../../utils/status';
+import { granuleStatus as statusOptions } from '../../utils/status';
 import { workflowOptionNames } from '../../selectors';
 import ListFilters from '../ListActions/ListFilters';
 import CollectionHeader from './collection-header';
@@ -50,7 +50,6 @@ const CollectionGranules = ({
   const [selected, setSelected] = useState([]);
   const query = generateQuery();
   const { dropdowns } = providers;
-  console.log(granuleStatus);
 
   const breadcrumbConfig = [
     {
