@@ -30,10 +30,14 @@ import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { granuleStatus as statusOptions } from '../../utils/status';
 =======
 import statusOptions from '../../utils/status';
 >>>>>>> Formatting updates
+=======
+import { granuleStatus as statusOptions } from '../../utils/status';
+>>>>>>> Add queued to status dropdowns
 import { workflowOptionNames } from '../../selectors';
 import ListFilters from '../ListActions/ListFilters';
 import CollectionHeader from './collection-header';
@@ -65,7 +69,6 @@ const CollectionGranules = ({
   const [selected, setSelected] = useState([]);
   const query = generateQuery();
   const { dropdowns } = providers;
-  console.log(granuleStatus);
 
   const breadcrumbConfig = [
     {
