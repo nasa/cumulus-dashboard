@@ -56,7 +56,7 @@ class Header extends React.Component {
   }
 
   className(path) {
-    const active = this.props.location.pathname.slice(0, path.length) === path; // nav issue with router
+    const active = this.props.location.pathname?.slice(0, path.length) === path; // nav issue with router
     const menuItem = path.replace('/', '');
     const order = `nav__order-${!nav.order.includes(menuItem) ? 2 : nav.order.indexOf(menuItem)}`;
     return c({

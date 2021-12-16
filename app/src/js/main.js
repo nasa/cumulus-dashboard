@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import isEqual from 'lodash/isEqual';
+import withQueryParams from 'react-router-query-params';
 import _config from './config';
 import { displayCase } from './utils/format';
 import Header from './components/Header/header';
 import Footer from './components/Footer/footer';
 import TopButton from './components/TopButton/TopButton';
-import { getLogs } from './actions';
+import { getLogs, restoreQueryParams } from './actions';
 import { initialState as logsInitialState } from './reducers/logs';
 
 const { target, environment } = _config;
@@ -22,13 +23,24 @@ const Main = ({
   dispatch,
   location,
   logs,
+  locationQueryParams,
+  setQueryParams,
 }) => {
+  const { pathname } = location;
+
   useEffect(() => {
     // kick off an initial logs request to check if metrics is configured
     if (isEqual(logs, logsInitialState)) {
       dispatch(getLogs());
     }
   }, [dispatch, logs]);
+
+  useEffect(() => {
+    if (locationQueryParams?.queryParams[pathname] && locationQueryParams?.restoreQuery) {
+      dispatch(restoreQueryParams());
+      setQueryParams(locationQueryParams.queryParams[pathname]);
+    }
+  }, [setQueryParams, dispatch, pathname, locationQueryParams]);
 
   return (
     <div className='app'>
@@ -63,8 +75,14 @@ Main.propTypes = {
   cmrInfo: PropTypes.object,
   cumulusInstance: PropTypes.object,
   logs: PropTypes.object,
+  locationQueryParams: PropTypes.object,
+  setQueryParams: PropTypes.func,
 };
 
 export { Main };
 
-export default withRouter(connect((state) => state)(Main));
+export default withRouter(
+  withQueryParams()(
+    connect((state) => state)(Main)
+  )
+);
