@@ -976,5 +976,3 @@ export const clearReconciliationReportFilter = (paramKey) => ({ type: types.CLEA
 
 export const toggleSidebar = () => ({ type: types.TOGGLE_SIDEBAR });
 export const sortPersist = (tableId, sortBy) => ({ type: types.SORTS, tableId, sortBy });
-
-export const restoreQueryParams = () => ({ type: types.RESTORE_QUERY_PARAMS });

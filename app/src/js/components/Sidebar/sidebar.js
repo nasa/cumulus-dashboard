@@ -19,6 +19,7 @@ const Sidebar = ({
   match,
   params,
   sidebar,
+  locationQueryParams
 }) => {
   const { open: sidebarOpen } = sidebar;
   const { metricsNotConfigured } = logs;
@@ -58,7 +59,7 @@ const Sidebar = ({
                     className={classes}
                     to={(routeLocation) => ({
                       pathname: path,
-                      search: getPersistentQueryParams(routeLocation),
+                      search: locationQueryParams.search[path] || getPersistentQueryParams(routeLocation),
                     })}
                   >
                     {d[0]}
@@ -107,9 +108,11 @@ Sidebar.propTypes = {
   sidebar: PropTypes.shape({
     open: PropTypes.bool,
   }),
+  locationQueryParams: PropTypes.object,
 };
 
 export default connect((state) => ({
   logs: state.logs,
   sidebar: state.sidebar,
+  locationQueryParams: state.locationQueryParams
 }))(Sidebar);

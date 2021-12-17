@@ -285,5 +285,3 @@ export const TIMER_SET_COUNTDOWN = 'TIMER_SET_COUNTDOWN';
 export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
 // Sorting Mechanism
 export const SORTS = 'SORTS';
-// Location
-export const RESTORE_QUERY_PARAMS = 'RESTORE_QUERY_PARAMS';

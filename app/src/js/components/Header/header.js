@@ -79,7 +79,7 @@ class Header extends React.Component {
   }
 
   render() {
-    const { api, location, minimal } = this.props;
+    const { api, location, minimal, locationQueryParams } = this.props;
     const { authenticated } = api;
     const locationSearch = getPersistentQueryParams(location);
     const activePaths = paths.filter((path) => !nav.exclude[path[0]]);
@@ -100,7 +100,7 @@ class Header extends React.Component {
               <ul>
                 {activePaths.map((path) => (
                   <li key={path[0]} className={this.className(path[1])}>
-                    {this.linkTo(path, locationSearch)}
+                    {this.linkTo(path, locationQueryParams.search[path[1]] || locationSearch)}
                   </li>
                 ))}
                 <li className="rightalign nav__order-8">
@@ -130,8 +130,11 @@ Header.propTypes = {
   minimal: PropTypes.bool,
   cumulusInstance: PropTypes.object,
   datepicker: PropTypes.object,
+  locationQueryParams: PropTypes.object,
 };
 
 export { Header };
 
-export default withRouter(connect((state) => state)(Header));
+export default withRouter(connect((state) => ({
+  locationQueryParams: state.locationQueryParams
+}))(Header));

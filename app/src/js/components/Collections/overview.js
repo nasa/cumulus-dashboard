@@ -56,7 +56,7 @@ const breadcrumbConfig = [
   },
   {
     label: 'Collections',
-    href: '/collections',
+    href: '/collections/all',
   },
   {
     label: 'Collection Overview',

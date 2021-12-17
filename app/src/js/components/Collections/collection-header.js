@@ -25,7 +25,7 @@ const CollectionHeader = ({
     },
     {
       label: 'Collections',
-      href: '/collections',
+      href: '/collections/all',
     },
     {
       label: 'Collection Overview',
