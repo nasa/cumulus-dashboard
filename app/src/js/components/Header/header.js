@@ -17,7 +17,7 @@ import { kibanaAllLogsLink } from '../../utils/kibana';
 import { getPersistentQueryParams } from '../../utils/url-helper';
 
 const paths = [
-  [strings.collections, '/collections'],
+  [strings.collections, '/collections/all'],
   ['Providers', '/providers'],
   [strings.granules, '/granules'],
   ['Workflows', '/workflows'],

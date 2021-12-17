@@ -44,7 +44,9 @@ const Sidebar = ({
       <div key={base}>
         <ul>
           {routes(navPath, navParams, count).map((d, i) => {
-            const path = resolvePath(base, d[1]);
+            let baseComplete = base;
+            if (base === 'collections' && !d[1]) { baseComplete = 'collections/all'; }
+            const path = resolvePath(baseComplete, d[1]);
             if (d[1] && d[1].includes('logs') && metricsNotConfigured) return null;
             const classes = [
               // d[2] might be a function; use it only when it's a string
