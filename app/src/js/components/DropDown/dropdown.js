@@ -111,12 +111,6 @@ const Dropdown = ({
     if (getOptions) dispatch(getOptions());
   }, [dispatch, getOptions]);
 
-  useEffect(() => {
-    if (queryParams[paramKey]) {
-      setSelected([queryParams[paramKey]]);
-    }
-  }, [queryParams, paramKey]);
-
   function handleFocus(e) {
     if (clearOnClick) {
       setSelected([]);
