@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import isEqual from 'lodash/isEqual';
-import withQueryParams from 'react-router-query-params';
 import _config from './config';
 import { displayCase } from './utils/format';
 import Header from './components/Header/header';
@@ -68,8 +67,4 @@ Main.propTypes = {
 
 export { Main };
 
-export default withRouter(
-  withQueryParams()(
-    connect((state) => state)(Main)
-  )
-);
+export default withRouter(connect((state) => state)(Main));
