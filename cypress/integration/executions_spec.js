@@ -84,7 +84,7 @@ describe('Dashboard Executions Page', () => {
       );
 
       cy.contains('nav li a', 'Executions').as('executions');
-      cy.get('@executions').should('have.attr', 'href', '/executions');
+      cy.get('@executions').should('have.attr', 'href').and('include', '/executions');
       cy.get('@executions').click();
 
       cy.url().should('include', 'executions');
@@ -436,6 +436,48 @@ describe('Dashboard Executions Page', () => {
       cy.get('@columns').eq(3).should('have.text', 'Updated');
       cy.get('@columns').eq(4).should('have.text', 'Duration');
       cy.get('@columns').eq(5).should('have.text', 'Failed Events Snapshot');
+    });
+
+    it('Should dynamically update menu, sidbar and breadcrumb links with latest filter criteria', () => {
+      cy.visit('/executions');
+
+      cy.get('#status').as('status-input');
+      cy.get('@status-input').click().type('comp').type('{enter}');
+
+      cy.get('#type').as('type-input');
+      cy.get('@type-input').click().type('hello').type('{enter}');
+
+      cy.get('#collectionId').as('collectionId-input');
+      cy.get('@collectionId-input').click().type('MOD09GQ').type('{enter}');
+
+      cy.get('#search').as('search-input');
+      cy.get('@search-input').click().type('1a').type('{enter}');
+
+      cy.get('.table__main-asset > a').click();
+
+      // Breakcrumb <Link> contain correct query params
+      cy.get('.breadcrumb > :nth-child(2) > a')
+        .should('have.attr', 'href')
+        .and('include', 'status=complete')
+        .and('include', 'type=HelloWorldWorkflow')
+        .and('include', 'collectionId=MOD09GQ___006')
+        .and('include', 'search=1a5aaf01-835b-431a-924f-96a7feb3a3fb');
+
+      // // Menu <Link>s contain correct query params
+      cy.get('nav > ul > :nth-child(5) > a')
+        .should('have.attr', 'href')
+        .and('include', 'status=complete')
+        .and('include', 'type=HelloWorldWorkflow')
+        .and('include', 'collectionId=MOD09GQ___006')
+        .and('include', 'search=1a5aaf01-835b-431a-924f-96a7feb3a3fb');
+
+      // // Sidebar <Link>s contain correct query params
+      cy.get('.sidebar__nav--back')
+        .should('have.attr', 'href')
+        .and('include', 'status=complete')
+        .and('include', 'type=HelloWorldWorkflow')
+        .and('include', 'collectionId=MOD09GQ___006')
+        .and('include', 'search=1a5aaf01-835b-431a-924f-96a7feb3a3fb');
     });
   });
 });
