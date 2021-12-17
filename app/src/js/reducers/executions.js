@@ -45,10 +45,10 @@ export default createReducer(initialState, {
     state.list.params[action.paramKey] = null;
   },
   [SEARCH_EXECUTIONS]: (state, action) => {
-    state.list.infix = action.infix;
+    state.list.params.infix = action.infix;
   },
   [CLEAR_EXECUTIONS_SEARCH]: (state) => {
-    state.list.infix = null;
+    state.list.params.infix = null;
   },
   [EXECUTIONS_LIST]: (state, action) => {
     state.map[action.id] = {
@@ -59,12 +59,16 @@ export default createReducer(initialState, {
     };
   },
   [EXECUTIONS_LIST_INFLIGHT]: (state, action) => {
-    state.map[action.id] = { inflight: true };
+    if (action.id) {
+      state.map[action.id] = { inflight: true };
+    }
   },
   [EXECUTIONS_LIST_ERROR]: (state, action) => {
-    state.map[action.id] = {
-      inflight: false,
-      error: action.error,
-    };
+    if (action.id) {
+      state.map[action.id] = {
+        inflight: false,
+        error: action.error,
+      };
+    }
   },
 });

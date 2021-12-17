@@ -1,9 +1,10 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable import/no-cycle */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { get, set } from 'object-path';
 import startCase from 'lodash/startCase';
+import noop from 'lodash/noop';
 import { Form, formTypes } from '../Form/Form';
 import {
   arrayWithLength,
@@ -79,6 +80,7 @@ export const createFormConfig = ({
   include,
   exclude,
   enums = {},
+  handleInputChange = {},
 }) => {
   const fields = [];
   const toRegExps = (stringsOrRegExps) => stringsOrRegExps.map((strOrRE) => (typeof strOrRE === 'string' ? new RegExp(`^${strOrRE}$`, 'i') : strOrRE));
@@ -120,6 +122,7 @@ export const createFormConfig = ({
       labelText,
       schemaProperty: fullyQualifiedProperty,
       required,
+      handleChange: handleInputChange[property] || noop,
     };
 
     // dropdowns have type set to string, but have an enum prop.
@@ -154,7 +157,7 @@ export const createFormConfig = ({
       }
       case 'enum': {
         // pass the enum fields as options
-        config.options = meta.enum || enums[property];
+        config.options = enums[property] || meta.enum;
         fields.push(dropdownField(config, property, required && isText));
         break;
       }
@@ -204,7 +207,7 @@ function textField(config, property, validate) {
   config.type = formTypes.text;
   config.validate = validate;
   config.error = validate && get(errors, property, errors.required);
-  if (property === 'password' || property === 'username') config.isPassword = true;
+  if (property === 'password' || property === 'username') { config.isPassword = true; }
 
   return config;
 }
@@ -236,20 +239,21 @@ const Schema = ({
   enums,
   error,
   exclude,
+  handleInputChange,
   include,
   onCancel,
   onSubmit,
-  pk,
   schema,
   status,
 }) => {
-  const [fields, setFields] = useState(
-    createFormConfig({ data, schema, include, exclude, enums })
-  );
-
-  useEffect(() => {
-    setFields(createFormConfig({ data, schema, include, exclude, enums }));
-  }, [enums, data, schema, include, exclude, pk]);
+  const fields = createFormConfig({
+    data,
+    schema,
+    include,
+    exclude,
+    enums,
+    handleInputChange,
+  });
 
   return (
     <div
@@ -284,7 +288,6 @@ Schema.propTypes = {
   // as the value of the select option, and the second value is the option text.
   enums: PropTypes.objectOf(PropTypes.array),
   data: PropTypes.object,
-  pk: PropTypes.string,
   onCancel: PropTypes.func,
   onSubmit: PropTypes.func,
   status: PropTypes.string,
@@ -305,6 +308,7 @@ Schema.propTypes = {
   exclude: PropTypes.arrayOf(
     PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(RegExp)])
   ),
+  handleInputChange: PropTypes.objectOf(PropTypes.func),
 };
 
 Schema.defaultProps = {
