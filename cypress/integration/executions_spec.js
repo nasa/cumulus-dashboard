@@ -439,29 +439,34 @@ describe('Dashboard Executions Page', () => {
     });
 
     it('Should dynamically update menu, sidbar and breadcrumb links with latest filter criteria', () => {
+      const status = 'complete';
+      const type = 'HelloWorldWorkflow';
+      const collectionId = 'MOD09GQ___006';
+      const search = '1a5aaf01-835b-431a-924f-96a7feb3a3fb';
+
       cy.visit('/executions');
 
       cy.get('#status').as('status-input');
-      cy.get('@status-input').click().type('comp').type('{enter}');
+      cy.get('@status-input').click().type(status).type('{enter}');
 
       cy.get('#type').as('type-input');
-      cy.get('@type-input').click().type('hello').type('{enter}');
+      cy.get('@type-input').click().type(type).type('{enter}');
 
       cy.get('#collectionId').as('collectionId-input');
-      cy.get('@collectionId-input').click().type('MOD09GQ').type('{enter}');
+      cy.get('@collectionId-input').click().type(collectionId).type('{enter}');
 
       cy.get('#search').as('search-input');
-      cy.get('@search-input').click().type('1a').type('{enter}');
+      cy.get('@search-input').click().type(search).type('{enter}');
 
       cy.get('.table__main-asset > a').click();
 
       // Breakcrumb <Link> contain correct query params
       cy.get('.breadcrumb > :nth-child(2) > a')
         .should('have.attr', 'href')
-        .and('include', 'status=complete')
-        .and('include', 'type=HelloWorldWorkflow')
-        .and('include', 'collectionId=MOD09GQ___006')
-        .and('include', 'search=1a5aaf01-835b-431a-924f-96a7feb3a3fb');
+        .and('include', `status=${status}`)
+        .and('include', `type=${type}`)
+        .and('include', `collectionId=${collectionId}`)
+        .and('include', `search=${search}`);
 
       // // Menu <Link>s contain correct query params
       cy.get('nav > ul > :nth-child(5) > a')
