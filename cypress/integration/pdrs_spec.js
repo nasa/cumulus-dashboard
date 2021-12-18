@@ -232,5 +232,26 @@ describe('Dashboard PDRs Page', () => {
       cy.url().should('include', `/pdrs/pdr/${pdrName}`);
       cy.get('.heading--large').should('have.text', `PDR: ${pdrName}`);
     });
+
+    it.only('Should dynamically update menu, sidbar and breadcrumb /pdrs links with latest filter criteria', () => {
+      const status = 'running';
+
+      cy.visit('/pdrs');
+
+      cy.get('#status').as('status-input');
+      cy.get('@status-input').click().type(status).type('{enter}');
+
+      cy.get('.table__main-asset > a').first().click({ force: true });
+
+      // Menu <Link>s contain correct query params
+      cy.get('nav > ul > :nth-child(8) > a')
+        .should('have.attr', 'href')
+        .and('include', `status=${status}`);
+
+      // Sidebar <Link>s contain correct query params
+      cy.get('.sidebar__nav--back')
+        .should('have.attr', 'href')
+        .and('include', `status=${status}`);
+    });
   });
 });
