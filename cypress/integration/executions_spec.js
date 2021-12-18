@@ -438,7 +438,7 @@ describe('Dashboard Executions Page', () => {
       cy.get('@columns').eq(5).should('have.text', 'Failed Events Snapshot');
     });
 
-    it('Should dynamically update menu, sidbar and breadcrumb links with latest filter criteria', () => {
+    it('Should dynamically update menu, sidbar and breadcrumb /executions links with latest filter criteria', () => {
       const status = 'complete';
       const type = 'HelloWorldWorkflow';
       const collectionId = 'MOD09GQ___006';
