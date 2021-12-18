@@ -400,5 +400,31 @@ describe('Dashboard Reconciliation Reports Page', () => {
         card.get('.card-title').contains(cards[index].count);
       });
     });
+
+    it('Should dynamically update menu, sidbar and breadcrumb /reconciliation-reports links with latest filter criteria', () => {
+      const type = 'Internal';
+      const status = 'Generated';
+      const search = 'InternalReport092020';
+
+      cy.visit('/reconciliation-reports');
+
+      cy.get('#type').as('type-input');
+      cy.get('@type-input').click().type(type).type('{enter}');
+
+      cy.get('#status').as('status-input');
+      cy.get('@status-input').click().type(status).type('{enter}');
+
+      cy.get('#search').as('search-input');
+      cy.get('@search-input').click().type(search).type('{enter}');
+
+      cy.get('img').click();
+
+      // Menu <Link>s contain correct query params
+      cy.get(':nth-child(9) > a')
+        .should('have.attr', 'href')
+        .and('include', `type=${type}`)
+        .and('include', `status=${status}`)
+        .and('include', `search=${search}`);
+    });
   });
 });

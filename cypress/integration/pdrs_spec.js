@@ -233,7 +233,7 @@ describe('Dashboard PDRs Page', () => {
       cy.get('.heading--large').should('have.text', `PDR: ${pdrName}`);
     });
 
-    it.only('Should dynamically update menu, sidbar and breadcrumb /pdrs links with latest filter criteria', () => {
+    it('Should dynamically update menu, sidbar and breadcrumb /pdrs links with latest filter criteria', () => {
       const status = 'running';
 
       cy.visit('/pdrs');
