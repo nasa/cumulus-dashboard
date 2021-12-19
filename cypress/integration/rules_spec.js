@@ -328,5 +328,31 @@ describe('Rules page', () => {
       cy.get('.modal-content').should('not.be', 'visible');
       cy.contains('.error__report', 'Error');
     });
+
+    it('Should dynamically update menu, sidbar and breadcrumb /rules links with latest filter criteria', () => {
+      const search = 'MOD09GK_TEST_kinesisRule';
+
+      cy.visit('/rules');
+
+      cy.get('#search').as('search-input');
+      cy.get('@search-input').click().type(search).type('{enter}');
+
+      cy.get('.table__main-asset > a').click();
+
+      // Breakcrumb <Link> contain correct query params
+      cy.get('.breadcrumb > :nth-child(2) > a')
+        .should('have.attr', 'href')
+        .and('include', `search=${search}`);
+
+      // Menu <Link>s contain correct query params
+      cy.get('nav > ul > :nth-child(7) > a')
+        .should('have.attr', 'href')
+        .and('include', `search=${search}`);
+
+      // Sidebar <Link>s contain correct query params
+      cy.get('.sidebar__nav--back')
+        .should('have.attr', 'href')
+        .and('include', `search=${search}`);
+    });
   });
 });
