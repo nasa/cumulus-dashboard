@@ -851,5 +851,57 @@ describe('Dashboard Granules Page', () => {
       cy.get('.meta__row > dt', { timeout: 10000 }).contains('Executions List').siblings('dd').children('a')
         .click();
     });
+
+    it('Should dynamically update menu, sidbar and breadcrumb /granules links with latest filter criteria', () => {
+      const status = 'complete';
+      const provider = 's3_provider';
+      const collectionId = 'Test-L2-Coastal___Operational/Near-Real-Time';
+      const searchShort = 'test';
+      const search = 'test_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl2';
+
+      cy.visit('/granules');
+
+      cy.get('#status').as('status-input');
+      cy.get('@status-input').click().type(status).type('{enter}');
+
+      cy.get('#collectionId').as('collectionId-input');
+      cy.get('@collectionId-input').click().type(collectionId).type('{enter}');
+
+      cy.get('#provider').as('provider-input');
+      cy.get('@provider-input').click().type(provider).type('{enter}');
+
+      cy.get('#search').as('search-input');
+      cy.get('@search-input').click().type(searchShort).type('{enter}');
+
+      cy.intercept('GET', `/granules/${search}*`).as('getGranule');
+
+      cy.get('.hover-wrap > span > a').first().click();
+
+      cy.wait('@getGranule');
+
+      // Breakcrumb <Link> contain correct query params
+      cy.get('.breadcrumb > :nth-child(2) > a')
+        .should('have.attr', 'href')
+        .and('include', `status=${status}`)
+        .and('include', `provider=${provider}`)
+        .and('include', `collectionId=${encodeURIComponent(collectionId)}`)
+        .and('include', `search=${search}`);
+
+      // Menu <Link>s contain correct query params
+      cy.get('nav > ul > :nth-child(3) > a')
+        .should('have.attr', 'href')
+        .and('include', `status=${status}`)
+        .and('include', `provider=${provider}`)
+        .and('include', `collectionId=${encodeURIComponent(collectionId)}`)
+        .and('include', `search=${search}`);
+
+      // Sidebar <Link>s contain correct query params
+      cy.get('.sidebar__nav--back')
+        .should('have.attr', 'href')
+        .and('include', `status=${status}`)
+        .and('include', `provider=${provider}`)
+        .and('include', `collectionId=${encodeURIComponent(collectionId)}`)
+        .and('include', `search=${search}`);
+    });
   });
 });

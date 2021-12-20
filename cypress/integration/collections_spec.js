@@ -622,6 +622,37 @@ describe('Dashboard Collections Page', () => {
       });
     });
 
+    it('Should dynamically update menu, sidbar and breadcrumb links with latest filter criteria', () => {
+      cy.visit('/collections/all');
+      cy.wait('@getCollections');
+
+      cy.get('.filter-provider .rbt-input-main').as('provider-input');
+      cy.get('@provider-input').click().type('s3').type('{enter}');
+
+      cy.get('.search').as('search');
+      cy.get('@search').click().type('Test').type('{enter}');
+
+      cy.get('span > a').click();
+
+      // Breakcrumb <Link> contain correct query params
+      cy.get('.breadcrumb > :nth-child(2) > a')
+        .should('have.attr', 'href')
+        .and('include', 'provider=s3_provider')
+        .and('include', 'search=Test-L2-Coastal');
+
+      // Menu <Link>s contain correct query params
+      cy.get('nav > ul > :nth-child(1) > a')
+        .should('have.attr', 'href')
+        .and('include', 'provider=s3_provider')
+        .and('include', 'search=Test-L2-Coastal');
+
+      // Sidebar <Link>s contain correct query params
+      cy.get('.sidebar__nav--back')
+        .should('have.attr', 'href')
+        .and('include', 'provider=s3_provider')
+        .and('include', 'search=Test-L2-Coastal');
+    });
+
     describe('Encoded version', () => {
       const name = 'Test-L2-Coastal';
       const version = 'Operational/Near-Real-Time';

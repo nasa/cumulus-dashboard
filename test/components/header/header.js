@@ -17,12 +17,16 @@ test('Header contains correct number of nav items and excludes PDRs and Logs', f
   const location = {
     pathname: '/'
   }
+  const locationQueryParams = {
+    search: {}
+  };
 
   const header = shallow(
     <Header
       dispatch={dispatch}
       api={api}
       location={location}
+      locationQueryParams={locationQueryParams}
     />
   );
 
@@ -40,12 +44,16 @@ test('Logo path is "/cumulus-logo.png" when BUCKET is not specified', function (
   const location = {
     pathname: '/'
   }
+  const locationQueryParams = {
+    search: {}
+  };
 
   const header = shallow(
     <Header
       dispatch={dispatch}
       api={api}
       location={location}
+      locationQueryParams={locationQueryParams}
     />
   );
 

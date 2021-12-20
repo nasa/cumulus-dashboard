@@ -17,7 +17,7 @@ import { kibanaAllLogsLink } from '../../utils/kibana';
 import { getPersistentQueryParams } from '../../utils/url-helper';
 
 const paths = [
-  [strings.collections, '/collections'],
+  [strings.collections, '/collections/all'],
   ['Providers', '/providers'],
   [strings.granules, '/granules'],
   ['Workflows', '/workflows'],
@@ -56,7 +56,7 @@ class Header extends React.Component {
   }
 
   className(path) {
-    const active = this.props.location.pathname.slice(0, path.length) === path; // nav issue with router
+    const active = this.props.location.pathname?.slice(0, path.length) === path; // nav issue with router
     const menuItem = path.replace('/', '');
     const order = `nav__order-${!nav.order.includes(menuItem) ? 2 : nav.order.indexOf(menuItem)}`;
     return c({
@@ -79,7 +79,7 @@ class Header extends React.Component {
   }
 
   render() {
-    const { api, location, minimal } = this.props;
+    const { api, location, minimal, locationQueryParams } = this.props;
     const { authenticated } = api;
     const locationSearch = getPersistentQueryParams(location);
     const activePaths = paths.filter((path) => !nav.exclude[path[0]]);
@@ -100,7 +100,7 @@ class Header extends React.Component {
               <ul>
                 {activePaths.map((path) => (
                   <li key={path[0]} className={this.className(path[1])}>
-                    {this.linkTo(path, locationSearch)}
+                    {this.linkTo(path, locationQueryParams.search[path[1]] || locationSearch)}
                   </li>
                 ))}
                 <li className="rightalign nav__order-8">
@@ -130,8 +130,11 @@ Header.propTypes = {
   minimal: PropTypes.bool,
   cumulusInstance: PropTypes.object,
   datepicker: PropTypes.object,
+  locationQueryParams: PropTypes.object,
 };
 
 export { Header };
 
-export default withRouter(connect((state) => state)(Header));
+export default withRouter(connect((state) => ({
+  locationQueryParams: state.locationQueryParams
+}))(Header));
