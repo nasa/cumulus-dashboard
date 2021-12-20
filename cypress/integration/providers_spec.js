@@ -72,7 +72,7 @@ describe('Dashboard Providers Page', () => {
         cy.get('@providerInput')
           .contains('.dropdown__label', 'Protocol')
           .siblings()
-          .find('div[class*="container"]')
+          .find('.react-select__value-container')
           .click();
         cy.contains('div[id*="react-select"]', protocol).click();
         expectedFields.forEach((field) => {
@@ -97,7 +97,7 @@ describe('Dashboard Providers Page', () => {
         cy.get('@providerInput')
           .contains('.dropdown__label', 'Protocol')
           .siblings()
-          .find('div[class*="container"]')
+          .find('.react-select__value-container')
           .click();
         cy.contains('div[id*="react-select"]', protocol).click();
         expectedFields.forEach((field) => {
@@ -122,7 +122,7 @@ describe('Dashboard Providers Page', () => {
         cy.get('@providerInput')
           .contains('.dropdown__label', 'Protocol')
           .siblings()
-          .find('div[class*="container"]')
+          .find('.react-select__value-container')
           .click();
         cy.contains('div[id*="react-select"]', protocol).click();
         expectedFields.forEach((field) => {
@@ -143,7 +143,7 @@ describe('Dashboard Providers Page', () => {
         cy.get('@providerInput')
           .contains('.dropdown__label', 'Protocol')
           .siblings()
-          .find('div[class*="container"]')
+          .find('.react-select__value-container')
           .click();
         cy.contains('div[id*="react-select"]', protocol).click();
         expectedFields.forEach((field) => {
@@ -167,7 +167,7 @@ describe('Dashboard Providers Page', () => {
         cy.get('@providerInput')
           .contains('.dropdown__label', 'Protocol')
           .siblings()
-          .find('div[class*="container"]')
+          .find('.react-select__value-container')
           .click();
         cy.contains('div[id*="react-select"]', protocol).click();
         expectedFields.forEach((field) => {
@@ -189,7 +189,7 @@ describe('Dashboard Providers Page', () => {
         cy.get('@providerInput')
           .contains('.dropdown__label', 'Protocol')
           .siblings()
-          .find('div[class*="container"]')
+          .find('.react-select__value-container')
           .click();
         cy.contains('div[id*="react-select"]', protocol).click();
         cy.get('@providerInput')
