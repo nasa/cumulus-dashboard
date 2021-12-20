@@ -57,13 +57,19 @@ const CollectionGranules = ({
   const { meta } = list;
   const decodedVersion = decodeURIComponent(collectionVersion);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Update breadcrumbs and some formatting
   const collectionId = getCollectionId({
     name: collectionName,
     version: decodedVersion,
   });
+<<<<<<< HEAD
 =======
   const collectionId = getCollectionId({ name: collectionName, version: decodedVersion });
 >>>>>>> Updating routing that calculates views
+=======
+>>>>>>> Update breadcrumbs and some formatting
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const [selected, setSelected] = useState([]);
@@ -74,13 +80,19 @@ const CollectionGranules = ({
     {
       label: 'Collection Granules',
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Update breadcrumbs and some formatting
       href: `${collectionHrefFromNameVersion({
         name: collectionName,
         version: collectionVersion,
       })}/granules`,
+<<<<<<< HEAD
 =======
       href: `${collectionHrefFromNameVersion({ name: collectionName, version: collectionVersion })}/granules`,
 >>>>>>> Updating routing that calculates views
+=======
+>>>>>>> Update breadcrumbs and some formatting
       active: !granuleStatus,
     },
   ];

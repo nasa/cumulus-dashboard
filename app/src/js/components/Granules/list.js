@@ -35,10 +35,14 @@ import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ListFilters from '../ListActions/ListFilters';
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 const generateBreadcrumbConfig = (view) => [
 =======
 const initialBreadcrumbConfig = [
 >>>>>>> Updating routing that calculates views
+=======
+const generateBreadcrumbConfig = (view) => [
+>>>>>>> Update breadcrumbs and some formatting
   {
     label: 'Dashboard Home',
     href: '/',
@@ -48,12 +52,18 @@ const initialBreadcrumbConfig = [
     href: '/granules',
   },
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Update breadcrumbs and some formatting
   {
     label: view,
     active: true,
   },
+<<<<<<< HEAD
 =======
 >>>>>>> Updating routing that calculates views
+=======
+>>>>>>> Update breadcrumbs and some formatting
 ];
 
 const AllGranules = ({
@@ -83,6 +93,7 @@ const AllGranules = ({
   const tableSortId = status === 'failed' ? 'granuleId' : 'timestamp';
   const errorCount = get(stats, 'count.data.granules.count') || [];
 <<<<<<< HEAD
+<<<<<<< HEAD
   const breadcrumbConfig = generateBreadcrumbConfig(displayCaseView);
 =======
   const breadcrumbConfig = [
@@ -93,6 +104,9 @@ const AllGranules = ({
     },
   ];
 >>>>>>> Updating routing that calculates views
+=======
+  const breadcrumbConfig = generateBreadcrumbConfig(displayCaseView);
+>>>>>>> Update breadcrumbs and some formatting
 
   useEffect(() => {
     dispatch(listWorkflows());
