@@ -21,27 +21,31 @@ import List from '../Table/Table';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 
-const ActivePdrs = ({ dispatch, match, pdrs, queryParams }) => {
+const generateBreadcrumbConfig = (view) => [
+  {
+    label: 'Dashboard Home',
+    href: '/',
+  },
+  {
+    label: 'PDRs',
+    href: '/pdrs',
+  },
+  {
+    label: view,
+    active: true,
+  },
+];
+
+const ActivePdrs = ({ match, pdrs, queryParams }) => {
   const { list } = pdrs;
   const { count, queriedAt } = list.meta;
-  const { params: { status: paramStatus } } = match;
+  const {
+    params: { status: paramStatus },
+  } = match;
   const status = paramStatus === 'active' ? 'running' : paramStatus;
   const query = generateQuery();
   const displayCaseView = displayCase(paramStatus);
-  const breadcrumbConfig = [
-    {
-      label: 'Dashboard Home',
-      href: '/',
-    },
-    {
-      label: 'PDRs',
-      href: '/pdrs',
-    },
-    {
-      label: displayCaseView,
-      active: true,
-    },
-  ];
+  const breadcrumbConfig = generateBreadcrumbConfig(displayCaseView);
 
   function generateQuery() {
     const currentQuery = { ...queryParams };
@@ -94,7 +98,6 @@ const ActivePdrs = ({ dispatch, match, pdrs, queryParams }) => {
 };
 
 ActivePdrs.propTypes = {
-  dispatch: PropTypes.func,
   match: PropTypes.object,
   pdrs: PropTypes.object,
   queryParams: PropTypes.object,

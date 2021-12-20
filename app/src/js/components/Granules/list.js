@@ -34,7 +34,7 @@ import { workflowOptionNames } from '../../selectors';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ListFilters from '../ListActions/ListFilters';
 
-const initialBreadcrumbConfig = [
+const generateBreadcrumbConfig = (view) => [
   {
     label: 'Dashboard Home',
     href: '/',
@@ -42,6 +42,10 @@ const initialBreadcrumbConfig = [
   {
     label: 'Granules',
     href: '/granules',
+  },
+  {
+    label: view,
+    active: true,
   },
 ];
 
@@ -71,13 +75,7 @@ const AllGranules = ({
   const displayCaseView = displayCase(status);
   const tableSortId = status === 'failed' ? 'granuleId' : 'timestamp';
   const errorCount = get(stats, 'count.data.granules.count') || [];
-  const breadcrumbConfig = [
-    ...initialBreadcrumbConfig,
-    {
-      label: displayCaseView,
-      active: true,
-    },
-  ];
+  const breadcrumbConfig = generateBreadcrumbConfig(displayCaseView);
 
   useEffect(() => {
     dispatch(listWorkflows());

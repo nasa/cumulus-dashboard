@@ -4,7 +4,11 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import { getCollectionId, displayCase, collectionHrefFromNameVersion } from '../../utils/format';
+import {
+  getCollectionId,
+  displayCase,
+  collectionHrefFromNameVersion,
+} from '../../utils/format';
 import {
   listGranules,
   filterGranules,
@@ -13,7 +17,7 @@ import {
   searchGranules,
   clearGranulesSearch,
   listWorkflows,
-  getOptionsProviderName
+  getOptionsProviderName,
 } from '../../actions';
 import {
   bulkActions,
@@ -36,7 +40,7 @@ const CollectionGranules = ({
   match,
   queryParams,
   workflowOptions,
-  providers
+  providers,
 }) => {
   const { params } = match;
   const { name: collectionName, version: collectionVersion, status } = params;
@@ -44,7 +48,10 @@ const CollectionGranules = ({
   const { list } = granules;
   const { meta } = list;
   const decodedVersion = decodeURIComponent(collectionVersion);
-  const collectionId = getCollectionId({ name: collectionName, version: decodedVersion });
+  const collectionId = getCollectionId({
+    name: collectionName,
+    version: decodedVersion,
+  });
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const [selected, setSelected] = useState([]);
@@ -54,7 +61,10 @@ const CollectionGranules = ({
   const breadcrumbConfig = [
     {
       label: 'Collection Granules',
-      href: `${collectionHrefFromNameVersion({ name: collectionName, version: collectionVersion })}/granules`,
+      href: `${collectionHrefFromNameVersion({
+        name: collectionName,
+        version: collectionVersion,
+      })}/granules`,
       active: !granuleStatus,
     },
   ];
@@ -121,7 +131,8 @@ const CollectionGranules = ({
   function updateSelection(selectedIds, currentSelectedRows) {
     const allSelectedRows = selected.concat(currentSelectedRows);
     const selectedRows = selectedIds
-      .map((id) => allSelectedRows.find((g) => id === g.granuleId)).filter(Boolean);
+      .map((id) => allSelectedRows.find((g) => id === g.granuleId))
+      .filter(Boolean);
     setSelected(selectedRows);
   }
 
@@ -212,6 +223,6 @@ export default withRouter(
   connect((state) => ({
     granules: state.granules,
     workflowOptions: workflowOptionNames(state),
-    providers: state.providers
+    providers: state.providers,
   }))(CollectionGranules)
 );
