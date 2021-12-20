@@ -26,6 +26,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - When creating a provider, only fields relevant for the selected protocol will be displayed
 - **CUMULUS-2764**
   - Remove error copy button from auth modal
+- **CUMULUS-2543**
+  - When navigating in the Cumulus dashboard any filter query params will be captured and restored
+  when returning to that route.
 
 ### Fixed
 
