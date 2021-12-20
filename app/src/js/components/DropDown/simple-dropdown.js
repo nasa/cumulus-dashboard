@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
-import { customStyles, DropdownIndicator } from '../../utils/dropdown-utils';
 
 const SimpleDropdown = ({
-  className,
+  className = '',
   error,
   id,
   label,
@@ -44,11 +43,10 @@ const SimpleDropdown = ({
             aria-label={label}
             {...rest}
             blurInputOnSelect={true}
-            className={className}
-            components={{ DropdownIndicator }}
+            className={`dropdown ${className}`}
+            classNamePrefix="react-select"
             options={optionsObject}
             onChange={handleChange}
-            styles={customStyles}
             value={valueObject}
           />
         </li>
@@ -65,7 +63,11 @@ SimpleDropdown.propTypes = {
   label: PropTypes.any,
   onChange: PropTypes.func,
   options: PropTypes.array,
-  value: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array]),
+  value: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.string,
+    PropTypes.array,
+  ]),
 };
 
 export default SimpleDropdown;

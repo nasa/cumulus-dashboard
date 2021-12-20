@@ -10,8 +10,8 @@
       position: absolute;
       color: $white;
       position: absolute;
-      font-family: 'FontAwesome';
-      content: '\f013';
+      font-family: "FontAwesome";
+      content: "\f013";
       font-weight: 900;
       left: 10px;
       top: 0.45em;
@@ -64,15 +64,45 @@
     visibility: hidden;
   }
 
-  &__indicator {
-    &:after {
-      font-family: 'FontAwesome';
-      content: '\f0dc';
-      color: $white;
-    }
-  }
-
   &__collection {
     margin-bottom: 0em;
+  }
+
+  .react-select {
+    &__control {
+      border: 1px solid $border-grey;
+      border-radius: 0.5em;
+      box-shadow: $shadow__default;
+    }
+    &__menu {
+      margin: 0;
+      z-index: 9999;
+    }
+    &__indicator {
+      background-color: $ocean-blue;
+      border-radius: 0 0.5em 0.5em 0;
+      box-shadow: $shadow__default;
+      svg {
+        display: none !important;
+      }
+      &:after {
+        font-family: "FontAwesome";
+        content: "\f0dc";
+        color: $white;
+      }
+    }
+    &__indicator-separator {
+      display: none;
+    }
+
+    &__option {
+      &.react-select__option--is-focused {
+        background-color: $hover-blue;
+      }
+      &.react-select__option--is-selected {
+        background-color: $ocean-blue;
+        color: $white;
+      }
+    }
   }
 }
