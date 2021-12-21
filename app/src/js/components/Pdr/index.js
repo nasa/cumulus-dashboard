@@ -52,27 +52,15 @@ const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
                 )}
               />
               <Route
-                path="/pdrs/active"
-                render={(props) => (
-                  <PdrList queryParams={filteredQueryParams} {...props} />
-                )}
-              />
-              <Route
-                path="/pdrs/failed"
-                render={(props) => (
-                  <PdrList queryParams={filteredQueryParams} {...props} />
-                )}
-              />
-              <Route
-                path="/pdrs/completed"
-                render={(props) => (
-                  <PdrList queryParams={filteredQueryParams} {...props} />
-                )}
-              />
-              <Route
                 path="/pdrs/pdr/:pdrName"
                 render={(props) => (
                   <Pdr queryParams={filteredQueryParams} {...props} />
+                )}
+              />
+              <Route
+                path="/pdrs/:status"
+                render={(props) => (
+                  <PdrList queryParams={filteredQueryParams} {...props} />
                 )}
               />
             </Switch>

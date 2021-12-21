@@ -76,27 +76,15 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
                 component={GranuleOverview}
               />
               <Route
-                path="/granules/completed"
-                render={(props) => (
-                  <AllGranules queryParams={filteredQueryParams} {...props} />
-                )}
-              />
-              <Route
-                path="/granules/processing"
-                render={(props) => (
-                  <AllGranules queryParams={filteredQueryParams} {...props} />
-                )}
-              />
-              <Route
-                path="/granules/failed"
-                render={(props) => (
-                  <AllGranules queryParams={filteredQueryParams} {...props} />
-                )}
-              />
-              <Route
                 path="/granules/lists"
                 render={(props) => (
                   <ReconciliationReportList queryParams={filteredQueryParams} {...props} />
+                )}
+              />
+              <Route
+                path="/granules/:status"
+                render={(props) => (
+                  <AllGranules queryParams={filteredQueryParams} {...props} />
                 )}
               />
               <Redirect

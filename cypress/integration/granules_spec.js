@@ -81,13 +81,16 @@ describe('Dashboard Granules Page', () => {
 
       // shows a summary count of completed and failed granules
       cy.get('.overview-num__wrapper ul li')
-        .first().contains('li', 'Completed').contains('li', 8)
+        .first().contains('li', 'Completed').contains('li', 7)
         .next()
         .contains('li', 'Failed')
         .contains('li', 2)
         .next()
         .contains('li', 'Running')
-        .contains('li', 2);
+        .contains('li', 2)
+        .next()
+        .contains('li', 'Queued')
+        .contains('li', 1);
 
       // shows a list of granules
       cy.getFakeApiFixture('granules').as('granulesListFixture');
@@ -263,13 +266,16 @@ describe('Dashboard Granules Page', () => {
 
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
-          .first().should('contain', 8).and('contain', 'Completed')
+          .first().should('contain', 7).and('contain', 'Completed')
           .next()
           .should('contain', 0)
           .and('contain', 'Failed')
           .next()
           .should('contain', 0)
-          .and('contain', 'Running');
+          .and('contain', 'Running')
+          .next()
+          .should('contain', 0)
+          .and('contain', 'Queued');
       });
     });
 
@@ -329,22 +335,28 @@ describe('Dashboard Granules Page', () => {
 
       // shows a summary count of completed and failed granules
       cy.get('.overview-num__wrapper ul li')
-        .first().contains('li', 'Completed').contains('li', 8)
+        .first().contains('li', 'Completed').contains('li', 7)
         .next()
         .contains('li', 'Failed')
         .contains('li', 2)
         .next()
         .contains('li', 'Running')
-        .contains('li', 2);
+        .contains('li', 2)
+        .next()
+        .contains('li', 'Queued')
+        .contains('li', 1);
       cy.setDatepickerDropdown('Recent');
       cy.get('.overview-num__wrapper ul li')
-        .first().contains('li', 'Completed').contains('li', 8)
+        .first().contains('li', 'Completed').contains('li', 7)
         .next()
         .contains('li', 'Failed')
         .contains('li', 2)
         .next()
         .contains('li', 'Running')
-        .contains('li', 2);
+        .contains('li', 2)
+        .next()
+        .contains('li', 'Queued')
+        .contains('li', 1);
       cy.setDatepickerDropdown('Custom');
       cy.get('[data-cy="endDateTime"] .react-datetime-picker__inputGroup__month').click();
       cy.get('.react-calendar__month-view__days__day--weekend').eq(0).click();
@@ -645,13 +657,16 @@ describe('Dashboard Granules Page', () => {
 
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
-          .first().should('contain', 8).and('contain', 'Completed')
+          .first().should('contain', 7).and('contain', 'Completed')
           .next()
           .should('contain', 2)
           .and('contain', 'Failed')
           .next()
           .should('contain', 2)
-          .and('contain', 'Running');
+          .and('contain', 'Running')
+          .next()
+          .should('contain', 1)
+          .and('contain', 'Queued');
       });
     });
 

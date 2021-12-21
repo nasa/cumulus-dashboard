@@ -42,9 +42,10 @@ describe('Dashboard Collections Page', () => {
 
       cy.get('.table .tbody .tr').should('have.length', 2);
       cy.get('.tbody > .tr > :nth-child(4)').should('contain', '11');
-      cy.get('.tbody > .tr > :nth-child(5)').should('contain', '7');
+      cy.get('.tbody > .tr > :nth-child(5)').should('contain', '6');
       cy.get('.tbody > .tr > :nth-child(6)').should('contain', '2');
       cy.get('.tbody > .tr > :nth-child(7)').should('contain', '2');
+      cy.get('.tbody > .tr > :nth-child(8)').should('contain', '1');
 
       cy.clearStartDateTime();
       cy.wait('@getCollections');
@@ -548,20 +549,26 @@ describe('Dashboard Collections Page', () => {
           .and('contain', 'Failed')
           .next()
           .should('contain', 0)
-          .and('contain', 'Running');
+          .and('contain', 'Running')
+          .next()
+          .should('contain', 0)
+          .and('contain', 'Queued');
       });
 
       cy.get('[data-cy="endDateTime"] .react-datetime-picker__clear-button__icon').click();
 
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
-          .first().should('contain', 7).and('contain', 'Completed')
+          .first().should('contain', 6).and('contain', 'Completed')
           .next()
           .should('contain', 2)
           .and('contain', 'Failed')
           .next()
           .should('contain', 2)
-          .and('contain', 'Running');
+          .and('contain', 'Running')
+          .next()
+          .should('contain', 1)
+          .and('contain', 'Queued');
       });
     });
 
@@ -570,13 +577,16 @@ describe('Dashboard Collections Page', () => {
 
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
-          .first().should('contain', 7).and('contain', 'Completed')
+          .first().should('contain', 6).and('contain', 'Completed')
           .next()
           .should('contain', 2)
           .and('contain', 'Failed')
           .next()
           .should('contain', 2)
-          .and('contain', 'Running');
+          .and('contain', 'Running')
+          .next()
+          .should('contain', 1)
+          .and('contain', 'Queued');
       });
 
       cy.get('.filter-status .rbt-input-main').as('status-input');

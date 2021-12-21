@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Upgrade cypress to 8.7.0
 - **CUMULUS-2721**
   - Remove table selectors and granule actions from all reconciliation report tables since they will not work on these tables due to the nature of the backend
+- **CUMULUS-2722**
+  - Updated dashboard displays to handle queued granules
 - **CUMULUS-2744**
   - Display granules associated with an execution in a table
 - **CUMULUS-2747**

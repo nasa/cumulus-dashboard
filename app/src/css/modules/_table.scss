@@ -660,9 +660,7 @@
 // Table - Granule Status //
 
 .table__main-asset {
-  .granule__status--running, .granule__status--running:visited,
-  .granule__status--completed, .granule__status--completed:visited,
-  .granule__status--failed, .granule__status--failed:visited {
+  .granule__status, .granule__status:visited {
     color: $ocean-blue;
   }
 }

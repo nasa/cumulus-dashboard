@@ -21,42 +21,36 @@ import List from '../Table/Table';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 
-const ActivePdrs = ({ dispatch, location, pdrs, queryParams }) => {
+const generateBreadcrumbConfig = (view) => [
+  {
+    label: 'Dashboard Home',
+    href: '/',
+  },
+  {
+    label: 'PDRs',
+    href: '/pdrs',
+  },
+  {
+    label: view,
+    active: true,
+  },
+];
+
+const ActivePdrs = ({ match, pdrs, queryParams }) => {
   const { list } = pdrs;
   const { count, queriedAt } = list.meta;
+  const {
+    params: { status: paramStatus },
+  } = match;
+  const status = paramStatus === 'active' ? 'running' : paramStatus;
   const query = generateQuery();
-  const view = getView();
-  const displayCaseView = displayCase(view);
-  const breadcrumbConfig = [
-    {
-      label: 'Dashboard Home',
-      href: '/',
-    },
-    {
-      label: 'PDRs',
-      href: '/pdrs',
-    },
-    {
-      label: displayCaseView,
-      active: true,
-    },
-  ];
+  const displayCaseView = displayCase(paramStatus);
+  const breadcrumbConfig = generateBreadcrumbConfig(displayCaseView);
 
   function generateQuery() {
     const currentQuery = { ...queryParams };
-    const { pathname } = location;
-    if (pathname === '/pdrs/completed') currentQuery.status = 'completed';
-    else if (pathname === '/pdrs/failed') currentQuery.status = 'failed';
-    else if (pathname === '/pdrs/active') currentQuery.status = 'running';
+    currentQuery.status = status;
     return currentQuery;
-  }
-
-  function getView() {
-    const { pathname } = location;
-    if (pathname === '/pdrs/completed') return 'completed';
-    if (pathname === '/pdrs/failed') return 'failed';
-    if (pathname === '/pdrs/active') return 'active';
-    return 'all';
   }
 
   function generateBulkActions() {
@@ -80,7 +74,7 @@ const ActivePdrs = ({ dispatch, location, pdrs, queryParams }) => {
         <List
           list={list}
           action={listPdrs}
-          tableColumns={view === 'failed' ? errorTableColumns : tableColumns}
+          tableColumns={status === 'failed' ? errorTableColumns : tableColumns}
           query={query}
           bulkActions={generateBulkActions()}
           rowId="pdrName"
@@ -104,8 +98,7 @@ const ActivePdrs = ({ dispatch, location, pdrs, queryParams }) => {
 };
 
 ActivePdrs.propTypes = {
-  location: PropTypes.object,
-  dispatch: PropTypes.func,
+  match: PropTypes.object,
   pdrs: PropTypes.object,
   queryParams: PropTypes.object,
 };

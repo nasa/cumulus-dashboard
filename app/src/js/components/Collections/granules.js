@@ -4,7 +4,11 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import { getCollectionId, displayCase, collectionHrefFromNameVersion } from '../../utils/format';
+import {
+  getCollectionId,
+  displayCase,
+  collectionHrefFromNameVersion,
+} from '../../utils/format';
 import {
   listGranules,
   filterGranules,
@@ -13,7 +17,7 @@ import {
   searchGranules,
   clearGranulesSearch,
   listWorkflows,
-  getOptionsProviderName
+  getOptionsProviderName,
 } from '../../actions';
 import {
   bulkActions,
@@ -25,8 +29,7 @@ import {
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
-import statusOptions from '../../utils/status';
-import { strings } from '../locale';
+import { granuleStatus as statusOptions } from '../../utils/status';
 import { workflowOptionNames } from '../../selectors';
 import ListFilters from '../ListActions/ListFilters';
 import CollectionHeader from './collection-header';
@@ -34,21 +37,21 @@ import CollectionHeader from './collection-header';
 const CollectionGranules = ({
   dispatch,
   granules,
-  location,
   match,
   queryParams,
   workflowOptions,
-  providers
+  providers,
 }) => {
   const { params } = match;
-  const { name: collectionName, version: collectionVersion } = params;
-  const { pathname } = location;
+  const { name: collectionName, version: collectionVersion, status } = params;
+  const granuleStatus = status === 'processing' ? 'running' : status;
   const { list } = granules;
   const { meta } = list;
-  const displayName = strings.granules;
   const decodedVersion = decodeURIComponent(collectionVersion);
-  const collectionId = getCollectionId({ name: collectionName, version: decodedVersion });
-  const view = getView();
+  const collectionId = getCollectionId({
+    name: collectionName,
+    version: decodedVersion,
+  });
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const [selected, setSelected] = useState([]);
@@ -58,14 +61,17 @@ const CollectionGranules = ({
   const breadcrumbConfig = [
     {
       label: 'Collection Granules',
-      href: `${collectionHrefFromNameVersion({ name: collectionName, version: collectionVersion })}/granules`,
-      active: view === 'all',
+      href: `${collectionHrefFromNameVersion({
+        name: collectionName,
+        version: collectionVersion,
+      })}/granules`,
+      active: !granuleStatus,
     },
   ];
 
-  if (view !== 'all') {
+  if (granuleStatus) {
     breadcrumbConfig.push({
-      label: displayCase(view),
+      label: displayCase(granuleStatus),
       active: true,
     });
   }
@@ -84,15 +90,8 @@ const CollectionGranules = ({
       ...queryParams,
       collectionId,
     };
-    if (view !== 'all') options.status = view;
+    if (granuleStatus) options.status = granuleStatus;
     return options;
-  }
-
-  function getView() {
-    if (pathname.includes('/granules/completed')) return 'completed';
-    if (pathname.includes('/granules/processing')) return 'running';
-    if (pathname.includes('/granules/failed')) return 'failed';
-    return 'all';
   }
 
   function generateBulkActions() {
@@ -132,7 +131,8 @@ const CollectionGranules = ({
   function updateSelection(selectedIds, currentSelectedRows) {
     const allSelectedRows = selected.concat(currentSelectedRows);
     const selectedRows = selectedIds
-      .map((id) => allSelectedRows.find((g) => id === g.granuleId)).filter(Boolean);
+      .map((id) => allSelectedRows.find((g) => id === g.granuleId))
+      .filter(Boolean);
     setSelected(selectedRows);
   }
 
@@ -150,7 +150,7 @@ const CollectionGranules = ({
       <section className="page__section">
         <div className="heading__wrapper--border">
           <h2 className="heading--medium heading--shared-content with-description">
-            {`${displayCase(view)} ${displayName} `}
+            {displayCase(granuleStatus || 'all')} Granules{' '}
             <span className="num-title">
               {`${(meta.count && meta.count) || 0}`}
             </span>
@@ -179,7 +179,7 @@ const CollectionGranules = ({
             searchKey="granules"
           />
           <ListFilters>
-            {view === 'all' && (
+            {!granuleStatus && (
               <Dropdown
                 options={statusOptions}
                 action={filterGranules}
@@ -213,7 +213,6 @@ const CollectionGranules = ({
 CollectionGranules.propTypes = {
   granules: PropTypes.object,
   dispatch: PropTypes.func,
-  location: PropTypes.object,
   match: PropTypes.object,
   queryParams: PropTypes.object,
   workflowOptions: PropTypes.array,
@@ -224,6 +223,6 @@ export default withRouter(
   connect((state) => ({
     granules: state.granules,
     workflowOptions: workflowOptionNames(state),
-    providers: state.providers
+    providers: state.providers,
   }))(CollectionGranules)
 );
