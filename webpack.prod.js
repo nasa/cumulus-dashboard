@@ -37,6 +37,9 @@ const MainConfig = mergeWithRules({
       new TerserJsPlugin({
         parallel: true,
         include: /\.js$/,
+        terserOptions: {
+          sourceMap: true,
+        }
       }),
       new CssMinimizerPlugin({
         minimizerOptions: {
