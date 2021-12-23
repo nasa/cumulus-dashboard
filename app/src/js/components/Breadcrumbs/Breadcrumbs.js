@@ -14,7 +14,8 @@ const Breadcrumbs = ({ config, locationQueryParams }) => (
           key={index}
           className={`breadcrumb-item ${active ? 'active' : ''}`}
         >
-          {active ? <span>{label}</span>
+          {active
+            ? <span>{label}</span>
             : <Link
               to={(toLocation) => (
                 {

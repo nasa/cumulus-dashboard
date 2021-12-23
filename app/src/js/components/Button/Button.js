@@ -98,7 +98,7 @@ export const Button = ({
           ? (
             <span>
             </span>
-          )
+            )
           : children
         }
       </span>

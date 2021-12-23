@@ -1,5 +1,5 @@
 const path = require('path');
-const merge = require('webpack-merge');
+const { mergeWithRules } = require('webpack-merge');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserJsPlugin = require('terser-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
@@ -12,9 +12,13 @@ const servedByCumulusAPI = process.env.SERVED_BY_CUMULUS_API;
 
 const publicPath = servedByCumulusAPI ? './' : '/';
 
-const MainConfig = merge.smartStrategy({
+const MainConfig = mergeWithRules({
   devtool: 'replace',
-  'module.rules.use': 'prepend'
+  module: {
+    rules: {
+      use: 'prepend',
+    },
+  },
 })(CommonConfig, {
   mode: 'production',
   devtool: 'source-map',
@@ -33,21 +37,20 @@ const MainConfig = merge.smartStrategy({
         cache: true,
         parallel: true,
         sourceMap: true,
-        include: /\.js$/
+        include: /\.js$/,
       }),
       new CssMinimizerPlugin({
         minimizerOptions: {
           preset: [
             'default',
             {
-              discardComments:
-              {
-                removeAll: true
-              }
-            }
-          ]
-        }
-      })
+              discardComments: {
+                removeAll: true,
+              },
+            },
+          ],
+        },
+      }),
     ],
     splitChunks: {
       cacheGroups: {
@@ -55,17 +58,17 @@ const MainConfig = merge.smartStrategy({
           name: 'vendor',
           test: /[\\/]node_modules[\\/]/,
           chunks: 'all',
-          maxSize: 500000
+          maxSize: 500000,
         },
         styles: {
           name: 'styles',
           test: /\.css$/,
-          chunks: 'all'
-        }
-      }
+          chunks: 'all',
+        },
+      },
     },
     runtimeChunk: true,
-    sideEffects: true
+    sideEffects: true,
   },
   module: {
     rules: [
@@ -81,19 +84,19 @@ const MainConfig = merge.smartStrategy({
             loader: MiniCssExtractPlugin.loader,
             options: {
               esModule: false,
-            }
-          }
-        ]
-      }
-    ]
+            },
+          },
+        ],
+      },
+    ],
   },
   plugins: [
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: `[name].[chunkhash:8]-${pkg.version}.css`,
-      chunkFilename: `[id].[chunkhash:8]-${pkg.version}.css`
-    })
-  ]
+      chunkFilename: `[id].[chunkhash:8]-${pkg.version}.css`,
+    }),
+  ],
 });
 
 module.exports = MainConfig;

@@ -55,11 +55,13 @@ const tableColumns = [
   },
   {
     Header: 'Link',
-    accessor: (row) => (row.bucket && row.key ? (
+    accessor: (row) => (row.bucket && row.key
+      ? (
       <a href={makeLink(row.bucket, row.key)}>
         {row.fileName ? link : nullValue}
       </a>
-    ) : null),
+        )
+      : null),
     id: 'link',
   },
   {
@@ -93,21 +95,25 @@ const metaAccessors = [
   {
     label: `${strings.cmr} Link`,
     property: 'cmrLink',
-    accessor: (d) => (d ? (
+    accessor: (d) => (d
+      ? (
       <a href={d} target="_blank">
         link
       </a>
-    ) : (
-      nullValue
-    )),
+        )
+      : (
+          nullValue
+        )),
   },
   {
     label: 'Executions List',
-    accessor: (row) => (row.granuleId && row.collectionId ? (
+    accessor: (row) => (row.granuleId && row.collectionId
+      ? (
       <Link to={() => ({ pathname: `/executions/executions-list/${encodeURIComponent(row.collectionId)}/${encodeURIComponent(path.basename(row.granuleId))}` })}>link</Link>
-    ) : (
-      nullValue
-    )),
+        )
+      : (
+          nullValue
+        )),
   },
   {
     label: 'Published',
