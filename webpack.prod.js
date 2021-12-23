@@ -16,6 +16,7 @@ const MainConfig = mergeWithRules({
   devtool: 'replace',
   module: {
     rules: {
+      test: 'match',
       use: 'prepend',
     },
   },
@@ -34,9 +35,7 @@ const MainConfig = mergeWithRules({
     minimize: true,
     minimizer: [
       new TerserJsPlugin({
-        cache: true,
         parallel: true,
-        sourceMap: true,
         include: /\.js$/,
       }),
       new CssMinimizerPlugin({
