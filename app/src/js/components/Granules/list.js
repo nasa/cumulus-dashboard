@@ -34,15 +34,7 @@ import { workflowOptionNames } from '../../selectors';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ListFilters from '../ListActions/ListFilters';
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 const generateBreadcrumbConfig = (view) => [
-=======
-const initialBreadcrumbConfig = [
->>>>>>> Updating routing that calculates views
-=======
-const generateBreadcrumbConfig = (view) => [
->>>>>>> Update breadcrumbs and some formatting
   {
     label: 'Dashboard Home',
     href: '/',
@@ -51,19 +43,10 @@ const generateBreadcrumbConfig = (view) => [
     label: 'Granules',
     href: '/granules',
   },
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Update breadcrumbs and some formatting
   {
     label: view,
     active: true,
   },
-<<<<<<< HEAD
-=======
->>>>>>> Updating routing that calculates views
-=======
->>>>>>> Update breadcrumbs and some formatting
 ];
 
 const AllGranules = ({
@@ -92,21 +75,7 @@ const AllGranules = ({
   const displayCaseView = displayCase(status);
   const tableSortId = status === 'failed' ? 'granuleId' : 'timestamp';
   const errorCount = get(stats, 'count.data.granules.count') || [];
-<<<<<<< HEAD
-<<<<<<< HEAD
   const breadcrumbConfig = generateBreadcrumbConfig(displayCaseView);
-=======
-  const breadcrumbConfig = [
-    ...initialBreadcrumbConfig,
-    {
-      label: displayCaseView,
-      active: true,
-    },
-  ];
->>>>>>> Updating routing that calculates views
-=======
-  const breadcrumbConfig = generateBreadcrumbConfig(displayCaseView);
->>>>>>> Update breadcrumbs and some formatting
 
   useEffect(() => {
     dispatch(listWorkflows());
@@ -189,15 +158,7 @@ const AllGranules = ({
         </section>
         <div className="page__section__header page__section__header-wrapper">
           <h1 className="heading--large heading--shared-content with-description ">
-<<<<<<< HEAD
-<<<<<<< HEAD
             {displayCaseView} Granules{' '}
-=======
-            {displayCaseView} Granules
->>>>>>> Updating routing that calculates views
-=======
-            {displayCaseView} Granules{' '}
->>>>>>> Formatting updates
             <span className="num-title">
               {!Number.isNaN(+count) ? `${tally(count)}` : 0}
             </span>

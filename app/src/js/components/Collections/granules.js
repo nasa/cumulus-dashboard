@@ -29,15 +29,7 @@ import {
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
-<<<<<<< HEAD
-<<<<<<< HEAD
 import { granuleStatus as statusOptions } from '../../utils/status';
-=======
-import statusOptions from '../../utils/status';
->>>>>>> Formatting updates
-=======
-import { granuleStatus as statusOptions } from '../../utils/status';
->>>>>>> Add queued to status dropdowns
 import { workflowOptionNames } from '../../selectors';
 import ListFilters from '../ListActions/ListFilters';
 import CollectionHeader from './collection-header';
@@ -56,20 +48,10 @@ const CollectionGranules = ({
   const { list } = granules;
   const { meta } = list;
   const decodedVersion = decodeURIComponent(collectionVersion);
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Update breadcrumbs and some formatting
   const collectionId = getCollectionId({
     name: collectionName,
     version: decodedVersion,
   });
-<<<<<<< HEAD
-=======
-  const collectionId = getCollectionId({ name: collectionName, version: decodedVersion });
->>>>>>> Updating routing that calculates views
-=======
->>>>>>> Update breadcrumbs and some formatting
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const [selected, setSelected] = useState([]);
@@ -79,20 +61,10 @@ const CollectionGranules = ({
   const breadcrumbConfig = [
     {
       label: 'Collection Granules',
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Update breadcrumbs and some formatting
       href: `${collectionHrefFromNameVersion({
         name: collectionName,
         version: collectionVersion,
       })}/granules`,
-<<<<<<< HEAD
-=======
-      href: `${collectionHrefFromNameVersion({ name: collectionName, version: collectionVersion })}/granules`,
->>>>>>> Updating routing that calculates views
-=======
->>>>>>> Update breadcrumbs and some formatting
       active: !granuleStatus,
     },
   ];
@@ -178,19 +150,7 @@ const CollectionGranules = ({
       <section className="page__section">
         <div className="heading__wrapper--border">
           <h2 className="heading--medium heading--shared-content with-description">
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
             {displayCase(granuleStatus || 'all')} Granules{' '}
-=======
-            {`${displayCase(granuleStatus)} ${displayName} `}
->>>>>>> Updating routing that calculates views
-=======
-            {displayCase(granuleStatus || 'all')} Granules
->>>>>>> Formatting updates
-=======
-            {displayCase(granuleStatus || 'all')} Granules{' '}
->>>>>>> Fix integration tests
             <span className="num-title">
               {`${(meta.count && meta.count) || 0}`}
             </span>

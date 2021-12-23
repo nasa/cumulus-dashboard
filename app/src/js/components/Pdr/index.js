@@ -52,21 +52,12 @@ const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
                 )}
               />
               <Route
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Fix integration tests
                 path="/pdrs/pdr/:pdrName"
                 render={(props) => (
                   <Pdr queryParams={filteredQueryParams} {...props} />
                 )}
               />
               <Route
-<<<<<<< HEAD
-=======
->>>>>>> Updating routing that calculates views
-=======
->>>>>>> Fix integration tests
                 path="/pdrs/:status"
                 render={(props) => (
                   <PdrList queryParams={filteredQueryParams} {...props} />
