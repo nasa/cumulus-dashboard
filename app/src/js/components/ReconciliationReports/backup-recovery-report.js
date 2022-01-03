@@ -40,7 +40,7 @@ const BackupRecoveryReport = ({
         name={reportName}
         onDownloadClick={handleDownloadClick}
         startTime={createStartTime}
-        type='Backup & Recovery'
+        type='Backup and Recovery' // TODO: verify this matches the "type" returned from the API
       />
       <section className="page__section">
         <div className="list-action-wrapper">
