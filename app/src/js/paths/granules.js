@@ -7,6 +7,7 @@ const granuleRoutes = [
   ['Completed', 'completed', (d) => d.key === 'completed'],
   ['Running', 'processing', (d) => d.key === 'running'],
   ['Failed', 'failed', (d) => d.key === 'failed'],
+  ['Queued', 'queued', (d) => d.key === 'queued'],
   ['Lists', 'lists', (d) => d.key === 'Granule Inventory']
 ];
 

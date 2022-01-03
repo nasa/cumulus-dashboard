@@ -1,16 +1,17 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable import/no-cycle */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { get, set } from 'object-path';
 import startCase from 'lodash/startCase';
+import noop from 'lodash/noop';
 import { Form, formTypes } from '../Form/Form';
 import {
   arrayWithLength,
   isArray,
   isNumber,
   isObject,
-  isText
+  isText,
 } from '../../utils/validate';
 import t from '../../utils/strings';
 import ErrorReport from '../Errors/report';
@@ -25,7 +26,7 @@ const traverseSchema = (schema, enums, fn, path = []) => {
     if (
       meta.type !== 'object' ||
       meta.additionalProperties === true ||
-      (property in enums)
+      property in enums
     ) {
       fn([...path, property], meta, schema);
     } else if (typeof meta.properties === 'object') {
@@ -73,13 +74,14 @@ export const removeReadOnly = (data, schema) => {
 
 // recursively scan a schema object and create a form config from it.
 // returns a flattened representation of the schema.
-export const createFormConfig = (
+export const createFormConfig = ({
   data = {},
   schema,
   include,
   exclude,
-  enums = {}
-) => {
+  enums = {},
+  handleInputChange = {},
+}) => {
   const fields = [];
   const toRegExps = (stringsOrRegExps) => stringsOrRegExps.map((strOrRE) => (typeof strOrRE === 'string' ? new RegExp(`^${strOrRE}$`, 'i') : strOrRE));
   const inclusions = toRegExps(include);
@@ -98,7 +100,9 @@ export const createFormConfig = (
 
     // determine the label
     const property = path[path.length - 1];
-    const required = isArray(schemaProperty.required) && schemaProperty.required.includes(property);
+    const required =
+      isArray(schemaProperty.required) &&
+      schemaProperty.required.includes(property);
 
     const labelText = startCase(meta.title || property);
     const label = (
@@ -117,7 +121,8 @@ export const createFormConfig = (
       label,
       labelText,
       schemaProperty: fullyQualifiedProperty,
-      required
+      required,
+      handleChange: handleInputChange[property] || noop,
     };
 
     // dropdowns have type set to string, but have an enum prop.
@@ -126,7 +131,9 @@ export const createFormConfig = (
 
     if (isArray(meta.enum) || property in enums) {
       type = 'enum';
-    } else if (Object.prototype.hasOwnProperty.call(meta, 'patternProperties')) {
+    } else if (
+      Object.prototype.hasOwnProperty.call(meta, 'patternProperties')
+    ) {
       type = 'pattern';
     } else {
       type = meta.type;
@@ -150,7 +157,7 @@ export const createFormConfig = (
       }
       case 'enum': {
         // pass the enum fields as options
-        config.options = meta.enum || enums[property];
+        config.options = enums[property] || meta.enum;
         fields.push(dropdownField(config, property, required && isText));
         break;
       }
@@ -189,21 +196,23 @@ const textAreaField = (config, property, validate) => ({
   ...config,
   type: formTypes.textArea,
   mode: 'json',
-  value: isObject(config.value) ? JSON.stringify(config.value, null, 2) : config.value,
+  value: isObject(config.value)
+    ? JSON.stringify(config.value, null, 2)
+    : config.value,
   validate,
-  error: validate && get(errors, property, errors.required)
+  error: validate && get(errors, property, errors.required),
 });
 
-function textField (config, property, validate) {
+function textField(config, property, validate) {
   config.type = formTypes.text;
   config.validate = validate;
   config.error = validate && get(errors, property, errors.required);
-  if (property === 'password' || property === 'username') config.isPassword = true;
+  if (property === 'password' || property === 'username') { config.isPassword = true; }
 
   return config;
 }
 
-function numberField (config, property, validate) {
+function numberField(config, property, validate) {
   config.type = formTypes.number;
   config.validate = validate;
   config.error = validate && get(errors, property, errors.required);
@@ -211,14 +220,14 @@ function numberField (config, property, validate) {
   return config;
 }
 
-function dropdownField (config, property, validate) {
+function dropdownField(config, property, validate) {
   config.type = formTypes.dropdown;
   config.validate = validate;
   config.error = validate && get(errors, property, errors.required);
   return config;
 }
 
-function listField (config, property, validate) {
+function listField(config, property, validate) {
   config.type = formTypes.list;
   config.validate = validate;
   config.error = validate && get(errors, property, errors.required);
@@ -230,21 +239,28 @@ const Schema = ({
   enums,
   error,
   exclude,
+  handleInputChange,
   include,
   onCancel,
   onSubmit,
-  pk,
   schema,
   status,
 }) => {
-  const [fields, setFields] = useState(createFormConfig(data, schema, include, exclude, enums));
-
-  useEffect(() => {
-    setFields(createFormConfig(data, schema, include, exclude, enums));
-  }, [enums, data, schema, include, exclude, pk]);
+  const fields = createFormConfig({
+    data,
+    schema,
+    include,
+    exclude,
+    enums,
+    handleInputChange,
+  });
 
   return (
-    <div ref={(element) => { error && element && element.scrollIntoView(true); }}>
+    <div
+      ref={(element) => {
+        error && element && element.scrollIntoView(true);
+      }}
+    >
       {error && <ErrorReport report={error} />}
       <Form
         inputMeta={fields}
@@ -272,7 +288,6 @@ Schema.propTypes = {
   // as the value of the select option, and the second value is the option text.
   enums: PropTypes.objectOf(PropTypes.array),
   data: PropTypes.object,
-  pk: PropTypes.string,
   onCancel: PropTypes.func,
   onSubmit: PropTypes.func,
   status: PropTypes.string,
@@ -292,7 +307,8 @@ Schema.propTypes = {
   // appearing on the form.
   exclude: PropTypes.arrayOf(
     PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(RegExp)])
-  )
+  ),
+  handleInputChange: PropTypes.objectOf(PropTypes.func),
 };
 
 Schema.defaultProps = {
@@ -300,7 +316,7 @@ Schema.defaultProps = {
   // Exclude no schema properties
   exclude: [],
   // Include all schema properties
-  include: [/.+/]
+  include: [/.+/],
 };
 
 export default Schema;

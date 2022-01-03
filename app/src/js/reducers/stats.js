@@ -44,7 +44,11 @@ function shimEmptyCount(count) {
     key: 'running',
     count: 0,
   };
-  return [completed, failed, running];
+  const queued = count.find((item) => item.key === 'queued') || {
+    key: 'queued',
+    count: 0,
+  };
+  return [completed, failed, running, queued];
 }
 
 export default createReducer(initialState, {

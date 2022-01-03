@@ -12,6 +12,7 @@ const singleCollectionRoutes = [
   ['Completed', 'collection/:name/:version/granules/completed'],
   ['Running', 'collection/:name/:version/granules/processing'],
   ['Failed', 'collection/:name/:version/granules/failed'],
+  ['Queued', 'collection/:name/:version/granules/queued'],
   ['Definition', 'collection/:name/:version/definition'],
   ['Logs', 'collection/:name/:version/logs']
 ];

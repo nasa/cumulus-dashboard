@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 const FormList = ({ error, id, label, onChange, value }) => {
-  const [values, setValues] = useState(value.length ? value : ['']);
+  const [values, setValues] = useState(value?.length ? value : ['']);
 
   function handleChange(index, newValue) {
     // make a copy of values so we can update the index

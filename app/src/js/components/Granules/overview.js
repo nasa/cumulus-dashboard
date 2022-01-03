@@ -29,7 +29,7 @@ import {
   recoverAction,
   tableColumns,
 } from '../../utils/table-config/granules';
-import statusOptions from '../../utils/status';
+import { granuleStatus as statusOptions } from '../../utils/status';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 import List from '../Table/Table';
@@ -166,7 +166,7 @@ class GranulesOverview extends React.Component {
         <section className="page__section page__section__header-wrapper">
           <div className="page__section__header">
             <h1 className="heading--large heading--shared-content with-description ">
-              {strings.granule_overview}
+              Granule Overview
             </h1>
             {lastUpdated(queriedAt)}
             <Overview type="granules" inflight={granules.list.inflight} />

@@ -382,7 +382,7 @@ class GranuleOverview extends React.Component {
           {errors.length ? <ErrorReport report={errors} /> : null}
           <div className="heading__wrapper--border">
             <h2 className="heading--medium with-description">
-              {strings.granule_overview}
+              Granule Overview
             </h2>
           </div>
           <Metadata data={granule} accessors={metaAccessors} />

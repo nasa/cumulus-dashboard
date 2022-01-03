@@ -27,7 +27,7 @@ import {
   collectionHrefFromNameVersion,
   collectionHrefFromId,
 } from '../../utils/format';
-import statusOptions from '../../utils/status';
+import { granuleStatus as statusOptions } from '../../utils/status';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 import {
   bulkActions,
@@ -56,7 +56,7 @@ const breadcrumbConfig = [
   },
   {
     label: 'Collections',
-    href: '/collections',
+    href: '/collections/all',
   },
   {
     label: 'Collection Overview',

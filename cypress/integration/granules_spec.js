@@ -81,13 +81,16 @@ describe('Dashboard Granules Page', () => {
 
       // shows a summary count of completed and failed granules
       cy.get('.overview-num__wrapper ul li')
-        .first().contains('li', 'Completed').contains('li', 8)
+        .first().contains('li', 'Completed').contains('li', 7)
         .next()
         .contains('li', 'Failed')
         .contains('li', 2)
         .next()
         .contains('li', 'Running')
-        .contains('li', 2);
+        .contains('li', 2)
+        .next()
+        .contains('li', 'Queued')
+        .contains('li', 1);
 
       // shows a list of granules
       cy.getFakeApiFixture('granules').as('granulesListFixture');
@@ -263,13 +266,16 @@ describe('Dashboard Granules Page', () => {
 
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
-          .first().should('contain', 8).and('contain', 'Completed')
+          .first().should('contain', 7).and('contain', 'Completed')
           .next()
           .should('contain', 0)
           .and('contain', 'Failed')
           .next()
           .should('contain', 0)
-          .and('contain', 'Running');
+          .and('contain', 'Running')
+          .next()
+          .should('contain', 0)
+          .and('contain', 'Queued');
       });
     });
 
@@ -329,22 +335,28 @@ describe('Dashboard Granules Page', () => {
 
       // shows a summary count of completed and failed granules
       cy.get('.overview-num__wrapper ul li')
-        .first().contains('li', 'Completed').contains('li', 8)
+        .first().contains('li', 'Completed').contains('li', 7)
         .next()
         .contains('li', 'Failed')
         .contains('li', 2)
         .next()
         .contains('li', 'Running')
-        .contains('li', 2);
+        .contains('li', 2)
+        .next()
+        .contains('li', 'Queued')
+        .contains('li', 1);
       cy.setDatepickerDropdown('Recent');
       cy.get('.overview-num__wrapper ul li')
-        .first().contains('li', 'Completed').contains('li', 8)
+        .first().contains('li', 'Completed').contains('li', 7)
         .next()
         .contains('li', 'Failed')
         .contains('li', 2)
         .next()
         .contains('li', 'Running')
-        .contains('li', 2);
+        .contains('li', 2)
+        .next()
+        .contains('li', 'Queued')
+        .contains('li', 1);
       cy.setDatepickerDropdown('Custom');
       cy.get('[data-cy="endDateTime"] .react-datetime-picker__inputGroup__month').click();
       cy.get('.react-calendar__month-view__days__day--weekend').eq(0).click();
@@ -379,7 +391,7 @@ describe('Dashboard Granules Page', () => {
     it('Should reingest a granule from granule details page.', () => {
       const granuleId = 'MOD09GQ.A9344328.K9yI3O.006.4625818663028';
       cy.intercept(
-        { method: 'PUT', url: new RegExp('/granules/.*') },
+        { method: 'PUT', url: /\/granules\/.*/ },
         { body: { message: 'ingested' }, statusCode: 200 },
       );
       cy.intercept('GET', `/granules/${granuleId}*`).as('getGranule');
@@ -401,7 +413,7 @@ describe('Dashboard Granules Page', () => {
     it('Should reingest a granule and redirect to the granules detail page.', () => {
       const granuleId = 'MOD09GQ.A0142558.ee5lpE.006.5112577830916';
       cy.intercept(
-        { method: 'PUT', url: new RegExp('/granules/.*') },
+        { method: 'PUT', url: /\/granules\/.*/ },
         { body: { message: 'ingested' }, statusCode: 200 },
       );
       cy.intercept('GET', `/granules/${granuleId}*`).as('getGranule');
@@ -426,7 +438,7 @@ describe('Dashboard Granules Page', () => {
         'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
       ];
       cy.intercept(
-        { method: 'PUT', url: new RegExp('/granules/.*') },
+        { method: 'PUT', url: /\/granules\/.*/ },
         { body: { message: 'ingested' }, statusCode: 200 },
       );
       cy.visit('/granules');
@@ -446,7 +458,7 @@ describe('Dashboard Granules Page', () => {
 
     it('Should reingest multiple granules selected from multiple pages.', () => {
       cy.intercept(
-        { method: 'PUT', url: new RegExp('/granules/.*') },
+        { method: 'PUT', url: /\/granules\/.*/ },
         { body: { message: 'ingested' }, statusCode: 200 },
       );
       cy.visit('/granules?limit=2');
@@ -479,7 +491,7 @@ describe('Dashboard Granules Page', () => {
         'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
       ];
       cy.intercept(
-        { method: 'PUT', url: new RegExp('/granules/.*') },
+        { method: 'PUT', url: /\/granules\/.*/ },
         { body: { message: 'Oopsie' }, statusCode: 500 }
       );
       cy.visit('/granules');
@@ -498,7 +510,7 @@ describe('Dashboard Granules Page', () => {
     it('Should have a Granule Lists page', () => {
       const listName = 'GranuleList100220';
       const url = new RegExp(`.*/reconciliationReports/${listName}`);
-      cy.intercept({ url: new RegExp('.*/reconciliationReports\\?limit=.*'), method: 'GET' }).as('getLists');
+      cy.intercept({ url: /\/reconciliationReports\?limit=.*/, method: 'GET' }).as('getLists');
       cy.intercept({ url, method: 'GET' }).as('getList');
       cy.visit('/granules');
       cy.contains('.sidebar li a', 'Lists').click();
@@ -645,13 +657,16 @@ describe('Dashboard Granules Page', () => {
 
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
-          .first().should('contain', 8).and('contain', 'Completed')
+          .first().should('contain', 7).and('contain', 'Completed')
           .next()
           .should('contain', 2)
           .and('contain', 'Failed')
           .next()
           .should('contain', 2)
-          .and('contain', 'Running');
+          .and('contain', 'Running')
+          .next()
+          .should('contain', 1)
+          .and('contain', 'Queued');
       });
     });
 
@@ -716,15 +731,13 @@ describe('Dashboard Granules Page', () => {
     });
 
     it('Should handle a successful API response from the Remove and Delete granule requests', () => {
-      cy.intercept(
-        { method: 'PUT', url: new RegExp('/granules/.*') }, (req) => {
-          expect(req.body).to.have.property('action', 'removeFromCmr');
-          req.reply({ body: { message: 'success' }, statusCode: 200 });
-        }
-      );
+      cy.intercept({ method: 'PUT', url: /\/granules\/.*/ }, (req) => {
+        expect(req.body).to.have.property('action', 'removeFromCmr');
+        req.reply({ body: { message: 'success' }, statusCode: 200 });
+      });
 
       cy.intercept(
-        { method: 'DELETE', url: new RegExp('/granules/.*') },
+        { method: 'DELETE', url: /\/granules\/.*/ },
         { body: { message: 'success' }, statusCode: 200 }
       );
 
@@ -744,12 +757,12 @@ describe('Dashboard Granules Page', () => {
 
     it('Should handle a failed API response from the Remove granule requests', () => {
       cy.intercept(
-        { method: 'PUT', url: new RegExp('/granules/.*') },
+        { method: 'PUT', url: /\/granules\/.*/ },
         { body: { message: 'error' }, statusCode: 400 }
       );
 
       cy.intercept(
-        { method: 'DELETE', url: new RegExp('/granules/.*') },
+        { method: 'DELETE', url: /\/granules\/.*/ },
         { body: { message: 'success' }, status: 200 }
       );
 
@@ -769,12 +782,12 @@ describe('Dashboard Granules Page', () => {
 
     it('Should handle a failed API response from the Delete granule requests', () => {
       cy.intercept(
-        { method: 'PUT', url: new RegExp('/granules/.*') },
+        { method: 'PUT', url: /\/granules\/.*/ },
         { body: { message: 'success' }, statusCode: 200 }
       );
 
       cy.intercept(
-        { method: 'DELETE', url: new RegExp('/granules/.*') },
+        { method: 'DELETE', url: /\/granules\/.*/ },
         { body: { message: 'error' }, statusCode: 400 }
       );
 
@@ -837,6 +850,58 @@ describe('Dashboard Granules Page', () => {
       // overrode default timeout of 4 seconds because granules detail page takes longer than 4 seconds even locally
       cy.get('.meta__row > dt', { timeout: 10000 }).contains('Executions List').siblings('dd').children('a')
         .click();
+    });
+
+    it('Should dynamically update menu, sidbar and breadcrumb /granules links with latest filter criteria', () => {
+      const status = 'complete';
+      const provider = 's3_provider';
+      const collectionId = 'Test-L2-Coastal___Operational/Near-Real-Time';
+      const searchShort = 'test';
+      const search = 'test_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl2';
+
+      cy.visit('/granules');
+
+      cy.get('#status').as('status-input');
+      cy.get('@status-input').click().type(status).type('{enter}');
+
+      cy.get('#collectionId').as('collectionId-input');
+      cy.get('@collectionId-input').click().type(collectionId).type('{enter}');
+
+      cy.get('#provider').as('provider-input');
+      cy.get('@provider-input').click().type(provider).type('{enter}');
+
+      cy.get('#search').as('search-input');
+      cy.get('@search-input').click().type(searchShort).type('{enter}');
+
+      cy.intercept('GET', `/granules/${search}*`).as('getGranule');
+
+      cy.get('.hover-wrap > span > a').first().click();
+
+      cy.wait('@getGranule');
+
+      // Breakcrumb <Link> contain correct query params
+      cy.get('.breadcrumb > :nth-child(2) > a')
+        .should('have.attr', 'href')
+        .and('include', `status=${status}`)
+        .and('include', `provider=${provider}`)
+        .and('include', `collectionId=${encodeURIComponent(collectionId)}`)
+        .and('include', `search=${search}`);
+
+      // Menu <Link>s contain correct query params
+      cy.get('nav > ul > :nth-child(3) > a')
+        .should('have.attr', 'href')
+        .and('include', `status=${status}`)
+        .and('include', `provider=${provider}`)
+        .and('include', `collectionId=${encodeURIComponent(collectionId)}`)
+        .and('include', `search=${search}`);
+
+      // Sidebar <Link>s contain correct query params
+      cy.get('.sidebar__nav--back')
+        .should('have.attr', 'href')
+        .and('include', `status=${status}`)
+        .and('include', `provider=${provider}`)
+        .and('include', `collectionId=${encodeURIComponent(collectionId)}`)
+        .and('include', `search=${search}`);
     });
   });
 });

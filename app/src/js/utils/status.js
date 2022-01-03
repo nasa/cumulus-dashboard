@@ -9,41 +9,50 @@ const status = [
   },
   {
     id: 'failed',
-    label: 'Failed'
-  }
+    label: 'Failed',
+  },
 ];
-export default status;
+
+export const granuleStatus = [
+  ...status,
+  {
+    id: 'queued',
+    label: 'Queued',
+  },
+];
 
 export const operationStatus = [
   {
     id: 'RUNNING',
-    label: 'Running'
+    label: 'Running',
   },
   {
     id: 'SUCCEEDED',
-    label: 'Succeeded'
+    label: 'Succeeded',
   },
   {
     id: 'TASK_FAILED',
-    label: 'Task Failed'
+    label: 'Task Failed',
   },
   {
     id: 'RUNNER_FAILED',
-    label: 'Runner Failed'
-  }
+    label: 'Runner Failed',
+  },
 ];
 
 export const reconciliationReportStatus = [
   {
     id: 'Generated',
-    label: 'Generated'
+    label: 'Generated',
   },
   {
     id: 'Pending',
-    label: 'Pending'
+    label: 'Pending',
   },
   {
     id: 'Failed',
-    label: 'Failed'
-  }
+    label: 'Failed',
+  },
 ];
+
+export default status;

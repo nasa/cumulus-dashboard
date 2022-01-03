@@ -639,7 +639,8 @@ select option{
 }
 
 .rule__content,
-.execution__content {
+.execution__content,
+.provider__content {
   border: 1px solid $border-grey;
   box-shadow: $shadow__default;
   border-radius: 10px;
@@ -654,7 +655,12 @@ select option{
     .meta__row {
       flex-direction: row;
       dt{
-        width: 10%;
+        width: 25%;
+      }
+      dd {
+        width: 74%;
+        line-break: anywhere;
+        margin: 0;
       }
     }
   }

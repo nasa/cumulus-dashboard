@@ -17,9 +17,17 @@ test('Header should include PDRs and Logs in navigation when HIDE_PDR=false and 
   const location = {
     pathname: '/',
   };
+  const locationQueryParams = {
+    search: {}
+  };
 
   const header = shallow(
-    <Header dispatch={dispatch} api={api} location={location} />
+    <Header
+      dispatch={dispatch}
+      api={api}
+      location={location}
+      locationQueryParams={locationQueryParams}
+    />
   );
 
   const navigation = header.find('nav li');
@@ -36,9 +44,17 @@ test('Logo path includes BUCKET env variable', function (t) {
   const location = {
     pathname: '/',
   };
+  const locationQueryParams = {
+    search: {}
+  };
 
   const header = shallow(
-    <Header dispatch={dispatch} api={api} location={location} />
+    <Header
+      dispatch={dispatch}
+      api={api}
+      location={location}
+      locationQueryParams={locationQueryParams}
+    />
   );
 
   const logo = header.find('img[alt="Logo"]');

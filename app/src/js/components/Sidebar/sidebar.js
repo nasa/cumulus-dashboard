@@ -19,6 +19,7 @@ const Sidebar = ({
   match,
   params,
   sidebar,
+  locationQueryParams
 }) => {
   const { open: sidebarOpen } = sidebar;
   const { metricsNotConfigured } = logs;
@@ -43,7 +44,9 @@ const Sidebar = ({
       <div key={base}>
         <ul>
           {routes(navPath, navParams, count).map((d, i) => {
-            const path = resolvePath(base, d[1]);
+            let baseComplete = base;
+            if (base === 'collections' && !d[1]) { baseComplete = 'collections/all'; }
+            const path = resolvePath(baseComplete, d[1]);
             if (d[1] && d[1].includes('logs') && metricsNotConfigured) return null;
             const classes = [
               // d[2] might be a function; use it only when it's a string
@@ -58,7 +61,7 @@ const Sidebar = ({
                     className={classes}
                     to={(routeLocation) => ({
                       pathname: path,
-                      search: getPersistentQueryParams(routeLocation),
+                      search: locationQueryParams.search[path] || getPersistentQueryParams(routeLocation),
                     })}
                   >
                     {d[0]}
@@ -107,9 +110,11 @@ Sidebar.propTypes = {
   sidebar: PropTypes.shape({
     open: PropTypes.bool,
   }),
+  locationQueryParams: PropTypes.object,
 };
 
 export default connect((state) => ({
   logs: state.logs,
   sidebar: state.sidebar,
+  locationQueryParams: state.locationQueryParams
 }))(Sidebar);
