@@ -44,12 +44,6 @@
       "location": "s3://localbucket/localrun/reconciliation-reports/GranuleList100220.csv",
       "type": "Granule Inventory",
       "status": "Generated"
-    },
-    {
-      "name": "backupAndRecovery-20211130",
-      "location": "s3://localbucket/localrun/reconciliation-reports/backupAndRecovery-20211130.json",
-      "type": "Backup and Recovery",
-      "status": "Generated"
     }
   ]
 }

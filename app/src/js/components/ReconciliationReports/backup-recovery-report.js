@@ -1,6 +1,9 @@
+/**
+ * TODO: This component should be completed as part of CUMULUS-2748
+ */
+
 import PropTypes from 'prop-types';
 import React from 'react';
-// import groupBy from 'lodash/groupBy';
 import {
   searchReconciliationReport,
   clearReconciliationSearch,
@@ -10,8 +13,6 @@ import Search from '../Search/search';
 import ReportHeading from './report-heading';
 import { handleDownloadUrlClick } from '../../utils/download-file';
 import { tableColumnsBackupAndRecovery } from '../../utils/table-config/reconciliation-reports';
-// import { getFilesSummary, getGranuleFilesSummary } from './reshape-report';
-// import { getCollectionId } from '../../utils/format';
 
 const BackupRecoveryReport = ({
   filterString,
