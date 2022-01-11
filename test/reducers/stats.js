@@ -2,7 +2,7 @@
 import test from 'ava';
 import reducer, { initialState } from '../../app/src/js/reducers/stats';
 import sinon from 'sinon';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import {
   STATS,
   STATS_INFLIGHT,

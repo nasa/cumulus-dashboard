@@ -410,16 +410,18 @@ export class Form extends React.Component {
       </div>
     );
 
-    return this.props.nowrap ? (
-      form
-    ) : (
+    return this.props.nowrap
+      ? (
+          form
+        )
+      : (
       <form
         className="page__section--fullpage-form page__section--fullpage-form--internal"
         id={`form-${this.id}`}
       >
         {form}
       </form>
-    );
+        );
   }
 }
 

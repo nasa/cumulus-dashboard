@@ -51,11 +51,13 @@ export const tableColumns = [
           >
             {value || 'N/A'}
           </span>
-          {eventDetails.type.toLowerCase().includes('failed') ? (
+          {eventDetails.type.toLowerCase().includes('failed')
+            ? (
             <i className="fas fa-times-circle status-icon--failed"></i>
-          ) : (
+              )
+            : (
             <i className="far fa-check-circle status-icon--success"></i>
-          )}
+              )}
           <DefaultModal
             showModal={showModal}
             title={`ID ${id}: ${value || 'N/A'} - ${eventDetails.type}`}
