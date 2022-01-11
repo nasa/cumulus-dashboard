@@ -30,7 +30,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Remove error copy button from auth modal
 - **CUMULUS-2543**
   - When navigating in the Cumulus dashboard any filter query params will be captured and restored
-  when returning to that route.
+    when returning to that route.
+- **CUMULUS-IP**
+  - Updated test fixtures to correspond to new cumulus execution output. This is a transparent change to users.
 
 ### Fixed
 
