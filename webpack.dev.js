@@ -1,16 +1,19 @@
 const webpack = require('webpack');
-const merge = require('webpack-merge');
+const { mergeWithRules } = require('webpack-merge');
 const path = require('path');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
 const CommonConfig = require('./webpack.common');
 
-const DevConfig = merge.smartStrategy(
-  {
-    devtool: 'replace',
-    'module.rules.use': 'prepend'
-  }
-)(CommonConfig, {
+const DevConfig = mergeWithRules({
+  devtool: 'replace',
+  module: {
+    rules: {
+      test: 'match',
+      use: 'prepend',
+    },
+  },
+})(CommonConfig, {
   mode: 'development',
   devtool: 'inline-source-map',
   devServer: {
@@ -23,7 +26,7 @@ const DevConfig = merge.smartStrategy(
       directory: path.join(__dirname, 'dist'),
       watch: true,
       publicPath: '/',
-    }
+    },
   },
   module: {
     rules: [
@@ -34,14 +37,11 @@ const DevConfig = merge.smartStrategy(
             // Creates `style` nodes from JS strings
             loader: 'style-loader',
           },
-        ]
+        ],
       },
-    ]
+    ],
   },
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new ESLintPlugin()
-  ]
+  plugins: [new webpack.HotModuleReplacementPlugin(), new ESLintPlugin()],
 });
 
 module.exports = DevConfig;

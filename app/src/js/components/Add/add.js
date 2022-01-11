@@ -83,24 +83,26 @@ const AddRecord = ({
         <div className="page__section__header">
           <h1 className="heading--large">{title}</h1>
         </div>
-        {schema ? (
-          <Schema
-            data={data}
-            schema={schema}
-            handleInputChange={handleInputChange}
-            onSubmit={post}
-            onCancel={navigateBack}
-            status={record.status}
-            error={
-              error || (record.status === 'inflight' ? null : record.error)
-            }
-            include={include}
-            exclude={exclude}
-            enums={enums}
-          />
-        ) : (
-          <Loading />
-        )}
+        {schema
+          ? (
+            <Schema
+              data={data}
+              schema={schema}
+              handleInputChange={handleInputChange}
+              onSubmit={post}
+              onCancel={navigateBack}
+              status={record.status}
+              error={
+                error || (record.status === 'inflight' ? null : record.error)
+              }
+              include={include}
+              exclude={exclude}
+              enums={enums}
+            />
+            )
+          : (
+            <Loading />
+            )}
       </section>
     </div>
   );

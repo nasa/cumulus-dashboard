@@ -6,7 +6,8 @@ const Datepicker = lazy(() => import('../Datepicker/DatepickerRange'));
 
 const DatePickerHeader = ({ heading, onChange, showDatePicker = true }) => (
   <>
-    {showDatePicker ? <div className='content__header'>
+    {showDatePicker
+      ? <div className='content__header'>
       <div className='row'>
         <ul className='datetimeheader'>
           <li>

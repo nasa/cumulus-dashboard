@@ -2,7 +2,7 @@
 
 import test from 'ava';
 import { get } from 'object-path';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
 import { shallow, configure } from 'enzyme';
 import { BulkGranule } from '../../../app/src/js/components/Granules/bulk.js';

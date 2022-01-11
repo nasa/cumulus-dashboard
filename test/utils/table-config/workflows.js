@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import test from 'ava';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import { buildLink, makeSteps } from '../../../app/src/js/utils/table-config/workflows';
 import _config from '../../../app/src/js/config';
 

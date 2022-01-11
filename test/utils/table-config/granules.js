@@ -2,7 +2,7 @@
 
 import test from 'ava';
 import sinon from 'sinon';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { __RewireAPI__ as GranulesRewireAPI } from '../../../app/src/js/utils/table-config/granules';
 
