@@ -21,7 +21,7 @@
       "type": "IngestGranule",
       "collectionId": "MOD09GQ___006",
       "tasks": {
-        "Report": {
+        "0": {
           "name": "test-source-integration-SfSnsReport",
           "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-SfSnsReport:SfSnsReport-852e08f1fd5e168685bed68ab05230471247aa2b",
           "version": "18"
@@ -44,7 +44,7 @@
       "type": "IngestGranule",
       "collectionId": "MOD09GQ___006",
       "tasks": {
-        "StopStatus": {
+        "0": {
           "name": "test-source-integration-SfSnsReport",
           "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-SfSnsReport:SfSnsReport-852e08f1fd5e168685bed68ab05230471247aa2b",
           "version": "18"
@@ -67,22 +67,22 @@
       "type": "DiscoverAndQueuePdrs",
       "collectionId": "MOD09GQ___006",
       "tasks": {
-        "StartStatus": {
+        "0": {
           "name": "test-source-integration-SfSnsReport",
           "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-SfSnsReport:SfSnsReport-852e08f1fd5e168685bed68ab05230471247aa2b",
           "version": "18"
         },
-        "QueuePdrs": {
+        "1": {
           "name": "test-source-integration-QueuePdrs",
           "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-QueuePdrs:QueuePdrs-8e81d722bac219528d2be0ba8d8104a8cbb1bb04",
           "version": "18"
         },
-        "StopStatus": {
+        "2": {
           "name": "test-source-integration-SfSnsReport",
           "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-SfSnsReport:SfSnsReport-852e08f1fd5e168685bed68ab05230471247aa2b",
           "version": "18"
         },
-        "DiscoverPdrs": {
+        "3": {
           "name": "test-source-integration-DiscoverPdrs",
           "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-DiscoverPdrs:DiscoverPdrs-c155ebecc4d03a9a0a3737b844122643e93d3887",
           "version": "19"
@@ -106,27 +106,27 @@
       "name": "9888b858-d70c-42ec-a887-c9367dcfd7cf",
       "collectionId": "MOD09GQ___006",
       "tasks": {
-        "StatusReport": {
+        "0": {
           "name": "test-source-integration-SfSnsReport",
           "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-SfSnsReport:SfSnsReport-852e08f1fd5e168685bed68ab05230471247aa2b",
           "version": "18"
         },
-        "StopStatus": {
+        "1": {
           "name": "test-source-integration-SfSnsReport",
           "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-SfSnsReport:SfSnsReport-852e08f1fd5e168685bed68ab05230471247aa2b",
           "version": "18"
         },
-        "CheckStatus": {
+        "2": {
           "name": "test-source-integration-PdrStatusCheck",
           "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-PdrStatusCheck:PdrStatusCheck-870b3ba8ae46bd75407798ef59cc1e459d363312",
           "version": "19"
         },
-        "QueueGranules": {
+        "3": {
           "name": "test-source-integration-QueueGranules",
           "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-QueueGranules:QueueGranules-5f5de321741f77e2d7f89f41f16498f02ce111cd",
           "version": "19"
         },
-        "ParsePdr": {
+        "4": {
           "name": "test-source-integration-ParsePdr",
           "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-ParsePdr:ParsePdr-2979f1f71736621607b0d6ccc9875dce4fdcccab",
           "version": "19"
@@ -150,22 +150,22 @@
       "name": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
       "collectionId": "MOD09GQ___006",
       "tasks": {
-        "MoveGranuleStep": {
+        "0": {
           "name": "test-source-integration-MoveGranules",
           "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-MoveGranules:MoveGranules-065967facfd624617685271a921be71a8c436f27",
           "version": "32"
         },
-        "StopStatus": {
+        "1": {
           "name": "test-source-integration-SfSnsReport",
           "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-SfSnsReport:SfSnsReport-852e08f1fd5e168685bed68ab05230471247aa2b",
           "version": "18"
         },
-        "ProcessingStep": {
+        "2": {
           "name": "test-source-integration-FakeProcessing",
           "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-FakeProcessing:FakeProcessing-ca2504cf11020f7a7a2b01304752adf11fa43a56",
           "version": "35"
         },
-        "SyncGranuleNoVpc": {
+        "3": {
           "name": "test-source-integration-SyncGranuleNoVpc",
           "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-SyncGranuleNoVpc:SyncGranuleNoVpc-71bf2cfeda020e9409a3f67293d1f7b8f42e0546",
           "version": "35"
@@ -191,27 +191,27 @@
       "status": "completed",
       "timestamp": 1544123921145,
       "tasks": {
-        "MoveGranuleStep": {
+        "0": {
           "name": "test-source-integration-MoveGranules",
           "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-MoveGranules:MoveGranules-0df332b0b971a1e01cac875e2c1497b0cab840fc",
           "version": "38"
         },
-        "CmrStep": {
+        "1": {
           "name": "test-source-integration-PostToCmr",
           "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-PostToCmr:PostToCmr-e7dd30c53fd4c8b13241e5c9ebfe6f92c148b6c0",
           "version": "30"
         },
-        "ProcessingStep": {
+        "2": {
           "name": "test-source-integration-FakeProcessing",
           "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-FakeProcessing:FakeProcessing-769a215f9b18c5a0f376e25d2b4326c810baaaa8",
           "version": "41"
         },
-        "StopStatus": {
+        "3": {
           "name": "test-source-integration-SfSnsReport",
           "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-SfSnsReport:SfSnsReport-d4c3a5a1e006ace8ad2368605afb331abdaf1431",
           "version": "23"
         },
-        "SyncGranuleNoVpc": {
+        "4": {
           "name": "test-source-integration-SyncGranuleNoVpc",
           "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-SyncGranuleNoVpc:SyncGranuleNoVpc-1baa8c522bf76a37ed6d577ebc3e5fdb678512e3",
           "version": "41"
@@ -325,7 +325,7 @@
       "status": "completed",
       "timestamp": 1580327992306,
       "tasks": {
-        "HelloWorld": {
+        "0": {
           "name": "test-source-integration-HelloWorld",
           "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-HelloWorld",
           "version": "$LATEST"
@@ -347,7 +347,7 @@
       "status": "completed",
       "timestamp": 1632351781244,
       "tasks": {
-       "HelloWorld": {
+       "0": {
         "name": "test-source-integration-HelloWorld",
         "arn": "arn:aws:lambda:us-east-1:596205514787:function:test-source-integration-HelloWorld",
         "version": "$LATEST"
