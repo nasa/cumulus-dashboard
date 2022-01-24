@@ -20,10 +20,12 @@ export const tableColumns = ({ dispatch, isGranules, query }) => ([
           return <Link to={link} >{value}</Link>;
       }
     }
-  }, ...(!isGranules ? [{
-    Header: 'Report Type',
-    accessor: 'type'
-  }] : []),
+  }, ...(!isGranules
+    ? [{
+        Header: 'Report Type',
+        accessor: 'type'
+      }]
+    : []),
   {
     Header: 'Status',
     accessor: 'status'

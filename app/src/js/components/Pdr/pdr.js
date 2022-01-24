@@ -64,7 +64,8 @@ const metaAccessors = [
   {
     label: 'Execution',
     property: 'execution',
-    accessor: (d) => (d ? (
+    accessor: (d) => (d
+      ? (
       <Link
         to={(location) => ({
           pathname: `/executions/execution/${path.basename(d)}`,
@@ -73,9 +74,10 @@ const metaAccessors = [
       >
         link
       </Link>
-    ) : (
-      nullValue
-    )),
+        )
+      : (
+          nullValue
+        )),
   },
   {
     label: 'Status',

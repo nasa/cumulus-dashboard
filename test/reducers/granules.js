@@ -1,7 +1,7 @@
 'use strict';
 
 import test from 'ava';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import reducer, { initialState } from '../../app/src/js/reducers/granules';
 import {
   BULK_GRANULE,

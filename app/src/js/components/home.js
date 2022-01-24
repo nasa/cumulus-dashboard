@@ -91,15 +91,17 @@ class Home extends React.Component {
             const value = d[0];
             return (
               <li key={d[1]}>
-                {this.isExternalLink(d[2]) ? (
-                  <a id={d[1]} href={d[2]} className='overview-num' target='_blank'>
-                    <span className={`num--large num--large--${this.getCountColor(d[1], value)}`}>{value}</span> {d[1]}
-                  </a>
-                ) : (
-                  <Link id={d[1]} className='overview-num' to={{ pathname: d[2], search: getPersistentQueryParams(this.props.location) }}>
-                    <span className={`num--large num--large--${this.getCountColor(d[1], value)}`}>{value}</span> {d[1]}
-                  </Link>
-                )}
+                {this.isExternalLink(d[2])
+                  ? (
+                    <a id={d[1]} href={d[2]} className='overview-num' target='_blank'>
+                      <span className={`num--large num--large--${this.getCountColor(d[1], value)}`}>{value}</span> {d[1]}
+                    </a>
+                    )
+                  : (
+                    <Link id={d[1]} className='overview-num' to={{ pathname: d[2], search: getPersistentQueryParams(this.props.location) }}>
+                      <span className={`num--large num--large--${this.getCountColor(d[1], value)}`}>{value}</span> {d[1]}
+                    </Link>
+                    )}
               </li>
             );
           })}

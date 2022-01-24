@@ -1,7 +1,7 @@
 'use strict';
 
 import test from 'ava';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
 import { shallow, configure } from 'enzyme';
 import * as redux from 'react-redux';
@@ -20,7 +20,7 @@ const dispatch = () => {};
 
 test.beforeEach((t) => {
   // Mock useDispatch hook
-  sinon.stub(redux, "useDispatch").returns(sinon.spy());
+  sinon.stub(redux, 'useDispatch').returns(sinon.spy());
 });
 
 test.afterEach.always(() => {
@@ -127,6 +127,7 @@ test.serial('Execution Events shows event history', function (t) {
     error: false,
     meta: {},
   };
+  let testedExpectedAssertion = false;
 
   const executionEvents = shallow(
     <ExecutionEvents
@@ -144,17 +145,17 @@ test.serial('Execution Events shows event history', function (t) {
   t.is(tableRows.length, 19);
 
   const expectedWorkflowTasksData = {
-    StatusReport: {
+    0: {
       version: '$LATEST',
       name: 'test-SfSnsReport',
       arn: 'arn:aws:lambda:us-east-1:000000000000:function:test-SfSnsReport',
     },
-    DiscoverGranules: {
+    1: {
       version: '$LATEST',
       name: 'test-DiscoverGranules',
       arn: 'arn:aws:lambda:us-east-1:000000000000:function:test-DiscoverGranules',
     },
-    StopStatus: {
+    2: {
       version: '$LATEST',
       name: 'test-SfSnsReport',
       arn: 'arn:aws:lambda:us-east-1:000000000000:function:test-SfSnsReport',
@@ -164,20 +165,22 @@ test.serial('Execution Events shows event history', function (t) {
   tableRows.forEach((row) => {
     const columns = row.find('Cell');
     t.is(columns.length, 3);
-    const moreDetails = columns.last().shallow().find('pre');
-    moreDetails.map((node) => {
-      const parsedDetailsOutput = JSON.parse(node.text()).output;
-      if (
-        parsedDetailsOutput &&
-        parsedDetailsOutput.meta &&
-        parsedDetailsOutput.meta.workflow_tasks &&
-        Object.keys(parsedDetailsOutput.meta.workflow_tasks).length === 3
-      ) {
-        t.deepEqual(
-          parsedDetailsOutput.meta.workflow_tasks,
-          expectedWorkflowTasksData
-        );
-      }
-    });
+    const moreDetails = JSON.parse(
+      columns.at(1).dive().find('pre').render().html()
+    );
+    if (
+      moreDetails.output &&
+      moreDetails.output.meta &&
+      moreDetails.output.meta.workflow_tasks &&
+      Object.keys(moreDetails.output.meta.workflow_tasks).length === 3
+    ) {
+      testedExpectedAssertion = true;
+      t.deepEqual(
+        moreDetails.output.meta.workflow_tasks,
+        expectedWorkflowTasksData
+      );
+    }
   });
+
+  t.true(testedExpectedAssertion);
 });

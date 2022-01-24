@@ -13,10 +13,12 @@ function bar (completed, failed, text) {
         style={{ width: `${completed}%` }} />
       <div className='table__progress--bar table__progress--bar--failed'
         style={{ width: `${failed}%`, left: `${completed}%` }} />
-      {!completed && !failed ? (
+      {!completed && !failed
+        ? (
         <div className='table__progress--bar'
           style={{ width: '0.5%' }} />
-      ) : null}
+          )
+        : null}
       <div className='table__progress--text'
         style={{ left: `${completed + failed}%` }}>{text}</div>
     </div>
