@@ -81,7 +81,7 @@
     "babel-plugin-webpack-alias-7": "^0.1.1",
     "babelify": "^10.0.0",
     "browser-env": "^3.3.0",
-    "cached-path-relative": "1.0.2",
+    "cached-path-relative": "1.1.0",
     "clean-webpack-plugin": "^4.0.0",
     "cls-bluebird": "^2.1.0",
     "copy-webpack-plugin": "^9.1.0",
