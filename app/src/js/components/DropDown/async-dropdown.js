@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Async from 'react-select/async';
-import { customStyles, DropdownIndicator } from '../../utils/dropdown-utils';
 
 const AsyncDropdown = ({
   onInputChange,
   onChange,
-  className,
+  className = '',
   id,
   label,
   error,
@@ -49,11 +48,10 @@ const AsyncDropdown = ({
             aria-label={label}
             blurInputOnSelect={true}
             {...rest}
-            className={className}
-            components={ { DropdownIndicator } }
-            styles={customStyles}
+            className={`dropdown ${className}`}
+            classNamePrefix="react-select"
             defaultOptions={true}
-            onChange= {handleChange}
+            onChange={handleChange}
             value={valueObject}
             options={optionsObject}
             loadOptions={promiseOptions}
@@ -73,7 +71,11 @@ AsyncDropdown.propTypes = {
   label: PropTypes.any,
   onChange: PropTypes.func,
   options: PropTypes.array,
-  value: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array]),
+  value: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.string,
+    PropTypes.array,
+  ]),
 };
 
 export default AsyncDropdown;

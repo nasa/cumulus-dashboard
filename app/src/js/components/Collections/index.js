@@ -92,27 +92,7 @@ const Collections = ({ dispatch, location, logs, queryParams }) => {
               />
               <Route
                 exact
-                path="/collections/collection/:name/:version/granules/completed"
-                render={(props) => (
-                  <CollectionGranules
-                    queryParams={filteredQueryParams}
-                    {...props}
-                  />
-                )}
-              />
-              <Route
-                exact
-                path="/collections/collection/:name/:version/granules/processing"
-                render={(props) => (
-                  <CollectionGranules
-                    queryParams={filteredQueryParams}
-                    {...props}
-                  />
-                )}
-              />
-              <Route
-                exact
-                path="/collections/collection/:name/:version/granules/failed"
+                path="/collections/collection/:name/:version/granules/:status"
                 render={(props) => (
                   <CollectionGranules
                     queryParams={filteredQueryParams}

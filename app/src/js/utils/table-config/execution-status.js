@@ -18,19 +18,22 @@ export const tableColumns = [
       if (value) {
         return (
           <>
-            <span className="num-title--round">
-              {value}
-            </span>
+            <span className="num-title--round">{value}</span>
           </>
         );
       }
       return 'N/A';
-    }
+    },
   },
   {
     Header: 'Step Name',
     accessor: 'name',
-    Cell: ({ cell: { value }, row: { original: { id, eventDetails } } }) => {
+    Cell: ({
+      cell: { value },
+      row: {
+        original: { id, eventDetails },
+      },
+    }) => {
       const [showModal, setShowModal] = useState(false);
       function toggleModal(e) {
         if (e) {
@@ -40,12 +43,21 @@ export const tableColumns = [
       }
       return (
         <>
-          <span className="link link--pad-right" onClick={toggleModal} role="button" tabIndex="0">
+          <span
+            className="link link--pad-right"
+            onClick={toggleModal}
+            role="button"
+            tabIndex="0"
+          >
             {value || 'N/A'}
           </span>
           {eventDetails.type.toLowerCase().includes('failed')
-            ? <i className="fas fa-times-circle status-icon--failed"></i>
-            : <i className="far fa-check-circle status-icon--success"></i>}
+            ? (
+            <i className="fas fa-times-circle status-icon--failed"></i>
+              )
+            : (
+            <i className="far fa-check-circle status-icon--success"></i>
+              )}
           <DefaultModal
             showModal={showModal}
             title={`ID ${id}: ${value || 'N/A'} - ${eventDetails.type}`}
@@ -64,7 +76,7 @@ export const tableColumns = [
   {
     Header: 'Timestamp',
     accessor: 'timestamp',
-    Cell: ({ cell: { value } }) => fullDate(value)
+    Cell: ({ cell: { value } }) => fullDate(value),
   },
 ];
 
@@ -137,26 +149,6 @@ export const metaAccessors = ({
     },
   },
   {
-    label: 'Granule ID',
-    property: 'granules',
-    accessor: (d) => {
-      if (!d) return 'N/A';
-      return (
-        <Link to={() => ({ pathname: `/granules/granule/${encodeURIComponent(path.basename(d[0].granuleId))}` })}>{d[0].granuleId}</Link>
-      );
-    },
-  },
-  {
-    label: 'Associated Executions List',
-    property: 'granules',
-    accessor: (d) => {
-      if (!d) return 'N/A';
-      return (
-        <Link to={() => ({ pathname: `/executions/executions-list/${encodeURIComponent(d[0].collectionId)}/${encodeURIComponent(path.basename(d[0].granuleId))}` })}>Link</Link>
-      );
-    },
-  },
-  {
     label: 'Input',
     property: 'input',
     accessor: (d) => {
@@ -167,7 +159,7 @@ export const metaAccessors = ({
               onClick={() => toggleModal('input')}
               className="button button--small button--no-left-padding"
             >
-                Show Input
+              Show Input
             </button>
             <DefaultModal
               showModal={showInputModal}
@@ -192,20 +184,20 @@ export const metaAccessors = ({
     accessor: (d) => {
       if (d) {
         const jsonData =
-            typeof Blob !== 'undefined'
-              ? new Blob([d], { type: 'text/json' })
-              : null;
+          typeof Blob !== 'undefined'
+            ? new Blob([d], { type: 'text/json' })
+            : null;
         const downloadUrl =
-            typeof window.URL.createObjectURL === 'function'
-              ? window.URL.createObjectURL(jsonData)
-              : '';
+          typeof window.URL.createObjectURL === 'function'
+            ? window.URL.createObjectURL(jsonData)
+            : '';
         return (
           <>
             <button
               onClick={() => toggleModal('output')}
               className="button button--small button--no-left-padding"
             >
-                Show Output
+              Show Output
             </button>
             <DefaultModal
               showModal={showOutputModal}
@@ -218,7 +210,7 @@ export const metaAccessors = ({
                     download="output.json"
                     href={downloadUrl}
                   >
-                      Download File
+                    Download File
                   </a>
                 </>
               }
@@ -242,11 +234,11 @@ export const metaAccessors = ({
     accessor: (d) => {
       const kibanaLink = kibanaExecutionLink(cumulusInstance, d);
       const className =
-          'button button--small button__goto button__arrow button__animation button__arrow--white';
+        'button button--small button__goto button__arrow button__animation button__arrow--white';
       if (kibanaLink && kibanaLink.length) {
         return (
           <a href={kibanaLink} target="_blank" className={className}>
-              View Logs in Kibana
+            View Logs in Kibana
           </a>
         );
       }
@@ -260,10 +252,43 @@ export const metaAccessors = ({
           title={`${d}/logs`}
           className={className}
         >
-            View Execution Logs
+          View Execution Logs
         </Link>
       );
     },
+  },
+];
+
+export const associatedGranulesTableColumns = [
+  {
+    Header: 'Granule ID',
+    accessor: 'granuleId',
+    Cell: ({ cell: { value } }) => (
+      <Link
+        to={() => ({
+          pathname: `/granules/granule/${encodeURIComponent(
+            path.basename(value)
+          )}`,
+        })}
+      >
+        {value}
+      </Link>
+    ),
+  },
+  {
+    Header: 'Associated Executions List',
+    id: 'associatedExecutions',
+    Cell: ({ row: { original: { collectionId, granuleId } } }) => (
+      <Link
+        to={() => ({
+          pathname: `/executions/executions-list/${encodeURIComponent(
+            collectionId
+          )}/${encodeURIComponent(path.basename(granuleId))}`,
+        })}
+      >
+        Link
+      </Link>
+    ),
   },
 ];
 

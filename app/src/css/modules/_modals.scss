@@ -97,6 +97,10 @@
   margin-bottom: 2em;
 }
 
+.oauth-modal .error__report .button.button--copy_error {
+  display: none;
+}
+
 .modal_subtitle {
   font-weight: $base-font-semibold;
 }
@@ -296,14 +300,3 @@
     }
   }
 }
-
-/*.modal {
-  border-radius: 5px;
-  display: inline-block;
-  background-color: $background-white;
-  box-shadow: $shadow__modal;
-  padding: 2em;
-  position: relative;
-  width: 300px;
-  text-align: left;
-}*/ /*Working on replacing modal to use some default Bootstrap stylings*/

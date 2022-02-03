@@ -83,22 +83,25 @@ class Home extends React.Component {
     const data = items.filter((d) => d[0] !== nullValue);
     if (!data.length) return null;
     return pageSection(
-      title, String(sectionId),
+      title,
+      String(sectionId),
       <div className="overview-num__wrapper overview-num__wrapper-home">
         <ul id={listId}>
           {data.map((d) => {
             const value = d[0];
             return (
               <li key={d[1]}>
-                {this.isExternalLink(d[2]) ? (
-                  <a id={d[1]} href={d[2]} className='overview-num' target='_blank'>
-                    <span className={`num--large num--large--${this.getCountColor(d[1], value)}`}>{value}</span> {d[1]}
-                  </a>
-                ) : (
-                  <Link id={d[1]} className='overview-num' to={{ pathname: d[2], search: getPersistentQueryParams(this.props.location) }}>
-                    <span className={`num--large num--large--${this.getCountColor(d[1], value)}`}>{value}</span> {d[1]}
-                  </Link>
-                )}
+                {this.isExternalLink(d[2])
+                  ? (
+                    <a id={d[1]} href={d[2]} className='overview-num' target='_blank'>
+                      <span className={`num--large num--large--${this.getCountColor(d[1], value)}`}>{value}</span> {d[1]}
+                    </a>
+                    )
+                  : (
+                    <Link id={d[1]} className='overview-num' to={{ pathname: d[2], search: getPersistentQueryParams(this.props.location) }}>
+                      <span className={`num--large num--large--${this.getCountColor(d[1], value)}`}>{value}</span> {d[1]}
+                    </Link>
+                    )}
               </li>
             );
           })}
@@ -112,7 +115,7 @@ class Home extends React.Component {
    * @param {Object} dist - distribution state object.
    * @returns - Error Report when any distribution metric contains an error.
    */
-  distrubutionConnectionErrors (dist) {
+  distributionConnectionErrors (dist) {
     const errors = Object.keys(dist).filter((key) => dist[key].error).map((key) => dist[key].error);
     if (errors.length === 0) return undefined;
     const uniqueErrors = [...new Set(errors)];
@@ -198,14 +201,15 @@ class Home extends React.Component {
           {metricsConfigured() &&
            <>
              {sectionHeader('Distribution Overview', 'distributionOverview')}
-             {this.distrubutionConnectionErrors(dist)}
+             {this.distributionConnectionErrors(dist)}
              {this.buttonListSection(distErrorStats, 'Distribution Errors', 'distributionErrors')}
              {this.buttonListSection(distSuccessStats, 'Distribution Successes', 'distributionSuccesses')}
            </>
           }
 
           {sectionHeader(
-            'Granules Updates', 'updateGranules',
+            'Granules Updates',
+            'updateGranules',
             <Link className='link--secondary link--learn-more' to={{ pathname: '/granules', search: searchString }}>{strings.view_granules_overview}</Link>
           )}
           {this.buttonListSection(

@@ -27,7 +27,7 @@ describe('Dashboard Executions Page', () => {
 
       cy.url().should('include', 'executions');
       cy.contains('.heading--xlarge', 'Executions');
-      cy.contains('.heading--large', 'Execution Overview');
+      cy.contains('.heading--large', 'Executions Overview');
 
       // shows a summary count of completed and failed executions
       cy.get('.overview-num__wrapper ul li')
@@ -84,7 +84,7 @@ describe('Dashboard Executions Page', () => {
       );
 
       cy.contains('nav li a', 'Executions').as('executions');
-      cy.get('@executions').should('have.attr', 'href', '/executions');
+      cy.get('@executions').should('have.attr', 'href').and('include', '/executions');
       cy.get('@executions').click();
 
       cy.url().should('include', 'executions');
@@ -311,9 +311,14 @@ describe('Dashboard Executions Page', () => {
           cy.contains('State Machine Arn').next().should('have.text', stateMachine);
           cy.contains('Started').next().should('have.text', startMatch);
           cy.contains('Ended').next().should('have.text', endMatch);
-          cy.contains('Granule ID').next().should('have.text', granuleId);
-          cy.contains('Associated Executions List').next().should('have.text', 'Link');
+          cy.contains('Parent Workflow Execution').next().should('have.text', 'N/A');
         });
+
+      cy.get('.table .thead .th').eq(0).contains('Granule ID');
+      cy.get('.table .thead .th').eq(1).contains('Associated Executions List');
+
+      cy.get('.table .tbody .td').eq(0).contains(granuleId);
+      cy.get('.table .tbody .td').eq(1).contains('Link');
 
       cy.getFakeApiFixture('executions').as('executionsFixture');
       cy.get('@executionsFixture').its('results')
@@ -351,15 +356,11 @@ describe('Dashboard Executions Page', () => {
       cy.get('@response').then((resp) => {
         cy.wrap(resp.response.body.execution.granules[0]).as('granule');
         cy.get('@granule').then((granule) => {
-          cy.get('.status--process').within(() => {
-            cy.contains('Associated Executions List')
-              .next()
-              .should('have.text', 'Link')
-              .children('a')
-              .should('have.attr', 'href')
-              .should('include', `${granule.collectionId}/${granule.granuleId}`);
-            cy.contains('Associated Executions List').next().children('a').click();
-          });
+          cy.get('.table .tbody .td').eq(0).contains(granule.granuleId);
+          cy.get('.table .tbody .td').eq(1).should('have.text', 'Link').children('a')
+            .should('have.attr', 'href')
+            .should('include', `${granule.collectionId}/${granule.granuleId}`);
+          cy.get('.table .tbody .td').eq(1).children('a').click();
         });
       });
 
@@ -435,6 +436,53 @@ describe('Dashboard Executions Page', () => {
       cy.get('@columns').eq(3).should('have.text', 'Updated');
       cy.get('@columns').eq(4).should('have.text', 'Duration');
       cy.get('@columns').eq(5).should('have.text', 'Failed Events Snapshot');
+    });
+
+    it('Should dynamically update menu, sidbar and breadcrumb /executions links with latest filter criteria', () => {
+      const status = 'complete';
+      const type = 'HelloWorldWorkflow';
+      const collectionId = 'MOD09GQ___006';
+      const search = '1a5aaf01-835b-431a-924f-96a7feb3a3fb';
+
+      cy.visit('/executions');
+
+      cy.get('#status').as('status-input');
+      cy.get('@status-input').click().type(status).type('{enter}');
+
+      cy.get('#type').as('type-input');
+      cy.get('@type-input').click().type(type).type('{enter}');
+
+      cy.get('#collectionId').as('collectionId-input');
+      cy.get('@collectionId-input').click().type(collectionId).type('{enter}');
+
+      cy.get('#search').as('search-input');
+      cy.get('@search-input').click().type(search).type('{enter}');
+
+      cy.get('.table__main-asset > a').click();
+
+      // Breakcrumb <Link> contain correct query params
+      cy.get('.breadcrumb > :nth-child(2) > a')
+        .should('have.attr', 'href')
+        .and('include', `status=${status}`)
+        .and('include', `type=${type}`)
+        .and('include', `collectionId=${collectionId}`)
+        .and('include', `search=${search}`);
+
+      // // Menu <Link>s contain correct query params
+      cy.get('nav > ul > :nth-child(5) > a')
+        .should('have.attr', 'href')
+        .and('include', 'status=complete')
+        .and('include', 'type=HelloWorldWorkflow')
+        .and('include', 'collectionId=MOD09GQ___006')
+        .and('include', 'search=1a5aaf01-835b-431a-924f-96a7feb3a3fb');
+
+      // // Sidebar <Link>s contain correct query params
+      cy.get('.sidebar__nav--back')
+        .should('have.attr', 'href')
+        .and('include', 'status=complete')
+        .and('include', 'type=HelloWorldWorkflow')
+        .and('include', 'collectionId=MOD09GQ___006')
+        .and('include', 'search=1a5aaf01-835b-431a-924f-96a7feb3a3fb');
     });
   });
 });

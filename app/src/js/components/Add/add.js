@@ -23,6 +23,7 @@ const AddRecord = ({
   enums,
   exclude,
   include,
+  handleInputChange,
   primaryProperty,
   schemaKey,
   schemaState,
@@ -37,8 +38,10 @@ const AddRecord = ({
   const schema = schemaState[schemaKey];
 
   useEffect(() => {
-    dispatch(getSchema(schemaKey));
-  }, [dispatch, schemaKey]);
+    if (!schema) {
+      dispatch(getSchema(schemaKey));
+    }
+  }, [dispatch, schema, schemaKey]);
 
   useEffect(() => {
     const status = get(state, ['created', pk, 'status']);
@@ -52,11 +55,11 @@ const AddRecord = ({
     }
   }, [baseRoute, pk, state]);
 
-  function navigateBack () {
+  function navigateBack() {
     historyPushWithQueryParams(`/${baseRoute.split('/')[1]}`);
   }
 
-  function post (_id, payload) {
+  function post(_id, payload) {
     if (attachMeta) {
       payload.createdAt = new Date().getTime();
       payload.updatedAt = payload.createdAt;
@@ -80,22 +83,26 @@ const AddRecord = ({
         <div className="page__section__header">
           <h1 className="heading--large">{title}</h1>
         </div>
-        {schema ? (
-          <Schema
-            data={data}
-            schema={schema}
-            pk={'new-collection'}
-            onSubmit={post}
-            onCancel={navigateBack}
-            status={record.status}
-            error={error || (record.status === 'inflight' ? null : record.error)}
-            include={include}
-            exclude={exclude}
-            enums={enums}
-          />
-        ) : (
-          <Loading />
-        )}
+        {schema
+          ? (
+            <Schema
+              data={data}
+              schema={schema}
+              handleInputChange={handleInputChange}
+              onSubmit={post}
+              onCancel={navigateBack}
+              status={record.status}
+              error={
+                error || (record.status === 'inflight' ? null : record.error)
+              }
+              include={include}
+              exclude={exclude}
+              enums={enums}
+            />
+            )
+          : (
+            <Loading />
+            )}
       </section>
     </div>
   );
@@ -133,18 +140,19 @@ AddRecord.propTypes = {
   // appearing on the form.
   exclude: PropTypes.arrayOf(
     PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(RegExp)])
-  )
+  ),
+  handleInputChange: PropTypes.objectOf(PropTypes.func),
 };
 
 Schema.defaultProps = {
   // Exclude no schema properties
   exclude: [],
   // Include all schema properties
-  include: [/.+/]
+  include: [/.+/],
 };
 
 export default withRouter(
   connect((state) => ({
-    schemaState: state.schema
+    schemaState: state.schema,
   }))(AddRecord)
 );

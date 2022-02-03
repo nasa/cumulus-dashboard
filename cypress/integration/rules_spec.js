@@ -117,24 +117,24 @@ describe('Rules page', () => {
       cy.get('@ruleInput')
         .contains('.dropdown__label', 'workflow', { matchCase: false })
         .siblings()
-        .find('div[class*="container"]')
+        .find('.react-select__value-container')
         .click();
       cy.contains('div[id*="react-select"]', workflow).click();
       cy.get('@ruleInput')
         .contains('.dropdown__label', 'provider', { matchCase: false })
         .siblings()
-        .find('div[class*="container"]')
+        .find('.react-select__value-container')
         .click();
       cy.contains('div[id*="react-select"]', provider).click();
       cy.get('@ruleInput')
         .contains('.dropdown__label', 'collection', { matchCase: false })
         .siblings()
-        .find('div[class*="container"]')
+        .find('.react-select__value-container')
         .click();
       cy.contains('div[id*="react-select"]', collection).click();
 
       cy.get('@ruleInput')
-        .contains('.form__textarea', 'Optional Meta Data For The Rule');
+        .contains('.form__textarea', 'Metadata');
       // test invalid json error
       cy.window().its('aceEditorRef').its('editor').then((editor) => {
         editor.setValue('{badjson}');
@@ -144,18 +144,18 @@ describe('Rules page', () => {
       cy.get('@ruleInput')
         .contains('.dropdown__label', 'type', { matchCase: false })
         .siblings()
-        .find('div[class*="container"]')
+        .find('.react-select__value-container')
         .click();
       cy.contains('div[id*="react-select"]', 'onetime').click();
       cy.get('@ruleInput')
         .contains('.dropdown__label', 'state', { matchCase: false })
         .siblings()
-        .find('div[class*="container"]')
+        .find('.react-select__value-container')
         .click();
       cy.contains('div[id*="react-select"]', 'ENABLED').click();
 
       cy.contains('form button', 'Submit').click();
-      const errorMessage = 'Please review the following fields and submit again: \'Optional Meta Data For The Rule\'';
+      const errorMessage = 'Please review the following fields and submit again: \'Metadata\'';
       cy.contains('.error__report', errorMessage);
 
       // fix the json input
@@ -327,6 +327,32 @@ describe('Rules page', () => {
       cy.get('.button--submit').click();
       cy.get('.modal-content').should('not.be', 'visible');
       cy.contains('.error__report', 'Error');
+    });
+
+    it('Should dynamically update menu, sidbar and breadcrumb /rules links with latest filter criteria', () => {
+      const search = 'MOD09GK_TEST_kinesisRule';
+
+      cy.visit('/rules');
+
+      cy.get('#search').as('search-input');
+      cy.get('@search-input').click().type(search).type('{enter}');
+
+      cy.get('.table__main-asset > a').click();
+
+      // Breakcrumb <Link> contain correct query params
+      cy.get('.breadcrumb > :nth-child(2) > a')
+        .should('have.attr', 'href')
+        .and('include', `search=${search}`);
+
+      // Menu <Link>s contain correct query params
+      cy.get('nav > ul > :nth-child(7) > a')
+        .should('have.attr', 'href')
+        .and('include', `search=${search}`);
+
+      // Sidebar <Link>s contain correct query params
+      cy.get('.sidebar__nav--back')
+        .should('have.attr', 'href')
+        .and('include', `search=${search}`);
     });
   });
 });

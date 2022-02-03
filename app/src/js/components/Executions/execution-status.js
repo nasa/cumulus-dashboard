@@ -4,13 +4,33 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import { getExecutionStatus, getCumulusInstanceMetadata } from '../../actions';
-import { metaAccessors } from '../../utils/table-config/execution-status';
+import {
+  metaAccessors,
+  associatedGranulesTableColumns,
+} from '../../utils/table-config/execution-status';
 
+import List from '../Table/Table';
 import ErrorReport from '../Errors/report';
 
 import ExecutionStatusGraph from './execution-status-graph';
 import Metadata from '../Table/Metadata';
 import Loading from '../LoadingIndicator/loading-indicator';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+
+const breadcrumbConfig = [
+  {
+    label: 'Dashboard Home',
+    href: '/',
+  },
+  {
+    label: 'Executions',
+    href: '/executions'
+  },
+  {
+    label: 'Execution Details',
+    active: true
+  }
+];
 
 const ExecutionStatus = ({
   cumulusInstance,
@@ -58,6 +78,9 @@ const ExecutionStatus = ({
       <Helmet>
         <title> Execution Status </title>
       </Helmet>
+      <section className="page__section page__section__controls">
+        <Breadcrumbs config={breadcrumbConfig} />
+      </section>
       <section className="page__section page__section__header-wrapper">
         <h1 className="heading--large heading--shared-content with-description width--three-quarters">
           Execution: {name}
@@ -70,7 +93,7 @@ const ExecutionStatus = ({
       {stateMachine && executionHistory && (
         <section className="page__section">
           <div className="heading__wrapper--border">
-            <h2 className="heading--medium with-description">Visual</h2>
+            <h2 className="heading--medium">Visual</h2>
           </div>
           <ExecutionStatusGraph executionStatus={executionStatus} />
         </section>
@@ -78,15 +101,18 @@ const ExecutionStatus = ({
 
       <section className="page__section">
         <div className="heading__wrapper--border">
-          <h2 className="heading--medium with-description">Details
-            <Link
-              className="button button--small button--events"
-              to={() => ({
-                pathname: `/executions/execution/${executionArn}/events`
-              })}
-            >
-            Events
-            </Link>
+          <h2 className="heading--medium">
+            <span>Details</span>
+            <span className="float-right">
+              <Link
+                className="button button--small button--events"
+                to={() => ({
+                  pathname: `/executions/execution/${executionArn}/events`,
+                })}
+              >
+                Events
+              </Link>
+            </span>
           </h2>
         </div>
         <div className="execution__content status--process">
@@ -101,6 +127,16 @@ const ExecutionStatus = ({
             })}
           />
         </div>
+        <div className="heading__wrapper--border">
+          <h2 className="heading--medium">Associated Granules</h2>
+        </div>
+        <List
+          data={execution.granules}
+          hideActions={true}
+          rowId="granuleId"
+          tableColumns={associatedGranulesTableColumns}
+          useSimplePagination={true}
+        />
       </section>
     </div>
   );

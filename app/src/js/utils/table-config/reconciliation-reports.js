@@ -20,10 +20,12 @@ export const tableColumns = ({ dispatch, isGranules, query }) => ([
           return <Link to={link} >{value}</Link>;
       }
     }
-  }, ...(!isGranules ? [{
-    Header: 'Report Type',
-    accessor: 'type'
-  }] : []),
+  }, ...(!isGranules
+    ? [{
+        Header: 'Report Type',
+        accessor: 'type'
+      }]
+    : []),
   {
     Header: 'Status',
     accessor: 'status'
@@ -101,6 +103,10 @@ const checkReportDeleted = (reportName, reports) => reports.every((report) => re
 
 export const bulkActions = (reports) => [];
 
+/**
+ * Commenting out Conflict Details for all the following tables
+ * since it does not currently function
+ */
 export const tableColumnsS3Files = [
   {
     Header: 'Filename',
@@ -112,12 +118,12 @@ export const tableColumnsS3Files = [
     Cell: <span className='status-indicator status-indicator--failed'></span>,
     disableSortBy: true
   },
-  {
-    Header: 'Conflict Details',
-    id: 'conflictDetails',
-    Cell: 'View Details',
-    disableSortBy: true
-  },
+  // {
+  //   Header: 'Conflict Details',
+  //   id: 'conflictDetails',
+  //   Cell: 'View Details',
+  //   disableSortBy: true
+  // },
   {
     Header: 'Bucket',
     accessor: 'bucket'
@@ -144,12 +150,12 @@ export const tableColumnsFiles = [
     Cell: <span className='status-indicator status-indicator--orange'></span>,
     disableSortBy: true
   },
-  {
-    Header: 'Conflict Details',
-    id: 'conflictDetails',
-    Cell: 'View Details',
-    disableSortBy: true
-  },
+  // {
+  //   Header: 'Conflict Details',
+  //   id: 'conflictDetails',
+  //   Cell: 'View Details',
+  //   disableSortBy: true
+  // },
   {
     Header: 'Bucket',
     accessor: 'bucket'
@@ -166,12 +172,12 @@ export const tableColumnsCollections = [
     Header: 'Collection name',
     accessor: 'name',
   },
-  {
-    Header: 'Conflict Details',
-    id: 'conflictDetails',
-    Cell: 'View Details',
-    disableSortBy: true
-  }
+  // {
+  //   Header: 'Conflict Details',
+  //   id: 'conflictDetails',
+  //   Cell: 'View Details',
+  //   disableSortBy: true
+  // }
 ];
 
 export const tableColumnsGranules = [
@@ -180,17 +186,21 @@ export const tableColumnsGranules = [
     accessor: 'granuleId'
   },
   {
+    Header: 'Collection ID',
+    accessor: 'collectionId'
+  },
+  {
     Header: 'Conflict Type',
     id: 'conflictType',
     Cell: <span className='status-indicator status-indicator--failed'></span>,
     disableSortBy: true
   },
-  {
-    Header: 'Conflict Details',
-    id: 'conflictDetails',
-    Cell: 'View Details',
-    disableSortBy: true
-  }
+  // {
+  //   Header: 'Conflict Details',
+  //   id: 'conflictDetails',
+  //   Cell: 'View Details',
+  //   disableSortBy: true
+  // }
 ];
 
 export const tableColumnsGnf = [

@@ -37,31 +37,38 @@ export const tableColumns = [
   },
   {
     Header: strings.granules,
-    accessor: (row) => tally(get(row, 'stats.total')),
+    accessor: (row) => tally(get(row, 'stats.total', 0)),
     id: 'granules',
     disableSortBy: true,
-    width: 100
+    width: 90
   },
   {
     Header: 'Completed',
-    accessor: (row) => tally(get(row, 'stats.completed')),
+    accessor: (row) => tally(get(row, 'stats.completed', 0)),
     id: 'completed',
     disableSortBy: true,
     width: 100
   },
   {
     Header: 'Running',
-    accessor: (row) => tally(get(row, 'stats.running')),
+    accessor: (row) => tally(get(row, 'stats.running', 0)),
     id: 'running',
     disableSortBy: true,
-    width: 100
+    width: 90
   },
   {
     Header: 'Failed',
-    accessor: (row) => tally(get(row, 'stats.failed')),
+    accessor: (row) => tally(get(row, 'stats.failed', 0)),
     id: 'failed',
     disableSortBy: true,
-    width: 100
+    width: 75
+  },
+  {
+    Header: 'Queued',
+    accessor: (row) => tally(get(row, 'stats.queued', 0)),
+    id: 'queued',
+    disableSortBy: true,
+    width: 85
   },
   {
     Header: 'MMT',

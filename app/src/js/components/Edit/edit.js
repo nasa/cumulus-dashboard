@@ -40,30 +40,32 @@ const EditRecord = ({
     dispatch(getSchema(schemaKey));
   }, [dispatch, getRecord, pk, schemaKey]);
 
-  useEffect(() => {
-    const updateStatus = get(state.updated, [pk, 'status']);
-    if (updateStatus === 'success') {
-      setTimeout(() => {
-        dispatch(clearRecordUpdate(pk));
-        historyPushWithQueryParams(backRoute);
-      }, updateDelay);
-    }
-
-    if (pkState !== pk) {
-    // record has hit an API error
-      if (record.error) {
-        setError(record.error);
-        setPkState(pk);
-      } else if (record.data) {
-        setError(null);
-        setPkState(pk);
-      } else if (!record.inflight) {
-        // we've not yet fetched the record, request it
-        dispatch(getRecord(pk));
+  useEffect(
+    () => {
+      const updateStatus = get(state.updated, [pk, 'status']);
+      if (updateStatus === 'success') {
+        setTimeout(() => {
+          dispatch(clearRecordUpdate(pk));
+          historyPushWithQueryParams(backRoute);
+        }, updateDelay);
       }
-    }
-  },
-  [backRoute, clearRecordUpdate, dispatch, getRecord, pk, pkState, record, state.updated]);
+
+      if (pkState !== pk) {
+        // record has hit an API error
+        if (record.error) {
+          setError(record.error);
+          setPkState(pk);
+        } else if (record.data) {
+          setError(null);
+          setPkState(pk);
+        } else if (!record.inflight) {
+        // we've not yet fetched the record, request it
+          dispatch(getRecord(pk));
+        }
+      }
+    },
+    [backRoute, clearRecordUpdate, dispatch, getRecord, pk, pkState, record, state.updated]
+  );
 
   function navigateBack () {
     historyPushWithQueryParams(backRoute);
@@ -90,7 +92,8 @@ const EditRecord = ({
     <div className='page__component'>
       <section className='page__section'>
         <h1 className='heading--large'>Edit {schemaKey}: {pk}</h1>
-        {schema && record.data ? (
+        {schema && record.data
+          ? (
           <Schema
             schema={schema}
             data={record.data}
@@ -101,7 +104,8 @@ const EditRecord = ({
             include={includedForms}
             error={meta.status === 'inflight' ? null : error}
           />
-        ) : <Loading />}
+            )
+          : <Loading />}
       </section>
     </div>
   );

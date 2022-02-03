@@ -55,11 +55,13 @@ const tableColumns = [
   },
   {
     Header: 'Link',
-    accessor: (row) => (row.bucket && row.key ? (
+    accessor: (row) => (row.bucket && row.key
+      ? (
       <a href={makeLink(row.bucket, row.key)}>
         {row.fileName ? link : nullValue}
       </a>
-    ) : null),
+        )
+      : null),
     id: 'link',
   },
   {
@@ -93,21 +95,25 @@ const metaAccessors = [
   {
     label: `${strings.cmr} Link`,
     property: 'cmrLink',
-    accessor: (d) => (d ? (
+    accessor: (d) => (d
+      ? (
       <a href={d} target="_blank">
         link
       </a>
-    ) : (
-      nullValue
-    )),
+        )
+      : (
+          nullValue
+        )),
   },
   {
     label: 'Executions List',
-    accessor: (row) => (row.granuleId && row.collectionId ? (
+    accessor: (row) => (row.granuleId && row.collectionId
+      ? (
       <Link to={() => ({ pathname: `/executions/executions-list/${encodeURIComponent(row.collectionId)}/${encodeURIComponent(path.basename(row.granuleId))}` })}>link</Link>
-    ) : (
-      nullValue
-    )),
+        )
+      : (
+          nullValue
+        )),
   },
   {
     label: 'Published',
@@ -382,7 +388,7 @@ class GranuleOverview extends React.Component {
           {errors.length ? <ErrorReport report={errors} /> : null}
           <div className="heading__wrapper--border">
             <h2 className="heading--medium with-description">
-              {strings.granule_overview}
+              Granule Overview
             </h2>
           </div>
           <Metadata data={granule} accessors={metaAccessors} />

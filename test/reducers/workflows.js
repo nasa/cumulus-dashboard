@@ -2,7 +2,7 @@
 
 import test from 'ava';
 import sinon from 'sinon';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import reducer, { filterData, initialState } from '../../app/src/js/reducers/workflows';
 
 const testData = [

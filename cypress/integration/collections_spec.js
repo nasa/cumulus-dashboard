@@ -42,9 +42,10 @@ describe('Dashboard Collections Page', () => {
 
       cy.get('.table .tbody .tr').should('have.length', 2);
       cy.get('.tbody > .tr > :nth-child(4)').should('contain', '11');
-      cy.get('.tbody > .tr > :nth-child(5)').should('contain', '7');
+      cy.get('.tbody > .tr > :nth-child(5)').should('contain', '6');
       cy.get('.tbody > .tr > :nth-child(6)').should('contain', '2');
       cy.get('.tbody > .tr > :nth-child(7)').should('contain', '2');
+      cy.get('.tbody > .tr > :nth-child(8)').should('contain', '1');
 
       cy.clearStartDateTime();
       cy.wait('@getCollections');
@@ -106,7 +107,7 @@ describe('Dashboard Collections Page', () => {
 
     it('should display expected MMT Links for a collections list', () => {
       cy.intercept(
-        { method: 'GET', url: new RegExp('/collections\\?limit=.*') },
+        { method: 'GET', url: /\/collections\?limit=.*/ },
         { fixture: 'collections-with-mmtLinks.json' }
       ).as('getCollections');
       cy.visit('/collections');
@@ -483,7 +484,7 @@ describe('Dashboard Collections Page', () => {
         'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
       ];
       cy.intercept(
-        { method: 'PUT', url: new RegExp('/granules/.*') },
+        { method: 'PUT', url: /\/granules\/.*/ },
         { statusCode: 500, body: { message: 'Oopsie' } }
       );
       cy.visit('/granules');
@@ -508,7 +509,7 @@ describe('Dashboard Collections Page', () => {
       ];
 
       cy.intercept(
-        { method: 'PUT', url: new RegExp('/granules/.*') },
+        { method: 'PUT', url: /\/granules\/.*/ },
         { statusCode: 200, body: { message: 'ingested' } }
       );
 
@@ -548,20 +549,26 @@ describe('Dashboard Collections Page', () => {
           .and('contain', 'Failed')
           .next()
           .should('contain', 0)
-          .and('contain', 'Running');
+          .and('contain', 'Running')
+          .next()
+          .should('contain', 0)
+          .and('contain', 'Queued');
       });
 
       cy.get('[data-cy="endDateTime"] .react-datetime-picker__clear-button__icon').click();
 
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
-          .first().should('contain', 7).and('contain', 'Completed')
+          .first().should('contain', 6).and('contain', 'Completed')
           .next()
           .should('contain', 2)
           .and('contain', 'Failed')
           .next()
           .should('contain', 2)
-          .and('contain', 'Running');
+          .and('contain', 'Running')
+          .next()
+          .should('contain', 1)
+          .and('contain', 'Queued');
       });
     });
 
@@ -570,13 +577,16 @@ describe('Dashboard Collections Page', () => {
 
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
-          .first().should('contain', 7).and('contain', 'Completed')
+          .first().should('contain', 6).and('contain', 'Completed')
           .next()
           .should('contain', 2)
           .and('contain', 'Failed')
           .next()
           .should('contain', 2)
-          .and('contain', 'Running');
+          .and('contain', 'Running')
+          .next()
+          .should('contain', 1)
+          .and('contain', 'Queued');
       });
 
       cy.get('.filter-status .rbt-input-main').as('status-input');
@@ -610,6 +620,37 @@ describe('Dashboard Collections Page', () => {
           .should('contain', 0)
           .and('contain', 'Running');
       });
+    });
+
+    it('Should dynamically update menu, sidbar and breadcrumb links with latest filter criteria', () => {
+      cy.visit('/collections/all');
+      cy.wait('@getCollections');
+
+      cy.get('.filter-provider .rbt-input-main').as('provider-input');
+      cy.get('@provider-input').click().type('s3').type('{enter}');
+
+      cy.get('.search').as('search');
+      cy.get('@search').click().type('Test').type('{enter}');
+
+      cy.get('span > a').click();
+
+      // Breakcrumb <Link> contain correct query params
+      cy.get('.breadcrumb > :nth-child(2) > a')
+        .should('have.attr', 'href')
+        .and('include', 'provider=s3_provider')
+        .and('include', 'search=Test-L2-Coastal');
+
+      // Menu <Link>s contain correct query params
+      cy.get('nav > ul > :nth-child(1) > a')
+        .should('have.attr', 'href')
+        .and('include', 'provider=s3_provider')
+        .and('include', 'search=Test-L2-Coastal');
+
+      // Sidebar <Link>s contain correct query params
+      cy.get('.sidebar__nav--back')
+        .should('have.attr', 'href')
+        .and('include', 'provider=s3_provider')
+        .and('include', 'search=Test-L2-Coastal');
     });
 
     describe('Encoded version', () => {

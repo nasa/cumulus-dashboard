@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { fromNowWithTooltip } from '../format';
+import { fromNow, fromNowWithTooltip, tally } from '../format';
 import { getPersistentQueryParams } from '../url-helper';
 
 export const tableColumns = [
@@ -22,10 +22,48 @@ export const tableColumns = [
     accessor: 'protocol'
   },
   {
+    Header: 'Port',
+    accessor: 'port'
+  },
+  {
     Header: 'Last Updated',
     accessor: 'timestamp',
     Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
     id: 'timestamp'
+  }
+];
+
+export const metaAccessors = [
+  {
+    label: 'Created',
+    property: 'createdAt',
+    accessor: fromNow
+  },
+  {
+    label: 'Updated',
+    property: 'updatedAt',
+    accessor: fromNow
+  },
+  {
+    label: 'Protocol',
+    property: 'protocol'
+  },
+  {
+    label: 'Host',
+    property: 'host'
+  },
+  {
+    label: 'Port',
+    property: 'port'
+  },
+  {
+    label: 'Global Connection Limit',
+    property: 'globalConnectionLimit',
+    accessor: tally
+  },
+  {
+    label: 'Username (encrypted)',
+    property: 'username'
   }
 ];
 
