@@ -134,7 +134,7 @@ describe('Rules page', () => {
       cy.contains('div[id*="react-select"]', collection).click();
 
       cy.get('@ruleInput')
-        .contains('.form__textarea', 'Optional Meta Data For The Rule');
+        .contains('.form__textarea', 'Metadata');
       // test invalid json error
       cy.window().its('aceEditorRef').its('editor').then((editor) => {
         editor.setValue('{badjson}');
@@ -155,7 +155,7 @@ describe('Rules page', () => {
       cy.contains('div[id*="react-select"]', 'ENABLED').click();
 
       cy.contains('form button', 'Submit').click();
-      const errorMessage = 'Please review the following fields and submit again: \'Optional Meta Data For The Rule\'';
+      const errorMessage = 'Please review the following fields and submit again: \'Metadata\'';
       cy.contains('.error__report', errorMessage);
 
       // fix the json input
