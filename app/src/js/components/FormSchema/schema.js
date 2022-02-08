@@ -3,7 +3,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { get, set } from 'object-path';
-import startCase from 'lodash/startCase';
 import noop from 'lodash/noop';
 import { Form, formTypes } from '../Form/Form';
 import {
@@ -17,6 +16,14 @@ import t from '../../utils/strings';
 import ErrorReport from '../Errors/report';
 
 const { errors } = t;
+
+/**
+ * Replace first character of each word of a string with a capitalized letter.
+ * replaces lodash/startCase because it fails on `S3`
+ * @param {string} sentence - input string to capitalize
+ * @returns {string} input sentence with each first character capitalized.
+ */
+const startCase = (sentence) => sentence.split(' ').map((word) => word.charAt(0).toUpperCase() + word.substring(1)).join(' ');
 
 const traverseSchema = (schema, enums, fn, path = []) => {
   // eslint-disable-next-line guard-for-in
