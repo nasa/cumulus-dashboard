@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - **CUMULUS-2843**
-  Replaces lodash/startCase with custom function used to create titles from schema.
+  Replaces lodash/startCase with custom function used to capitalize titles from schema.
 
 ## [v9.0.0] - 2022-02-01
 
