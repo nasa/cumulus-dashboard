@@ -3,8 +3,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { get, set } from 'object-path';
-import startCase from 'lodash/startCase';
 import noop from 'lodash/noop';
+import startCase from 'lodash/startCase';
 import { Form, formTypes } from '../Form/Form';
 import {
   arrayWithLength,
@@ -104,7 +104,7 @@ export const createFormConfig = ({
       isArray(schemaProperty.required) &&
       schemaProperty.required.includes(property);
 
-    const labelText = startCase(meta.title || property);
+    const labelText = meta.title || startCase(property);
     const label = (
       <span>
         <span className="label__name">{labelText}</span>

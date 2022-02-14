@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- **CUMULUS-2843**
+  - Create provider and create rule modals now dislpay the provider [rule]
+    schema title directly as read from the Cumulus API.
+
 ## [v9.0.0] - 2022-02-01
 
 ## Breaking Changes
