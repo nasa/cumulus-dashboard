@@ -376,6 +376,10 @@ export const deconstructCollectionId = (collectionId) => {
   } catch (error) {
     // do nothing  error thrown below
   }
+  if (collectionId && collectionId.match(' / ')) {
+    console.debug(`deconstructCollectionId called with previously deconstructed ID ${collectionId}`);
+    return collectionId;
+  }
   throw new Error(`invalid collectionId: ${JSON.stringify(collectionId)}`);
 };
 
