@@ -352,20 +352,7 @@ export const getEncodedCollectionId = (collection) => {
   return nullValue;
 };
 
-// "MYD13A1___006" => "MYD13A1 / 006"
-export const collectionName = (collectionId) => {
-  if (!collectionId) return nullValue;
-  return collectionId.split('___').join(' / ');
-};
-
-export const collectionNameVersion = (collectionId) => {
-  if (!collectionId) return nullValue;
-  const [name, version] = collectionId.split('___');
-  return { name, version };
-};
-
-export const constructCollectionNameVersion = (name, version) => `${name}___${version}`;
-
+const collectionIdSeparator = '___';
 /**
  * Returns the name and version of a collection based on
  * the collectionId used in elasticsearch indexing
@@ -374,12 +361,38 @@ export const constructCollectionNameVersion = (name, version) => `${name}___${ve
  * @returns {Object} name and version as object
  */
 export const deconstructCollectionId = (collectionId) => {
-  const [name, version] = collectionId.split('___');
-  return {
-    name,
-    version,
-  };
+  let name;
+  let version;
+  try {
+    const last = collectionId.lastIndexOf(collectionIdSeparator);
+    name = collectionId.substring(0, last);
+    version = collectionId.substring(last + collectionIdSeparator.length);
+    if (name && version) {
+      return {
+        name,
+        version,
+      };
+    }
+  } catch (error) {
+    // do nothing  error thrown below
+  }
+  throw new Error(`invalid collectionId: ${JSON.stringify(collectionId)}`);
 };
+
+// "MYD13A1___006" => "MYD13A1 / 006"
+// "trailing_____1.0" => "trailing__ / 1.0"
+export const collectionName = (collectionId) => {
+  if (!collectionId) return nullValue;
+  const collection = deconstructCollectionId(collectionId);
+  return `${collection.name} / ${collection.version}`;
+};
+
+export const collectionNameVersion = (collectionId) => {
+  if (!collectionId) return nullValue;
+  return deconstructCollectionId(collectionId);
+};
+
+export const constructCollectionId = (name, version) => `${name}${collectionIdSeparator}${version}`;
 
 export const collectionLink = (collectionId) => {
   if (!collectionId || collectionId === nullValue) return nullValue;
