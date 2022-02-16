@@ -332,26 +332,6 @@ export const truncate = (string, to = 100) => {
   return `${string.slice(0, to)}...`;
 };
 
-export const getFormattedCollectionId = (collection) => {
-  const collectionId = getCollectionId(collection);
-  return formatCollectionId(collectionId);
-};
-
-export const formatCollectionId = (collectionId) => (collectionId === undefined ? nullValue : collectionId);
-
-export const getCollectionId = (collection) => {
-  if (collection && collection.name && collection.version) {
-    return `${collection.name}___${collection.version}`;
-  }
-};
-
-export const getEncodedCollectionId = (collection) => {
-  if (collection && collection.name && collection.version) {
-    return `${collection.name}___${encodeURIComponent(collection.version)}`;
-  }
-  return nullValue;
-};
-
 const collectionIdSeparator = '___';
 /**
  * Returns the name and version of a collection based on
@@ -397,6 +377,26 @@ export const collectionNameVersion = (collectionId) => {
 };
 
 export const constructCollectionId = (name, version) => `${name}${collectionIdSeparator}${version}`;
+
+export const getFormattedCollectionId = (collection) => {
+  const collectionId = getCollectionId(collection);
+  return formatCollectionId(collectionId);
+};
+
+export const formatCollectionId = (collectionId) => (collectionId === undefined ? nullValue : collectionId);
+
+export const getCollectionId = (collection) => {
+  if (collection && collection.name && collection.version) {
+    return constructCollectionId(collection.name, collection.version);
+  }
+};
+
+export const getEncodedCollectionId = (collection) => {
+  if (collection && collection.name && collection.version) {
+    return constructCollectionId(collection.name, encodeURIComponent(collection.version));
+  }
+  return nullValue;
+};
 
 export const collectionLink = (collectionId) => {
   if (!collectionId || collectionId === nullValue) return nullValue;
