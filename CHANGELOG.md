@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- **CUMULUS-2843**
+  - Create provider and create rule modals now dislpay the provider [rule]
+    schema title directly as read from the Cumulus API.
+
+## [v9.0.0] - 2022-02-01
+
+## Breaking Changes
+
+This version of the dashboard requires Cumulus API v10.0.0
+
+## All Changes
+
 ### Added
 
 - **CUMULUS-2687**
@@ -1218,7 +1232,8 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
-  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v8.0.0...HEAD
+  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v9.0.0...HEAD
+  [v9.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v8.0.0...v9.0.0
   [v8.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v7.1.0...v8.0.0
   [v7.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v7.0.0...v7.1.0
   [v7.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v6.0.0...v7.0.0
