@@ -332,6 +332,52 @@ export const truncate = (string, to = 100) => {
   return `${string.slice(0, to)}...`;
 };
 
+const collectionIdSeparator = '___';
+/**
+ * Returns the name and version of a collection based on
+ * the collectionId used in elasticsearch indexing
+ *
+ * @param {string} collectionId - collectionId used in elasticsearch index
+ * @returns {Object} name and version as object
+ */
+export const deconstructCollectionId = (collectionId) => {
+  let name;
+  let version;
+  try {
+    const last = collectionId.lastIndexOf(collectionIdSeparator);
+    name = collectionId.substring(0, last);
+    version = collectionId.substring(last + collectionIdSeparator.length);
+    if (name && version) {
+      return {
+        name,
+        version,
+      };
+    }
+  } catch (error) {
+    // do nothing  error thrown below
+  }
+  if (collectionId && collectionId.match(' / ')) {
+    console.debug(`deconstructCollectionId called with previously deconstructed ID ${collectionId}`);
+    return collectionId;
+  }
+  throw new Error(`invalid collectionId: ${JSON.stringify(collectionId)}`);
+};
+
+// "MYD13A1___006" => "MYD13A1 / 006"
+// "trailing_____1.0" => "trailing__ / 1.0"
+export const collectionName = (collectionId) => {
+  if (!collectionId) return nullValue;
+  const collection = deconstructCollectionId(collectionId);
+  return `${collection.name} / ${collection.version}`;
+};
+
+export const collectionNameVersion = (collectionId) => {
+  if (!collectionId) return nullValue;
+  return deconstructCollectionId(collectionId);
+};
+
+export const constructCollectionId = (name, version) => `${name}${collectionIdSeparator}${version}`;
+
 export const getFormattedCollectionId = (collection) => {
   const collectionId = getCollectionId(collection);
   return formatCollectionId(collectionId);
@@ -341,44 +387,15 @@ export const formatCollectionId = (collectionId) => (collectionId === undefined 
 
 export const getCollectionId = (collection) => {
   if (collection && collection.name && collection.version) {
-    return `${collection.name}___${collection.version}`;
+    return constructCollectionId(collection.name, collection.version);
   }
 };
 
 export const getEncodedCollectionId = (collection) => {
   if (collection && collection.name && collection.version) {
-    return `${collection.name}___${encodeURIComponent(collection.version)}`;
+    return constructCollectionId(collection.name, encodeURIComponent(collection.version));
   }
   return nullValue;
-};
-
-// "MYD13A1___006" => "MYD13A1 / 006"
-export const collectionName = (collectionId) => {
-  if (!collectionId) return nullValue;
-  return collectionId.split('___').join(' / ');
-};
-
-export const collectionNameVersion = (collectionId) => {
-  if (!collectionId) return nullValue;
-  const [name, version] = collectionId.split('___');
-  return { name, version };
-};
-
-export const constructCollectionNameVersion = (name, version) => `${name}___${version}`;
-
-/**
- * Returns the name and version of a collection based on
- * the collectionId used in elasticsearch indexing
- *
- * @param {string} collectionId - collectionId used in elasticsearch index
- * @returns {Object} name and version as object
- */
-export const deconstructCollectionId = (collectionId) => {
-  const [name, version] = collectionId.split('___');
-  return {
-    name,
-    version,
-  };
 };
 
 export const collectionLink = (collectionId) => {
