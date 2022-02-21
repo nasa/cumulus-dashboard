@@ -1,4 +1,5 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
+import { collectionName, collectionHrefFromId } from '../../app/src/js/utils/format';
 
 describe('Dashboard PDRs Page', () => {
   describe('When not logged in', () => {
@@ -159,8 +160,8 @@ describe('Dashboard PDRs Page', () => {
               .should('have.attr', 'href', `/providers/provider/${pdr.provider}`);
 
             cy.contains('Collection').next()
-              .contains('a', pdr.collectionId.split('___').join(' / '))
-              .should('have.attr', 'href', `/collections/collection/${pdr.collectionId.split('___').join('/')}`);
+              .contains('a', collectionName(pdr.collectionId))
+              .should('have.attr', 'href', collectionHrefFromId(pdr.collectionId));
 
             cy.contains('Execution').next()
               .contains('a', 'link')
@@ -215,8 +216,8 @@ describe('Dashboard PDRs Page', () => {
             .should('have.attr', 'href')
             .and('be.eq', `/granules/granule/${granule.granuleId}`);
           cy.get('@columns').eq(3)
-            .contains('a', granule.collectionId.split('___').join(' / '))
-            .should('have.attr', 'href', `/collections/collection/${granule.collectionId.split('___').join('/')}`);
+            .contains('a', collectionName(granule.collectionId))
+            .should('have.attr', 'href', collectionHrefFromId(granule.collectionId));
           cy.get('@columns').eq(4)
             .should('have.text', `${Number(granule.duration.toFixed(2))}s`);
           cy.get('@columns').eq(5).invoke('text')
