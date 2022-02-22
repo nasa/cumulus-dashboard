@@ -141,9 +141,9 @@ const CreateReconciliationReport = ({
   function renderForm({ handleSubmit, submitting, values }) {
     const { collectionId, granuleId, provider, reportType } = values || {};
 
-    const collectionIdDisabled = !!granuleId || !!provider;
-    const granuleIdDisabled = !!collectionId || !!provider;
-    const providerDisabled = !!collectionId || !!granuleId;
+    const collectionIdDisabled = reportType !== 'ORCA Backup' && (!!granuleId || !!provider);
+    const granuleIdDisabled = reportType !== 'ORCA Backup' && (!!collectionId || !!provider);
+    const providerDisabled = reportType !== 'ORCA Backup' && (!!collectionId || !!granuleId);
 
     return (
       <form onSubmit={handleSubmit} className="create-report">
@@ -208,18 +208,20 @@ const CreateReconciliationReport = ({
           </div>
           <div className="form__item form__item--tooltip">
             <span>Additional Filters</span>
-            <Tooltip
-              className="tooltip--light"
-              id="report-filter-tooltip"
-              placement="right"
-              target={
-                <FontAwesomeIcon
-                  className="button__icon--animation"
-                  icon={faInfoCircle}
-                />
-              }
-              tip="Only one of Provider, Collection ID, or Granule ID may be applied for each report"
-            />
+            {reportType !== 'ORCA Backup' && (
+              <Tooltip
+                className="tooltip--light"
+                id="report-filter-tooltip"
+                placement="right"
+                target={
+                  <FontAwesomeIcon
+                    className="button__icon--animation"
+                    icon={faInfoCircle}
+                  />
+                }
+                tip="Only one of Provider, Collection ID, or Granule ID may be applied for each report"
+              />
+            )}
           </div>
           <div className="form__item">
             <label htmlFor="provider">Provider</label>

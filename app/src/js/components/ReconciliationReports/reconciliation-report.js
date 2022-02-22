@@ -11,7 +11,7 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import InventoryReport from './inventory-report';
 import GnfReport from './gnf-report';
 import Legend from './legend';
-import BackupRecoveryReport from './backup-recovery-report';
+import OrcaBackupReport from './orca-backup-report';
 
 const ReconciliationReport = ({
   dispatch = {},
@@ -69,7 +69,7 @@ const ReconciliationReport = ({
             reportName={reconciliationReportName}
             reportUrl={reportUrl}
           />,
-          'Backup and Recovery': <BackupRecoveryReport // TODO: verify this matches the "type" returned from the API
+          'ORCA Backup': <OrcaBackupReport
             filterString={filterString}
             legend={<Legend />}
             recordData={recordData}

@@ -14,7 +14,7 @@ import ReportHeading from './report-heading';
 import { handleDownloadUrlClick } from '../../utils/download-file';
 import { tableColumnsBackupAndRecovery } from '../../utils/table-config/reconciliation-reports';
 
-const BackupRecoveryReport = ({
+const OrcaBackupReport = ({
   filterString,
   legend,
   onSelect,
@@ -40,7 +40,7 @@ const BackupRecoveryReport = ({
         name={reportName}
         onDownloadClick={handleDownloadClick}
         startTime={createStartTime}
-        type='Backup and Recovery' // TODO: verify this matches the "type" returned from the API
+        type='ORCA Backup'
       />
       <section className="page__section">
         <div className="list-action-wrapper">
@@ -66,7 +66,7 @@ const BackupRecoveryReport = ({
   );
 };
 
-BackupRecoveryReport.propTypes = {
+OrcaBackupReport.propTypes = {
   filterString: PropTypes.string,
   legend: PropTypes.node,
   onSelect: PropTypes.func,
@@ -75,4 +75,4 @@ BackupRecoveryReport.propTypes = {
   reportUrl: PropTypes.string
 };
 
-export default BackupRecoveryReport;
+export default OrcaBackupReport;
