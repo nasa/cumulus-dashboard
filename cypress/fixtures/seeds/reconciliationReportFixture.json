@@ -44,6 +44,12 @@
       "location": "s3://localbucket/localrun/reconciliation-reports/GranuleList100220.csv",
       "type": "Granule Inventory",
       "status": "Generated"
+    },
+    {
+      "name": "orcaBackupReport-20220111T191341153",
+      "location": "s3://localbucket/localrun/reconciliation-reports/orcaBackupReport-20220111T191341153.json",
+      "type": "ORCA Backup",
+      "status": "Generated"
     }
   ]
 }

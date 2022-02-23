@@ -1,0 +1,127 @@
+{
+  "collectionIds": [
+    "MYD13Q1___006",
+    "MOD09GQ_test-jl-rds-tf-OrcaBackupAndRecovery-1643920759431___006"
+  ],
+  "createEndTime": "2022-02-11T19:13:41.986Z",
+  "createStartTime": "2022-02-11T19:13:41.153Z",
+  "granuleIds": [
+    "MYD13Q1.A3194547.tnYsne.006.8400707913298",
+    "MYD13Q1.A2655880.GOWVT9.006.3531712476486",
+    "granuleId818a68e870",
+    "MOD09GQ.A8858216.Y6HJnu.006.6168319936421"
+  ],
+  "providers": [
+    "provider938e760104",
+    "s3_provider_test-jl-rds-tf-CreateReconciliationReport-1644606640782",
+    "s3_provider_test-jl-rds-tf-OrcaBackupAndRecovery-1643920759431"
+  ],
+  "reportEndTime": "2022-02-11T19:12:25.000Z",
+  "reportType": "ORCA Backup",
+  "status": "SUCCESS",
+  "granules": {
+    "okCount": 0,
+    "cumulusCount": 2,
+    "orcaCount": 2,
+    "okFilesCount": 5,
+    "conflictFilesCount": 6,
+    "withConflicts": [
+      {
+        "okFilesCount": 4,
+        "granuleId": "MYD13Q1.A3194547.tnYsne.006.8400707913298",
+        "collectionId": "MYD13Q1___006",
+        "provider": "s3_provider_test-jl-rds-tf-CreateReconciliationReport-1644606640782",
+        "createdAt": 1644606673827,
+        "updatedAt": 1644606718024,
+        "conflictFiles": [
+          {
+            "fileName": "MYD13Q1.A3194547.tnYsne.006.8400707913298.cmr.xml",
+            "bucket": "jl-test-integration-protected-2",
+            "key": "MYD13Q1___006/MYD/MYD13Q1.A3194547.tnYsne.006.8400707913298.cmr.xml",
+            "reason": "shouldExcludedFromOrca"
+          },
+          {
+            "fileName": "BROWSE.MYD13Q1.A3194547.tnYsne.006.8400707913298.1.jpg2",
+            "bucket": "jl-test-integration-public",
+            "key": "MYD13Q1___006/BRO/BROWSE.MYD13Q1.A3194547.tnYsne.006.8400707913298.1.jpg2",
+            "reason": "onlyInCumulus"
+          },
+          {
+            "fileName": "BROWSE.MYD13Q1.A3194547.tnYsne.006.8400707913298.1.jpg",
+            "bucket": "jl-test-integration-public",
+            "key": "MYD13Q1___006/BRO/BROWSE.MYD13Q1.A3194547.tnYsne.006.8400707913298.1.jpg",
+            "orcaBucket": "jl-test-integration-orca-glacier",
+            "reason": "onlyInOrca"
+          }
+        ]
+      }
+    ],
+    "onlyInCumulus": [
+      {
+        "okFilesCount": 1,
+        "granuleId": "MYD13Q1.A2655880.GOWVT9.006.3531712476486",
+        "collectionId": "MYD13Q1___006",
+        "provider": "s3_provider_test-jl-rds-tf-CreateReconciliationReport-1644606640782",
+        "createdAt": 1644606673656,
+        "updatedAt": 1644606683360,
+        "conflictFiles": [
+          {
+            "fileName": "MYD13Q1.A2655880.GOWVT9.006.3531712476486.hdf",
+            "bucket": "jl-test-integration-protected",
+            "key": "MYD13Q1___006/2017/MYD/MYD13Q1.A2655880.GOWVT9.006.3531712476486.hdf",
+            "reason": "onlyInCumulus"
+          },
+          {
+            "fileName": "BROWSE.MYD13Q1.A2655880.GOWVT9.006.3531712476486.hdf",
+            "bucket": "jl-test-integration-private",
+            "key": "MYD13Q1___006/BRO/BROWSE.MYD13Q1.A2655880.GOWVT9.006.3531712476486.hdf",
+            "reason": "onlyInCumulus"
+          },
+          {
+            "fileName": "BROWSE.MYD13Q1.A2655880.GOWVT9.006.3531712476486.1.jpg",
+            "bucket": "jl-test-integration-public",
+            "key": "MYD13Q1___006/BRO/BROWSE.MYD13Q1.A2655880.GOWVT9.006.3531712476486.1.jpg",
+            "reason": "onlyInCumulus"
+          },
+          {
+            "fileName": "MYD13Q1.A2655880.GOWVT9.006.3531712476486.cmr.xml",
+            "bucket": "jl-test-integration-protected-2",
+            "key": "MYD13Q1___006/MYD/MYD13Q1.A2655880.GOWVT9.006.3531712476486.cmr.xml",
+            "reason": "onlyInCumulus"
+          }
+        ]
+      }
+    ],
+    "onlyInOrca": [
+      {
+        "granuleId": "MOD09GQ.A8858216.Y6HJnu.006.6168319936421",
+        "provider": "s3_provider_test-jl-rds-tf-OrcaBackupAndRecovery-1643920759431",
+        "collectionId": "MOD09GQ_test-jl-rds-tf-OrcaBackupAndRecovery-1643920759431___006",
+        "createdAt": 1643920768281,
+        "conflictFiles": [
+          {
+            "bucket": "jl-test-integration-protected",
+            "key": "MOD09GQ___006/2017/MOD/jl-rds-tf-OrcaBackupAndRecovery-1643920759431/MOD09GQ.A8858216.Y6HJnu.006.6168319936421.hdf",
+            "fileName": "MOD09GQ.A8858216.Y6HJnu.006.6168319936421.hdf",
+            "orcaBucket": "jl-test-integration-orca-glacier",
+            "reason": "onlyInOrca"
+          },
+          {
+            "bucket": "jl-test-integration-public",
+            "key": "MOD09GQ___006/MOD/jl-rds-tf-OrcaBackupAndRecovery-1643920759431/MOD09GQ.A8858216.Y6HJnu.006.6168319936421_ndvi.jpg",
+            "fileName": "MOD09GQ.A8858216.Y6HJnu.006.6168319936421_ndvi.jpg",
+            "orcaBucket": "jl-test-integration-orca-glacier",
+            "reason": "onlyInOrca"
+          },
+          {
+            "bucket": "jl-test-integration-protected-2",
+            "key": "MOD09GQ___006/MOD/jl-rds-tf-OrcaBackupAndRecovery-1643920759431/MOD09GQ.A8858216.Y6HJnu.006.6168319936421.cmr.xml",
+            "fileName": "MOD09GQ.A8858216.Y6HJnu.006.6168319936421.cmr.xml",
+            "orcaBucket": "jl-test-integration-orca-glacier",
+            "reason": "onlyInOrca"
+          }
+        ]
+      }
+    ]
+  }
+}
