@@ -46,9 +46,9 @@ describe('Dashboard Providers Page', () => {
         'Host',
       ];
       const expectedFieldsAuth = ['Port', 'Username', 'Password'];
-      // TODO [MHS, 02/08/2022] Update with correct value when cumulus API changes next time.
       const expectedFieldsHttp = ['Allowed Redirects', 'S3 URI For Custom SSL Certificate'];
       const expectedFieldsSftp = ['Private Key', 'AWS KMS Customer Master Key ARN Or Alias'];
+
       it('should go to add providers page', () => {
         cy.visit('/providers');
         cy.contains('.heading--large', 'Provider Overview');

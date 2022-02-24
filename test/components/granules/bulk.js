@@ -6,7 +6,7 @@ import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
 import { shallow, configure } from 'enzyme';
 import { BulkGranule } from '../../../app/src/js/components/Granules/bulk.js';
-import { constructCollectionNameVersion } from '../../../app/src/js/utils/format.js';
+import { constructCollectionId } from '../../../app/src/js/utils/format.js';
 
 configure({ adapter: new Adapter() });
 

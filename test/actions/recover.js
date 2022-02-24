@@ -9,7 +9,7 @@ import {
   applyRecoveryWorkflowToGranule
 } from '../../app/src/js/actions';
 import {
-  constructCollectionNameVersion
+  constructCollectionId
 } from '../../app/src/js/utils/format';
 import { requestMiddleware } from '../../app/src/js/middleware/request';
 
@@ -37,7 +37,7 @@ const store = mockStore({
 const getActionType = (action) => action.type;
 const name = 'fakeCollection';
 const version = '000';
-const collectionId = constructCollectionNameVersion(name, version);
+const collectionId = constructCollectionId(name, version);
 const granuleId = 'fakeId';
 
 test.beforeEach((t) => {
