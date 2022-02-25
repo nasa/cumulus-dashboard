@@ -2,9 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Alert } from 'react-bootstrap';
 import DefaultModal from '../Modal/modal';
-import {
-  collectionName as collectionLabelForId,
-} from '../../utils/format';
 
 class DeleteCollectionModal extends React.Component {
   constructor (props) {
@@ -40,7 +37,7 @@ class DeleteCollectionModal extends React.Component {
         <p> You have submitted a request to delete the following collection: </p>
         <br />
         <h1>
-          <strong>{collectionLabelForId(this.props.collectionLabel)}</strong>
+          <strong>{this.props.collectionLabel}</strong>
         </h1>
         <br />
         <p> Are you sure you want to permanently delete this collection? </p>
