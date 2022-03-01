@@ -145,7 +145,7 @@
         "Cause": "\"None\"",
         "Error": "Unknown Error"
       },
-      "productVolume": 17909733,
+      "productVolume": "17909733",
       "timeToPreprocess": 2.863,
       "duration": 7.442,
       "createdAt": 1537831670335,
@@ -178,7 +178,7 @@
         "Cause": "\"None\"",
         "Error": "Unknown Error"
       },
-      "productVolume": 17911979,
+      "productVolume": "17911979",
       "timeToPreprocess": 0.342,
       "duration": 20.572,
       "createdAt": 1542053110348,
@@ -215,7 +215,7 @@
         "Cause": "\"None\"",
         "Error": "Unknown Error"
       },
-      "productVolume": 17956339,
+      "productVolume": "17956339",
       "endingDateTime": "2017-11-08T23:59:59.000Z",
       "timeToPreprocess": 0.432,
       "duration": 26.701,
@@ -259,7 +259,7 @@
         "Cause": "{\"errorMessage\":\"verifyFile s3://cumulus-test-sandbox-internal/non-existent-path/non-existent-file failed: Actual file size 2MB did not match expected file size 3MB\",\"errorType\":\"UnexpectedFileSize\",\"stackTrace\":[\"S3Granule.sync (/var/task/index.js:147549:13)\",\"<anonymous>\",\"process._tickDomainCallback (internal/process/next_tick.js:228:7)\"]}",
         "Error": "UnexpectedFileSize"
       },
-      "productVolume": 17953851,
+      "productVolume": "17953851",
       "timeToPreprocess": 0.935,
       "duration": 27.969,
       "createdAt": 1537830592105,
@@ -283,7 +283,7 @@
         "Cause": "\"None\"",
         "Error": "Unknown Error"
       },
-      "productVolume": 17956339,
+      "productVolume": "17956339",
       "endingDateTime": "2017-11-08T23:59:59.000Z",
       "timeToPreprocess": 0.342,
       "duration": 25.752,
@@ -329,7 +329,7 @@
         "Cause": "\"None\"",
         "Error": "Unknown Error"
       },
-      "productVolume": 17956339,
+      "productVolume": "17956339",
       "endingDateTime": "2017-11-08T23:59:59.000Z",
       "timeToPreprocess": 0.83,
       "duration": 14.011,
@@ -374,7 +374,7 @@
         "Cause": "\"None\"",
         "Error": "Unknown Error"
       },
-      "productVolume": 17956339,
+      "productVolume": "17956339",
       "endingDateTime": "2017-11-08T23:59:59.000Z",
       "timeToPreprocess": 0.892,
       "duration": 26.939,
@@ -418,7 +418,7 @@
         "Cause": "{\"errorMessage\":\"Source file not found s3://cumulus-test-sandbox-internal/non-existent-path/non-existent-file\",\"errorType\":\"FileNotFound\",\"stackTrace\":[\"S3Granule.sync (/var/task/index.js:147549:13)\",\"<anonymous>\",\"process._tickDomainCallback (internal/process/next_tick.js:228:7)\"]}",
         "Error": "FileNotFound"
       },
-      "productVolume": 17953851,
+      "productVolume": "17953851",
       "timeToPreprocess": 0.783,
       "duration": 26.981,
       "createdAt": 1537810191858,
@@ -459,7 +459,7 @@
       "processingEndDateTime": "2019-12-11T23:19:30.946Z",
       "processingStartDateTime": "2019-12-11T23:19:23.823Z",
       "productionDateTime": "2018-07-19T12:01:01Z",
-      "productVolume": 2488,
+      "productVolume": "2488",
       "provider": "s3_provider",
       "published": false,
       "status": "completed",
