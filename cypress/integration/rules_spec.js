@@ -260,7 +260,7 @@ describe('Rules page', () => {
 
       // Test error flow
       const errorRuleType = 'test';
-      const errorMessage = 'insert into "rules" ("arn", "collection_cumulus_id", "created_at", "enabled", "execution_name_prefix", "log_event_arn", "meta", "name", "payload", "provider_cumulus_id", "queue_url", "tags", "type", "updated_at", "value", "workflow")';
+      const errorMessage = 'insert into "rules" ("collection_cumulus_id", "created_at", "enabled", "meta", "name", "provider_cumulus_id", "type", "updated_at", "workflow")';
       cy.contains('.ace_variable', 'name');
       cy.editJsonTextarea({ data: { rule: { type: errorRuleType } }, update: true });
 
