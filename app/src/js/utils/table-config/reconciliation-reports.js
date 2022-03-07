@@ -252,3 +252,38 @@ export const tableColumnsGnf = [
     width: 50,
   },
 ];
+
+export const tableColumnsBackupAndRecovery = [
+  {
+    Header: 'Collection ID',
+    accessor: 'collectionId',
+    // eslint-disable-next-line react/prop-types
+    Cell: ({ cell: { value } }) => <Link to={(location) => ({
+      pathname: collectionHrefFromId(value), search: getPersistentQueryParams(location)
+    })}>{value}</Link>,
+    width: 125,
+  },
+  {
+    Header: 'Granule ID',
+    accessor: 'granuleId',
+    width: 200,
+  },
+  {
+    Header: 'Provider',
+    accessor: 'provider'
+  },
+  {
+    Header: 'Conflict Type',
+    id: 'conflictType'
+  },
+  // {
+  //   Header: 'Conflict Details',
+  //   id: 'conflictDetails',
+  //   Cell: 'View Details',
+  //   disableSortBy: true
+  // },
+  {
+    Header: 'S3 Link',
+    id: 's3'
+  }
+];

@@ -2,6 +2,7 @@ import moment from 'moment';
 import { shouldBeRedirectedToLogin } from '../support/assertions';
 import { dateTimeFormat } from '../../app/src/js/utils/datepicker';
 import { tableColumns } from '../../app/src/js/utils/table-config/reconciliation-reports';
+import { displayCase } from '../../app/src/js/utils/format';
 
 const tableColumnHeaders = tableColumns({ isGranules: false }).map((column) => column.Header);
 
@@ -42,7 +43,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.contains('.table .thead .th', 'Date Generated');
       cy.contains('.table .thead .th', 'Download Report');
       cy.contains('.table .thead .th', 'Delete Report');
-      cy.get('.table .tbody .tr').should('have.length', 5);
+      cy.get('.table .tbody .tr').should('have.length', 6);
       cy.get('[data-value="inventoryReport-2020/01/14T202529026"] > .table__main-asset > a').should('have.attr', 'href', '/reconciliation-reports/report/inventoryReport-2020%2F01%2F14T202529026');
       cy.get('[data-value="inventoryReport-20200114T205238781"] > .table__main-asset > a').should('have.attr', 'href', '/reconciliation-reports/report/inventoryReport-20200114T205238781');
     });
@@ -87,7 +88,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.get('@type-input').should('be.visible').click({ force: true }).type('invent{enter}');
       cy.get('.filter-status .rbt-input-main').as('status-input');
       cy.get('@status-input').should('be.visible').click({ force: true }).type('gener{enter}');
-      cy.url().should('include', 'search=inventoryReport-2020')
+      cy.url({ timeout: 10000 }).should('include', 'search=inventoryReport-2020')
         .and('include', 'type=Inventory')
         .and('include', 'status=Generated');
       cy.get('.table .tbody .tr').should('have.length', 2);
@@ -95,14 +96,14 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
     it('should have a download button column', () => {
       cy.visit('/reconciliation-reports');
-      cy.get('.button__row--download').should('have.length', 5);
+      cy.get('.button__row--download').should('have.length', 6);
     });
 
     it('deletes a report when the Delete button is clicked', () => {
       cy.visit('/reconciliation-reports');
       cy.get('[data-value="inventoryReport-2020/01/14T202529026"]').find('.button__row--delete').click({ force: true });
 
-      cy.get('.table .tbody .tr').should('have.length', 4);
+      cy.get('.table .tbody .tr').should('have.length', 5);
       cy.get('[data-value="inventoryReport-2020/01/14T202529026"]')
         .should('not.exist');
     });
@@ -168,6 +169,52 @@ describe('Dashboard Reconciliation Reports Page', () => {
         expect(body).to.have.property('endTimestamp', endTimestamp);
         expect(body).to.have.deep.property('collectionId', collectionId);
         expect(body).to.have.property('location', location);
+      }).as('createReport');
+
+      cy.get('.button--submit').click();
+      cy.wait('@createReport');
+
+      cy.url().should('not.include', path);
+      cy.url().should('include', '/reconciliation-reports');
+    });
+
+    it('should be able to choose filters when creating a orca backup report', () => {
+      const path = '/reconciliation-reports/create';
+      const reportType = 'ORCA Backup';
+      const reportName = 'orcaBackupReport-20220111T191341153';
+      const collectionId = ['http_testcollection___001', 'MOD09GQ___006'];
+      const provider = ['s3_provider'];
+      const granuleId = ['MOD09GQ.A9344328.K9yI3O.006.4625818663028'];
+
+      cy.visit('/reconciliation-reports/create');
+      cy.contains('.heading--large', 'Create Report');
+
+      cy.get('form .form__item .reportType').as('reportType');
+      cy.get('@reportType').click().type('orca{enter}');
+      cy.get('@reportType').find('input[name="reportType"]').should('have.value', reportType);
+      cy.contains('.main-form--wrapper h2', displayCase(reportType));
+
+      cy.get('form .form__item .reportName').as('reportName');
+      cy.get('@reportName').should('be.visible').click().type(reportName);
+
+      cy.get('form .form__item .provider').as('provider');
+      cy.get('@provider').click().type('s3_{enter}');
+      cy.get('form .form__item .collectionId').as('collectionId');
+      cy.get('@collectionId').click().type('http_{enter}');
+      cy.get('@collectionId').click().type('MOD09GQ_{enter}');
+      cy.get('form .form__item .granuleId').as('granuleId');
+      cy.get('@granuleId').click().type('MOD09GQ.A93{enter}');
+
+      cy.intercept({
+        url: '/reconciliationReports',
+        method: 'POST'
+      }, (req) => {
+        const { body } = req;
+        expect(body).to.have.property('reportType', reportType);
+        expect(body).to.have.property('reportName', reportName);
+        expect(body).to.have.deep.property('provider', provider);
+        expect(body).to.have.deep.property('collectionId', collectionId);
+        expect(body).to.have.deep.property('granuleId', granuleId);
       }).as('createReport');
 
       cy.get('.button--submit').click();
