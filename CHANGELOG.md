@@ -11,13 +11,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Breaking Changes
 
-This version of the dashboard requires Cumulus API v10.1.0
+This version of the dashboard requires Cumulus API v10.1.1
 
 ### Changed
 
+- **CUMULUS-NONE**
+  - Updates Cumulus development dependencies to v10.1.1 and upgrades localstack to 0.11.5 to work with latest Cumulus.
 - **CUMULUS-2843**
   - Create provider and create rule modals now dislpay the provider [rule]
     schema title directly as read from the Cumulus API.
+
 
 ## [v9.0.0] - 2022-02-01
 
