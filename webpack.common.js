@@ -152,7 +152,6 @@ const CommonConfig = {
       HIDE_PDR: config.nav.exclude.PDRs,
       AUTH_METHOD: config.oauthMethod,
       KIBANAROOT: config.kibanaRoot,
-      ESROOT: config.esRoot,
       ES_CLOUDWATCH_TARGET_PATTERN: config.esCloudwatchTargetPattern,
       ES_DISTRIBUTION_TARGET_PATTERN: config.esDistributionTargetPattern,
       ES_USER: config.esUser,

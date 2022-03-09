@@ -13,6 +13,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 This version of the dashboard requires Cumulus API v10.1.0
 
+- **CUMULUS-2728**
+  - Removes kibana links and Metrics integration. To get this functionality,
+    use the Metric's ELK stack and custom Kibana displays.
+    `KIBANAROOT` is still used to send the operator to the kibana instance where bulk operation queries and custom visualizations can be found.
+
+    The following variables have been removed and no longer serve any purpose in the application.
+
+    + ESROOT
+    + ES\_CLOUDWATCH\_TARGET\_PATTERN
+    + ES\_DISTRIBUTION\_TARGET\_PATTERN
+    + ES\_PASSWORD
+    + ES\_USER
+    + SHOW\_DISTRIBUTION\_API\_METRICS
+    + SHOW\_TEA\_METRICS
+
 ### Changed
 
 - **CUMULUS-2843**
