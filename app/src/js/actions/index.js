@@ -16,10 +16,6 @@ import { historyPushWithQueryParams } from '../utils/url-helper';
 
 const { CALL_API } = types;
 const {
-  esCloudwatchTargetPattern,
-  esDistributionTargetPattern,
-  showDistributionAPIMetrics,
-  showTeaMetrics,
   apiRoot: root,
   defaultPageLimit,
   minCompatibleApiVersion
