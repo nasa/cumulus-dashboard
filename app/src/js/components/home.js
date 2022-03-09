@@ -21,7 +21,7 @@ import {
 import { pageSection, sectionHeader } from './Section/section';
 import List from './Table/Table';
 import { errorTableColumns } from '../utils/table-config/granules';
-import { kibanaGranuleErrorsLink } from '../utils/kibana';
+import linkToKibana from '../utils/kibana';
 import DatepickerRange from './Datepicker/DatepickerRange';
 import { strings } from './locale';
 import { getPersistentQueryParams } from '../utils/url-helper';
@@ -114,7 +114,7 @@ class Home extends React.Component {
     const { location } = this.props;
     const searchString = getPersistentQueryParams(location);
     const overview = [
-      [tally(get(stats.data, 'errors.value')), 'Errors', kibanaGranuleErrorsLink()],
+      [tally(get(stats.data, 'errors.value')), 'Errors', linkToKibana()],
       [tally(get(stats.data, 'collections.value')), strings.collections, '/collections'],
       [tally(get(stats.data, 'granules.value')), strings.granules, '/granules'],
       [tally(get(this.props.executions, 'list.meta.count')), 'Executions', '/executions'],
