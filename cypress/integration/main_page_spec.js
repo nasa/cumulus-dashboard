@@ -208,54 +208,6 @@ describe('Dashboard Home Page', () => {
       cy.get('.table--wrapper > div > div.tbody').should('be.empty');
     });
 
-    it('modifies the Metrics section as datepicker changes', () => {
-      // Cypress only allows one stub per url. We make multiple POST requests to the same
-      // elasticsearch endpoint. The fixture here returns a combined response of all the
-      // responses for one url, effectively stubbing our elasticsearch searches.
-      let fixtureName = 'elasticsearch.json';
-      cy.intercept('POST', 'http://example.com/*/_search/', (req) => req.reply({ statusCode: 200, fixture: fixtureName }));
-      cy.visit('/');
-
-      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(4)').contains('0');
-      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(3)').contains('2');
-      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(2)').contains('4');
-      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(1)').contains('6');
-
-      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(4)').contains('1');
-      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(3)').contains('3');
-      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(2)').contains('5');
-      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(1)').contains('7');
-
-      fixtureName = 'updated_elasticsearch.json';
-
-      cy.get('[data-cy=startDateTime]').within(() => {
-        cy.get('input[name=month]').click().type(1);
-        cy.get('input[name=day]').click().type(31);
-        cy.get('input[name=year]').click().type(2009);
-        cy.get('input[name=hour12]').click().type(0);
-        cy.get('input[name=minute]').click().type(0);
-        cy.get('select[name=amPm]').select('AM');
-      });
-      cy.get('[data-cy=endDateTime]').within(() => {
-        cy.get('input[name=month]').click().type(5);
-        cy.get('input[name=day]').click().type(1);
-        cy.get('input[name=year]').click().type(2010);
-        cy.get('input[name=hour12]').click().type(0);
-        cy.get('input[name=minute]').click().type(0);
-        cy.get('select[name=amPm]').select('AM');
-      });
-
-      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(4)').contains('10');
-      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(3)').contains('12');
-      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(2)').contains('14');
-      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(1)').contains('16');
-
-      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(4)').contains('11');
-      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(3)').contains('13');
-      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(2)').contains('15');
-      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(1)').contains('17');
-    });
-
     it('Logging out successfully redirects to the login screen', () => {
       // Logging to debug intermittent timeouts
       cy.task('log', 'Start test');
@@ -305,11 +257,6 @@ describe('Dashboard Home Page', () => {
         cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '1');
         cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '35');
       });
-    });
-
-    it('should not display the Distribution stats when no data is provided', () => {
-      cy.get('ul#distributionErrors').should('not.exist');
-      cy.get('ul#distributionSuccesses').should('not.exist');
     });
 
     describe('The Timer', () => {
