@@ -3,9 +3,7 @@
 import test from 'ava';
 import { randomBytes } from 'crypto';
 import _config from '../../app/src/js/config';
-import {
-  linkToKibana,
-} from '../../app/src/js/utils/kibana';
+import linkToKibana from '../../app/src/js/utils/kibana';
 
 
 test.before((t) => {

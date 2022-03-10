@@ -20,13 +20,13 @@ This version of the dashboard requires Cumulus API v10.1.0
 
     The following variables have been removed and no longer serve any purpose in the application.
 
-    + ESROOT
-    + ES\_CLOUDWATCH\_TARGET\_PATTERN
-    + ES\_DISTRIBUTION\_TARGET\_PATTERN
-    + ES\_PASSWORD
-    + ES\_USER
-    + SHOW\_DISTRIBUTION\_API\_METRICS
-    + SHOW\_TEA\_METRICS
+    + `ESROOT`
+    + `ES_CLOUDWATCH_TARGET_PATTERN`
+    + `ES_DISTRIBUTION_TARGET_PATTERN`
+    + `ES_PASSWORD`
+    + `ES_USER`
+    + `SHOW_DISTRIBUTION_API_METRICS`
+    + `SHOW_TEA_METRICS`
 
 ### Changed
 
