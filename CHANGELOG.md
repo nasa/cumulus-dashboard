@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- **CUMULUS-NONE**
+  - Upgrade Cypress testing library to latest 9.5.1
+
 ## [v10.0.0] - 2022-02-25
 
 ## Breaking Changes
