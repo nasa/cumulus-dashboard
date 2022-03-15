@@ -14,14 +14,9 @@ services:
     environment:
       - APIROOT=http://localhost:5001
       - ENABLE_RECOVERY=true
-      - ESROOT=http://example.com
-      - ES_CLOUDWATCH_TARGET_PATTERN=daac-cumulus-cloudwatch-env-*
-      - ES_DISTRIBUTION_TARGET_PATTERN=daac-distribution-env-*
       - HIDE_PDR=false
       - DAAC_NAME=local
       - STAGE=LOCALHOST-Development
-      - SHOW_DISTRIBUTION_API_METRICS=true
-      - SHOW_TEA_METRICS=false
       - AUTH_METHOD=earthdata
   shim:   # empty container to open ports
     image: ${DOCKER_REPOSITORY}node:12.18.0
