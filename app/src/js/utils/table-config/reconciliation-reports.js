@@ -15,6 +15,7 @@ export const tableColumns = ({ dispatch, isGranules, query }) => ([
       switch (type) {
         case 'Internal':
         case 'Granule Inventory':
+        case 'ORCA Backup':
           return <Link to={link} onClick={(e) => handleDownloadClick(e, value, dispatch)}>{value}</Link>;
         default:
           return <Link to={link} >{value}</Link>;
