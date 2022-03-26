@@ -34,19 +34,7 @@ Setting the following environment variables can override the default values.
 | HIDE\_PDR | Whether to hide (or show) the PDR menu. | *true* |
 | LABELS | Choose `gitc` or `daac` localization. | *daac* |
 | STAGE | Identifier displayed at top of dashboard page: e.g. PROD, UAT | *development* |
-
- Environment options to configure metrics displays. **All** of the below are optional configurations to display metrics on the Cumulus Dashboard.
-
-| Env Name | Description | Default |
-| -----|----|---- |
-| ESROOT | Should point to an Elasticsearch endpoint. Must be set for distribution metrics to be displayed. | |
-| ES\_PASSWORD | Elasticsearch password, needed when protected by basic authorization. | |
-| ES\_USER |  Elasticsearch username, needed when protected by basic authorization. | |
-| ES\_CLOUDWATCH\_TARGET\_PATTERN |  The Elasticsearch target pattern to find cloudwatch events. e.g. `<daac>-cloudwatch-cumulus-<env>-*` | |
-| ES\_DISTRIBUTION\_TARGET\_PATTERN | The Elasticsearch target pattern to find s3 access log distribution events. e.g. `<daac>-distribution-<env>-*` | |
 | KIBANAROOT | \<optional\>  Points to a Kibana endpoint. | |
-| SHOW\_DISTRIBUTION\_API\_METRICS | \<optional\> Display metrics from the Cumulus Distribution API. | *false* |
-| SHOW\_TEA\_METRICS | \<optional\> Display metrics from the Thin Egress Application (TEA). | *true* |
 
 
 ## Quick start
@@ -81,7 +69,7 @@ Set the environment and build the dashboard with these commands:
   $ source production.env && ./bin/build_dashboard_via_docker.sh
 ```
 
-This script uses Docker Compose to build and copy the a compiled dashboard into the `./dist` directory. You can now deploy this directory to AWS behind [CloudFront](https://aws.amazon.com/cloudfront/).  If you are in NGAP, follow the instructions for "Request Public or Protected Access to the APIs and Dashboard" on the earthdata wiki page [Using Cumulus with Private APIs](https://wiki.earthdata.nasa.gov/display/CUMULUS/Cumulus+Deployments+in+NGAP).
+This script uses Docker Compose to build and copy the compiled dashboard into the `./dist` directory. You can now deploy this directory to AWS behind [CloudFront](https://aws.amazon.com/cloudfront/).  If you are in NGAP, follow the instructions for "Request Public or Protected Access to the APIs and Dashboard" on the earthdata wiki page [Using Cumulus with Private APIs](https://wiki.earthdata.nasa.gov/display/CUMULUS/Cumulus+Deployments+in+NGAP).
 
 
 ### Run the dashboard locally via Docker Image
@@ -211,7 +199,7 @@ Serve the cumulus API (separate terminal)
 
 Serve the dashboard web application (another terminal)
 ```bash
-  $ [HIDE_PDR=false SHOW_DISTRIBUTION_API_METRICS=true ENABLE_RECOVERY=true ESROOT=http://example.com APIROOT=http://localhost:5001] npm run serve
+  $ [HIDE_PDR=false ENABLE_RECOVERY=true APIROOT=http://localhost:5001] npm run serve
 ```
 
 If you're just testing dashboard code, you can generally run all of the above commands as a single docker-compose stack.
@@ -242,7 +230,7 @@ These are started and stopped with the commands:
   $ npm run stop-localstack
 ```
 
-After these containers are running, you can start a cumulus API locally in a terminal window `npm run serve-api`, the dashboard in another window. `[HIDE_PDR=false SHOW_DISTRIBUTION_API_METRICS=true ENABLE_RECOVERY=true ESROOT=http://example.com ES_CLOUDWATCH_TARGET_PATTERN=cwpattern ES_DISTRIBUTION_TARGET_PATTERN=distpattern APIROOT=http://localhost:5001] npm run serve` and finally cypress in a third window. `npm run cypress`.
+After these containers are running, you can start a cumulus API locally in a terminal window `npm run serve-api`, the dashboard in another window. `[HIDE_PDR=false ENABLE_RECOVERY=true APIROOT=http://localhost:5001] npm run serve` and finally cypress in a third window. `npm run cypress`.
 
 Once the Docker app is running, If you would like to see sample data you can seed the database. This will load the same sample data into the application that is used during cypress testing.
 ```bash
@@ -279,7 +267,7 @@ localstack_1     | Ready.
 you should be able to verify access to the local Cumulus API at http://localhost:5001/token
 
 
-Then you can run the dashboard locally (without Docker) `[HIDE_PDR=false SHOW_DISTRIBUTION_API_METRICS=true ESROOT=http://example.com APIROOT=http://localhost:5001] npm run serve` and open cypress tests `npm run cypress`.
+Then you can run the dashboard locally (without Docker) `[HIDE_PDR=false APIROOT=http://localhost:5001] npm run serve` and open cypress tests `npm run cypress`.
 
 The Docker compose stack also includes a command to let a developer start all development containers with a single command.
 

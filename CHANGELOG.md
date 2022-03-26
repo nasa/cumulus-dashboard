@@ -20,13 +20,31 @@ This version of the dashboard requires Cumulus API v11.1.0
 
 ## Breaking Changes
 
-This version of the dashboard requires Cumulus API v10.1.0
+This version of the dashboard requires Cumulus API v10.1.1
+
+- **CUMULUS-2728**
+  - Removes kibana links and Metrics integration. To get this functionality,
+    use the Metric's ELK stack and custom Kibana displays.
+    `KIBANAROOT` is still used to send the operator to the kibana instance where bulk operation queries and custom visualizations can be found.
+
+    The following variables have been removed and no longer serve any purpose in the application.
+
+    + `ESROOT`
+    + `ES_CLOUDWATCH_TARGET_PATTERN`
+    + `ES_DISTRIBUTION_TARGET_PATTERN`
+    + `ES_PASSWORD`
+    + `ES_USER`
+    + `SHOW_DISTRIBUTION_API_METRICS`
+    + `SHOW_TEA_METRICS`
 
 ### Changed
 
+- **CUMULUS-NONE**
+  - Updates Cumulus development dependencies to v10.1.1 and upgrades localstack to 0.11.5 to work with latest Cumulus.
 - **CUMULUS-2843**
   - Create provider and create rule modals now dislpay the provider [rule]
     schema title directly as read from the Cumulus API.
+
 
 ## [v9.0.0] - 2022-02-01
 
