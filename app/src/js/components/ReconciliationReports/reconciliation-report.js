@@ -11,7 +11,7 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import InventoryReport from './inventory-report';
 import GnfReport from './gnf-report';
 import Legend from './legend';
-import OrcaBackupReport from './orca-backup-report';
+import OrcaBackupReport from './backup-report';
 
 const ReconciliationReport = ({
   dispatch = {},
@@ -74,6 +74,7 @@ const ReconciliationReport = ({
             legend={<Legend />}
             recordData={recordData}
             reportName={reconciliationReportName}
+            reportType={reportType}
             reportUrl={reportUrl}
           />
         }[reportType]

@@ -1,7 +1,3 @@
-/**
- * TODO: This component should be completed as part of CUMULUS-2748
- */
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import {
@@ -14,19 +10,30 @@ import ReportHeading from './report-heading';
 import { handleDownloadUrlClick } from '../../utils/download-file';
 import { tableColumnsBackupAndRecovery } from '../../utils/table-config/reconciliation-reports';
 
-const OrcaBackupReport = ({
+const BackupReport = ({
   filterString,
   legend,
   onSelect,
   recordData,
   reportName,
+  reportType,
   reportUrl
 }) => {
   const {
     createStartTime = null,
     createEndTime = null,
-    error = null
+    error = null,
+    granules: {
+      withConflicts = [],
+      onlyInCumulus = [],
+      onlyInOrca = []
+    }
   } = recordData || {};
+
+  const records = withConflicts.map((g) => ({ ...g, conflictType: 'withConflicts' })).concat(
+    onlyInCumulus.map((g) => ({ ...g, conflictType: 'onlyInCumulus' })),
+    onlyInOrca.map((g) => ({ ...g, conflictType: 'onlyInOrca' }))
+  );
 
   function handleDownloadClick(e) {
     handleDownloadUrlClick(e, { url: reportUrl });
@@ -35,6 +42,7 @@ const OrcaBackupReport = ({
   return (
     <div className="page__component">
       <ReportHeading
+        conflictComparisons={records.length}
         endTime={createEndTime}
         error={error}
         name={reportName}
@@ -54,11 +62,11 @@ const OrcaBackupReport = ({
           />
         </div>
         <List
-          data={[]}
+          data={records}
           legend={legend}
           onSelect={onSelect}
           rowId="granuleId"
-          tableColumns={tableColumnsBackupAndRecovery}
+          tableColumns={tableColumnsBackupAndRecovery({ reportName, reportType })}
           useSimplePagination={true}
         />
       </section>
@@ -66,13 +74,14 @@ const OrcaBackupReport = ({
   );
 };
 
-OrcaBackupReport.propTypes = {
+BackupReport.propTypes = {
   filterString: PropTypes.string,
   legend: PropTypes.node,
   onSelect: PropTypes.func,
   recordData: PropTypes.object,
   reportName: PropTypes.string,
+  reportType: PropTypes.string,
   reportUrl: PropTypes.string
 };
 
-export default OrcaBackupReport;
+export default BackupReport;

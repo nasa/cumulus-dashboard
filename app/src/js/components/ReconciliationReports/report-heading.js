@@ -108,6 +108,8 @@ const ReportHeading = ({
                   'The reports below compare datasets and display the conflicts in each data location.',
                 'Granule Not Found':
                   'The report below shows a comparison across each data bucket/repository for granule issues.',
+                'ORCA Backup':
+                  'The report below compares datasets and displays the conflicts with ORCA and Cumulus.'
               }[type]
             }
           </div>
