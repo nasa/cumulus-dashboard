@@ -5,18 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## feature/rds-phase-2
+## [Unreleased]
 
 ## Breaking Changes
 
-This version of the dashboard requires Cumulus API release from feature/rds-phase-2
+This version of the dashboard requires Cumulus API v11.1.0
 
 ### Added
 
 - **CUMULUS-2704**
   - Add option to create ORCA Reconciliation Report to dashboard
-
-## [Unreleased]
 
 ## [v10.0.0] - 2022-02-25
 
