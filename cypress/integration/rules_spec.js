@@ -260,7 +260,7 @@ describe('Rules page', () => {
 
       // Test error flow
       const errorRuleType = 'test';
-      const errorMessage = 'insert into "rules" ("collection_cumulus_id", "created_at", "enabled", "meta", "name", "provider_cumulus_id", "type", "updated_at", "workflow")';
+      const errorMessage = 'The record has validation errors: [{"keyword":"enum","dataPath":".rule.type","schemaPath":"#/properties/rule/properties/type/enum","params":{"allowedValues":["onetime","scheduled","sns","kinesis","sqs"]},"message":"should be equal to one of the allowed values"}]';
       cy.contains('.ace_variable', 'name');
       cy.editJsonTextarea({ data: { rule: { type: errorRuleType } }, update: true });
 
