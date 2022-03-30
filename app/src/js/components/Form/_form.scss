@@ -702,3 +702,21 @@ select option{
     border-radius: 0 0 10px 10px;
   }
 }
+
+.reconciliation-granule__content {
+  .metadata__details .meta__row {
+    dt, dd {
+      vertical-align: top;
+    }
+    dt {
+      width: 20%;
+    }
+    dd {
+      width: 40%;
+    }
+    .granule__location div{
+      display: inline-block;
+      width: 30%;
+    }
+  }
+}

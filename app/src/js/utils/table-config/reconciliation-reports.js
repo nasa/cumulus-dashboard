@@ -253,7 +253,7 @@ export const tableColumnsGnf = [
   },
 ];
 
-export const tableColumnsBackupAndRecovery = ({ reportType, reportName }) => ([
+export const tableColumnsBackup = ({ reportType, reportName }) => ([
   {
     Header: 'Granule ID',
     accessor: 'granuleId',
@@ -288,10 +288,6 @@ export const tableColumnsBackupAndRecovery = ({ reportType, reportName }) => ([
     Header: 'Provider',
     accessor: 'provider',
     Cell: ({ cell: { value } }) => providerLink(value)
-  },
-  {
-    Header: 'S3 Link',
-    id: 's3'
   }
 ]);
 

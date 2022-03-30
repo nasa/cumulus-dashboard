@@ -13,16 +13,20 @@ import Metadata from '../Table/Metadata';
 import { tableColumnsGranuleConflictDetails } from '../../utils/table-config/reconciliation-reports';
 
 const displayDataLocation = (reportType, granule) => {
-  const cumulusFilesCount = granule.okFilesCount + granule.conflictFiles.filter((file) => file.onlyInCumulus).length;
+  const { conflictFiles = [], okFilesCount = 0 } = granule;
+  const cumulusFilesCount = okFilesCount +
+    conflictFiles.filter((file) => file.reason === 'onlyInCumulus').length;
 
   if (reportType === 'ORCA Backup') {
-    const orcaFilesCount = granule.okFilesCount +
-      granule.conflictFiles.filter((file) => (!!file.onlyInOrca || !!file.shouldBeExcludedFromOrca)).length;
+    const orcaFilesCount = okFilesCount +
+      conflictFiles.filter((file) => ['onlyInOrca', 'shouldBeExcludedFromOrca'].includes(file.reason)).length;
 
-    return <>
+    return <div className='granule__location'>
       <ul>
-        <span>Cumulus</span>
+        <div>
+        Cumulus
         <Tooltip
+          className="tooltip--blue"
           id={granule.granuleId}
           placement='right'
           target={
@@ -32,11 +36,16 @@ const displayDataLocation = (reportType, granule) => {
           }
           tip={<div>{cumulusFilesCount ? 'Found' : 'Not Found'}</div>}
         />
-        <span>Number of Files:</span><span>{cumulusFilesCount}</span>
+        </div>
+        <div>
+        Number of Files: {cumulusFilesCount}
+        </div>
       </ul>
       <ul>
-        <span>Orca</span>
+      <div>
+        Orca
         <Tooltip
+          className="tooltip--blue"
           id={granule.granuleId}
           placement='right'
           target={
@@ -46,9 +55,12 @@ const displayDataLocation = (reportType, granule) => {
           }
           tip={<div>{orcaFilesCount ? 'Found' : 'Not Found'}</div>}
         />
-        <span>Number of Files:</span><span>{orcaFilesCount}</span>
+      </div>
+      <div>
+        Number of Files: {orcaFilesCount}
+      </div>
       </ul>
-      </>;
+      </div>;
   }
   return <>
     <ul>Cumulus Found Number of Files: ${cumulusFilesCount}</ul>
@@ -79,10 +91,6 @@ const metaAccessors = (reportType, granule) => ([
 ]);
 
 const BackupReportGranuleDetails = ({
-  filterString,
-  legend,
-  onSelect,
-  recordData,
   location = {},
 }) => {
   const { state: locationState } = location;
@@ -131,7 +139,9 @@ const BackupReportGranuleDetails = ({
               Conflict Details
             </h2>
           </div>
-          <Metadata data={granule} accessors={metaAccessors(reportType, granule)} />
+          <div className='reconciliation-granule__content'>
+            <Metadata data={granule} accessors={metaAccessors(reportType, granule)} />
+          </div>
         </section>
         <section className="page__section">
           <List
@@ -149,12 +159,7 @@ const BackupReportGranuleDetails = ({
 };
 
 BackupReportGranuleDetails.propTypes = {
-  filterString: PropTypes.string,
-  legend: PropTypes.node,
-  onSelect: PropTypes.func,
-  granule: PropTypes.object,
   location: PropTypes.object,
-  recordData: PropTypes.object,
 };
 
 export default BackupReportGranuleDetails;
