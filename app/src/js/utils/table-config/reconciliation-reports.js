@@ -293,53 +293,41 @@ export const tableColumnsBackup = ({ reportType, reportName }) => ([
 
 const fileLink = (bucket, key) => `https://${bucket}.s3.amazonaws.com/${key}`;
 export const tableColumnsGranuleConflictDetails = ({ reportType }) => {
-  const backupColumns = (reportType === 'ORCA Backup')
-    ? [
-        {
-          Header: 'In Orca Only',
-          id: 'onlyInOrca',
-          accessor: 'reason',
-          Cell: ({ cell: { value } }) => ( // eslint-disable-line react/prop-types
-            (value === 'onlyInOrca')
-              ? <button
-                  aria-label="Download Report"
-                  className='button button__row button__row--check'
-                />
-              : nullValue
-          ),
-          disableSortBy: true,
-        },
-        {
-          Header: 'Should Be Excluded From Orca',
-          id: 'shouldBeExcludedFromOrca',
-          accessor: 'reason',
-          Cell: ({ cell: { value } }) => ( // eslint-disable-line react/prop-types
-            (value === 'shouldBeExcludedFromOrca')
-              ? <button
-                  aria-label="Download Report"
-                  className='button button__row button__row--check'
-                />
-              : nullValue
-          ),
-          disableSortBy: true,
-        },
-      ]
-    : [];
+  const checkButton = <button className='button button__row button__row--check'/>;
+  const orcaBackupColumns = [
+    {
+      Header: 'In Orca Only',
+      id: 'onlyInOrca',
+      accessor: 'reason',
+      Cell: ({ cell: { value } }) => (
+        (value === 'onlyInOrca') ? checkButton : nullValue
+      ),
+      disableSortBy: true,
+    },
+    {
+      Header: 'Should Be Excluded From Orca',
+      id: 'shouldBeExcludedFromOrca',
+      accessor: 'reason',
+      Cell: ({ cell: { value } }) => (
+        (value === 'shouldBeExcludedFromOrca') ? checkButton : nullValue
+      ),
+      disableSortBy: true,
+    },
+  ];
+  const backupColumns = (reportType === 'ORCA Backup') ? orcaBackupColumns : [];
 
   return [
     {
       Header: 'Filename',
-      accessor: (row) => row.fileName || '(No name)',
-      id: 'fileName',
+      accessor: 'fileName',
+      width: 200,
     },
     {
       Header: 'Link',
       accessor: (row) => (row.bucket && row.key
-        ? (
-          <a href={fileLink(row.bucket, row.key)}>
+        ? (<a href={fileLink(row.bucket, row.key)}>
             {row.fileName ? 'Link' : nullValue}
-          </a>
-          )
+          </a>)
         : null),
       id: 'link',
     },
@@ -347,13 +335,8 @@ export const tableColumnsGranuleConflictDetails = ({ reportType }) => {
       Header: 'In Cumulus Only',
       id: 'onlyInCumulus',
       accessor: 'reason',
-      Cell: ({ cell: { value } }) => ( // eslint-disable-line react/prop-types
-        (value === 'onlyInCumulus')
-          ? <button
-              aria-label="Download Report"
-              className='button button__row button__row--check'
-            />
-          : nullValue
+      Cell: ({ cell: { value } }) => (
+        (value === 'onlyInCumulus') ? checkButton : nullValue
       ),
       disableSortBy: true,
     }

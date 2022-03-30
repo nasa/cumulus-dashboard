@@ -6,65 +6,50 @@ import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import Tooltip from '../Tooltip/tooltip';
 import {
   collectionLink,
+  granuleLink,
   providerLink,
   fullDate,
 } from '../../utils/format';
 import Metadata from '../Table/Metadata';
 import { tableColumnsGranuleConflictDetails } from '../../utils/table-config/reconciliation-reports';
 
-const displayDataLocation = (reportType, granule) => {
-  const { conflictFiles = [], okFilesCount = 0 } = granule;
-  const cumulusFilesCount = okFilesCount +
-    conflictFiles.filter((file) => file.reason === 'onlyInCumulus').length;
-
+const renderDataLocation = (reportType, granule) => {
+  const { cumulusFilesCount = 0, orcaFilesCount = 0 } = granule;
   if (reportType === 'ORCA Backup') {
-    const orcaFilesCount = okFilesCount +
-      conflictFiles.filter((file) => ['onlyInOrca', 'shouldBeExcludedFromOrca'].includes(file.reason)).length;
-
     return <div className='granule__location'>
       <ul>
         <div>
-        Cumulus
-        <Tooltip
-          className="tooltip--blue"
-          id={granule.granuleId}
-          placement='right'
-          target={
-            <span
-              className={'status-indicator status-indicator--found status-indicator--granule'}
-            ></span>
-          }
-          tip={<div>{cumulusFilesCount ? 'Found' : 'Not Found'}</div>}
-        />
+          Cumulus
+          <Tooltip
+            className="tooltip--blue"
+            id={granule.granuleId}
+            placement='right'
+            target={<span className={`status-indicator status-indicator--${cumulusFilesCount ? '' : 'not'}found status-indicator--granule`}/>}
+            tip={<div>{cumulusFilesCount ? 'Found' : 'Not Found'}</div>}
+          />
         </div>
         <div>
-        Number of Files: {cumulusFilesCount}
+          Number of Files: {cumulusFilesCount}
         </div>
       </ul>
       <ul>
-      <div>
-        Orca
-        <Tooltip
-          className="tooltip--blue"
-          id={granule.granuleId}
-          placement='right'
-          target={
-            <span
-              className={'status-indicator status-indicator--found status-indicator--granule'}
-            ></span>
-          }
-          tip={<div>{orcaFilesCount ? 'Found' : 'Not Found'}</div>}
-        />
-      </div>
-      <div>
-        Number of Files: {orcaFilesCount}
-      </div>
+        <div>
+          Orca
+          <Tooltip
+            className="tooltip--blue"
+            id={granule.granuleId}
+            placement='right'
+            target={<span className={`status-indicator status-indicator--${orcaFilesCount ? '' : 'not'}found status-indicator--granule`}/>}
+            tip={<div>{orcaFilesCount ? 'Found' : 'Not Found'}</div>}
+          />
+        </div>
+        <div>
+          Number of Files: {orcaFilesCount}
+        </div>
       </ul>
-      </div>;
+    </div>;
   }
-  return <>
-    <ul>Cumulus Found Number of Files: ${cumulusFilesCount}</ul>
-    </>;
+  return <><ul>Cumulus Found Number of Files: ${cumulusFilesCount}</ul></>;
 };
 
 const metaAccessors = (reportType, granule) => ([
@@ -86,13 +71,11 @@ const metaAccessors = (reportType, granule) => ([
   {
     label: 'Location',
     property: 'createdAt',
-    accessor: () => displayDataLocation(reportType, granule),
+    accessor: () => renderDataLocation(reportType, granule),
   },
 ]);
 
-const BackupReportGranuleDetails = ({
-  location = {},
-}) => {
+const BackupReportGranuleDetails = ({ location = {} }) => {
   const { state: locationState } = location;
   const { reportName, reportType, granule } = locationState || {};
 
@@ -128,7 +111,11 @@ const BackupReportGranuleDetails = ({
           {reportType} Report: {reportName}
         </h1>
         <h2 className='heading--medium heading--shared-content with-description with-bottom-border width--full'>
-          Granule: {granule.granuleId}
+          Granule: {
+            ['onlyInCumulus', 'withConflicts'].includes(granule.conflictType)
+              ? granuleLink(granule.granuleId)
+              : granule.granuleId
+          }
         </h2>
         <p className='with-description'>
           Below is a deep dive into where the backup issues are for this granule.
@@ -150,8 +137,7 @@ const BackupReportGranuleDetails = ({
             rowId='fileName'
             initialSortId='updatedAt'
             useSimplePagination={true}
-          >
-          </List>
+          />
         </section>
       </section>
     </div>
