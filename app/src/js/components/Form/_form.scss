@@ -720,3 +720,16 @@ select option{
     }
   }
 }
+
+.reconciliation-reports__header {
+  &--tooltip {
+    display: flex;
+    align-items: center;
+
+    svg {
+      color: $ocean-blue;
+      margin-left: .5em;
+      padding: .5em;
+    }
+  }
+}

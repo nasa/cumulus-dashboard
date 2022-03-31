@@ -1,9 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown as DropdownBootstrap } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ErrorReport from '../Errors/report';
+import Tooltip from '../Tooltip/tooltip';
+
+const backupOptionsInfo = <span>We have two options for operators to backup
+  and recovery their data and investigate in the dashboard.  They are
+  the following: <strong>ORCA (Operational Recovery Cloud Archive)</strong>: Data
+  backup and recovery of granules in S3.  Sometimes referred to
+  S3 Glacier.  <strong>LZARDS (Level Zero and Repositories Data Store)</strong>:
+  An offline backup solution.</span>;
 
 /**
  * ReportHeading
@@ -42,6 +52,7 @@ const ReportHeading = ({
   const formattedEndTime = endTime
     ? moment(endTime).utc().format('YYYY-MM-DD H:mm:ss')
     : 'missing';
+
   return (
     <>
       <section className="page__section page__section__controls">
@@ -101,7 +112,7 @@ const ReportHeading = ({
               </li>
             </ul>
           </div>
-          <div className="with-description">
+          <div className="with-description reconciliation-reports__header--tooltip">
             {
               {
                 Inventory:
@@ -109,7 +120,22 @@ const ReportHeading = ({
                 'Granule Not Found':
                   'The report below shows a comparison across each data bucket/repository for granule issues.',
                 'ORCA Backup':
-                  'The report below compares datasets and displays the conflicts with ORCA and Cumulus.'
+                  <>
+                  <span>The report below compares datasets and displays the conflicts with ORCA and Cumulus. </span>
+                  <span><Tooltip
+                    className="tooltip--light"
+                    id="back-options-tooltip"
+                    placement="right"
+                    target={
+                      <FontAwesomeIcon
+                        className="button__icon--animation"
+                        icon={faInfoCircle}
+                      />
+                    }
+                    tip={backupOptionsInfo}
+                  />
+                  </span>
+                  </>
               }[type]
             }
           </div>
