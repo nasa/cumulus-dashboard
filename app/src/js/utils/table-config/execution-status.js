@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import get from 'lodash/get';
 import { displayCase, fullDate, parseJson } from '../format';
 import { getPersistentQueryParams } from '../url-helper';
-import { kibanaExecutionLink } from '../kibana';
+import linkToKibana from '../kibana';
 import { window } from '../browser';
 import DefaultModal from '../../components/Modal/modal';
 
@@ -232,7 +232,7 @@ export const metaAccessors = ({
     label: 'Logs',
     property: 'executionArn',
     accessor: (d) => {
-      const kibanaLink = kibanaExecutionLink(cumulusInstance, d);
+      const kibanaLink = linkToKibana();
       const className =
         'button button--small button__goto button__arrow button__animation button__arrow--white';
       if (kibanaLink && kibanaLink.length) {
