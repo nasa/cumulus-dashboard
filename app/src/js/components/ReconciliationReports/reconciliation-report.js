@@ -11,6 +11,7 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import InventoryReport from './inventory-report';
 import GnfReport from './gnf-report';
 import Legend from './legend';
+import OrcaBackupReport from './orca-backup-report';
 
 const ReconciliationReport = ({
   dispatch = {},
@@ -62,6 +63,13 @@ const ReconciliationReport = ({
             reportUrl={reportUrl}
           />,
           'Granule Not Found': <GnfReport
+            filterString={filterString}
+            legend={<Legend />}
+            recordData={recordData}
+            reportName={reconciliationReportName}
+            reportUrl={reportUrl}
+          />,
+          'ORCA Backup': <OrcaBackupReport
             filterString={filterString}
             legend={<Legend />}
             recordData={recordData}

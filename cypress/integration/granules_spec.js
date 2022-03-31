@@ -814,11 +814,11 @@ describe('Dashboard Granules Page', () => {
 
       // Validate Scroll Right button is visible when hovering over the last completely visible column
       // and can scroll and hide the scroll right button
-      cy.get('.tr:nth-child(1) > .td:nth-child(8)').trigger('mouseover');
+      cy.get('.tr:nth-child(1) > .td:nth-child(8)', { timeout: 1000 }).trigger('mouseover');
       cy.get('.scrollButtonRight').should('be.visible');
       cy.get('.scrollButtonRight').trigger('mousedown', { button: 0 });
       cy.wait(1000);
-      cy.get('.scrollButtonRight').trigger('mouseup', { button: 0 });
+      cy.get('.scrollButtonRight').trigger('mouseup', { button: 0, force: true });
       cy.get('.scrollButtonRight').trigger('mouseout');
       cy.get('.scrollButtonRight').should('not.be.visible');
 

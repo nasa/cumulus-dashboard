@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## Breaking Changes
+
+This version of the dashboard requires Cumulus API v11.1.0
+
+### Added
+
+- **CUMULUS-2704**
+  - Add option to create ORCA Reconciliation Report to dashboard
+
 ## [v10.0.0] - 2022-02-25
 
 ## Breaking Changes
