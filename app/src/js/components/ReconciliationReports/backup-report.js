@@ -1,7 +1,3 @@
-/**
- * TODO: This component should be completed as part of CUMULUS-2748
- */
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import {
@@ -12,21 +8,37 @@ import List from '../Table/Table';
 import Search from '../Search/search';
 import ReportHeading from './report-heading';
 import { handleDownloadUrlClick } from '../../utils/download-file';
-import { tableColumnsBackupAndRecovery } from '../../utils/table-config/reconciliation-reports';
+import { tableColumnsBackup } from '../../utils/table-config/reconciliation-reports';
 
-const OrcaBackupReport = ({
+const BackupReport = ({
   filterString,
   legend,
   onSelect,
   recordData,
   reportName,
+  reportType,
   reportUrl
 }) => {
   const {
-    createStartTime = null,
-    createEndTime = null,
-    error = null
+    reportStartTime = null,
+    reportEndTime = null,
+    error = null,
+    granules: {
+      withConflicts = [],
+      onlyInCumulus = [],
+      onlyInOrca = []
+    }
   } = recordData || {};
+
+  let records = withConflicts.map((g) => ({ ...g, conflictType: 'withConflicts' })).concat(
+    onlyInCumulus.map((g) => ({ ...g, conflictType: 'onlyInCumulus' })),
+    onlyInOrca.map((g) => ({ ...g, conflictType: 'onlyInOrca' }))
+  );
+
+  if (filterString) {
+    records = records.filter((file) => file.granuleId.toLowerCase()
+      .includes(filterString.toLowerCase()));
+  }
 
   function handleDownloadClick(e) {
     handleDownloadUrlClick(e, { url: reportUrl });
@@ -35,12 +47,13 @@ const OrcaBackupReport = ({
   return (
     <div className="page__component">
       <ReportHeading
-        endTime={createEndTime}
+        conflictComparisons={records.length}
+        endTime={reportEndTime}
         error={error}
         name={reportName}
         onDownloadClick={handleDownloadClick}
-        startTime={createStartTime}
-        type='ORCA Backup'
+        startTime={reportStartTime}
+        type={reportType}
       />
       <section className="page__section">
         <div className="list-action-wrapper">
@@ -49,16 +62,14 @@ const OrcaBackupReport = ({
             clear={clearReconciliationSearch}
             label="Search"
             labelKey="granuleId"
-            // options={combinedGranules}
             placeholder="Search"
           />
         </div>
         <List
-          data={[]}
-          legend={legend}
+          data={records}
           onSelect={onSelect}
           rowId="granuleId"
-          tableColumns={tableColumnsBackupAndRecovery}
+          tableColumns={tableColumnsBackup({ reportName, reportType })}
           useSimplePagination={true}
         />
       </section>
@@ -66,13 +77,14 @@ const OrcaBackupReport = ({
   );
 };
 
-OrcaBackupReport.propTypes = {
+BackupReport.propTypes = {
   filterString: PropTypes.string,
   legend: PropTypes.node,
   onSelect: PropTypes.func,
   recordData: PropTypes.object,
   reportName: PropTypes.string,
+  reportType: PropTypes.string,
   reportUrl: PropTypes.string
 };
 
-export default OrcaBackupReport;
+export default BackupReport;

@@ -376,6 +376,109 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.get(`[data-value="${reportName}"]`).find('.button__row--download').should('have.length', 1);
     });
 
+    it('displays an individual ORCA report', () => {
+      const reportName = 'orcaBackupReport-20220111T191341153';
+      const granuleId = 'MYD13Q1.A3194547.tnYsne.006.8400707913298';
+      const collectionId = 'MYD13Q1___006';
+      const provider = 's3_provider';
+      const path = `/reconciliation-reports/report/${reportName}`;
+
+      cy.visit('/reconciliation-reports');
+      cy.contains(`.table .tbody .tr a[href="${path}"]`, reportName);
+
+      cy.visit(path);
+      cy.contains('.heading--large', `ORCA Backup Report: ${reportName}`);
+
+      // table columns
+      cy.get('.table .tbody .tr').should('have.length', 3);
+      cy.get(`[data-value="${granuleId}"]`).children().as('columns');
+      cy.get('@columns').should('have.length', 5);
+      cy.get('@columns').eq(0).invoke('text')
+        .should('be.eq', granuleId);
+      cy.get('@columns').eq(1).invoke('text')
+        .should('be.eq', 'withConflicts');
+      cy.get('@columns').eq(2).invoke('text')
+        .should('be.eq', 'View Details');
+      cy.get('@columns').eq(3).invoke('text')
+        .should('be.eq', collectionId);
+      cy.get('@columns').eq(4).invoke('text')
+        .should('be.eq', provider);
+
+      /** Table Filters **/
+      cy.get('.table__filters');
+      cy.contains('.table__filters .button__filter', 'Show/Hide Columns').click();
+      cy.get('.table__filters--collapse').should('be.visible');
+      const filterLabel = 'Granule ID';
+
+      cy.contains('.table .th', filterLabel).should('be.visible');
+      cy.contains('.table__filters--filter label', filterLabel).find('span').click();
+      cy.get('.button__apply-filter').click();
+      cy.contains('.table .th', filterLabel).should('not.exist');
+
+      cy.contains('.table__filters .button__filter', 'Show/Hide Columns').click();
+      cy.get('.table__filters--collapse').should('not.be.visible');
+      cy.contains('.table__filters .button__filter', 'Show/Hide Columns');
+    });
+
+    it('displays conflict details for a granule in the ORCA report', () => {
+      const reportName = 'orcaBackupReport-20220111T191341153';
+      const granuleId = 'MYD13Q1.A3194547.tnYsne.006.8400707913298';
+      const fileName = 'MYD13Q1.A3194547.tnYsne.006.8400707913298.cmr.xml';
+      const fileBucket = 'cumulus-test-sandbox-protected-2';
+      const conflictDetailsPage = `/reconciliation-reports/report/${reportName}/details`;
+      const collection = 'MYD13Q1 / 006';
+      const provider = 's3_provider';
+
+      // granule conflict details page needs data from the report
+      cy.visit(`/reconciliation-reports/report/${reportName}`);
+      cy.get(`.table .tbody [data-value="${granuleId}"]`)
+        .contains('.td a', 'View Details')
+        .click();
+
+      cy.wait(1000);
+      cy.url().should('include', conflictDetailsPage);
+
+      // header
+      cy.contains('.heading--large', `ORCA Backup Report: ${reportName}`);
+      cy.get('.heading--medium')
+        .first().should('have.text', `Granule: ${granuleId}`);
+      cy.get('.heading--medium')
+        .eq(1).should('have.text', 'Conflict Details');
+      cy.get('.metadata__details')
+        .within(() => {
+          cy.get('dt')
+            .contains('Collection')
+            .next('dd')
+            .should('contain', collection);
+          cy.get('dt')
+            .contains('Provider')
+            .next('dd')
+            .contains(provider)
+            .should('have.attr', 'href', `/providers/provider/${provider}`);
+          cy.get('dt')
+            .contains('Ingest');
+          cy.get('dt')
+            .contains('Location');
+        });
+
+      // table
+      cy.get('.table .tbody .tr').should('have.length', 3);
+      cy.get(`[data-value="${fileName}"]`).children().as('columns');
+      cy.get('@columns').should('have.length', 6);
+      cy.get('@columns').eq(1).invoke('text')
+        .should('be.eq', 'Link');
+      cy.get('@columns').eq(1).children('a')
+        .should('have.attr', 'href')
+        .and('include', fileName);
+      cy.get('@columns').eq(2).invoke('text')
+        .should('be.eq', '--');
+      cy.get('@columns').eq(3).invoke('text')
+        .should('be.eq', '--');
+      cy.get('@columns').eq(4).children('button').should('have.class', 'button__row--check');
+      cy.get('@columns').eq(5).invoke('text')
+        .should('be.eq', fileBucket);
+    });
+
     it('should have the option to search the report', () => {
       cy.visit('/reconciliation-reports/report/inventoryReport-20200114T205238781');
 

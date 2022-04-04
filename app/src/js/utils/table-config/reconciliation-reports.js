@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import get from 'lodash/get';
 
-import { nullValue, dateOnly, IndicatorWithTooltip, collectionHrefFromId } from '../format';
+import { nullValue, dateOnly, IndicatorWithTooltip, collectionHrefFromId, providerLink } from '../format';
 import { getReconciliationReport, deleteReconciliationReport, listReconciliationReports } from '../../actions';
 import { getPersistentQueryParams } from '../url-helper';
 
@@ -15,7 +15,6 @@ export const tableColumns = ({ dispatch, isGranules, query }) => ([
       switch (type) {
         case 'Internal':
         case 'Granule Inventory':
-        case 'ORCA Backup':
           return <Link to={link} onClick={(e) => handleDownloadClick(e, value, dispatch)}>{value}</Link>;
         default:
           return <Link to={link} >{value}</Link>;
@@ -254,7 +253,28 @@ export const tableColumnsGnf = [
   },
 ];
 
-export const tableColumnsBackupAndRecovery = [
+export const tableColumnsBackup = ({ reportType, reportName }) => ([
+  {
+    Header: 'Granule ID',
+    accessor: 'granuleId',
+    width: 200,
+  },
+  {
+    Header: 'Conflict Type',
+    accessor: 'conflictType',
+  },
+  {
+    Header: 'Conflict Details',
+    id: 'conflictDetails',
+    Cell: ({ row: { original: granule, values: { granuleId } } }) => ( // eslint-disable-line react/prop-types
+    <Link
+      to={{
+        pathname: `/reconciliation-reports/report/${reportName}/details`,
+        state: { reportType, reportName, granule }
+      }} >View Details</Link>
+    ),
+    disableSortBy: true
+  },
   {
     Header: 'Collection ID',
     accessor: 'collectionId',
@@ -265,26 +285,66 @@ export const tableColumnsBackupAndRecovery = [
     width: 125,
   },
   {
-    Header: 'Granule ID',
-    accessor: 'granuleId',
-    width: 200,
-  },
-  {
     Header: 'Provider',
-    accessor: 'provider'
-  },
-  {
-    Header: 'Conflict Type',
-    id: 'conflictType'
-  },
-  // {
-  //   Header: 'Conflict Details',
-  //   id: 'conflictDetails',
-  //   Cell: 'View Details',
-  //   disableSortBy: true
-  // },
-  {
-    Header: 'S3 Link',
-    id: 's3'
+    accessor: 'provider',
+    Cell: ({ cell: { value } }) => providerLink(value)
   }
-];
+]);
+
+const fileLink = (bucket, key) => `https://${bucket}.s3.amazonaws.com/${key}`;
+export const tableColumnsGranuleConflictDetails = ({ reportType }) => {
+  const checkButton = <button className='button button__row button__row--check'/>;
+  const orcaBackupColumns = [
+    {
+      Header: 'In Orca Only',
+      id: 'onlyInOrca',
+      accessor: 'reason',
+      Cell: ({ cell: { value } }) => (
+        (value === 'onlyInOrca') ? checkButton : nullValue
+      ),
+      disableSortBy: true,
+    },
+    {
+      Header: 'Should Be Excluded From Orca',
+      id: 'shouldBeExcludedFromOrca',
+      accessor: 'reason',
+      Cell: ({ cell: { value } }) => (
+        (value === 'shouldBeExcludedFromOrca') ? checkButton : nullValue
+      ),
+      disableSortBy: true,
+    },
+  ];
+  const backupColumns = (reportType === 'ORCA Backup') ? orcaBackupColumns : [];
+
+  return [
+    {
+      Header: 'Filename',
+      accessor: 'fileName',
+      width: 200,
+    },
+    {
+      Header: 'Link',
+      accessor: (row) => (row.bucket && row.key
+        ? (<a href={fileLink(row.bucket, row.key)}>
+            {row.fileName ? 'Link' : nullValue}
+          </a>)
+        : null),
+      id: 'link',
+    },
+    {
+      Header: 'In Cumulus Only',
+      id: 'onlyInCumulus',
+      accessor: 'reason',
+      Cell: ({ cell: { value } }) => (
+        (value === 'onlyInCumulus') ? checkButton : nullValue
+      ),
+      disableSortBy: true,
+    }
+  ].concat(
+    backupColumns,
+    {
+      Header: 'Bucket',
+      accessor: 'bucket',
+    }
+  );
+};

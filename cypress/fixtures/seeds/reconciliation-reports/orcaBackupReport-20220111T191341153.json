@@ -21,11 +21,15 @@
     "okCount": 0,
     "cumulusCount": 2,
     "orcaCount": 2,
-    "okFilesCount": 5,
-    "conflictFilesCount": 6,
+    "okFilesCount": 4,
+    "cumulusFilesCount": 10,
+    "orcaFilesCount": 7,
+    "conflictFilesCount": 10,
     "withConflicts": [
       {
-        "okFilesCount": 4,
+        "okFilesCount": 3,
+        "cumulusFilesCount": 5,
+        "orcaFilesCount": 4,
         "granuleId": "MYD13Q1.A3194547.tnYsne.006.8400707913298",
         "collectionId": "MYD13Q1___006",
         "provider": "s3_provider",
@@ -57,6 +61,8 @@
     "onlyInCumulus": [
       {
         "okFilesCount": 1,
+        "cumulusFilesCount": 5,
+        "orcaFilesCount": 0,
         "granuleId": "MYD13Q1.A2655880.GOWVT9.006.3531712476486",
         "collectionId": "MYD13Q1___006",
         "provider": "s3_provider",
@@ -92,6 +98,9 @@
     ],
     "onlyInOrca": [
       {
+        "okFilesCount": 0,
+        "cumulusFilesCount": 0,
+        "orcaFilesCount": 3,
         "granuleId": "MOD09GQ.A8858216.Y6HJnu.006.6168319936421",
         "provider": "s3_provider",
         "collectionId": "MOD09GQ___006",
