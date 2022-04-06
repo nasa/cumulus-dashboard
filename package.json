@@ -162,7 +162,7 @@
     "jsonwebtoken": "^8.4.0",
     "localized-strings": "^0.2.4",
     "lodash": "^4.17.21",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "normalize-opentype.css": "^0.2.4",
     "normalize.css": "^8.0.1",
     "numeral": "^2.0.4",
