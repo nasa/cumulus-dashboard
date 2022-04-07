@@ -16,6 +16,10 @@ This version of the dashboard requires Cumulus API release from feature/rds-phas
 - **CUMULUS-2704**
   - Add option to create ORCA Reconciliation Report to dashboard
 
+### Changed
+
+- **CUMULUS-2903**
+  - Bumped Node version from 12.18.0 to 14.19.1 to match Core
 ## [Unreleased]
 
 ## Breaking Changes
