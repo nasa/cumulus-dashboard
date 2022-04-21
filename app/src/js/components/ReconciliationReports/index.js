@@ -10,6 +10,7 @@ import { getCount, listReconciliationReports } from '../../actions';
 import CreateReconciliationReport from './create';
 import ReconciliationReportList from './list';
 import ReconciliationReport from './reconciliation-report';
+import BackupReportGranuleDetails from './backup-report-granule-details';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import { filterQueryParams } from '../../utils/url-helper';
 
@@ -50,6 +51,7 @@ const ReconciliationReports = ({
             <Switch>
               <Route exact path='/reconciliation-reports' render={(props) => <ReconciliationReportList queryParams={filteredQueryParams} {...props} />} />
               <Route path="/reconciliation-reports/create" component={CreateReconciliationReport} />
+              <Route path='/reconciliation-reports/report/:reconciliationReportName/details' component={BackupReportGranuleDetails} />
               <Route path='/reconciliation-reports/report/:reconciliationReportName' component={ReconciliationReport} />
             </Switch>
           </div>

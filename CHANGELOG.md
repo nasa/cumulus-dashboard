@@ -7,17 +7,54 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v11.0.0] - 2022-04-19
+
+## Breaking Changes
+
+This version of the dashboard requires Cumulus API v11.1.0
+
+### Added
+
+- **CUMULUS-2704**
+  - Added option to create ORCA Reconciliation Report to dashboard
+
+- **CUMULUS-2748**
+  - Added ORCA Reconciliation Report display to dashboard
+
+### Changed
+
+- **CUMULUS-2903**
+  - Bumped Node version from 12.18.0 to 14.19.1 to match Core
+
 ## [v10.0.0] - 2022-02-25
 
 ## Breaking Changes
 
-This version of the dashboard requires Cumulus API v10.1.0
+This version of the dashboard requires Cumulus API v10.1.1
+
+- **CUMULUS-2728**
+  - Removes kibana links and Metrics integration. To get this functionality,
+    use the Metric's ELK stack and custom Kibana displays.
+    `KIBANAROOT` is still used to send the operator to the kibana instance where bulk operation queries and custom visualizations can be found.
+
+    The following variables have been removed and no longer serve any purpose in the application.
+
+    + `ESROOT`
+    + `ES_CLOUDWATCH_TARGET_PATTERN`
+    + `ES_DISTRIBUTION_TARGET_PATTERN`
+    + `ES_PASSWORD`
+    + `ES_USER`
+    + `SHOW_DISTRIBUTION_API_METRICS`
+    + `SHOW_TEA_METRICS`
 
 ### Changed
 
+- **CUMULUS-NONE**
+  - Updates Cumulus development dependencies to v10.1.1 and upgrades localstack to 0.11.5 to work with latest Cumulus.
 - **CUMULUS-2843**
   - Create provider and create rule modals now dislpay the provider [rule]
     schema title directly as read from the Cumulus API.
+
 
 ## [v9.0.0] - 2022-02-01
 
@@ -1238,7 +1275,8 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
-  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v10.0.0...HEAD
+  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v11.0.0...HEAD
+  [v11.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v10.0.0...v11.0.0
   [v10.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v9.0.0...v10.0.0
   [v9.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v8.0.0...v9.0.0
   [v8.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v7.1.0...v8.0.0

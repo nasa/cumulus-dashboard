@@ -13,7 +13,7 @@ import {
 import { graphicsPath, nav } from '../../config';
 import { window } from '../../utils/browser';
 import { strings } from '../locale';
-import { kibanaAllLogsLink } from '../../utils/kibana';
+import linkToKibana from '../../utils/kibana';
 import { getPersistentQueryParams } from '../../utils/url-helper';
 
 const paths = [
@@ -67,7 +67,7 @@ class Header extends React.Component {
 
   linkTo(path, search) {
     if (path[0] === 'Logs') {
-      const kibanaLink = kibanaAllLogsLink();
+      const kibanaLink = linkToKibana();
       return (
         <a href={kibanaLink} target="_blank">
           {path[0]}

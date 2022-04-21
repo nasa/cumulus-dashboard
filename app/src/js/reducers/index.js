@@ -6,7 +6,6 @@ import apiVersion from './api-version';
 import cmrInfo from './cmr-info';
 import collections from './collections';
 import config from './utils/config';
-import dist from './dist';
 import datepicker from './datepicker';
 import granules from './granules';
 import granulesExecutions from './granules-executions';
@@ -37,7 +36,6 @@ export const reducers = {
   cmrInfo,
   collections,
   config,
-  dist,
   datepicker,
   cumulusInstance,
   granules,

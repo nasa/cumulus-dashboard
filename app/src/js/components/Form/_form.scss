@@ -425,6 +425,11 @@ select option{
           width: 100%;
         }
       }
+      .react-datetime-picker__inputGroup {
+        input {
+          padding: 0;
+        }
+      }
       .subform__item--expanded {
         width: 87%;
       }
@@ -695,5 +700,36 @@ select option{
     cursor: pointer;
     margin-top: 0;
     border-radius: 0 0 10px 10px;
+  }
+}
+
+.reconciliation-granule__content {
+  .metadata__details .meta__row {
+    dt, dd {
+      vertical-align: top;
+    }
+    dt {
+      width: 20%;
+    }
+    dd {
+      width: 40%;
+    }
+    .granule__location div{
+      display: inline-block;
+      width: 30%;
+    }
+  }
+}
+
+.reconciliation-reports__header {
+  &--tooltip {
+    display: flex;
+    align-items: center;
+
+    svg {
+      color: $ocean-blue;
+      margin-left: .5em;
+      padding: .5em;
+    }
   }
 }

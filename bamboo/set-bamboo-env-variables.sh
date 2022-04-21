@@ -18,17 +18,10 @@ declare -a param_list=(
     "bamboo_SIT_BUCKET"
     "bamboo_SIT_DAAC_NAME"
     "bamboo_SIT_ENABLE_RECOVERY"
-    "bamboo_SIT_ESROOT"
-    "bamboo_SIT_ES_CLOUDWATCH_TARGET_PATTERN"
-    "bamboo_SIT_ES_DISTRIBUTION_TARGET_PATTERN"
     "bamboo_SIT_KIBANAROOT"
-    "bamboo_SIT_SHOW_DISTRIBUTION_API_METRICS"
-    "bamboo_SIT_SHOW_TEA_METRICS"
     "bamboo_SIT_HIDE_PDR"
     "bamboo_SIT_STAGE"
     "bamboo_SIT_DASHBOARD_BUCKET"
-    "bamboo_SIT_ES_CLOUDWATCH_INDEX_PATTERN"
-    "bamboo_SIT_ES_DISTRIBUTION_INDEX_PATTERN"
 )
 
 ## Strip 'bamboo_SECRET_' from secret keys

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import get from 'lodash/get';
 
-import { nullValue, dateOnly, IndicatorWithTooltip, collectionHrefFromId } from '../format';
+import { nullValue, dateOnly, IndicatorWithTooltip, collectionHrefFromId, providerLink } from '../format';
 import { getReconciliationReport, deleteReconciliationReport, listReconciliationReports } from '../../actions';
 import { getPersistentQueryParams } from '../url-helper';
 
@@ -252,3 +252,99 @@ export const tableColumnsGnf = [
     width: 50,
   },
 ];
+
+export const tableColumnsBackup = ({ reportType, reportName }) => ([
+  {
+    Header: 'Granule ID',
+    accessor: 'granuleId',
+    width: 200,
+  },
+  {
+    Header: 'Conflict Type',
+    accessor: 'conflictType',
+  },
+  {
+    Header: 'Conflict Details',
+    id: 'conflictDetails',
+    Cell: ({ row: { original: granule, values: { granuleId } } }) => ( // eslint-disable-line react/prop-types
+    <Link
+      to={{
+        pathname: `/reconciliation-reports/report/${reportName}/details`,
+        state: { reportType, reportName, granule }
+      }} >View Details</Link>
+    ),
+    disableSortBy: true
+  },
+  {
+    Header: 'Collection ID',
+    accessor: 'collectionId',
+    // eslint-disable-next-line react/prop-types
+    Cell: ({ cell: { value } }) => <Link to={(location) => ({
+      pathname: collectionHrefFromId(value), search: getPersistentQueryParams(location)
+    })}>{value}</Link>,
+    width: 125,
+  },
+  {
+    Header: 'Provider',
+    accessor: 'provider',
+    Cell: ({ cell: { value } }) => providerLink(value)
+  }
+]);
+
+const fileLink = (bucket, key) => `https://${bucket}.s3.amazonaws.com/${key}`;
+export const tableColumnsGranuleConflictDetails = ({ reportType }) => {
+  const checkButton = <button className='button button__row button__row--check'/>;
+  const orcaBackupColumns = [
+    {
+      Header: 'In Orca Only',
+      id: 'onlyInOrca',
+      accessor: 'reason',
+      Cell: ({ cell: { value } }) => (
+        (value === 'onlyInOrca') ? checkButton : nullValue
+      ),
+      disableSortBy: true,
+    },
+    {
+      Header: 'Should Be Excluded From Orca',
+      id: 'shouldBeExcludedFromOrca',
+      accessor: 'reason',
+      Cell: ({ cell: { value } }) => (
+        (value === 'shouldBeExcludedFromOrca') ? checkButton : nullValue
+      ),
+      disableSortBy: true,
+    },
+  ];
+  const backupColumns = (reportType === 'ORCA Backup') ? orcaBackupColumns : [];
+
+  return [
+    {
+      Header: 'Filename',
+      accessor: 'fileName',
+      width: 200,
+    },
+    {
+      Header: 'Link',
+      accessor: (row) => (row.bucket && row.key
+        ? (<a href={fileLink(row.bucket, row.key)}>
+            {row.fileName ? 'Link' : nullValue}
+          </a>)
+        : null),
+      id: 'link',
+    },
+    {
+      Header: 'In Cumulus Only',
+      id: 'onlyInCumulus',
+      accessor: 'reason',
+      Cell: ({ cell: { value } }) => (
+        (value === 'onlyInCumulus') ? checkButton : nullValue
+      ),
+      disableSortBy: true,
+    }
+  ].concat(
+    backupColumns,
+    {
+      Header: 'Bucket',
+      accessor: 'bucket',
+    }
+  );
+};

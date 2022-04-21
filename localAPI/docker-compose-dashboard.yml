@@ -1,7 +1,7 @@
 version: "3"
 services:
   dashboard:
-    image: ${DOCKER_REPOSITORY}node:12.18.0
+    image: ${DOCKER_REPOSITORY}node:14.19.1
     depends_on:
       - serve_api
     network_mode: "service:shim"
@@ -14,17 +14,12 @@ services:
     environment:
       - APIROOT=http://localhost:5001
       - ENABLE_RECOVERY=true
-      - ESROOT=http://example.com
-      - ES_CLOUDWATCH_TARGET_PATTERN=daac-cumulus-cloudwatch-env-*
-      - ES_DISTRIBUTION_TARGET_PATTERN=daac-distribution-env-*
       - HIDE_PDR=false
       - DAAC_NAME=local
       - STAGE=LOCALHOST-Development
-      - SHOW_DISTRIBUTION_API_METRICS=true
-      - SHOW_TEA_METRICS=false
       - AUTH_METHOD=earthdata
   shim:   # empty container to open ports
-    image: ${DOCKER_REPOSITORY}node:12.18.0
+    image: ${DOCKER_REPOSITORY}node:14.19.1
     command:
       bash -c "tail -f /dev/null"
     working_dir:
