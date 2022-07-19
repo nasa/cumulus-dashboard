@@ -107,8 +107,6 @@
     "eslint-webpack-plugin": "^3.1.1",
     "express": "^4.17.2",
     "file-loader": "^6.2.0",
-    "font-awesome": "^4.7.0",
-    "font-awesome-loader": "^1.0.2",
     "fs-extra": "^10.0.0",
     "html-loader": "^3.0.1",
     "html-webpack-plugin": "^5.5.0",
@@ -138,10 +136,10 @@
     "webpackbar": "^5.0.2"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.4",
+    "@fortawesome/fontawesome-free": "^6.1.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
-    "@fortawesome/react-fontawesome": "^0.1.16",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@reduxjs/toolkit": "^1.7.1",
     "axios": "^0.24.0",
     "bootstrap": "^4.5.3",
