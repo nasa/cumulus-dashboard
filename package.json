@@ -59,7 +59,7 @@
   },
   "devDependencies": {
     "@ava/babel": "^2.0.0",
-    "@axe-core/react": "^4.0.0",
+    "@axe-core/react": "^4.4.3",
     "@babel/core": "^7.16.5",
     "@babel/eslint-parser": "^7.16.5",
     "@babel/plugin-syntax-jsx": "^7.16.5",
