@@ -73,6 +73,7 @@ class OAuth extends React.Component {
               centered
               size="sm"
               aria-labelledby="modal__oauth-modal"
+              role="main"
             >
               <Modal.Header className="oauth-modal__header"></Modal.Header>
               <h1><Modal.Title id="modal__oauth-modal" className="oauth-modal__title">Welcome To Cumulus Dashboard</Modal.Title></h1>
