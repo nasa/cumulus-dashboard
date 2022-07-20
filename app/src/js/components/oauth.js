@@ -75,7 +75,7 @@ class OAuth extends React.Component {
               aria-labelledby="modal__oauth-modal"
             >
               <Modal.Header className="oauth-modal__header"></Modal.Header>
-              <Modal.Title id="modal__oauth-modal" className="oauth-modal__title">Welcome To Cumulus Dashboard</Modal.Title>
+              <h1><Modal.Title id="modal__oauth-modal" className="oauth-modal__title">Welcome To Cumulus Dashboard</Modal.Title></h1>
               <Modal.Body>
                 { api.inflight ? <h2 className='heading--medium'>Authenticating ... </h2> : null }
                 { api.error ? <ErrorReport report={api.error} /> : null }
