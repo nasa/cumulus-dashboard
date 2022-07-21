@@ -342,7 +342,7 @@ a:active {
     min-width: 175px;
     min-height: 100vh;
     background-color: $sub-blue;
-    color: #e7e4e4;
+    color: #ffffff;
     margin: 0;
 
     .sidebar-toggle {
@@ -368,11 +368,11 @@ a:active {
   display: none;
 
   a {
-    color: #e7e4e4;
+    color: #ffffff;
     border-bottom: none;
     .active {
       color: $white;
-      border-bottom: 1px solid #e7e4e4;
+      border-bottom: 1px solid #ffffff;
     }
     &:hover {
       color: $white;
@@ -385,10 +385,10 @@ a:active {
     display: inline-block;
   }
   .sidebar__nav--selected {
-    color: #e7e4e4;
+    color: #ffffff;
     font-weight: $base-font-semibold;
     letter-spacing: 0.2px;
-    border-bottom: 2px solid #e7e4e4;
+    border-bottom: 2px solid #ffffff;
   }
   li {
     margin-bottom: 0.75em;
