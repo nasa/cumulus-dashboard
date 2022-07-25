@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     + Specified title, level-one heading, and modal as main landmark on `/auth`
     + Increased link-background contrast in the header
     + Slight color adjustments for accessibility
+  - Updated dependencies with severe security vulnerabilities:
+    + `@cumulus/api` to `13.1.0`
+    + `moment` to `2.29.4`
+    + `terser-webpack-plugin` to `5.3.3`
 
 ## [v11.0.0] - 2022-04-19
 
