@@ -19,7 +19,7 @@ const AsyncCommand = ({
   confirmAction,
   confirmText,
   confirmOptions,
-  disabled,
+  hidden,
   element = 'button',
   error,
   postActionText,
@@ -33,7 +33,7 @@ const AsyncCommand = ({
   const inflight = status === 'inflight';
   const props = {
     className: element !== 'button' ? elementClass(inflight) : buttonClass(inflight),
-    onClick: disabled ? preventDefault : handleClick
+    onClick: hidden ? preventDefault : handleClick
   };
   if (element === 'a') props.href = '#';
   const children = (
@@ -61,7 +61,7 @@ const AsyncCommand = ({
     return [
       'button button--small form-group__element',
       `${processing ? 'button--loading' : ''}`,
-      `${disabled ? 'button--disabled' : ''}`,
+      `${hidden ? 'button--hidden' : ''}`,
       `${className || 'button__group'}`
     ].join(' ');
   }
@@ -70,7 +70,7 @@ const AsyncCommand = ({
   function elementClass (processing) {
     let newClassName = 'async__element';
     if (processing) newClassName += ' async__element--loading';
-    if (disabled) newClassName += ' async__element--disabled';
+    if (hidden) newClassName += ' async__element--disabled';
     if (className) newClassName += ` ${className}`;
     return newClassName;
   }
@@ -79,7 +79,7 @@ const AsyncCommand = ({
     e.preventDefault();
     if (confirmAction) {
       setConfirmModal(true);
-    } else if (status !== 'inflight' && !disabled) {
+    } else if (status !== 'inflight' && !hidden) {
       // prevent duplicate action if the action is already inflight.
       action();
     }
@@ -135,7 +135,7 @@ AsyncCommand.propTypes = {
   status: PropTypes.string,
   text: PropTypes.string,
   className: PropTypes.string,
-  disabled: PropTypes.bool,
+  hidden: PropTypes.bool,
   element: PropTypes.string,
   confirmAction: PropTypes.bool,
   confirmText: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
