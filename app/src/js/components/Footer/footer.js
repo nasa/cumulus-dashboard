@@ -27,7 +27,7 @@ const Footer = ({
   if (warning) { versionWarning = <h5 className='api__warning'><span className="warning-icon"></span>Warning: { warning }</h5>; }
 
   return (
-    <div className='footer'>
+    <div className='footer' role='contentinfo'>
       <div className='api__summary'>
         {authenticated &&
           <ul className="footer__container">
