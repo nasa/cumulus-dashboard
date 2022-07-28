@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     + `@cumulus/api` to `13.1.0`
     + `moment` to `2.29.4`
     + `terser-webpack-plugin` to `5.3.3`
+- **CUMULUS-3001**
+  - Removed `precss` dependency
 
 ## [v11.0.0] - 2022-04-19
 
