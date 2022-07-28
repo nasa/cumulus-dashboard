@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+- **CUMULUS-2763**
+  - Replaces disabled button interaction with hidden buttons for bulk actions.
 - **CUMULUS-2960**
   - Fixed the following Axe accessibility issues:
     + Specified title, level-one heading, and modal as main landmark on `/auth`

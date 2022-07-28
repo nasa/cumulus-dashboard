@@ -32,6 +32,11 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
     pointer-events: none;
   }
 
+  &--hidden {
+    visibility: hidden;
+    display: none;
+  }
+
   &:hover{
     background-color: $midnight-blue;
     color: $white;
