@@ -22,6 +22,7 @@ import executionLogs from './execution-logs';
 import operations from './operations';
 import rules from './rules';
 import reconciliationReports from './reconciliation-reports';
+import recoveryStatus from './recovery-status';
 import cumulusInstance from './cumulus-instance';
 import sidebar from './sidebar';
 import sorts from './sort-persist';
@@ -54,6 +55,7 @@ export const reducers = {
   operations,
   rules,
   reconciliationReports,
+  recoveryStatus,
   sorts,
   locationQueryParams,
 };

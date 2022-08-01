@@ -10,6 +10,7 @@ import isEqual from 'lodash/isEqual';
 import pick from 'lodash/pick';
 import {
   getGranule,
+  getGranuleRecoveryStatus,
   listExecutionsByGranule,
   reingestGranule,
   removeGranule,
@@ -140,6 +141,8 @@ class GranuleOverview extends React.Component {
     this.queryWorkflows = this.queryWorkflows.bind(this);
     this.reingest = this.reingest.bind(this);
     this.applyWorkflow = this.applyWorkflow.bind(this);
+    this.getGranuleRecoveryJobStatus = this.getGranuleRecoveryJobStatus.bind(this);
+    this.toggleShowRecoveryStatus = this.toggleShowRecoveryStatus.bind(this);
     this.remove = this.remove.bind(this);
     this.delete = this.delete.bind(this);
     this.errors = this.errors.bind(this);
@@ -148,6 +151,7 @@ class GranuleOverview extends React.Component {
     this.getExecuteOptions = this.getExecuteOptions.bind(this);
     this.setWorkflowMeta = this.setWorkflowMeta.bind(this);
     this.state = {
+      showRecoveryStatus: false,
       reingestWorkflow: {},
       workflow: this.props.workflowOptions[0],
       workflowMeta: defaultWorkflowMeta,
@@ -166,11 +170,12 @@ class GranuleOverview extends React.Component {
     }
   }
 
+  // TODO Show Recovery Status
+  // Hide Recovery Status
   loadGranule() {
-    const { config, dispatch, match } = this.props;
+    const { dispatch, match } = this.props;
     const { granuleId } = match.params;
-    const getRecoveryStatus = config.enableRecovery ? true : undefined;
-    dispatch(getGranule(granuleId, { getRecoveryStatus }))
+    dispatch(getGranule(granuleId))
       .then((granuleResponse) => {
         const payload = { granules: [pick(granuleResponse.data, ['granuleId', 'collectionId'])] };
         dispatch(listExecutionsByGranule(granuleId, payload));
@@ -208,6 +213,15 @@ class GranuleOverview extends React.Component {
     this.props.dispatch(deleteGranule(granuleId));
   }
 
+  toggleShowRecoveryStatus() {
+    const { granuleId } = this.props.match.params;
+    const newState = !this.state.showRecoveryStatus;
+    this.setState({ showRecoveryStatus: newState });
+    if (newState) {
+      this.props.dispatch(getGranuleRecoveryStatus(granuleId));
+    }
+  }
+
   errors() {
     const { granuleId } = this.props.match.params;
     return [
@@ -217,6 +231,7 @@ class GranuleOverview extends React.Component {
       get(this.props.granules.executed, [granuleId, 'error']),
       get(this.props.granules.removed, [granuleId, 'error']),
       get(this.props.granules.deleted, [granuleId, 'error']),
+      get(this.props.recoveryStatus.map, [granuleId, 'error']),
     ].filter(Boolean);
   }
 
@@ -284,6 +299,22 @@ class GranuleOverview extends React.Component {
     )];
   }
 
+  getGranuleRecoveryJobStatus(recoveryStatusRecord) {
+    if (!recoveryStatusRecord) return undefined;
+    console.log('here', recoveryStatusRecord);
+    const jobStatuses = (recoveryStatusRecord.files || []).map((file) => file.status);
+    // file status may be 'pending', 'staged', 'success', or 'failed'
+    let recoveryStatus = 'failed';
+    if (jobStatuses.length === 0) {
+      recoveryStatus = undefined;
+    } else if (jobStatuses.filter((jobStatus) => jobStatus !== 'success').length === 0) {
+      recoveryStatus = 'completed';
+    } else if (jobStatuses.filter((jobStatus) => !['success', 'failed'].includes(jobStatus)).length > 0) {
+      recoveryStatus = 'running';
+    }
+    return recoveryStatus;
+  }
+
   render() {
     const { granuleId } = this.props.match.params;
     const record = this.props.granules.map[granuleId];
@@ -300,6 +331,14 @@ class GranuleOverview extends React.Component {
         files.push(granule.files[key]);
       }
     }
+
+    const { enableRecovery } = this.props.config;
+    const showHideRecoveryStatusText = this.state.showRecoveryStatus
+      ? 'Hide Recovery Status'
+      : 'Show Recovery Status';
+    console.log('this.props.recoveryStatus.', this.props.recoveryStatus);
+    const recoveryStatus = this.getGranuleRecoveryJobStatus(get(this.props.recoveryStatus.map, [granuleId, 'data']));
+    console.log(recoveryStatus);
 
     const dropdownConfig = [
       {
@@ -373,11 +412,22 @@ class GranuleOverview extends React.Component {
                 <span>Ingest</span>
                 <IndicatorWithTooltip granuleId={granuleId} repo='ingest' value={displayCase(granule.status)} className='status-indicator--granule' />
               </dd>
-              {granule.recoveryStatus
+              {(this.state.showRecoveryStatus && recoveryStatus)
                 ? <dd>
                   <span>Recovery</span>
-                  <IndicatorWithTooltip granuleId={granuleId} repo='recovery' value={displayCase(granule.recoveryStatus)} className='status-indicator--granule' />
+                  <IndicatorWithTooltip granuleId={granuleId} repo='recovery' value={displayCase(recoveryStatus)} className='status-indicator--granule' />
                 </dd>
+                : null
+              }
+              {enableRecovery
+                ? <button
+                // aria-expanded={filtersExpanded}
+                aria-controls="table__filters--collapse"
+                className="button button--green button--small button__filter form-group__element--right"
+                onClick={this.toggleShowRecoveryStatus}
+              >
+              {showHideRecoveryStatusText}
+              </button>
                 : null
               }
             </div>
@@ -422,6 +472,7 @@ GranuleOverview.propTypes = {
   granules: PropTypes.object,
   executions: PropTypes.object,
   logs: PropTypes.object,
+  recoveryStatus: PropTypes.object,
   skipReloadOnMount: PropTypes.bool,
   workflowOptions: PropTypes.array,
 };
@@ -439,6 +490,7 @@ export default withRouter(
     config: state.config,
     granules: state.granules,
     executions: state.executions,
+    recoveryStatus: state.recoveryStatus,
     workflowOptions: workflowOptionNames(state),
     logs: state.logs,
   }))(GranuleOverview)
