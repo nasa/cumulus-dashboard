@@ -388,26 +388,32 @@ describe('Dashboard Granules Page', () => {
       cy.get('.table .tbody .tr').should('have.length', 2);
     });
 
-    it.only('Should show granule recovery status from granule detail page.', () => {
+    it('Should show or hide granule recovery status on the granule detail page.', () => {
       const granuleId = 'MOD09GQ.A9344328.K9yI3O.006.4625818663028';
       cy.intercept(
         { method: 'POST', url: 'orca/recovery/granules' },
-        { body: { granuleId }, fixture: 'granule-recovery-status.json', statusCode: 200 }
-      );
+        { fixture: 'granule-recovery-status.json', statusCode: 200 }
+      ).as('getGranuleRecoveryStatus');
       cy.intercept('GET', `/granules/${granuleId}*`).as('getGranule');
 
       cy.visit(`/granules/granule/${granuleId}`);
       cy.wait('@getGranule');
       cy.get('.heading--large').should('have.text', `Granule: ${granuleId}`);
-      cy.contains('button', 'Options').click();
-      cy.get('.dropdown__menu').contains('Reingest').click();
-      cy.get('.modal-body .form__dropdown .dropdown__element input').as('workflow-input');
-      cy.get('@workflow-input').click({ force: true }).type('IngestAndPublish').type('{enter}');
-      cy.get('.modal-body .form__dropdown .dropdown__element').should('have.text', 'IngestAndPublishGranule');
-      cy.get('.button--submit').click();
-      cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Success');
-      cy.get('.button--cancel').click();
-      cy.url().should('include', `granules/granule/${granuleId}`);
+
+      cy.get('.status--process .meta__row > dd').children().should('have.length', 2);
+
+      cy.get('.status--process .meta__row .button').as('showRecoveryStatusButton');
+      cy.get('@showRecoveryStatusButton').should('have.text', 'Show Recovery Status');
+      cy.get('@showRecoveryStatusButton').click();
+      cy.wait('@getGranuleRecoveryStatus');
+      cy.get('.status--process .meta__row > dd').children().should('have.length', 4);
+      cy.get('.status--process .meta__row > dd').children().eq(2).should('have.text', 'Recovery');
+      cy.get('.status--process .meta__row > dd').children().eq(3).should('have.class', 'status-indicator--running');
+      cy.get('@showRecoveryStatusButton').should('have.text', 'Hide Recovery Status');
+
+      cy.get('@showRecoveryStatusButton').click();
+      cy.get('.status--process .meta__row > dd').children().should('have.length', 2);
+      cy.get('@showRecoveryStatusButton').should('have.text', 'Show Recovery Status');
     });
 
     it('Should reingest a granule from granule detail page.', () => {
