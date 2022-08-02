@@ -178,7 +178,7 @@ export const getGranule = (granuleId, params) => ({
   }
 });
 
-export const getGranuleRecoveryStatus = (granuleId, params) => ({
+export const getGranuleRecoveryStatus = (granuleId) => ({
   [CALL_API]: {
     type: types.RECOVERY_GRANULE,
     method: 'POST',
