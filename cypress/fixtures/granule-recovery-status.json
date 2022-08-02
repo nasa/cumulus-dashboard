@@ -1,0 +1,22 @@
+{
+  "granuleId": "MOD09GQ.A9344328.K9yI3O.006.4625818663028",
+  "asyncOperationId": "43c9751b-9498-4733-90d8-56b1458e0f85",
+  "files": [
+    {
+      "fileName": "MOD09GQ.A9344328.K9yI3O.006.4625818663028.hdf",
+      "status": "pending"
+    },
+    {
+      "fileName": "MOD09GQ.A9344328.K9yI3O.006.4625818663028.pdf",
+      "status": "failed",
+      "error_message": "Access Denied"
+    },
+    {
+      "fileName": "MOD09GQ.A9344328.K9yI3O.006.4625818663028.cmr.xml",
+      "status": "success"
+    }
+  ],
+  "restoreDestination": "bucket_name",
+  "requestTime": 628021800000,
+  "completionTime": 628021900000
+}

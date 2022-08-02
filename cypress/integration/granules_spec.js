@@ -388,7 +388,35 @@ describe('Dashboard Granules Page', () => {
       cy.get('.table .tbody .tr').should('have.length', 2);
     });
 
-    it('Should reingest a granule from granule details page.', () => {
+    it('Should show or hide granule recovery status on the granule detail page.', () => {
+      const granuleId = 'MOD09GQ.A9344328.K9yI3O.006.4625818663028';
+      cy.intercept(
+        { method: 'POST', url: 'orca/recovery/granules' },
+        { fixture: 'granule-recovery-status.json', statusCode: 200 }
+      ).as('getGranuleRecoveryStatus');
+      cy.intercept('GET', `/granules/${granuleId}*`).as('getGranule');
+
+      cy.visit(`/granules/granule/${granuleId}`);
+      cy.wait('@getGranule');
+      cy.get('.heading--large').should('have.text', `Granule: ${granuleId}`);
+
+      cy.get('.status--process .meta__row > dd').children().should('have.length', 2);
+
+      cy.get('.status--process .meta__row .button').as('showRecoveryStatusButton');
+      cy.get('@showRecoveryStatusButton').should('have.text', 'Show Recovery Status');
+      cy.get('@showRecoveryStatusButton').click();
+      cy.wait('@getGranuleRecoveryStatus');
+      cy.get('.status--process .meta__row > dd').children().should('have.length', 4);
+      cy.get('.status--process .meta__row > dd').children().eq(2).should('have.text', 'Recovery');
+      cy.get('.status--process .meta__row > dd').children().eq(3).should('have.class', 'status-indicator--running');
+      cy.get('@showRecoveryStatusButton').should('have.text', 'Hide Recovery Status');
+
+      cy.get('@showRecoveryStatusButton').click();
+      cy.get('.status--process .meta__row > dd').children().should('have.length', 2);
+      cy.get('@showRecoveryStatusButton').should('have.text', 'Show Recovery Status');
+    });
+
+    it('Should reingest a granule from granule detail page.', () => {
       const granuleId = 'MOD09GQ.A9344328.K9yI3O.006.4625818663028';
       cy.intercept(
         { method: 'PUT', url: /\/granules\/.*/ },
@@ -410,7 +438,7 @@ describe('Dashboard Granules Page', () => {
       cy.url().should('include', `granules/granule/${granuleId}`);
     });
 
-    it('Should reingest a granule and redirect to the granules detail page.', () => {
+    it('Should reingest a granule and redirect to the granule detail page.', () => {
       const granuleId = 'MOD09GQ.A0142558.ee5lpE.006.5112577830916';
       cy.intercept(
         { method: 'PUT', url: /\/granules\/.*/ },

@@ -178,6 +178,16 @@ export const getGranule = (granuleId, params) => ({
   }
 });
 
+export const getGranuleRecoveryStatus = (granuleId) => ({
+  [CALL_API]: {
+    type: types.RECOVERY_GRANULE,
+    method: 'POST',
+    id: granuleId,
+    path: 'orca/recovery/granules',
+    data: { granuleId }
+  }
+});
+
 export const listGranules = (options) => (dispatch, getState) => {
   const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
   return dispatch({
