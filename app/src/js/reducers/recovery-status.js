@@ -28,9 +28,18 @@ export default createReducer(initialState, {
     state.map[action.id] = { inflight: true };
   },
   [RECOVERY_GRANULE_ERROR]: (state, action) => {
-    state.map[action.id] = {
-      error: action.error,
-      inflight: false,
-    };
+    let actionError = {};
+    try {
+      actionError = JSON.parse(action.error);
+    } catch (_) {
+      // empty
+    }
+
+    if (actionError.errorType !== 'NotFound' && actionError.httpStatus !== 404) {
+      state.map[action.id] = {
+        error: action.error,
+        inflight: false,
+      };
+    }
   },
 });
