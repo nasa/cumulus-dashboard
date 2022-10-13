@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
+import get from 'lodash/get';
 import { getExecutionStatus, getCumulusInstanceMetadata } from '../../actions';
 import {
   metaAccessors,
@@ -16,6 +17,7 @@ import ExecutionStatusGraph from './execution-status-graph';
 import Metadata from '../Table/Metadata';
 import Loading from '../LoadingIndicator/loading-indicator';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import { handleDownloadUrlClick } from '../../utils/download-file';
 
 const breadcrumbConfig = [
   {
@@ -41,7 +43,18 @@ const ExecutionStatus = ({
 }) => {
   const [showInputModal, setShowInputModal] = useState(false);
   const [showOutputModal, setShowOutputModal] = useState(false);
-  const { error, execution, executionHistory, stateMachine } = executionStatus;
+  let error = get(executionStatus, 'error');
+  let recordData = get(executionStatus, 'data.data', {});
+  const recordUrl = get(executionStatus, 'data.presignedS3Url');
+
+  // record data is an error message
+  if (typeof recordData === 'string' && recordData.startsWith('Error')) {
+    const recordError = `${recordData}, please download the execution record instead`;
+    error = error || recordError;
+    recordData = {};
+  }
+
+  const { execution, executionHistory, stateMachine } = recordData;
   const { executionArn } = execution || {};
   const { executionArn: executionArnParam } = match.params;
 
@@ -54,7 +67,19 @@ const ExecutionStatus = ({
     window.scrollTo(0, 0);
   }, []);
 
-  if (!execution) return null;
+  if (!execution) {
+    return (
+      <section className="page__section page__section__header-wrapper">
+        {recordUrl &&
+          <button
+            className="form-group__element--right button button--small button--download"
+            onClick={handleDownloadClick}>
+            Download Execution
+          </button>}
+        {error && <ErrorReport report={error} />}
+      </section>);
+  }
+
   if (executionArn !== executionArnParam) return <Loading />;
 
   const { name } = execution;
@@ -73,6 +98,10 @@ const ExecutionStatus = ({
     }
   }
 
+  function handleDownloadClick(e) {
+    handleDownloadUrlClick(e, { url: recordUrl });
+  }
+
   return (
     <div className="page__component">
       <Helmet>
@@ -82,11 +111,17 @@ const ExecutionStatus = ({
         <Breadcrumbs config={breadcrumbConfig} />
       </section>
       <section className="page__section page__section__header-wrapper">
-        <h1 className="heading--large heading--shared-content with-description width--three-quarters">
-          Execution: {name}
-        </h1>
-
-        {error && <ErrorReport report={error} />}
+        <div className="page__section__header">
+          <h1 className="heading--large heading--shared-content with-description width--three-quarters">
+            Execution: {name}
+          </h1>
+          <button
+            className="form-group__element--right button button--small button--download"
+            onClick={handleDownloadClick}>
+            Download Execution
+          </button>
+          {error && <ErrorReport report={error} />}
+        </div>
       </section>
 
       {/* stateMachine's definition and executionHistory's event statuses are needed to draw the graph */}
@@ -95,7 +130,7 @@ const ExecutionStatus = ({
           <div className="heading__wrapper--border">
             <h2 className="heading--medium">Visual</h2>
           </div>
-          <ExecutionStatusGraph executionStatus={executionStatus} />
+          <ExecutionStatusGraph executionStatus={recordData} />
         </section>
       )}
 
