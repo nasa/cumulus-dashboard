@@ -73,9 +73,11 @@ function uploadReconciliationReportFiles() {
       const { filename, data } = obj;
       const body = filename.endsWith('.csv') ? CSV.stringify(data) : JSON.stringify(data);
       return promiseS3Upload({
-        Bucket: `${localSystemBucket}`,
-        Key: `${localStackName}/reconciliation-reports/${filename}`,
-        Body: body,
+        params: {
+          Bucket: `${localSystemBucket}`,
+          Key: `${localStackName}/reconciliation-reports/${filename}`,
+          Body: body,
+        },
       });
     })
   );

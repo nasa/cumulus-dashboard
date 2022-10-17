@@ -115,11 +115,12 @@ const ExecutionStatus = ({
           <h1 className="heading--large heading--shared-content with-description width--three-quarters">
             Execution: {name}
           </h1>
-          <button
-            className="form-group__element--right button button--small button--download"
-            onClick={handleDownloadClick}>
-            Download Execution
-          </button>
+          {recordUrl &&
+            <button
+              className="form-group__element--right button button--small button--download"
+              onClick={handleDownloadClick}>
+              Download Execution
+            </button>}
           {error && <ErrorReport report={error} />}
         </div>
       </section>
