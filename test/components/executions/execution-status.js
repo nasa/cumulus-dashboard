@@ -12,9 +12,14 @@ configure({ adapter: new Adapter() });
 
 test('Cumulus-690 Execution Status shows workflow task and version information', function (t) {
   const executionStatus = {
-    execution: executionHistory.execution,
-    executionHistory: executionHistory.executionHistory,
-    stateMachine: executionHistory.execution,
+    data: {
+      presignedS3Url: 'http://example.com/presignedS3Url',
+      data: {
+        execution: executionHistory.execution,
+        executionHistory: executionHistory.executionHistory,
+        stateMachine: executionHistory.execution,
+      }
+    },
     inflight: true,
     error: false,
     meta: {}
