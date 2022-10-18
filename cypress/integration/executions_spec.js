@@ -66,6 +66,9 @@ describe('Dashboard Executions Page', () => {
             .should('be.eq', `${Number(execution.duration).toFixed(2)}s`);
           cy.get('@columns').eq(5).invoke('text')
             .should('be.eq', execution.collectionId || '--');
+          cy.get('@columns').eq(6).within(() => {
+            cy.get(`[data-value="${execution.name}"]`).find('.button__row--download');
+          });
         });
 
       cy.get('.table .tbody .tr').as('list');
@@ -94,6 +97,7 @@ describe('Dashboard Executions Page', () => {
       });
 
       cy.contains('.heading--large', 'Execution');
+      cy.get('.button--download').should('have.length', 1);
       cy.contains('.heading--medium', 'Visual');
 
       cy.get('.status--process')

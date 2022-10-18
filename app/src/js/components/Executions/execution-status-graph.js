@@ -86,7 +86,7 @@ const ExecutionStatusGraph = ({ executionStatus }) => {
 ExecutionStatusGraph.propTypes = {
   executionStatus: PropTypes.shape({
     executionHistory: PropTypes.object.isRequired,
-    stateMachine: PropTypes.string.isRequired,
+    stateMachine: PropTypes.object.isRequired,
   })
 };
 
