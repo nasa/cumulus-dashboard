@@ -21,7 +21,7 @@ services:
       - ../:/cumulus-dashboard
     ports:
       - "9200:9200"
-      - "4550-4586:4550-4586"
+      - "4550-4599:4550-4599"
       - "5432:5432"
   postgres:
     image: postgres:10.17-alpine
