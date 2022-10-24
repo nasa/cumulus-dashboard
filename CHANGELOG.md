@@ -7,12 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## Breaking Changes
+
+This version of the dashboard requires Cumulus API v13.4.0
+
 ### Added
 
 - **CUMULUS-2717**
   - Added `Show/Hide Recovery Status` button to granule detail page
 - **CUMULUS-2915**
   - Added download button to execution pages
+  - Updated dashboard to use alpha version `@cumulus/api@13.3.3-alpha.0` for testing
+  - Used npm 8.6.0
+
 ### Changed
 
 - **CUMULUS-2763**
