@@ -67,7 +67,7 @@ describe('Dashboard Executions Page', () => {
           cy.get('@columns').eq(5).invoke('text')
             .should('be.eq', execution.collectionId || '--');
           cy.get('@columns').eq(6).within(() => {
-            cy.get(`[data-value="${execution.name}"]`).find('.button__row--download');
+            cy.get('.button__row--download').should('have.length', 1);
           });
         });
 
