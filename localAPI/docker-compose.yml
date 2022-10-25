@@ -6,7 +6,7 @@ services:
     environment:
       ES_JAVA_OPTS: "-Xms750m -Xmx750m"
   localstack:
-    image: ${DOCKER_REPOSITORY}localstack/localstack:0.12.13
+    image: ${DOCKER_REPOSITORY}localstack/localstack:0.11.5
     network_mode: "service:shim"
     environment:
       SERVICES: "cloudformation,cloudwatch,cloudwatchlogs,dynamodb,iam,kinesis,kms,lambda,s3,secretsmanager,sns,sqs,stepfunctions,ssm,logs"

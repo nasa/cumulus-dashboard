@@ -19,7 +19,6 @@ This version of the dashboard requires Cumulus API v13.4.0
   - Added download button to execution pages
   - Updated dashboard to use alpha version `@cumulus/api@13.3.3-alpha.0` for testing
   - Used npm 8.6.0
-  - Upgraded localstack to 0.12.13 to work with latest Cumulus
 
 ### Changed
 
