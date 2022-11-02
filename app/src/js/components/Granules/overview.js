@@ -17,6 +17,7 @@ import {
   applyRecoveryWorkflowToGranule,
   getOptionsCollectionName,
   getOptionsProviderName,
+  refreshCumulusDbConnection,
   toggleGranulesTableColumns,
 } from '../../actions';
 import { lastUpdated, tally } from '../../utils/format';
@@ -70,6 +71,7 @@ class GranulesOverview extends React.Component {
   }
 
   componentDidMount() {
+    this.props.dispatch(refreshCumulusDbConnection());
     this.queryMeta();
   }
 

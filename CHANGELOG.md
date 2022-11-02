@@ -7,8 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
 - **CUMULUS-2717**
   - Added `Show/Hide Recovery Status` button to granule detail page
+- **CUMULUS-2915**
+  - Added action to list pages to refresh cumulus db connection
+
+### Changed
+
 - **CUMULUS-2763**
   - Replaces disabled button interaction with hidden buttons for bulk actions.
 - **CUMULUS-2960**
