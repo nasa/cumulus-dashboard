@@ -47,6 +47,7 @@ const ExecutionOverview = ({
   const { list } = executions;
   const { inflight, meta } = list;
   const { count, queriedAt } = meta;
+  const tableColumnsArray = tableColumns({ dispatch });
 
   useEffect(() => {
     dispatch(refreshCumulusDbConnection());
@@ -77,7 +78,7 @@ const ExecutionOverview = ({
         <List
           list={list}
           action={listExecutions}
-          tableColumns={tableColumns}
+          tableColumns={tableColumnsArray}
           query={{ ...queryParams }}
           rowId="name"
           initialSortId="createdAt"

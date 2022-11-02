@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkSquareAlt } from '@fortawesome/free-solid-svg-icons';
 import { withRouter } from 'react-router-dom';
+import get from 'lodash/get';
 import {
   getExecutionStatus,
   getCumulusInstanceMetadata,
@@ -45,7 +46,19 @@ const ExecutionEvents = ({
 }) => {
   const { params } = match || {};
   const { executionArn } = params;
-  const { error, execution, executionHistory, stateMachine, searchString } = executionStatus || {};
+
+  const { searchString } = executionStatus;
+  let error = get(executionStatus, 'error');
+  let recordData = get(executionStatus, 'data.data', {});
+
+  // record data is an error message
+  if (typeof recordData === 'string' && recordData.startsWith('Error')) {
+    const recordError = `${recordData}, please download the execution record instead`;
+    error = error || recordError;
+    recordData = {};
+  }
+
+  const { execution, executionHistory, stateMachine } = recordData;
   const { events } = executionHistory || {};
   const formattedEvents = formatEvents(events);
 
@@ -58,7 +71,7 @@ const ExecutionEvents = ({
     // when we have a new search, we also want to dispatch
   }, [dispatch, executionArn, searchString]);
 
-  if (!execution) return null;
+  if (!execution) return (error ? <ErrorReport report={error} /> : null);
 
   return (
     <div className='page__component'>
@@ -102,7 +115,7 @@ const ExecutionEvents = ({
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content'>All Events
               <span className="num-title">
-                {`${executionStatus.executionHistory.events.length || 0}`}
+                {`${events.length || 0}`}
               </span>
             </h2>
             <a className='csv__download button button--small button--green form-group__element--right'
