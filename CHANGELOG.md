@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Breaking Changes
 
-This version of the dashboard requires Cumulus API >= v13.5.0
+This version of the dashboard requires Cumulus API >= v13.5.0 (TBD)
 
 ### Added
 
@@ -21,6 +21,7 @@ This version of the dashboard requires Cumulus API >= v13.5.0
   - Used npm 8.6.0
   - Upgraded localstack to 0.12.13 to work with latest Cumulus
   - Added action to list pages to refresh cumulus db connection
+  - Updated `git+ssh://git@` to `git+https://` for npm 8.6.0 generated package-lock.json
 
 ### Changed
 
