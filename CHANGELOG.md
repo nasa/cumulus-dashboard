@@ -20,6 +20,7 @@ This version of the dashboard requires Cumulus API v13.5.0
   - Updated dashboard to use alpha version `@cumulus/api@13.3.3-alpha.0` for testing
   - Used npm 8.6.0
   - Upgraded localstack to 0.12.13 to work with latest Cumulus
+  - Updated `git+ssh://git@` to `git+https://` for npm generated package-lock.json
 
 ### Changed
 
