@@ -299,7 +299,7 @@ export const tableColumnsGranuleConflictDetails = ({ reportType }) => {
       Header: 'In Orca Only',
       id: 'onlyInOrca',
       accessor: 'reason',
-      Cell: ({ cell: { value } }) => (
+      Cell: ({ cell: { value } }) => ( // eslint-disable-line react/prop-types
         (value === 'onlyInOrca') ? checkButton : nullValue
       ),
       disableSortBy: true,
@@ -308,7 +308,7 @@ export const tableColumnsGranuleConflictDetails = ({ reportType }) => {
       Header: 'Should Be Excluded From Orca',
       id: 'shouldBeExcludedFromOrca',
       accessor: 'reason',
-      Cell: ({ cell: { value } }) => (
+      Cell: ({ cell: { value } }) => ( // eslint-disable-line react/prop-types
         (value === 'shouldBeExcludedFromOrca') ? checkButton : nullValue
       ),
       disableSortBy: true,
@@ -335,7 +335,7 @@ export const tableColumnsGranuleConflictDetails = ({ reportType }) => {
       Header: 'In Cumulus Only',
       id: 'onlyInCumulus',
       accessor: 'reason',
-      Cell: ({ cell: { value } }) => (
+      Cell: ({ cell: { value } }) => ( // eslint-disable-line react/prop-types
         (value === 'onlyInCumulus') ? checkButton : nullValue
       ),
       disableSortBy: true,

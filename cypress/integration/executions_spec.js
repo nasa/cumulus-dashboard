@@ -48,7 +48,7 @@ describe('Dashboard Executions Page', () => {
           const visiblePart = execution.name.split('-').slice(0, 3).join('-');
           cy.contains(visiblePart);
           cy.get(`[data-value="${execution.name}"]`).children().as('columns');
-          cy.get('@columns').should('have.length', 6);
+          cy.get('@columns').should('have.length', 7);
 
           cy.get('@columns').eq(0).children('a')
             .should('have.attr', 'href')
@@ -66,6 +66,9 @@ describe('Dashboard Executions Page', () => {
             .should('be.eq', `${Number(execution.duration).toFixed(2)}s`);
           cy.get('@columns').eq(5).invoke('text')
             .should('be.eq', execution.collectionId || '--');
+          cy.get('@columns').eq(6).within(() => {
+            cy.get('.button__row--download').should('have.length', 1);
+          });
         });
 
       cy.get('.table .tbody .tr').as('list');
@@ -94,6 +97,7 @@ describe('Dashboard Executions Page', () => {
       });
 
       cy.contains('.heading--large', 'Execution');
+      cy.get('.button--download').should('have.length', 1);
       cy.contains('.heading--medium', 'Visual');
 
       cy.get('.status--process')
@@ -183,7 +187,7 @@ describe('Dashboard Executions Page', () => {
       cy.get('@events').should('have.length', 7);
 
       cy.getFixture('valid-execution').as('executionStatus');
-      cy.get('@executionStatus').its('executionHistory').its('events').then((events) => {
+      cy.get('@executionStatus').its('data.executionHistory').its('events').then((events) => {
         let prevStepName;
         cy.get('@events').each(($el, index, $list) => {
           const timestamp = fullDate(events[index].timestamp);
@@ -234,7 +238,7 @@ describe('Dashboard Executions Page', () => {
       cy.get('@events').should('have.length', 7);
 
       cy.getFixture('valid-execution-with-failure').as('executionStatus');
-      cy.get('@executionStatus').its('executionHistory').its('events').then((events) => {
+      cy.get('@executionStatus').its('data.executionHistory').its('events').then((events) => {
         cy.get('@events').each(($el, index, $list) => {
           cy.wrap($el).children('.td').as('columns');
           if (events[index].type.toLowerCase().includes('failed')) {
@@ -354,7 +358,7 @@ describe('Dashboard Executions Page', () => {
 
       // validate Associated Executions List link contains correct parameters
       cy.get('@response').then((resp) => {
-        cy.wrap(resp.response.body.execution.granules[0]).as('granule');
+        cy.wrap(resp.response.body.data.execution.granules[0]).as('granule');
         cy.get('@granule').then((granule) => {
           cy.get('.table .tbody .td').eq(0).contains(granule.granuleId);
           cy.get('.table .tbody .td').eq(1).should('have.text', 'Link').children('a')

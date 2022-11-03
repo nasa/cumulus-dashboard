@@ -1,4 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
+import get from 'lodash/get';
 import {
   EXECUTION_STATUS,
   EXECUTION_STATUS_INFLIGHT,
@@ -8,9 +9,7 @@ import {
 } from '../actions/types';
 
 export const initialState = {
-  execution: null,
-  executionHistory: null,
-  stateMachine: null,
+  data: {},
   searchString: null,
   inflight: false,
   error: false,
@@ -25,13 +24,10 @@ export default createReducer(initialState, {
     const { data } = action;
     state.inflight = false;
     state.error = false;
-    state.execution = data.execution;
-    state.executionHistory = data.executionHistory;
-    state.stateMachine = data.stateMachine;
-    state.warning = data.warning;
+    state.data = data;
 
-    if (state.searchString) {
-      state.executionHistory.events = data.executionHistory.events.filter(
+    if (state.searchString && get(state, 'data.data.executionHistory.events')) {
+      state.data.data.executionHistory.events = data.data.executionHistory.events.filter(
         typeContains(state.searchString)
       );
     }
