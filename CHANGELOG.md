@@ -21,7 +21,8 @@ This version of the dashboard requires Cumulus API >= v13.5.0 (TBD)
   - Used npm 8.6.0
   - Upgraded localstack to 0.12.13 to work with latest Cumulus
   - Added action to list pages to refresh cumulus db connection
-  - Updated `git+ssh://git@` to `git+https://` for npm 8.6.0 generated package-lock.json
+  - Updated `git+ssh://git@` to `git+https://` for npm 8.6.0 generated package-lock.json,
+    and this is an [known issue](https://github.com/npm/cli/issues/2610) with npm 8.6.0
 
 ### Changed
 
