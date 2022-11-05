@@ -166,7 +166,7 @@ class GranuleOverview extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (!isEqual(prevProps.workflowOptions, this.props.workflowOptions)) {
-      this.setState({ workflow: this.props.workflowOptions[0] }); // eslint-disable-line react/no-did-update-set-state
+      this.setState({ workflow: this.props.workflowOptions[0] });
     }
   }
 
