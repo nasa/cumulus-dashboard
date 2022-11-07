@@ -9,6 +9,7 @@ import {
   clearRulesSearch,
   filterRules,
   clearRulesFilter,
+  refreshCumulusDbConnection,
 } from '../../actions';
 import { lastUpdated, tally } from '../../utils/format';
 import List from '../Table/Table';
@@ -34,6 +35,7 @@ class RulesOverview extends React.Component {
   }
 
   componentDidMount() {
+    this.props.dispatch(refreshCumulusDbConnection());
     this.props.dispatch(listRules);
   }
 

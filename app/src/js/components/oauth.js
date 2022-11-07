@@ -43,7 +43,7 @@ class OAuth extends React.Component {
     const { token } = this.props.queryParams;
     if (token) {
       const { dispatch } = this.props;
-      this.setState({ token }, () => dispatch(login(token))); // eslint-disable-line react/no-did-mount-set-state
+      this.setState({ token }, () => dispatch(login(token)));
     }
   }
 

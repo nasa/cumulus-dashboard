@@ -168,6 +168,10 @@ export const getCumulusInstanceMetadata = () => ({
   }
 });
 
+export const refreshCumulusDbConnection = () => (dispatch) => dispatch(
+  getGranule('fake-granuleid-refresh-connection')
+);
+
 export const getGranule = (granuleId, params) => ({
   [CALL_API]: {
     type: types.GRANULE,

@@ -11,6 +11,7 @@ import {
   listExecutions,
   listWorkflows,
   getOptionsCollectionName,
+  refreshCumulusDbConnection,
 } from '../../actions';
 import { workflowOptions as workflowSelectOptions } from '../../selectors';
 import { tally, lastUpdated } from '../../utils/format';
@@ -49,6 +50,7 @@ const ExecutionOverview = ({
   const tableColumnsArray = tableColumns({ dispatch });
 
   useEffect(() => {
+    dispatch(refreshCumulusDbConnection());
     dispatch(listWorkflows());
   }, [dispatch]);
 

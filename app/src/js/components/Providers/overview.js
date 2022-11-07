@@ -10,6 +10,7 @@ import {
   getCount,
   filterProviders,
   clearProvidersFilter,
+  refreshCumulusDbConnection,
 } from '../../actions';
 import { lastUpdated } from '../../utils/format';
 import { tableColumns } from '../../utils/table-config/providers';
@@ -24,6 +25,7 @@ class ProvidersOverview extends React.Component {
   }
 
   componentDidMount() {
+    this.props.dispatch(refreshCumulusDbConnection());
     this.queryStats();
   }
 
