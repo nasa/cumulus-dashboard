@@ -155,6 +155,7 @@ const CommonConfig = {
       BUCKET: config.graphicsPath,
       ENABLE_RECOVERY: config.enableRecovery,
       SERVED_BY_CUMULUS_API: config.servedByCumulusAPI,
+      DOCKER_DEFAULT_PLATFORM: config.dockerDefaultPlatform
     }),
   ],
 };

@@ -1,4 +1,4 @@
-FROM node:14.19.1 as build
+FROM --platform=linux/amd64 node:14.19.1 as build
 WORKDIR /cumulus-dashboard
 COPY package.json package-lock.json ./
 RUN npm install --no-optional
@@ -13,6 +13,7 @@ ARG KIBANAROOT
 ARG LABELS
 ARG SERVED_BY_CUMULUS_API
 ARG STAGE
+ARG DOCKER_DEFAULT_PLATFORM
 
 COPY . ./
 
@@ -29,6 +30,7 @@ RUN \
  LABELS=$LABELS \
  SERVED_BY_CUMULUS_API=$SERVED_BY_CUMULUS_API \
  STAGE=$STAGE \
+ DOCKER_DEFAULT_PLATFORM=$DOCKER_DEFAULT_PLATFORM \
  npm run build
 
 FROM nginx:alpine as app
