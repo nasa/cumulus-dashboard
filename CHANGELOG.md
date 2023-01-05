@@ -39,6 +39,8 @@ This version of the dashboard requires Cumulus API >= v13.5.0 (TBD)
     + `terser-webpack-plugin` to `5.3.3`
 - **CUMULUS-3001**
   - Removed `precss` dependency
+- **Snyk Security Fix**
+  - Upgraded jsonwebtoken from 8.5.1 to 9.0.0
 
 ## [v11.0.0] - 2022-04-19
 
