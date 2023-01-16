@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Breaking Changes
 
-This version of the dashboard requires Cumulus API v13.5.0
+This version of the dashboard requires Cumulus API >= v13.5.0 (TBD)
 
 ### Added
 
@@ -20,7 +20,9 @@ This version of the dashboard requires Cumulus API v13.5.0
   - Updated dashboard to use alpha version `@cumulus/api@13.3.3-alpha.0` for testing
   - Used npm 8.6.0
   - Upgraded localstack to 0.12.13 to work with latest Cumulus
-  - Updated `git+ssh://git@` to `git+https://` for npm generated package-lock.json
+  - Added action to list pages to refresh cumulus db connection
+  - Updated `git+ssh://git@` to `git+https://` for npm 8.6.0 generated package-lock.json,
+    and this is an [known issue](https://github.com/npm/cli/issues/2610) with npm 8.6.0
 
 ### Changed
 
@@ -37,6 +39,8 @@ This version of the dashboard requires Cumulus API v13.5.0
     + `terser-webpack-plugin` to `5.3.3`
 - **CUMULUS-3001**
   - Removed `precss` dependency
+- **Snyk Security Fix**
+  - Upgraded jsonwebtoken from 8.5.1 to 9.0.0
 
 ## [v11.0.0] - 2022-04-19
 
