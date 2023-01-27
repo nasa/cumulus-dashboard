@@ -33,7 +33,7 @@ const Main = ({
   return (
     <div className='app'>
       {target !== 'cumulus' && (
-        <div className='app__target--container'>
+        <div className='app__target--container' role='region'>
           <h4 className='app__target'>{displayCase(target)} ({displayCase(environment)})</h4>
         </div>
       )}

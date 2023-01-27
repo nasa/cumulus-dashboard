@@ -257,8 +257,6 @@ export class Form extends React.Component {
     if (prevProps.inputMeta !== inputMeta) {
       const inputs = generateInputState(inputMeta, this.id, this.state.inputs);
       const dirty = generateDirty(inputs);
-
-      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ inputs, dirty });
     }
     if (this.state.submitted) {

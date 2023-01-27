@@ -88,7 +88,7 @@ class Header extends React.Component {
         ? `${graphicsPath}${strings.logo}`
         : `${graphicsPath}/${strings.logo}`;
     return (
-      <div className="header">
+      <div className="header" role='banner'>
         <div className="row">
           <h1 className="logo">
             <Link to={{ pathname: '/', search: locationSearch }}>

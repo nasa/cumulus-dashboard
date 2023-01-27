@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import cloneDeep from 'lodash/cloneDeep';
+import get from 'lodash/get';
 import {
   displayCase,
   seconds,
@@ -14,6 +15,7 @@ import { strings } from '../../components/locale';
 import { getPersistentQueryParams } from '../url-helper';
 import { getEventDetails } from '../../components/Executions/execution-graph-utils';
 import Tooltip from '../../components/Tooltip/tooltip';
+import { getExecutionStatus } from '../../actions';
 
 export const formatEvents = (events) => {
   const mutableEvents = cloneDeep(events);
@@ -70,7 +72,7 @@ export const subColumns = [
   },
 ];
 
-export const tableColumns = [
+export const tableColumns = ({ dispatch }) => ([
   {
     Header: 'Name',
     accessor: 'name',
@@ -116,7 +118,28 @@ export const tableColumns = [
     accessor: 'collectionId',
     width: 200,
     Cell: ({ cell: { value } }) => formatCollectionId(value)
+  },
+  {
+    Header: 'Download Execution',
+    id: 'download',
+    accessor: 'name',
+    Cell: ({ row: { original: { arn } } }) => (// eslint-disable-line react/prop-types
+      <button
+        aria-label="Download Execution"
+        className='button button__row button__row--download'
+        onClick={(e) => handleDownloadClick(e, arn, dispatch)}
+      />
+    ),
+    disableSortBy: true
   }
-];
+]);
+
+const handleDownloadClick = (e, executionArn, dispatch) => {
+  e.preventDefault();
+  dispatch(getExecutionStatus(executionArn)).then((response) => {
+    const url = get(response, 'data.presignedS3Url');
+    if (url && window && !window.Cypress) window.open(url);
+  });
+};
 
 export default tableColumns;

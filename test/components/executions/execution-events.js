@@ -74,9 +74,14 @@ test.serial('Execution Events displays the correct step name', function (t) {
   };
 
   const executionStatus = {
-    execution: executionHistory.execution,
-    executionHistory: plainEventsExecutionHistory,
-    stateMachine: executionHistory.execution,
+    data: {
+      presignedS3Url: 'http://example.com/presignedS3Url',
+      data: {
+        execution: executionHistory.execution,
+        executionHistory: plainEventsExecutionHistory,
+        stateMachine: executionHistory.execution,
+      }
+    },
     inflight: true,
     error: false,
     meta: {},
@@ -120,9 +125,14 @@ test.serial('Execution Events displays the correct step name', function (t) {
 
 test.serial('Execution Events shows event history', function (t) {
   const executionStatus = {
-    execution: executionHistory.execution,
-    executionHistory: executionHistory.executionHistory,
-    stateMachine: executionHistory.execution,
+    data: {
+      presignedS3Url: 'http://example.com/presignedS3Url',
+      data: {
+        execution: executionHistory.execution,
+        executionHistory: executionHistory.executionHistory,
+        stateMachine: executionHistory.execution,
+      }
+    },
     inflight: true,
     error: false,
     meta: {},

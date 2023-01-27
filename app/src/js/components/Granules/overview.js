@@ -17,6 +17,7 @@ import {
   applyRecoveryWorkflowToGranule,
   getOptionsCollectionName,
   getOptionsProviderName,
+  refreshCumulusDbConnection,
   toggleGranulesTableColumns,
 } from '../../actions';
 import { lastUpdated, tally } from '../../utils/format';
@@ -70,12 +71,13 @@ class GranulesOverview extends React.Component {
   }
 
   componentDidMount() {
+    this.props.dispatch(refreshCumulusDbConnection());
     this.queryMeta();
   }
 
   componentDidUpdate(prevProps) {
     if (!isEqual(prevProps.workflowOptions, this.props.workflowOptions)) {
-      this.setState({ workflow: this.props.workflowOptions[0] }); // eslint-disable-line react/no-did-update-set-state
+      this.setState({ workflow: this.props.workflowOptions[0] });
     }
   }
 

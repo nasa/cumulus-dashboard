@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Alert } from 'react-bootstrap';
+import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import SortableTable from '../SortableTable/SortableTable';
 import { getExecutionStatus } from '../../actions';
@@ -15,7 +16,18 @@ const ExecutionSnapshot = ({
   const { original: { arn }, isExpanded } = row || {};
   const { map } = executionStatus || {};
   const currentExecutionStatus = useMemo(() => map[arn] || {}, [arn, map]);
-  const { execution, executionHistory, inflight, warning, error } = currentExecutionStatus || {};
+  const { inflight, warning } = currentExecutionStatus || {};
+  let error = get(currentExecutionStatus, 'error');
+  let recordData = get(currentExecutionStatus, 'data.data', {});
+
+  // record data is an error message
+  if (typeof recordData === 'string' && recordData.startsWith('Error')) {
+    const recordError = `${recordData}, please download the execution record instead`;
+    error = error || recordError;
+    recordData = {};
+  }
+
+  const { execution, executionHistory } = recordData;
   const { events } = executionHistory || {};
   const hasEvents = events?.length > 1;
 
@@ -50,11 +62,7 @@ const ExecutionSnapshot = ({
 
 ExecutionSnapshot.propTypes = {
   dispatch: PropTypes.func,
-  executionStatus: PropTypes.shape({
-    executionHistory: PropTypes.shape({
-      events: PropTypes.array
-    })
-  }),
+  executionStatus: PropTypes.object,
   row: PropTypes.object
 };
 

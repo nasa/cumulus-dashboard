@@ -229,7 +229,7 @@ export class BatchCommand extends React.Component {
           action={this.handleClick}
           text={text}
           className={className}
-          disabled={!activeModal && (!todo || !!inflight)}
+          hidden={!activeModal && (!todo || !!inflight)}
           status={!activeModal && inflight ? 'inflight' : null}
         />
         {activeModal && <div className="modal__cover"></div>}

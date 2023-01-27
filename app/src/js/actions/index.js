@@ -168,6 +168,10 @@ export const getCumulusInstanceMetadata = () => ({
   }
 });
 
+export const refreshCumulusDbConnection = () => (dispatch) => dispatch(
+  getGranule('fake-granuleid-refresh-connection')
+);
+
 export const getGranule = (granuleId, params) => ({
   [CALL_API]: {
     type: types.GRANULE,
@@ -175,6 +179,16 @@ export const getGranule = (granuleId, params) => ({
     id: granuleId,
     path: `granules/${granuleId}`,
     params
+  }
+});
+
+export const getGranuleRecoveryStatus = (granuleId) => ({
+  [CALL_API]: {
+    type: types.RECOVERY_GRANULE,
+    method: 'POST',
+    id: granuleId,
+    path: 'orca/recovery/granules',
+    data: { granuleId }
   }
 });
 

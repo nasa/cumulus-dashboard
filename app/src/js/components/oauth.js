@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 import get from 'lodash/get';
+import { Helmet } from 'react-helmet';
 import { login, setTokenState } from '../actions';
 import { window } from '../utils/browser';
 import { buildRedirectUrl } from '../utils/format';
@@ -42,7 +43,7 @@ class OAuth extends React.Component {
     const { token } = this.props.queryParams;
     if (token) {
       const { dispatch } = this.props;
-      this.setState({ token }, () => dispatch(login(token))); // eslint-disable-line react/no-did-mount-set-state
+      this.setState({ token }, () => dispatch(login(token)));
     }
   }
 
@@ -60,6 +61,9 @@ class OAuth extends React.Component {
 
     return (
       <div className='app'>
+        <Helmet>
+          <title>Cumulus Login</title>
+        </Helmet>
         <Header dispatch={dispatch} api={api} apiVersion={apiVersion} minimal={true}/>
         <main className='main' role='main'>
           <div className="modal-content">
@@ -69,9 +73,10 @@ class OAuth extends React.Component {
               centered
               size="sm"
               aria-labelledby="modal__oauth-modal"
+              role="main"
             >
               <Modal.Header className="oauth-modal__header"></Modal.Header>
-              <Modal.Title id="modal__oauth-modal" className="oauth-modal__title">Welcome To Cumulus Dashboard</Modal.Title>
+              <h1><Modal.Title id="modal__oauth-modal" className="oauth-modal__title">Welcome To Cumulus Dashboard</Modal.Title></h1>
               <Modal.Body>
                 { api.inflight ? <h2 className='heading--medium'>Authenticating ... </h2> : null }
                 { api.error ? <ErrorReport report={api.error} /> : null }

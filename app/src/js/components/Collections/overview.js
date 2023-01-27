@@ -18,6 +18,7 @@ import {
   listWorkflows,
   applyWorkflowToGranule,
   applyRecoveryWorkflowToGranule,
+  refreshCumulusDbConnection,
 } from '../../actions';
 import {
   collectionName as collectionLabelForId,
@@ -89,6 +90,7 @@ const CollectionOverview = ({
   const [selected, setSelected] = useState([]);
 
   useEffect(() => {
+    dispatch(refreshCumulusDbConnection());
     dispatch(listCollections());
     dispatch(getCumulusInstanceMetadata());
     dispatch(getCollection(collectionName, decodedVersion));
