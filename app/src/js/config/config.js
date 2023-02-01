@@ -27,7 +27,8 @@ const config = {
   kibanaRoot: process.env.KIBANAROOT || '',
   graphicsPath: process.env.BUCKET || '',
   enableRecovery: computeBool(process.env.ENABLE_RECOVERY, false),
-  servedByCumulusAPI: computeBool(process.env.SERVED_BY_CUMULUS_API, '')
+  servedByCumulusAPI: computeBool(process.env.SERVED_BY_CUMULUS_API, ''),
+  dockerDefaultPlatform: process.env.DOCKER_DEFAULT_PLATFORM || 'linux/amd64'
 };
 
 module.exports = config;

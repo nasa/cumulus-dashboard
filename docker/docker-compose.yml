@@ -4,6 +4,7 @@ services:
   build:
     working_dir: /cumulus-dashboard
     image: dashboard-build:${TAG-}
+    platform: linux/amd64
     build:
       dockerfile: docker/Dockerfile
       context: ../
@@ -18,9 +19,11 @@ services:
         - KIBANAROOT
         - SERVED_BY_CUMULUS_API
         - STAGE
+        - DOCKER_DEFAULT_PLATFORM
   dashboard:
     working_dir: /cumulus-dashboard
     image: ${IMAGE_NAME}
+    platform: linux/amd64
     build:
       dockerfile: docker/Dockerfile
       context: ../
@@ -34,3 +37,4 @@ services:
         - KIBANAROOT
         - SERVED_BY_CUMULUS_API
         - STAGE
+        - DOCKER_DEFAULT_PLATFORM
