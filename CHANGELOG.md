@@ -15,6 +15,8 @@ This version of the dashboard requires Cumulus API >= v14.0.0
 
 ### Added
 
+- **CUMULUS-3107**
+  - Added d3-dag dependency to replace dagre-d3
 - **CUMULUS-2717**
   - Added `Show/Hide Recovery Status` button to granule detail page
 - **CUMULUS-2915**
@@ -28,6 +30,8 @@ This version of the dashboard requires Cumulus API >= v14.0.0
 
 ### Changed
 
+- **CUMULUS-3107**
+  - Upated D3 dependency to the latest version 7.8.2
 - **CUMULUS-2763**
   - Replaces disabled button interaction with hidden buttons for bulk actions.
 - **CUMULUS-2960**
@@ -1299,7 +1303,6 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - Expandable errors. [CUMULUS-394]
-- Added d3-dag dependency to replace dagre-d3. [CUMULUS-3107]
 
 ### Changed
 
@@ -1308,7 +1311,6 @@ Fix for serving the dashboard through the Cumulus API.
 - Tests use ava instead of tape. [CUMULUS-418]
 - Remove `defaultVersion` from the config. To use a particular version of the
   API, just set that in the API URL.
-- Upated D3 dependency to the latest version 7.8.2. [CUMULUS-3107]
 
 ## v1.0.1 - 2018-03-07
 
