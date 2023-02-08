@@ -25,6 +25,8 @@ This version of the dashboard requires Cumulus API >= v14.0.0
   - Added action to list pages to refresh cumulus db connection
   - Updated `git+ssh://git@` to `git+https://` for npm 8.6.0 generated package-lock.json,
     and this is an [known issue](https://github.com/npm/cli/issues/2610) with npm 8.6.0
+- **CUMULUS-3107**
+  - Added d3-dag dependency to replace dagre-d3
 
 ### Changed
 
@@ -41,6 +43,8 @@ This version of the dashboard requires Cumulus API >= v14.0.0
     + `terser-webpack-plugin` to `5.3.3`
 - **CUMULUS-3001**
   - Removed `precss` dependency
+- **CUMULUS-3107**
+  - Upated D3 dependency to the latest version 7.8.2
 - **Snyk Security Fix**
   - Upgraded jsonwebtoken from 8.5.1 to 9.0.0
 
