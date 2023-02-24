@@ -9,10 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
-- **CUMULUS-3072**
+- **CUMULUS-3092**
 
-  - Updated all PUT /granules/${granuleId} actions to use PATCH and supply the 
-  required `Cumulus-API-Version` headers
+  - Updated all PUT /granules/${granuleId} actions to use PATCH and supply the
+  required `Cumulus-API-Version` headers implemented in CUMULUS-3072
   - Removed unused `reprocessGranule` action method
 
 ## [v12.0.0] - 2023-01-23
