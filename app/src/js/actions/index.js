@@ -249,7 +249,7 @@ export const applyWorkflowToGranule = (granuleId, workflow, meta) => ({
       meta
     },
     headers: {
-      'Cumulus-API-Version': 2,
+      'Cumulus-API-Version': '2',
     }
   }
 });
@@ -292,7 +292,7 @@ export const reingestGranule = (granuleId, meta) => ({
       ...meta,
     },
     headers: {
-      'Cumulus-API-Version': 2,
+      'Cumulus-API-Version': '2',
     }
   }
 });
@@ -312,7 +312,7 @@ export const removeGranule = (granuleId) => ({
       action: 'removeFromCmr'
     },
     headers: {
-      'Cumulus-API-Version': 2,
+      'Cumulus-API-Version': '2',
     }
   }
 });
