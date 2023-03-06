@@ -205,18 +205,6 @@ export const listGranules = (options) => (dispatch, getState) => {
   });
 };
 
-export const reprocessGranule = (granuleId) => ({
-  [CALL_API]: {
-    type: types.GRANULE_REPROCESS,
-    method: 'PUT',
-    id: granuleId,
-    path: `granules/${granuleId}`,
-    data: {
-      action: 'reprocess'
-    }
-  }
-});
-
 export const applyWorkflowToCollection = (name, version, workflow) => ({
   [CALL_API]: {
     type: types.COLLECTION_APPLYWORKFLOW,
@@ -252,13 +240,16 @@ export const applyRecoveryWorkflowToCollection = (collectionId) => (dispatch) =>
 export const applyWorkflowToGranule = (granuleId, workflow, meta) => ({
   [CALL_API]: {
     type: types.GRANULE_APPLYWORKFLOW,
-    method: 'PUT',
+    method: 'PATCH',
     id: granuleId,
     path: `granules/${granuleId}`,
     data: {
       action: 'applyWorkflow',
       workflow,
       meta
+    },
+    headers: {
+      'Cumulus-API-Version': '2',
     }
   }
 });
@@ -293,12 +284,15 @@ export const applyRecoveryWorkflowToGranule = (granuleId) => (dispatch) => dispa
 export const reingestGranule = (granuleId, meta) => ({
   [CALL_API]: {
     type: types.GRANULE_REINGEST,
-    method: 'PUT',
+    method: 'PATCH',
     id: granuleId,
     path: `granules/${granuleId}`,
     data: {
       action: 'reingest',
       ...meta,
+    },
+    headers: {
+      'Cumulus-API-Version': '2',
     }
   }
 });
@@ -311,11 +305,14 @@ export const reingestGranuleClearError = (granuleId) => ({
 export const removeGranule = (granuleId) => ({
   [CALL_API]: {
     type: types.GRANULE_REMOVE,
-    method: 'PUT',
+    method: 'PATCH',
     id: granuleId,
     path: `granules/${granuleId}`,
     data: {
       action: 'removeFromCmr'
+    },
+    headers: {
+      'Cumulus-API-Version': '2',
     }
   }
 });

@@ -213,7 +213,7 @@ test.serial('applyRecoveryWorkflowToGranule dispatches applyWorkflow', async (t)
   nock('https://example.com')
     .get(`/granules/${granuleId}`)
     .reply(200, getGranuleResponse)
-    .put(`/granules/${granuleId}`)
+    .patch(`/granules/${granuleId}`)
     .reply(200);
 
   return store.dispatch(applyRecoveryWorkflowToGranule(granuleId)).then(() => {
