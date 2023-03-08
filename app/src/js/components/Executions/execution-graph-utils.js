@@ -1,4 +1,8 @@
 import dagre from 'dagre-d3';
+import * as d3Base from 'd3';
+import * as d3Dag from 'd3-dag';
+
+const d3 = { ...d3Base, ...d3Dag };
 
 export const select = (arr, predOrProp) => {
   let predicate = predOrProp;
@@ -27,7 +31,14 @@ export const setParent = (g, child, parent) => {
   g.setParent(child, parent);
 };
 
+// Test draw function using d3-dag
 export const draw = (graph) => {
+  const dag = d3.dagHierarchy()(graph);
+  console.log('dag', dag.descendants('before'));
+  return dag.descendants('before');
+};
+
+export const drawOld = (graph) => {
   const g = new dagre.graphlib.Graph({ compound: true })
     .setGraph({})
     .setDefaultEdgeLabel(() => ({}));

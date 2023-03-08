@@ -152,6 +152,7 @@
     "core-js": "^3.20.1",
     "crypto-browserify": "^3.12.0",
     "d3": "^6.7.0",
+    "d3-dag": "^0.11.5",
     "dagre-d3": "^0.6.4",
     "deepmerge": "^4.2.2",
     "final-form": "4.20.4",
