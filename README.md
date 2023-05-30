@@ -222,7 +222,7 @@ For **development** and **testing** purposes only, you can run a Cumulus API loc
 
 *Important Note: These `docker-compose` commands do not build distributable containers, but are a provided as testing conveniences.  The docker-compose[-\*].yml files show that they work by linking your local directories into the container.*
 
-In order to run the Cumulus API locally you must first [build the dashboard](#buildlocally) and then run the containers that provide LocalStack and Elasticsearch services.
+In order to run the Cumulus API locally you must first [build the dashboard](#build-the-dashboard) and then run the containers that provide LocalStack and Elasticsearch services.
 
 These are started and stopped with the commands:
 ```bash
@@ -290,7 +290,7 @@ dashboard_1      | Hit CTRL-C to stop the server
 ```
 
 
-##### Troubleshooting Docker containers.
+#### Troubleshooting Docker Containers
 
 If something is not running correctly, or you're just interested, you can view the logs with a helper script, this will print out logs from each of the running docker containers.
 ```bash
@@ -305,7 +305,7 @@ ERROR: for localapi_shim_1  Cannot start service shim: driver failed programming
 ERROR: for shim  Cannot start service shim: driver failed programming external connectivity on endpoint localapi_shim_1 (7105603a4ff7fbb6f92211086f617bfab45d78cff47232793d152a244eb16feb): Bind for 0.0.0.0:9200 failed: port is already allocated
 ```
 
-#### Fully contained cypress testing.
+#### Fully Contained Cypress Testing
 
 You can run all of the cypress tests locally that Earthdata Bamboo runs with a single command:
 ```bash
@@ -314,7 +314,7 @@ You can run all of the cypress tests locally that Earthdata Bamboo runs with a s
 This stands up the entire stack as well as begins the e2e service that will run all cypress commands and report an exit code for their success or failure.  This is primarily used for CI, but can be useful to developers.
 
 
-#### <a name=dockerdiagram></a> Docker Container Service Diagram.
+#### <a name=dockerdiagram></a> Docker Container Service Diagram
 ![Docker Service Diagram](./ancillary/DashboardDockerServices.png)
 
 
