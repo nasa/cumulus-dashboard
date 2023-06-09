@@ -20,7 +20,12 @@ const rules = require('../fixtures/seeds/rulesFixture.json');
 const pdrs = require('../fixtures/seeds/pdrsFixture.json');
 const reconciliationReports = require('../fixtures/seeds/reconciliationReportFixture.json');
 const reconciliationReportDir = path.resolve(__dirname, '../fixtures/seeds/reconciliation-reports');
+
 function resetIt() {
+  process.env.system_bucket = localSystemBucket;
+  process.env.stackName = localStackName;
+  process.env.ReconciliationReportsTable = `${localStackName}-ReconciliationReportsTable`;
+
   return Promise.all([
     eraseDataStack(),
     testUtils.setAuthorizedOAuthUsers([localUserName]),
@@ -49,7 +54,7 @@ function seedReconciliationReports() {
 }
 
 function seedRules() {
-  return serveUtils.addRules(rules.results);
+  return serveUtils.addRules(rules.results, false);
 }
 
 function seedPdrs() {
@@ -103,7 +108,7 @@ function seedEverything() {
       .then(seedGranulesExecutions)
       .then(seedRules)
       .then(seedReconciliationReports),
-    uploadReconciliationReportFiles(),
+    //uploadReconciliationReportFiles(),
   ]);
 }
 
