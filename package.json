@@ -129,7 +129,7 @@
     "terser-webpack-plugin": "^5.3.3",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^2.0.0",
-    "webpack": "^5.65.0",
+    "webpack": "^5.76.0",
     "webpack-bundle-analyzer": "^4.5.0",
     "webpack-cli": "^4.9.0",
     "webpack-dev-server": "^4.7.1",
