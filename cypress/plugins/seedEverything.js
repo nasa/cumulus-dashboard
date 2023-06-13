@@ -108,7 +108,7 @@ function seedEverything() {
       .then(seedGranulesExecutions)
       .then(seedRules)
       .then(seedReconciliationReports),
-    //uploadReconciliationReportFiles(),
+    uploadReconciliationReportFiles(),
   ]);
 }
 
