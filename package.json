@@ -16,7 +16,7 @@
   "homepage": "https://github.com/nasa/cumulus-dashboard",
   "private": true,
   "engines": {
-    "node": ">=14.19.1"
+    "node": ">=16.19.0"
   },
   "scripts": {
     "audit-ci": "audit-ci --config $(pwd)/audit-ci.json",
@@ -68,8 +68,8 @@
     "@babel/preset-react": "^7.16.5",
     "@babel/register": "^7.16.5",
     "@babel/runtime": "^7.16.5",
-    "@cumulus/api": "14.0.0",
-    "@cumulus/aws-client": "14.0.0",
+    "@cumulus/api": "15.0.3",
+    "@cumulus/aws-client": "15.0.3",
     "@cypress/webpack-preprocessor": "^5.11.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
     "audit-ci": "^5.1.2",
@@ -129,7 +129,7 @@
     "terser-webpack-plugin": "^5.3.3",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^2.0.0",
-    "webpack": "^5.65.0",
+    "webpack": "^5.83.1",
     "webpack-bundle-analyzer": "^4.5.0",
     "webpack-cli": "^4.9.0",
     "webpack-dev-server": "^4.7.1",
