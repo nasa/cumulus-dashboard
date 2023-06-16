@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## Breaking Changes
+
+This version of the dashboard requires Cumulus API >= v15.0.3
+
 ### Changed
 
 - **CUMULUS-3092**
@@ -15,6 +19,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Removed unused `reprocessGranule` action method
 - **Fix Security Vulnerability**
   - Upgraded jsonwebtoken from 8.5.1 to 9.0.0
+- **Upgrades*
+  - Bumped Node version from 14.19.1 to 16.19.0 to match Core
+  - Upgraded devDependencies to use `@cumulus/api@15.0.3` and `@cumulus/aws-client@15.0.3`
 
 ## [v12.0.0] - 2023-01-23
 
