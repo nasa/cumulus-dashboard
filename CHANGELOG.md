@@ -8,14 +8,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ## [v12.0.1] - 2023-05-25
+### Breaking Changes
+
+This version of the dashboard requires Cumulus API >= v16.0.0
 
 ### Changed
 
 - **CUMULUS-3092**
-
   - Updated all PUT /granules/${granuleId} actions to use PATCH and supply the
   required `Cumulus-API-Version` headers implemented in CUMULUS-3072
   - Removed unused `reprocessGranule` action method
+- **CUMULUS-3299**
+  - Docs: Update and fix links that reference the docs after Docusaurus upgrade
 
 ## [v12.0.0] - 2023-01-23
 
