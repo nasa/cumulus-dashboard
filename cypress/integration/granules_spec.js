@@ -229,7 +229,7 @@ describe('Dashboard Granules Page', () => {
     it('Should resize column to fit content on double click', () => {
       cy.visit('/granules');
       cy.contains('.table .thead .tr .th', 'Name').as('nameColumn');
-      cy.get('@nameColumn').invoke('outerWidth').should('be.within', 224, 226); //TODO -- Ticket
+      cy.get('@nameColumn').invoke('outerWidth').should('be.within', 224, 226);
       cy.get('@nameColumn').find('.resizer').dblclick();
       cy.get('@nameColumn').invoke('outerWidth').should('be.within', 399, 401);
     });
