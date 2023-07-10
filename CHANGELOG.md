@@ -1328,7 +1328,7 @@ Fix for serving the dashboard through the Cumulus API.
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
   [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.1...HEAD
-  [v12.0.`]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.0...v12.0.1
+  [v12.0.1]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.0...v12.0.1
   [v12.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v11.0.0...v12.0.0
   [v11.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v10.0.0...v11.0.0
   [v10.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v9.0.0...v10.0.0
