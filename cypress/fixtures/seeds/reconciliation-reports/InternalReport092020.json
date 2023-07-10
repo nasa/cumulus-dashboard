@@ -66,6 +66,7 @@
           "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:IngestAndPublishGranule:edb21d63-b62d-42e9-8879-f39d53314f16",
           "processingEndDateTime": "2020-05-18T19:49:04.769Z",
           "published": false,
+      "cmrLink": null,
           "error": {},
           "productVolume": "253949",
           "timeToPreprocess": 0,
