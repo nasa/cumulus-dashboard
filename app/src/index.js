@@ -9,7 +9,12 @@ import App from './js/App';
 if (process.env.NODE_ENV !== 'production') {
   import('@axe-core/react')
     .then((axe) => {
-      axe.default(React, ReactDOM, 1000);
+      try {
+        axe.default(React, ReactDOM, 1000);
+      } catch (error) {
+        console.log('***Warning - @axe-core/react threw error and did not start');
+      }
+      return null;
     });
 }
 
