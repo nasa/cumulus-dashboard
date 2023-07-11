@@ -260,7 +260,7 @@ describe('Rules page', () => {
 
       // Test error flow
       const errorRuleType = 'test';
-      const errorMessage = 'The record has validation errors: [{"keyword":"enum","dataPath":".rule.type","schemaPath":"#/properties/rule/properties/type/enum","params":{"allowedValues":["onetime","scheduled","sns","kinesis","sqs"]},"message":"should be equal to one of the allowed values"}]';
+      const errorMessage = "Rule type 'test' not supported.";
       cy.contains('.ace_variable', 'name');
       cy.editJsonTextarea({ data: { rule: { type: errorRuleType } }, update: true });
 
