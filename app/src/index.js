@@ -6,15 +6,12 @@ import './public/favicon.ico';
 
 import App from './js/App';
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production' && process.env.TEST_ENV !== 'cypress') {
   import('@axe-core/react')
     .then((axe) => {
-      try {
-        axe.default(React, ReactDOM, 1000);
-      } catch (error) {
-        console.log('***Warning - @axe-core/react threw error and did not start');
-      }
-      return null;
+      axe.default(React, ReactDOM, 1000);
+    }).catch((_error) => {
+      console.log('***Warning - @axe-core/  react threw error and did not start');
     });
 }
 
