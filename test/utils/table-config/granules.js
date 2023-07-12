@@ -109,6 +109,7 @@ test('containsPublishedGranules returns true if any granule is published', (t)=>
     {
       "execution": "https://example.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789:execution:stack-IngestGranule:53f19d45-ead3-444d-9b74-83995df71657",
       "published": false,
+      "cmrLink": null,
     },
     {
       "execution": "https://example.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789:execution:stack-IngestGranule:53f19d45-ead3-444d-9b74-83995df71657",
@@ -124,10 +125,12 @@ test('containsPublishedGranules returns false if no granules are published', (t)
     {
       "execution": "https://example.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789:execution:stack-IngestGranule:53f19d45-ead3-444d-9b74-83995df71657",
       "published": false,
+      "cmrLink": null,
     },
     {
       "execution": "https://example.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789:execution:stack-IngestGranule:53f19d45-ead3-444d-9b74-83995df71657",
       "published": false,
+      "cmrLink": null,
     }
   ];
 

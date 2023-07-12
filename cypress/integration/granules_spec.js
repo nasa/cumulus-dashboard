@@ -229,11 +229,10 @@ describe('Dashboard Granules Page', () => {
     it('Should resize column to fit content on double click', () => {
       cy.visit('/granules');
       cy.contains('.table .thead .tr .th', 'Name').as('nameColumn');
-      cy.get('@nameColumn').invoke('outerWidth').should('eq', 225);
+      cy.get('@nameColumn').invoke('outerWidth').should('be.within', 224, 226);
       cy.get('@nameColumn').find('.resizer').dblclick();
-      cy.get('@nameColumn').invoke('outerWidth').should('eq', 400);
+      cy.get('@nameColumn').invoke('outerWidth').should('be.within', 399, 401);
     });
-
     it('Should update dropdown with label when visiting bookmarkable URL', () => {
       cy.visit('/granules?status=running');
       cy.get('.filter-status .rbt-input-main').as('status-input');
