@@ -69,12 +69,12 @@ Set the environment and build the dashboard with these commands:
   $ source production.env && ./bin/build_dashboard_via_docker.sh
 ```
 
-This script uses Docker Compose to build and copy the compiled dashboard into the `./dist` directory. You can now deploy this directory to AWS behind [CloudFront](https://aws.amazon.com/cloudfront/).  If you are in NGAP, follow the instructions for "Request Public or Protected Access to the APIs and Dashboard" on the earthdata wiki page [Using Cumulus with Private APIs](https://wiki.earthdata.nasa.gov/display/CUMULUS/Cumulus+Deployments+in+NGAP).
+This script uses Docker Compose to build and copy the compiled dashboard into the `./dist` directory. You can now deploy this directory to AWS behind [CloudFront](https://aws.amazon.com/cloudfront/).  If you are in NGAP, follow the instructions for "Request Public or Protected Access to the APIs and Dashboard" on the earthdata wiki page [Using Cumulus with Private APIs](https://wiki.earthdata.nasa.gov/display/CUMULUS/Using+Cumulus+with+Private+APIs).
 
 
 ### Run the dashboard locally via Docker Image
 
-You can also create a Docker container that will serve the dashboard behind a simple nginx configuration. Having a runnable Docker image is useful for testing a build before deployment or for NGAP Sandbox environments, where if you configure your computer to [access Cumulus APIs via SSM](https://wiki.earthdata.nasa.gov/display/CUMULUS/Accessing+Cumulus+APIs+via+SSM), you can run the dashboard container locally against the live Sandbox Cumulus API.
+You can also create a Docker container that will serve the dashboard behind a simple nginx configuration. Having a runnable Docker image is useful for testing a build before deployment or for NGAP Sandbox environments, where if you configure your computer to [access Cumulus APIs via SSM](https://wiki.earthdata.nasa.gov/display/CUMULUS/Accessing+Cumulus+APIs+via+SSM+Port+Forwarding), you can run the dashboard container locally against the live Sandbox Cumulus API.
 
 The script `./bin/build_dashboard_image.sh` will build a docker image containing the dashboard bundle served behind a basic [nginx](https://www.nginx.com/) configuration. The script takes one optional parameter, the tag to name the generated image which defaults to cumulus-dashboard:latest.  The same customizations as described in the [previous section](#build-the-dashboard-using-docker-and-docker-compose) are available to configure your dashboard.
 
@@ -96,10 +96,10 @@ In this example, the dashboard would be available at `http://localhost:3000/` in
 
 ### Build the dashboard
 
-The dashboard uses node v14.19.1. To build/run the dashboard on your local machine, install [nvm](https://github.com/creationix/nvm) and run `nvm install v14.19.1`.
+The dashboard uses node v16.19.0. To build/run the dashboard on your local machine, install [nvm](https://github.com/creationix/nvm) and run `nvm install v16.19.0`.
 
 #### install requirements
-We use npm for local package management, run `npm install -g npm@8.6.0` to install npm 8.6.0. To install the requirements:
+We use npm for local package management. To install the requirements:
 ```bash
   $ nvm use
   $ npm ci
@@ -149,7 +149,7 @@ During development you can run the webpack development webserver to serve the da
 ```bash
 APIROOT=http://<myapi>.com npm run serve
 ```
-The dashboard should be available at http://localhost:3000
+The dashboard should be available at `http://localhost:3000`
 
 ### Run a built dashboard
 
@@ -222,7 +222,7 @@ For **development** and **testing** purposes only, you can run a Cumulus API loc
 
 *Important Note: These `docker-compose` commands do not build distributable containers, but are a provided as testing conveniences.  The docker-compose[-\*].yml files show that they work by linking your local directories into the container.*
 
-In order to run the Cumulus API locally you must first [build the dashboard](#buildlocally) and then run the containers that provide LocalStack and Elasticsearch services.
+In order to run the Cumulus API locally you must first [build the dashboard](#build-the-dashboard) and then run the containers that provide LocalStack and Elasticsearch services.
 
 These are started and stopped with the commands:
 ```bash
@@ -264,7 +264,7 @@ and
 ```bash
 localstack_1     | Ready.
 ```
-you should be able to verify access to the local Cumulus API at http://localhost:5001/token
+you should be able to verify access to the local Cumulus API at `http://localhost:5001/token`
 
 
 Then you can run the dashboard locally (without Docker) `[HIDE_PDR=false APIROOT=http://localhost:5001] npm run serve` and open cypress tests `npm run cypress`.
@@ -290,7 +290,7 @@ dashboard_1      | Hit CTRL-C to stop the server
 ```
 
 
-##### Troubleshooting Docker containers.
+#### Troubleshooting Docker Containers
 
 If something is not running correctly, or you're just interested, you can view the logs with a helper script, this will print out logs from each of the running docker containers.
 ```bash
@@ -305,7 +305,7 @@ ERROR: for localapi_shim_1  Cannot start service shim: driver failed programming
 ERROR: for shim  Cannot start service shim: driver failed programming external connectivity on endpoint localapi_shim_1 (7105603a4ff7fbb6f92211086f617bfab45d78cff47232793d152a244eb16feb): Bind for 0.0.0.0:9200 failed: port is already allocated
 ```
 
-#### Fully contained cypress testing.
+#### Fully Contained Cypress Testing
 
 You can run all of the cypress tests locally that Earthdata Bamboo runs with a single command:
 ```bash
@@ -314,7 +314,7 @@ You can run all of the cypress tests locally that Earthdata Bamboo runs with a s
 This stands up the entire stack as well as begins the e2e service that will run all cypress commands and report an exit code for their success or failure.  This is primarily used for CI, but can be useful to developers.
 
 
-#### <a name=dockerdiagram></a> Docker Container Service Diagram.
+#### <a name=dockerdiagram></a> Docker Container Service Diagram
 ![Docker Service Diagram](./ancillary/DashboardDockerServices.png)
 
 
@@ -394,9 +394,5 @@ It is likely that no branch plan will exist for the `master` branch.
  - Click `Create plan branch manually`.
  - Choose Branch Name `master` and then click `create`.
  - Verify that the build has started for this plan.
-
-
-
-
 
 <a name="bundlefootnote">1</a>: A dashboard bundle is just a ready-to-deploy compiled version of the dashboard and environment.

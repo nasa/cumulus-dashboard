@@ -63,7 +63,7 @@ export const tableColumns = [
     Header: 'Published',
     accessor: 'published',
     Cell: ({ row: { original: { cmrLink, published } } }) => (// eslint-disable-line react/prop-types
-      cmrLink ? <a href={cmrLink} target='_blank'>{bool(published)}</a> : bool(published)
+      cmrLink && bool(published) ? <a href={cmrLink} target='_blank'>{bool(published)}</a> : bool(published)
     )
   },
   {

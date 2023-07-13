@@ -414,6 +414,7 @@ describe('Dashboard Executions Page', () => {
       cy.get('@executionGraphNodes').eq(1).should('have.text', 'HelloWorld');
 
       cy.contains('.sidebar__nav--back', 'Back to Executions').click();
+      cy.wait(1000);
       cy.get(`.td a[href="/executions/execution/${secondExecutionArn}"]`).click();
 
       cy.contains('.heading--medium', 'Visual').should('exist');
