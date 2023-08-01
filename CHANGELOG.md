@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- **CUMULUS-3265**
+  - Fixed bulk granule operation modal to correctly pass selected granules into bulk operation
+
 ## [v12.0.1] - 2023-05-25
+
 ### Breaking Changes
 
 This version of the dashboard requires Cumulus API v2 (Core version >= v16.0.0)

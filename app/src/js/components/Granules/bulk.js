@@ -33,7 +33,7 @@ const bulkOperationsDefaultQuery = {
   workflowName: '',
   index: '',
   query: '',
-  granules: '',
+  granules: [],
   meta: {}
 };
 
