@@ -16,6 +16,8 @@ This version of the dashboard requires Cumulus API >= v18.1.0 (TBD)
 - **CUMULUS-3095**
   - Updated all PUT /rules/${ruleName} actions to supply the required `Cumulus-API-Version` headers
   - Updates the dashboard to use alpha version `@cumulus/api@18.0.1-alpha.0` for testing.
+- **CICD updates**
+  - Switched `docker-compose` commands to `docker compose`
 
 ### Fixed
 

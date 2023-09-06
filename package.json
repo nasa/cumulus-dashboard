@@ -35,14 +35,14 @@
     "seed-database": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost NODE_ENV=test PG_HOST=localhost PG_USER=postgres PG_PASSWORD=password PG_DATABASE=postgres node ./localAPI/runSeedDatabase.js",
     "serve-api": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost NODE_ENV=test cmr_provider=CUMULUS FAKE_AUTH=true ./node_modules/@cumulus/api/bin/cli.js serve --no-reseed",
     "debug-api": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost NODE_ENV=test cmr_provider=CUMULUS FAKE_AUTH=true node --inspect-brk ./node_modules/@cumulus/api/bin/cli.js serve --no-reseed",
-    "start-localstack": "docker-compose -f ./localAPI/docker-compose.yml up -d",
-    "stop-localstack": "docker-compose -f ./localAPI/docker-compose.yml down",
-    "start-cumulusapi": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml up -d",
-    "stop-cumulusapi": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml down",
-    "start-dashboard": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml -f ./localAPI/docker-compose-dashboard.yml up -d",
-    "stop-dashboard": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml -f ./localAPI/docker-compose-dashboard.yml down",
-    "e2e-tests": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml -f ./localAPI/docker-compose-dashboard.yml -f ./localAPI/docker-compose-cypress.yml up --exit-code-from=e2e --abort-on-container-exit",
-    "view-docker-logs": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml -f ./localAPI/docker-compose-dashboard.yml logs -f "
+    "start-localstack": "docker compose -f ./localAPI/docker-compose.yml up -d",
+    "stop-localstack": "docker compose -f ./localAPI/docker-compose.yml down",
+    "start-cumulusapi": "docker compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml up -d",
+    "stop-cumulusapi": "docker compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml down",
+    "start-dashboard": "docker compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml -f ./localAPI/docker-compose-dashboard.yml up -d",
+    "stop-dashboard": "docker compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml -f ./localAPI/docker-compose-dashboard.yml down",
+    "e2e-tests": "docker compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml -f ./localAPI/docker-compose-dashboard.yml -f ./localAPI/docker-compose-cypress.yml up --exit-code-from=e2e --abort-on-container-exit",
+    "view-docker-logs": "docker compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml -f ./localAPI/docker-compose-dashboard.yml logs -f "
   },
   "ava": {},
   "browserslist": {
