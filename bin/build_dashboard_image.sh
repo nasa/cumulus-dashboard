@@ -14,4 +14,4 @@
 set -evx
 
 IMAGE_NAME="${1:-cumulus-dashboard:latest}"
-IMAGE_NAME=$IMAGE_NAME docker-compose -f docker/docker-compose.yml build dashboard
+IMAGE_NAME=$IMAGE_NAME docker compose -f docker/docker-compose.yml build dashboard

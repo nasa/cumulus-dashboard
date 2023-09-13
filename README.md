@@ -218,9 +218,9 @@ When the cypress editor opens, click on `run all specs`.
 
 ### Local API server
 
-For **development** and **testing** purposes only, you can run a Cumulus API locally. This requires `docker-compose` in order to stand up the Docker containers that serve Cumulus API.  There are a number of commands that will stand up different portions of the stack.  See the [Docker Service Diagram](#dockerdiagram) and examine the `docker-compose*.yml` file in the `/localAPI/` directory to see all of the possible combinations. Described below are each of the provided commands for running the dashboard and Cumulus API locally.
+For **development** and **testing** purposes only, you can run a Cumulus API locally. This requires `docker compose` in order to stand up the Docker containers that serve Cumulus API.  There are a number of commands that will stand up different portions of the stack.  See the [Docker Service Diagram](#dockerdiagram) and examine the `docker-compose*.yml` file in the `/localAPI/` directory to see all of the possible combinations. Described below are each of the provided commands for running the dashboard and Cumulus API locally.
 
-*Important Note: These `docker-compose` commands do not build distributable containers, but are a provided as testing conveniences.  The docker-compose[-\*].yml files show that they work by linking your local directories into the container.*
+*Important Note: These `docker compose` commands do not build distributable containers, but are a provided as testing conveniences.  The docker-compose[-\*].yml files show that they work by linking your local directories into the container.*
 
 In order to run the Cumulus API locally you must first [build the dashboard](#build-the-dashboard) and then run the containers that provide LocalStack and Elasticsearch services.
 
@@ -249,7 +249,7 @@ the start command, will exit successfully long before the stack is actually read
 The output looks like this:
 ```bash
 > cumulus-dashboard@2.0.0 start-cumulusapi /Users/savoie/projects/cumulus/cumulus-dashboard
-> docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml up -d
+> docker compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml up -d
 
 Creating localapi_shim_1 ... done
 Creating localapi_elasticsearch_1 ... done

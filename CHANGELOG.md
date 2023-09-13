@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Breaking Changes
+
+This version of the dashboard requires Cumulus API >= v18.1.0 (TBD)
+
+### Changed
+
+- **CUMULUS-3095**
+  - Updated all PUT /rules/${ruleName} actions to supply the required `Cumulus-API-Version` headers
+  - Updates the dashboard to use alpha version `@cumulus/api@18.0.1-alpha.1` for testing.
+- **CICD updates**
+  - Switched `docker-compose` commands to `docker compose`
+
 ### Fixed
 
 - **CUMULUS-3265**
