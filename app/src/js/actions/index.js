@@ -182,13 +182,13 @@ export const getGranule = (granuleId, params) => ({
   }
 });
 
-export const getGranuleRecoveryStatus = (granuleId) => ({
+export const getGranuleRecoveryStatus = (granuleId, collectionId) => ({
   [CALL_API]: {
     type: types.RECOVERY_GRANULE,
     method: 'POST',
     id: granuleId,
     path: 'orca/recovery/granules',
-    data: { granuleId }
+    data: { granuleId, collectionId }
   }
 });
 
