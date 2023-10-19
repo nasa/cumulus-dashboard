@@ -389,6 +389,7 @@ describe('Dashboard Granules Page', () => {
 
     it('Should show or hide granule recovery status on the granule detail page.', () => {
       const granuleId = 'MOD09GQ.A9344328.K9yI3O.006.4625818663028';
+      const collectionId = 'MOD09GQ___006';
       cy.intercept(
         { method: 'POST', url: 'orca/recovery/granules' },
         { fixture: 'granule-recovery-status.json', statusCode: 200 }
@@ -404,7 +405,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('.status--process .meta__row .button').as('showRecoveryStatusButton');
       cy.get('@showRecoveryStatusButton').should('have.text', 'Show Recovery Status');
       cy.get('@showRecoveryStatusButton').click();
-      cy.wait('@getGranuleRecoveryStatus');
+      cy.wait('@getGranuleRecoveryStatus').its('request.body').should('deep.equal', { granuleId, collectionId });
       cy.get('.status--process .meta__row > dd').children().should('have.length', 4);
       cy.get('.status--process .meta__row > dd').children().eq(2).should('have.text', 'Recovery');
       cy.get('.status--process .meta__row > dd').children().eq(3).should('have.class', 'status-indicator--running');
