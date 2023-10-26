@@ -23,6 +23,8 @@ This version of the dashboard requires Cumulus API >= v18.1.0 (TBD)
 
 - **CUMULUS-3265**
   - Fixed bulk granule operation modal to correctly pass selected granules into bulk operation
+- **CUMULUS-3434**
+  - Fixed `getGranuleRecoveryStatus` action to take granuleId and collectionId.
 
 ## [v12.0.1] - 2023-05-25
 
