@@ -61,21 +61,17 @@ const BulkGranuleModal = ({
     if (!inflight) {
       try {
         json = JSON.parse(query);
-        const granuleIds = json.ids.map((granule) => granule.granuleId);
-        json.ids = granuleIds;
       } catch (jsonError) {
-        return setErrorState('Syntax error in JSON');
+        return setErrorState(`Syntax error in JSON ${jsonError.message}`);
       }
       dispatch(bulkRequestAction({ requestId, json }));
     }
   }
 
   function queryGranulesWorkflows(queryParams) {
-    const { ids, index, query: esQuery } = queryParams;
-    if ((index && esQuery) || ids.length > 0) {
-      const granuleWorkflowsQuery = { ...queryParams, granules: ids };
-      delete granuleWorkflowsQuery[ids];
-      dispatch(getGranulesWorkflows(granuleWorkflowsQuery));
+    const { granules, index, query: esQuery } = queryParams;
+    if ((index && esQuery) || granules.length > 0) {
+      dispatch(getGranulesWorkflows(queryParams));
     }
   }
 
@@ -100,7 +96,7 @@ const BulkGranuleModal = ({
   }
 
   useEffect(() => {
-    const queryParams = { ...JSON.parse(query), ids: selected };
+    const queryParams = { ...JSON.parse(query), granules: selected };
     setQuery(JSON.stringify(queryParams, null, 2));
 
     if (showModal && queryWorkflowOptions) {
@@ -158,7 +154,7 @@ const BulkGranuleModal = ({
           {selected &&
             <>
               <p>Selected granules:</p>
-              <p>[{selected.map((selection) => `"${selection.granuleId}"`).join(', ')}]</p>
+              <p>[{selected.map((selection) => `{"granuleId": "${selection.granuleId}", "collectionId": "${selection.collectionId}"}`).join(', ')}]</p>
             </>
           }
           <br/>

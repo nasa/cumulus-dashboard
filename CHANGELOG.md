@@ -7,7 +7,29 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v12.1.0] - 2023-10-27
+
+### Breaking Changes
+
+This version of the dashboard requires Cumulus API >= v18.1.0
+
+### Changed
+
+- **CUMULUS-3095**
+  - Updated all PUT /rules/${ruleName} actions to supply the required `Cumulus-API-Version` headers
+  - Updates the dashboard to use alpha version `@cumulus/api@18.0.1-alpha.1` for testing.
+- **CICD updates**
+  - Switched `docker-compose` commands to `docker compose`
+
+### Fixed
+
+- **CUMULUS-3265**
+  - Fixed bulk granule operation modal to correctly pass selected granules into bulk operation
+- **CUMULUS-3434**
+  - Fixed `getGranuleRecoveryStatus` action to take granuleId and collectionId.
+
 ## [v12.0.1] - 2023-05-25
+
 ### Breaking Changes
 
 This version of the dashboard requires Cumulus API v2 (Core version >= v16.0.0)
@@ -1327,7 +1349,8 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
-  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.1...HEAD
+  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v12.1.0...HEAD
+  [v12.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.1...v12.1.0
   [v12.0.1]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.0...v12.0.1
   [v12.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v11.0.0...v12.0.0
   [v11.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v10.0.0...v11.0.0
