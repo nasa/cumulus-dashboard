@@ -16,7 +16,7 @@ done
 >&2 echo "Elasticsearch is up - checking Localstack"
 
 # Wait for localstack
-until curl --connect-timeout 5 -sS http://localhost:4566/ 2> /dev/null | grep 'running' > /dev/null; do
+until curl --connect-timeout 5 -sSI http://localhost:4566/ 2> /dev/null | head -n 1 | grep '200' > /dev/null; do
   >&2 echo "Localstack is unavailable - sleeping"
   sleep 2
 done
