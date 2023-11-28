@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- **CUMULUS-3502**
+  - Upgraded localstack to v3.0.0
+  - Bumped node version from 14.19.1 to 16.19.0 to match Core
+
 ## [v12.1.0] - 2023-10-27
 
 ### Breaking Changes
