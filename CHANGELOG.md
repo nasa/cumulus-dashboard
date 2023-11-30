@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-3502**
   - Upgraded localstack to v3.0.0
   - Bumped node version from 14.19.1 to 16.19.0 to match Core
+  - Updated the dashboard to use alpha version `@cumulus/api@18.2.0-alpha.0` and
+    `@cumulus/aws-client@18.2.0-alpha.0` to work with localstack v3.0.0
 
 ## [v12.1.0] - 2023-10-27
 
