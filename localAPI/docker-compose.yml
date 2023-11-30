@@ -23,7 +23,7 @@ services:
       - "4550-4599:4550-4599"
       - "5432:5432"
   postgres:
-    image: postgres:10.17-alpine
+    image: postgres:11.13-alpine
     network_mode: "service:shim"
     environment:
       POSTGRES_USER: "postgres"
