@@ -6,12 +6,12 @@ services:
     environment:
       ES_JAVA_OPTS: "-Xms750m -Xmx750m"
   localstack:
-    image: ${DOCKER_REPOSITORY}localstack/localstack:0.12.13
+    image: ${DOCKER_REPOSITORY}localstack/localstack:3.0.0
     network_mode: "service:shim"
     environment:
       SERVICES: "cloudformation,cloudwatch,cloudwatchlogs,dynamodb,iam,kinesis,kms,lambda,s3,secretsmanager,sns,sqs,stepfunctions,ssm,logs"
   shim:   # empty container to open ports
-    image: ${DOCKER_REPOSITORY}node:14.19.1
+    image: ${DOCKER_REPOSITORY}node:16.19.0
     command:
       bash -c "tail -f /dev/null"
     working_dir:
@@ -23,7 +23,7 @@ services:
       - "4550-4599:4550-4599"
       - "5432:5432"
   postgres:
-    image: postgres:10.17-alpine
+    image: postgres:11.13-alpine
     network_mode: "service:shim"
     environment:
       POSTGRES_USER: "postgres"

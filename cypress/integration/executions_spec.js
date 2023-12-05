@@ -463,7 +463,7 @@ describe('Dashboard Executions Page', () => {
       cy.get('#search').as('search-input');
       cy.get('@search-input').click().type(search).type('{enter}');
 
-      cy.get('.table__main-asset > a').click();
+      cy.get('.table__main-asset > a').click({ force: true });
 
       // Breakcrumb <Link> contain correct query params
       cy.get('.breadcrumb > :nth-child(2) > a')
