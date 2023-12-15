@@ -37,6 +37,17 @@ This version of the dashboard requires Cumulus API >= v18.1.0
 - **CUMULUS-3434**
   - Fixed `getGranuleRecoveryStatus` action to take granuleId and collectionId.
 
+## [v12.0.2] - 2023-12-13
+
+### Note
+
+This version of the dashboard requires Cumulus API v2 (Core version v16.x.x and v17.x.x)
+
+### Fixed
+
+- **CUMULUS-3265**
+  - Fixed bulk granule operation modal to correctly pass selected granules into bulk operation
+
 ## [v12.0.1] - 2023-05-25
 
 ### Breaking Changes
@@ -1359,7 +1370,8 @@ Fix for serving the dashboard through the Cumulus API.
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
   [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v12.1.0...HEAD
-  [v12.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.1...v12.1.0
+  [v12.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.2...v12.1.0
+  [v12.0.2]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.1...v12.0.2
   [v12.0.1]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.0...v12.0.1
   [v12.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v11.0.0...v12.0.0
   [v11.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v10.0.0...v11.0.0
