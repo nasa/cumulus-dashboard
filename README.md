@@ -410,6 +410,7 @@ e.g.:
 ### 2. Create a new branch for the release
 
 Create a new release branch off of the tag, and name the branch `release-vMAJOR.MINOR.x` (e.g. `release-v12.0.x`).
+
 Note: If we already have the branch from prior backports, check out that branch instead of creating a new one.
 
 ```shell
@@ -420,16 +421,18 @@ e.g.:
 ```
 
 ### 3. Cherry pick the commits relevant to the backport
-
+```shell
 git cherry-pick [replace-with-commit-SHA]
+```
 
 ### 4. Update the version number
 
 When changes are ready to be released, the version number must be updated in `package.json`.
 
-### 5. bamboo testing
+### 5. Bamboo build
 
 Commit all changes and push the release branch (e.g. `release-1.2.x`) to GitHub.
+
 Configure Bamboo to run automated tests against this branch by finding the branch plan for the release branch (`release-1.2.x`) and setting variables:
   - `GIT_PR`: `true`
 
