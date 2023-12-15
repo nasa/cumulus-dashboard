@@ -11,6 +11,7 @@ Code to generate and deploy the dashboard for the Cumulus API.
 - [Deployment](#deployment)
 - [Testing](#testing)
 - [Create a Dashboard Release](#create-a-dashboard-release)
+- [Create a Backport Dashboard Release](#create-a-backport-dashboard-release)
 
 
 Other pages:
@@ -400,22 +401,22 @@ It is likely that no branch plan will exist for the `master` branch.
 ### 1. Checkout the tag of the release we want to patch to
 
 ```shell
-    git checkout vMAJOR.MINOR.PATCH
+  git checkout vMAJOR.MINOR.PATCH
 
 e.g.:
-    git checkout v12.0.1
+  git checkout v12.0.1
 ```
 
 ### 2. Create a new branch for the release
 
-Create a new release branch off of the tag, naming the branch `release-vMAJOR.MINOR.x` (e.g. `release-v12.0.x`).
+Create a new release branch off of the tag, and name the branch `release-vMAJOR.MINOR.x` (e.g. `release-v12.0.x`).
 Note: If we already have the branch from prior backports, check out that branch instead of creating a new one.
 
 ```shell
-    git checkout -b release-vMAJOR.MINOR.x vMAJOR.MINOR.PATCH
+  git checkout -b release-vMAJOR.MINOR.x vMAJOR.MINOR.PATCH
 
 e.g.:
-    git checkout -b release-v12.0.x v12.0.1
+  git checkout -b release-v12.0.x v12.0.1
 ```
 
 ### 3. Cherry pick the commits relevant to the backport
@@ -430,16 +431,15 @@ When changes are ready to be released, the version number must be updated in `pa
 
 Commit all changes and push the release branch (e.g. `release-1.2.x`) to GitHub.
 Configure Bamboo to run automated tests against this branch by finding the branch plan for the release branch (`release-1.2.x`) and setting variables:
-    - `GIT_PR`: `true`
+  - `GIT_PR`: `true`
 
 ### 6. Manual testing
 
-Test the dashboard against a live API deployed with the latest Cumulus packages. The dashboard should be served from an S3 bucket through the [`/dashboard` API endpoint](https://nasa.github.io/cumulus-api/#serve-the-dashboard-from-a-bucket).
+See instruction in [Create a Dashboard Release](#create-a-dashboard-release)
 
 ### 7. Create a git tag for the release
 
 Push a new release tag to Github. The tag should be in the format `v1.2.3`, where `1.2.3` is the new version.  After the tag is created, you can create a new release from github.
-
 Create and push a new git tag:
 
 ```shell
@@ -448,8 +448,6 @@ Create and push a new git tag:
 ```
 
 ### 8. Add the release to GitHub
-
-Follow the [Github documentation to create a new release](https://help.github.com/articles/creating-releases/) for the dashboard using the tag that you just pushed. Make sure to use the content from the CHANGELOG for this release as the description of the release on GitHub.
 
 ### 9. Merge changelog to the develop branch
 
