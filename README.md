@@ -422,7 +422,7 @@ e.g.:
 
 ### 3. Cherry pick the commits relevant to the backport
 ```shell
-git cherry-pick [replace-with-commit-SHA]
+  git cherry-pick [replace-with-commit-SHA]
 ```
 
 ### 4. Update the version number
