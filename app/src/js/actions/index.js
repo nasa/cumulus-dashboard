@@ -99,7 +99,7 @@ export const checkApiVersion = () => (dispatch, getState) => {
     dispatch({
       type: types.API_VERSION_INCOMPATIBLE,
       payload: {
-        warning: `This dashboard is incompatible with the current Cumulus API v.${versionNumber}.  This dashboard requires a Cumulus API of v.${minCompatibleApiVersion} or later.`
+        warning: `This dashboard is incompatible with the current Cumulus API v${versionNumber}.  This dashboard requires a Cumulus API of v${minCompatibleApiVersion} or later.`
       }
     });
   }
