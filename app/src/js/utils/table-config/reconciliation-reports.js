@@ -292,6 +292,7 @@ export const tableColumnsBackup = ({ reportType, reportName }) => ([
 ]);
 
 const fileLink = (bucket, key) => `https://${bucket}.s3.amazonaws.com/${key}`;
+// * es-lint disable react/prop-types */
 export const tableColumnsGranuleConflictDetails = ({ reportType }) => {
   const checkButton = <button className='button button__row button__row--check'/>;
   const orcaBackupColumns = [
@@ -299,6 +300,8 @@ export const tableColumnsGranuleConflictDetails = ({ reportType }) => {
       Header: 'In Orca Only',
       id: 'onlyInOrca',
       accessor: 'reason',
+      // TODO: Updated ES lint rules caused a changeset-unrelated violation - this should be fixed
+      // eslint-disable-next-line react/prop-types
       Cell: ({ cell: { value } }) => (
         (value === 'onlyInOrca') ? checkButton : nullValue
       ),
@@ -308,6 +311,8 @@ export const tableColumnsGranuleConflictDetails = ({ reportType }) => {
       Header: 'Should Be Excluded From Orca',
       id: 'shouldBeExcludedFromOrca',
       accessor: 'reason',
+      // TODO: Updated ES lint rules caused a changeset-unrelated violation - this should be fixed
+      // eslint-disable-next-line react/prop-types
       Cell: ({ cell: { value } }) => (
         (value === 'shouldBeExcludedFromOrca') ? checkButton : nullValue
       ),
@@ -335,6 +340,8 @@ export const tableColumnsGranuleConflictDetails = ({ reportType }) => {
       Header: 'In Cumulus Only',
       id: 'onlyInCumulus',
       accessor: 'reason',
+      // TODO: Updated ES lint rules caused a changeset-unrelated violation - this should be fixed
+      // eslint-disable-next-line react/prop-types
       Cell: ({ cell: { value } }) => (
         (value === 'onlyInCumulus') ? checkButton : nullValue
       ),

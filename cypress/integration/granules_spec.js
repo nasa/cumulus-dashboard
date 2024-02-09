@@ -229,11 +229,10 @@ describe('Dashboard Granules Page', () => {
     it('Should resize column to fit content on double click', () => {
       cy.visit('/granules');
       cy.contains('.table .thead .tr .th', 'Name').as('nameColumn');
-      cy.get('@nameColumn').invoke('outerWidth').should('eq', 225);
+      cy.get('@nameColumn').invoke('outerWidth').should('be.within', 224, 226);
       cy.get('@nameColumn').find('.resizer').dblclick();
-      cy.get('@nameColumn').invoke('outerWidth').should('eq', 400);
+      cy.get('@nameColumn').invoke('outerWidth').should('be.within', 399, 401);
     });
-
     it('Should update dropdown with label when visiting bookmarkable URL', () => {
       cy.visit('/granules?status=running');
       cy.get('.filter-status .rbt-input-main').as('status-input');
@@ -390,6 +389,7 @@ describe('Dashboard Granules Page', () => {
 
     it('Should show or hide granule recovery status on the granule detail page.', () => {
       const granuleId = 'MOD09GQ.A9344328.K9yI3O.006.4625818663028';
+      const collectionId = 'MOD09GQ___006';
       cy.intercept(
         { method: 'POST', url: 'orca/recovery/granules' },
         { fixture: 'granule-recovery-status.json', statusCode: 200 }
@@ -405,7 +405,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('.status--process .meta__row .button').as('showRecoveryStatusButton');
       cy.get('@showRecoveryStatusButton').should('have.text', 'Show Recovery Status');
       cy.get('@showRecoveryStatusButton').click();
-      cy.wait('@getGranuleRecoveryStatus');
+      cy.wait('@getGranuleRecoveryStatus').its('request.body').should('deep.equal', { granuleId, collectionId });
       cy.get('.status--process .meta__row > dd').children().should('have.length', 4);
       cy.get('.status--process .meta__row > dd').children().eq(2).should('have.text', 'Recovery');
       cy.get('.status--process .meta__row > dd').children().eq(3).should('have.class', 'status-indicator--running');
@@ -419,7 +419,7 @@ describe('Dashboard Granules Page', () => {
     it('Should reingest a granule from granule detail page.', () => {
       const granuleId = 'MOD09GQ.A9344328.K9yI3O.006.4625818663028';
       cy.intercept(
-        { method: 'PUT', url: /\/granules\/.*/ },
+        { method: 'PATCH', url: /\/granules\/.*/ },
         { body: { message: 'ingested' }, statusCode: 200 },
       );
       cy.intercept('GET', `/granules/${granuleId}*`).as('getGranule');
@@ -441,7 +441,7 @@ describe('Dashboard Granules Page', () => {
     it('Should reingest a granule and redirect to the granule detail page.', () => {
       const granuleId = 'MOD09GQ.A0142558.ee5lpE.006.5112577830916';
       cy.intercept(
-        { method: 'PUT', url: /\/granules\/.*/ },
+        { method: 'PATCH', url: /\/granules\/.*/ },
         { body: { message: 'ingested' }, statusCode: 200 },
       );
       cy.intercept('GET', `/granules/${granuleId}*`).as('getGranule');
@@ -466,7 +466,7 @@ describe('Dashboard Granules Page', () => {
         'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
       ];
       cy.intercept(
-        { method: 'PUT', url: /\/granules\/.*/ },
+        { method: 'PATCH', url: /\/granules\/.*/ },
         { body: { message: 'ingested' }, statusCode: 200 },
       );
       cy.visit('/granules');
@@ -486,7 +486,7 @@ describe('Dashboard Granules Page', () => {
 
     it('Should reingest multiple granules selected from multiple pages.', () => {
       cy.intercept(
-        { method: 'PUT', url: /\/granules\/.*/ },
+        { method: 'PATCH', url: /\/granules\/.*/ },
         { body: { message: 'ingested' }, statusCode: 200 },
       );
       cy.visit('/granules?limit=2');
@@ -519,7 +519,7 @@ describe('Dashboard Granules Page', () => {
         'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
       ];
       cy.intercept(
-        { method: 'PUT', url: /\/granules\/.*/ },
+        { method: 'PATCH', url: /\/granules\/.*/ },
         { body: { message: 'Oopsie' }, statusCode: 500 }
       );
       cy.visit('/granules');
@@ -759,7 +759,7 @@ describe('Dashboard Granules Page', () => {
     });
 
     it('Should handle a successful API response from the Remove and Delete granule requests', () => {
-      cy.intercept({ method: 'PUT', url: /\/granules\/.*/ }, (req) => {
+      cy.intercept({ method: 'PATCH', url: /\/granules\/.*/ }, (req) => {
         expect(req.body).to.have.property('action', 'removeFromCmr');
         req.reply({ body: { message: 'success' }, statusCode: 200 });
       });

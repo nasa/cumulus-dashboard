@@ -182,13 +182,13 @@ export const getGranule = (granuleId, params) => ({
   }
 });
 
-export const getGranuleRecoveryStatus = (granuleId) => ({
+export const getGranuleRecoveryStatus = (granuleId, collectionId) => ({
   [CALL_API]: {
     type: types.RECOVERY_GRANULE,
     method: 'POST',
     id: granuleId,
     path: 'orca/recovery/granules',
-    data: { granuleId }
+    data: { granuleId, collectionId }
   }
 });
 
@@ -204,18 +204,6 @@ export const listGranules = (options) => (dispatch, getState) => {
     }
   });
 };
-
-export const reprocessGranule = (granuleId) => ({
-  [CALL_API]: {
-    type: types.GRANULE_REPROCESS,
-    method: 'PUT',
-    id: granuleId,
-    path: `granules/${granuleId}`,
-    data: {
-      action: 'reprocess'
-    }
-  }
-});
 
 export const applyWorkflowToCollection = (name, version, workflow) => ({
   [CALL_API]: {
@@ -252,13 +240,16 @@ export const applyRecoveryWorkflowToCollection = (collectionId) => (dispatch) =>
 export const applyWorkflowToGranule = (granuleId, workflow, meta) => ({
   [CALL_API]: {
     type: types.GRANULE_APPLYWORKFLOW,
-    method: 'PUT',
+    method: 'PATCH',
     id: granuleId,
     path: `granules/${granuleId}`,
     data: {
       action: 'applyWorkflow',
       workflow,
       meta
+    },
+    headers: {
+      'Cumulus-API-Version': '2',
     }
   }
 });
@@ -293,12 +284,15 @@ export const applyRecoveryWorkflowToGranule = (granuleId) => (dispatch) => dispa
 export const reingestGranule = (granuleId, meta) => ({
   [CALL_API]: {
     type: types.GRANULE_REINGEST,
-    method: 'PUT',
+    method: 'PATCH',
     id: granuleId,
     path: `granules/${granuleId}`,
     data: {
       action: 'reingest',
       ...meta,
+    },
+    headers: {
+      'Cumulus-API-Version': '2',
     }
   }
 });
@@ -311,11 +305,14 @@ export const reingestGranuleClearError = (granuleId) => ({
 export const removeGranule = (granuleId) => ({
   [CALL_API]: {
     type: types.GRANULE_REMOVE,
-    method: 'PUT',
+    method: 'PATCH',
     id: granuleId,
     path: `granules/${granuleId}`,
     data: {
       action: 'removeFromCmr'
+    },
+    headers: {
+      'Cumulus-API-Version': '2',
     }
   }
 });
@@ -761,7 +758,10 @@ export const updateRule = (payload) => ({
     type: types.UPDATE_RULE,
     method: 'PUT',
     path: `rules/${payload.name}`,
-    data: payload
+    data: payload,
+    headers: {
+      'Cumulus-API-Version': '2',
+    }
   }
 });
 
@@ -798,6 +798,9 @@ export const enableRule = (payload) => {
       data: {
         ...rule,
         state: 'ENABLED'
+      },
+      headers: {
+        'Cumulus-API-Version': '2',
       }
     }
   };
@@ -815,6 +818,9 @@ export const disableRule = (payload) => {
       data: {
         ...rule,
         state: 'DISABLED'
+      },
+      headers: {
+        'Cumulus-API-Version': '2',
       }
     }
   };
@@ -829,6 +835,9 @@ export const rerunRule = (payload) => ({
     data: {
       ...payload,
       action: 'rerun'
+    },
+    headers: {
+      'Cumulus-API-Version': '2',
     }
   }
 });

@@ -7,6 +7,62 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- **CUMULUS-3502**
+  - Upgraded localstack to v3.0.0
+  - Bumped node version from 14.19.1 to 16.19.0 to match Core
+  - Upgrade postgres image to 11.13-alpine
+  - Updated the dashboard to use alpha version `@cumulus/api@18.2.0-alpha.0` and
+    `@cumulus/aws-client@18.2.0-alpha.0` to work with localstack v3.0.0
+
+## [v12.1.0] - 2023-10-27
+
+### Breaking Changes
+
+This version of the dashboard requires Cumulus API >= v18.1.0
+
+### Changed
+
+- **CUMULUS-3095**
+  - Updated all PUT /rules/${ruleName} actions to supply the required `Cumulus-API-Version` headers
+  - Updates the dashboard to use alpha version `@cumulus/api@18.0.1-alpha.1` for testing.
+- **CICD updates**
+  - Switched `docker-compose` commands to `docker compose`
+
+### Fixed
+
+- **CUMULUS-3265**
+  - Fixed bulk granule operation modal to correctly pass selected granules into bulk operation
+- **CUMULUS-3434**
+  - Fixed `getGranuleRecoveryStatus` action to take granuleId and collectionId.
+
+## [v12.0.2] - 2023-12-13
+
+### Note
+
+This version of the dashboard requires Cumulus API v2 (Core version v16.x.x and v17.x.x)
+
+### Fixed
+
+- **CUMULUS-3265**
+  - Fixed bulk granule operation modal to correctly pass selected granules into bulk operation
+
+## [v12.0.1] - 2023-05-25
+
+### Breaking Changes
+
+This version of the dashboard requires Cumulus API v2 (Core version >= v16.0.0)
+
+### Changed
+
+- **CUMULUS-3092**
+  - Updated all PUT /granules/${granuleId} actions to use PATCH and supply the
+  required `Cumulus-API-Version` headers implemented in CUMULUS-3072
+  - Removed unused `reprocessGranule` action method
+- **CUMULUS-3299**
+  - Docs: Update and fix links that reference the docs after Docusaurus upgrade
+
 ## [v12.0.0] - 2023-01-23
 
 ## Breaking Changes
@@ -1313,7 +1369,10 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
-  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.0...HEAD
+  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v12.1.0...HEAD
+  [v12.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.2...v12.1.0
+  [v12.0.2]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.1...v12.0.2
+  [v12.0.1]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.0...v12.0.1
   [v12.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v11.0.0...v12.0.0
   [v11.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v10.0.0...v11.0.0
   [v10.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v9.0.0...v10.0.0

@@ -46,8 +46,8 @@ describe('Dashboard Providers Page', () => {
         'Host',
       ];
       const expectedFieldsAuth = ['Port', 'Username', 'Password'];
-      const expectedFieldsHttp = ['Allowed Redirects', 'S3 URI For Custom SSL Certificate'];
-      const expectedFieldsSftp = ['Private Key', 'AWS KMS Customer Master Key ARN Or Alias'];
+      const expectedFieldsHttp = ['Allowed redirects', 'S3 URI for custom SSL certificate'];
+      const expectedFieldsSftp = ['Private Key', 'AWS KMS Customer Master Key arn or alias'];
 
       it('should go to add providers page', () => {
         cy.visit('/providers');

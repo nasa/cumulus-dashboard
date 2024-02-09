@@ -26,32 +26,35 @@ const getRequestAsyncOpId = (request) => get(request, ['data', 'id']);
 const isStatusInflight = (status) => status === 'inflight';
 const isStatusSuccess = (status) => status === 'success';
 
+const granulesOrQueryDescription = 'add either an array of granule objects in the form:\n { "granuleId": "(value)", "collectionId": "(value)" } or an elasticsearch query and index.';
+const granulesOrQueryText = `In the box below, ${granulesOrQueryDescription}`;
+
 const bulkOperationsDefaultQuery = {
   workflowName: '',
   index: '',
   query: '',
-  ids: [],
+  granules: [],
   meta: {}
 };
 
 const bulkDeleteDefaultQuery = {
   index: '',
   query: '',
-  ids: [],
+  granules: [],
   forceRemoveFromCmr: false
 };
 
 const bulkReingestDefaultQuery = {
   index: '',
   query: '',
-  ids: []
+  granules: []
 };
 
 const bulkRecoveryDefaultQuery = {
   workflowName: '',
   index: '',
   query: '',
-  ids: []
+  granules: []
 };
 
 const BulkGranule = ({
@@ -268,7 +271,7 @@ const BulkGranule = ({
           <h4 className="modal_subtitle">To run and complete your bulk granule task:</h4>
           <ol>
             <li>In the box below, enter the <strong>workflowName</strong>.</li>
-            <li>Then add either an array of granule Ids or an elasticsearch query and index.</li>
+            <li>Then {granulesOrQueryText}</li>
           </ol>
         </BulkGranuleModal>
         <BulkGranuleModal
@@ -293,7 +296,7 @@ const BulkGranule = ({
         >
           <h4 className="modal_subtitle">To run and complete your bulk delete task:</h4>
           <ol>
-            <li>In the box below, add either an array of granule Ids or an elasticsearch query and index.</li>
+            <li>{granulesOrQueryText}</li>
             <li>Set <strong>forceRemoveFromCmr</strong> to <strong>true</strong> to automatically have granules
             removed from CMR as part of deletion.
             If <strong>forceRemoveFromCmr</strong> is <strong>false</strong>, then the bulk granule deletion will
@@ -325,7 +328,7 @@ const BulkGranule = ({
         >
           <h4 className="modal_subtitle">To run and complete your bulk reingest task:</h4>
           <ol>
-            <li>In the box below, add either an array of granule Ids or an elasticsearch query and index.</li>
+            <li>{granulesOrQueryText}.</li>
             <li>Then select workflow to rerun for all the selected granules. The workflows listed are the
               intersection of the selected granules' workflows.</li>
           </ol>
@@ -353,9 +356,8 @@ const BulkGranule = ({
         >
           <h4 className="modal_subtitle">To run and complete your bulk granule task:</h4>
           <ol>
-            <li>In the box below, enter the workflowName.</li>
-            <li>Then add either an array of granule Ids or an Elasticsearch query and
-              index (<i>see below</i>).</li>
+            <li>In the box below, enter the <strong>workflowName</strong>.</li>
+            <li>Then {granulesOrQueryText} (<i>see below</i>).</li>
           </ol>
         </BulkGranuleModal>
         }

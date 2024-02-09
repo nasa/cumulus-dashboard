@@ -14,7 +14,7 @@ DIST="$(pwd)/dist"
 echo "Cleaning $DIST directory"
 rm -rf $DIST && mkdir $DIST
 
-TAG=${TAG} docker-compose -f docker/docker-compose.yml build build
+TAG=${TAG} docker compose -f docker/docker-compose.yml build build
 docker create --name dashboard-build-container dashboard-build:${TAG}
 docker cp dashboard-build-container:/cumulus-dashboard/dist/. ./dist
 docker rm dashboard-build-container

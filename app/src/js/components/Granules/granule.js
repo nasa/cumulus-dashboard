@@ -213,10 +213,11 @@ class GranuleOverview extends React.Component {
 
   toggleShowRecoveryStatus() {
     const { granuleId } = this.props.match.params;
+    const collectionId = get(this.props.granules.map, [granuleId, 'data', 'collectionId']);
     const newState = !this.state.showRecoveryStatus;
     this.setState({ showRecoveryStatus: newState });
     if (newState) {
-      this.props.dispatch(getGranuleRecoveryStatus(granuleId));
+      this.props.dispatch(getGranuleRecoveryStatus(granuleId, collectionId));
     }
   }
 
