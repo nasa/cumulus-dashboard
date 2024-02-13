@@ -1,8 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-// import dagre from 'dagre-d3';
-// import * as d3Base from 'd3';
-// import * as d3Dag from 'd3-dag';
 import * as d3 from 'd3';
 import * as dagreD3 from 'dagre-d3-es';
 import Modal from 'react-bootstrap/Modal';
@@ -15,8 +12,6 @@ import {
   draw
 } from './execution-graph-utils';
 import { window } from '../../utils/browser';
-
-// const d3 = { ...d3Base, ...d3Dag };
 
 // dagre-d3 expects d3 to be attached to the window
 if (process.env.NODE_ENV !== 'test') window.d3 = d3;
@@ -35,40 +30,6 @@ const ExecutionStatusGraph = ({ executionStatus }) => {
     g.current = draw(graph);
     renderGraph('.visual', g);
   }, [executionHistory, stateMachine.definition]);
-
-  // This function sorts the nodes from left to right
-  // function sorted(layers) {
-  //   // console.log('lay',layers[0][0].data.node.data.data);
-  //   const dataLayers = layers[0][0].data.node.data.data;
-  //   for (let i = 0; i < dataLayers.length; i++) {
-  //     console.log('layi',dataLayers[i]);
-  //     dataLayers[i].sort((a, b) => {
-  //       const aVal = a.data.node.data.data[i].id;
-  //       const bVal = b.data.node.data.data[i].id;
-  //       return aVal - bVal;
-  //     });
-  //   }
-  //   return dataLayers;
-  // }
-
-  // const decro = function (layers) {
-  //   console.log('lay', sorted(layers));
-  //   sorted(layers);
-  // };
-
-  // function renderGraph (svgSelector) {
-  //   const nodeRadius = 20;
-  //   const layout = d3
-  //     .sugiyama() // base layout
-  //     .layering(d3.layeringSimplex())
-  //     .decross(decro)
-  //     .nodeSize(() => [3 * nodeRadius, 3 * nodeRadius]);
-  //   const { width, height } = layout(g);
-  //   // // const render = new dagre.render()
-  //   const svg = d3.select(svgSelector);
-  //   svg.attr('viewBox', [0, 0, width * 1.5, height * 1.5].join(' '));
-  //   // const defs = svg.append('defs'); // For gradients
-  // }
 
   function renderGraph(svgSelector) {
     const render = new dagreD3.render();
