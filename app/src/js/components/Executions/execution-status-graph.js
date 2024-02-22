@@ -25,7 +25,6 @@ const ExecutionStatusGraph = ({ executionStatus }) => {
     const workflow = JSON.parse(stateMachine.definition);
     const events = getExecutionEvents(executionHistory);
     const graph = workflowToGraph(workflow);
-    console.log('graph', graph);
     addEventsToGraph(events, graph);
     g.current = draw(graph);
     renderGraph('.visual', g);
