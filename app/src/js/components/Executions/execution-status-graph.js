@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import dagre from 'dagre-d3';
 import * as d3 from 'd3';
+import * as dagreD3 from 'dagre-d3-es';
 import Modal from 'react-bootstrap/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
@@ -30,8 +30,8 @@ const ExecutionStatusGraph = ({ executionStatus }) => {
     renderGraph('.visual', g);
   }, [executionHistory, stateMachine.definition]);
 
-  function renderGraph (svgSelector) {
-    const render = new dagre.render();
+  function renderGraph(svgSelector) {
+    const render = new dagreD3.render();
     const svg = d3.select(svgSelector);
     render(svg, g.current);
     const { height } = d3.select(`${svgSelector} g`).node().getBBox();

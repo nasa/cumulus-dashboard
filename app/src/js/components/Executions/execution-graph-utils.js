@@ -1,4 +1,4 @@
-import dagre from 'dagre-d3';
+import * as dagreD3 from 'dagre-d3-es';
 
 export const select = (arr, predOrProp) => {
   let predicate = predOrProp;
@@ -28,7 +28,7 @@ export const setParent = (g, child, parent) => {
 };
 
 export const draw = (graph) => {
-  const g = new dagre.graphlib.Graph({ compound: true })
+  const g = new dagreD3.graphlib.Graph({ compound: true })
     .setGraph({})
     .setDefaultEdgeLabel(() => ({}));
 

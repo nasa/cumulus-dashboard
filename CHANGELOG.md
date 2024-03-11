@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Updated the dashboard to use alpha version `@cumulus/api@18.2.0-alpha.0` and
     `@cumulus/aws-client@18.2.0-alpha.0` to work with localstack v3.0.0
 
+- **CUMULUS-3184**
+  - Replaced dagre-d3 with dagre-d3-es to address the d3-color vulnerability
+  - Upgraded d3 to v7.2.0 to be compatible with dagre-d3-es v7.0.10
+
 ## [v12.1.0] - 2023-10-27
 
 ### Breaking Changes
