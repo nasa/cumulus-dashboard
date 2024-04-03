@@ -8,7 +8,7 @@ const deploymentConfig = require('./config');
 const baseConfig = {
   environment: 'development',
   requireEarthdataLogin: false,
-  minCompatibleApiVersion: 'change-me',
+  minCompatibleApiVersion: '18.2.0',
   oauthMethod: 'earthdata',
 
   graphicsPath: '/src/assets/images/',
