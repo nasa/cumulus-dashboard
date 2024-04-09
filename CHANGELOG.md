@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+This version of the dashboard requires Cumulus API >= v18.2.0
+
 ### Changed
 
 - **CUMULUS-3502**
@@ -15,6 +17,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Upgrade postgres image to 11.13-alpine
   - Updated the dashboard to use alpha version `@cumulus/api@18.2.0-alpha.0` and
     `@cumulus/aws-client@18.2.0-alpha.0` to work with localstack v3.0.0
+- **Snyk Security Fix**
+  - Upgraded axios from 1.6.0 to 1.6.8
 
 ## [v12.1.0] - 2023-10-27
 
