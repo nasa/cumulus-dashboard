@@ -16,7 +16,8 @@ const Footer = ({
   const leftSideLinks = [
     { text: 'FOIA', url: 'https://www.nasa.gov/FOIA/index.html' },
     { text: 'Privacy', url: 'https://www.nasa.gov/about/highlights/HP_Privacy.html' },
-    { text: 'Feedback', url: 'https://github.com/nasa/cumulus-dashboard/issues' }
+    { text: 'Feedback', url: 'https://github.com/nasa/cumulus-dashboard/issues' },
+    { text: 'Accessibility', url: 'https://www.nasa.gov/accessibility/' }
   ];
 
   const rightSideLinks = [
