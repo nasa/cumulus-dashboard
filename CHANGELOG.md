@@ -11,6 +11,10 @@ This version of the dashboard requires Cumulus API >= v18.2.0
 
 ### Changed
 
+- **CUMULUS-3619**
+    - Added Accessibility link to footer
+    - Modified unit tests to accomodate new changes.
+
 - **CUMULUS-3502**
   - Upgraded localstack to v3.0.0
   - Bumped node version from 14.19.1 to 16.19.0 to match Core
