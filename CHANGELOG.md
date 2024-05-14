@@ -25,6 +25,8 @@ This version of the dashboard requires Cumulus API >= v18.2.0
   - Upgraded axios from 1.6.0 to 1.6.8
 - **CUMULUS-3662**
   - Upgrade node dependencies that were CommonJS(CJS) to ECMAScript Modules(ESM)
+- **CUMULUS-3659**
+  - Change configuration files to work with ECMAScript Modules(ESM)
 
 ## [v12.1.0] - 2023-10-27
 
