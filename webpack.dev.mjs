@@ -3,7 +3,7 @@ const { mergeWithRules } = require('webpack-merge');
 const path = require('path');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
-const CommonConfig = require('./webpack.common');
+const CommonConfig = require('./webpack.common.mjs');
 
 const DevConfig = mergeWithRules({
   devtool: 'replace',

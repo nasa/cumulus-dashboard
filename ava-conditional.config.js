@@ -1,7 +1,5 @@
-const baseConfig = require('./ava.config.cjs');
-
-module.exports = {
-  ...baseConfig,
+export default {
+  require: ['./ava.config.js'],
   files: ['test/**/condition*', '!node_modules/', '!test/fixtures/**/*'],
   environmentVariables: {
     HIDE_PDR: 'false',
