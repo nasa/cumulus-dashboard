@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   presets: [
     [
       '@babel/preset-env', {
@@ -13,6 +13,9 @@ module.exports = {
   plugins: [
     '@babel/plugin-syntax-jsx',
     '@babel/plugin-transform-runtime',
-    ...process.env.NODE_ENV === 'test' && !process.env.CYPRESS_TESTING ? ['babel-plugin-rewire'] : []
+   {
+    tests:
+      process.env.NODE_ENV === 'test' && !process.env.CYPRESS_TESTING ? ['babel-plugin-rewire'] : []
+   }
   ]
 };
