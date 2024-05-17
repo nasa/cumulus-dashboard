@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   babel: {
     testOptions: {
       plugins: [

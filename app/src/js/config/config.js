@@ -11,7 +11,7 @@ function computeBool (value, defaultValue) {
   return value && value.toLowerCase() === 'true';
 }
 
-const config = {
+export default config = {
   target: process.env.DAAC_NAME || 'local',
   environment: process.env.STAGE || 'development',
   nav: {
@@ -30,4 +30,3 @@ const config = {
   servedByCumulusAPI: computeBool(process.env.SERVED_BY_CUMULUS_API, '')
 };
 
-module.exports = config;
