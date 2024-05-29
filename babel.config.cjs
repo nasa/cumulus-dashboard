@@ -1,5 +1,7 @@
-export default {
-  presets: [
+module.exports = function (api) {
+  api.cache(true);
+
+  const presets = [
     [
       '@babel/preset-env', {
         targets: {
@@ -9,14 +11,17 @@ export default {
       }
     ],
     '@babel/preset-react'
-  ],
-  plugins: [
+  ];
+
+  const plugins = [
     '@babel/plugin-syntax-jsx',
     '@babel/plugin-transform-runtime',
     'transform-commonjs',
-    {
-      tests:
-      process.env.NODE_ENV === 'test' && !process.env.CYPRESS_TESTING ? ['babel-plugin-rewire'] : []
-    }
-  ]
+    ...process.env.NODE_ENV === 'test' && !process.env.CYPRESS_TESTING ? ['babel-plugin-rewire'] : []
+  ];
+
+  return {
+    presets,
+    plugins
+  };
 };

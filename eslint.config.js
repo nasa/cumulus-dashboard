@@ -13,8 +13,66 @@ import babelParser from '@babel/eslint-parser';
 
 export default [
   {
-    files: ['**/*.js'],
-    rules: js.configs.recommended.rules,
+    files: ['**/*.js', '**/*.jsx'],
+    // global rules
+    rules: { 
+      ...js.configs.recommended.rules,
+
+      // Rule Meaning: 0 - rule off, 1 - rule on as a warning (doesn't affect exit code), 2 - rule on as an error (exit code is 1 when triggered)
+      'comma-dangle': [2, 'only-multiline'],
+      'space-before-function-paren': [
+        1, { anonymous: 'ignore', named: 'ignore', asyncArrow: 'ignore' },
+      ],
+      semi: [2, 'always'],
+      'no-extra-semi': 2,
+      'semi-spacing': [2, { before: false, after: true }],
+      'new-cap': [2, { properties: false }],
+      'react/jsx-no-duplicate-props': 2,
+      'react/jsx-no-undef': 2,
+      'react/jsx-uses-react': 2,
+      'react/jsx-uses-vars': 2,
+      'react/no-danger': 0,
+      'react/no-deprecated': 2,
+      'react/no-did-mount-set-state': 0,
+      'react/no-did-update-set-state': 0,
+      'react/no-direct-mutation-state': 2,
+      'react/no-is-mounted': 2,
+      'react/no-unknown-property': 2,
+      'react/prop-types': 2,
+      'react/react-in-jsx-scope': 2,
+      'react-hooks/rules-of-hooks': 2,
+      'react-hooks/exhaustive-deps': 1,
+      'eslint-comments/no-unused-disable': 1,
+      'eslint-comments/disable-enable-pair': [
+        'error',
+        { allowWholeFile: true },
+      ],
+      'import/no-extraneous-dependencies': 0,
+      'import/newline-after-import': 0,
+      'import/no-named-as-default': 0,
+      'import/no-unresolved': 2, // to handle cjs node modules to esm
+      'import/no-commonjs': 2, // to handle cjs node modules to esm
+      'import/extensions': [2, 'ignorePackages'], // to handle cjs node modules to esm
+      'lodash/import-scope': [2, 'method'],
+      'lodash/prefer-constant': 0,
+      'lodash/prefer-lodash-method': 0,
+      'lodash/prefer-lodash-typecheck': 0,
+      'no-param-reassign': ['error', { props: false }],
+      'class-methods-use-this': 0,
+      'consistent-return': 0,
+      'no-console': 0,
+      'max-len': [
+        2,
+        {
+          code: 120,
+          ignorePattern: 'https?:|JSON\\.parse|[Uu]rl =',
+          ignoreStrings: true,
+          ignoreTemplateLiterals: true,
+        },
+      ],
+      'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
+      'jsx-a11y/click-events-have-key-events': 0
+    },
   },
   // global ignores that replace .eslintignore for flat config
   {
@@ -33,9 +91,7 @@ export default [
       'react-hooks': reactHooks,
     },
   },
-  // global rules
   {
-    files: ['**/*.js', '**/*.jsx'],
     languageOptions: {
       parser: babelParser,
       parserOptions: {
@@ -56,62 +112,6 @@ export default [
         Cypress: true,
         expect: true,
       },
-    },
-    rules: {
-      'comma-dangle': ['error', 'only-multiline'],
-      'space-before-function-paren': [
-        'warn',
-        { anonymous: 'ignore', named: 'ignore', asyncArrow: 'ignore' },
-      ],
-      semi: ['error', 'always'],
-      'no-extra-semi': 2,
-      'semi-spacing': [2, { before: false, after: true }],
-      'new-cap': [2, { properties: false }],
-      'react/jsx-no-duplicate-props': 2,
-      'react/jsx-no-undef': 2,
-      'react/jsx-uses-react': 2,
-      'react/jsx-uses-vars': 2,
-      'react/no-danger': 0,
-      'react/no-deprecated': 2,
-      'react/no-did-mount-set-state': 0,
-      'react/no-did-update-set-state': 0,
-      'react/no-direct-mutation-state': 2,
-      'react/no-is-mounted': 2,
-      'react/no-unknown-property': 2,
-      'react/prop-types': 2,
-      'react/react-in-jsx-scope': 2,
-      'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'warn',
-      'eslint-comments/no-unused-disable': 'warn',
-      'eslint-comments/disable-enable-pair': [
-        'error',
-        { allowWholeFile: true },
-      ],
-      'import/no-extraneous-dependencies': 'off',
-      'import/newline-after-import': 'off',
-      'import/no-named-as-default': 'off',
-      'import/no-unresolved': 2, // to handle cjs node modules to esm
-      'import/no-commonjs': 2, // to handle cjs node modules to esm
-      'import/extensions': ['error', 'ignorePackages'], // to handle cjs node modules to esm
-      'lodash/import-scope': ['error', 'method'],
-      'lodash/prefer-constant': 'off',
-      'lodash/prefer-lodash-method': 'off',
-      'lodash/prefer-lodash-typecheck': 'off',
-      'no-param-reassign': ['error', { props: false }],
-      'class-methods-use-this': 'off',
-      'consistent-return': 'off',
-      'no-console': 'off',
-      'max-len': [
-        2,
-        {
-          code: 120,
-          ignorePattern: 'https?:|JSON\\.parse|[Uu]rl =',
-          ignoreStrings: true,
-          ignoreTemplateLiterals: true,
-        },
-      ],
-      'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
-      'jsx-a11y/click-events-have-key-events': 'off'
     },
     // Define React version settings
     settings: {
