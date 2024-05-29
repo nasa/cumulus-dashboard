@@ -1,23 +1,20 @@
 // New FlatConfig ESLint
 import js from '@eslint/js';
 import globals from 'globals';
-import airbnbBase from 'eslint-config-airbnb-base/recommended';
-import standard from 'eslint-config-standard/recommended';
-import eslintComments from 'eslint-plugin-eslint-comments/recommended';
-import importErrors from 'eslint-plugin-import/errors';
-import importWarnings from 'eslint-plugin-import/warnings';
-import lodash from 'eslint-plugin-lodash/recommended';
-import jsxAlly from 'eslint-plugin-jsx-a11y/recommended';
-import react from 'eslint-plugin-react/recommended';
-import reactHooks from 'eslint-plugin-react-hooks/recommended';
-import babelParser from '@babel/eslint-parser/recommended';
+import airbnbBase from 'eslint-config-airbnb-base';
+import standard from 'eslint-config-standard';
+import eslintComments from 'eslint-plugin-eslint-comments';
+import importPlugin from 'eslint-plugin-import';
+import lodash from 'eslint-plugin-lodash';
+import jsxAlly from 'eslint-plugin-jsx-a11y';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import babelParser from '@babel/eslint-parser';
 
 export default [
-    ...js.configs.recommended,
-    {
-      rules: {
-          semi: ["warn", "always"]
-      }
+  {
+    files: ['**/*.js'],
+    rules: js.configs.recommended.rules,
   },
   // global ignores that replace .eslintignore for flat config
   {
@@ -25,17 +22,16 @@ export default [
   },
   // declare imported configs
   {
-    plugins: [
-      airbnbBase,
-      standard,
-      eslintComments,
-      importErrors,
-      importWarnings,
-      lodash,
-      jsxAlly,
-      react,
-      reactHooks
-    ]
+    plugins: {
+      'airbnb-base': airbnbBase,
+      'standard': standard,
+      'eslint-comments': eslintComments,
+      'import': importPlugin,
+      'lodash': lodash,
+      'jsx-a11y': jsxAlly,
+      'react': react,
+      'react-hooks': reactHooks,
+    },
   },
   // global rules
   {
@@ -45,33 +41,29 @@ export default [
       parserOptions: {
         ecmaVersion: 'latest',
         ecmaFeatures: {
-          jsx: true
+          jsx: true,
         },
         allowImportExportEverywhere: true,
         sourceType: 'module', // to handle esm
         requireConfigFile: false,
         babelOptions: {
-          configFile: true
-        }
+          configFile: true,
+        },
       },
       globals: {
         ...globals.browser,
         cy: true,
         Cypress: true,
-        expect: true
+        expect: true,
       },
-      // Define React version settings
-      settings: {
-      react: {
-        pragma: 'React',
-        version: '17.0.2'
-      }
-  },
     },
     rules: {
       'comma-dangle': ['error', 'only-multiline'],
-      'space-before-function-paren': ['warn', { anonymous: 'ignore', named: 'ignore', asyncArrow: 'ignore' }],
-      'semi': ['error', 'always'],
+      'space-before-function-paren': [
+        'warn',
+        { anonymous: 'ignore', named: 'ignore', asyncArrow: 'ignore' },
+      ],
+      semi: ['error', 'always'],
       'no-extra-semi': 2,
       'semi-spacing': [2, { before: false, after: true }],
       'new-cap': [2, { properties: false }],
@@ -93,7 +85,7 @@ export default [
       'eslint-comments/no-unused-disable': 'warn',
       'eslint-comments/disable-enable-pair': [
         'error',
-        { allowWholeFile: true }
+        { allowWholeFile: true },
       ],
       'import/no-extraneous-dependencies': 'off',
       'import/newline-after-import': 'off',
@@ -113,16 +105,20 @@ export default [
         2,
         {
           code: 120,
-          ignorePattern: ('https?:|JSON\\.parse|[Uu]rl ='),
+          ignorePattern: 'https?:|JSON\\.parse|[Uu]rl =',
           ignoreStrings: true,
-          ignoreTemplateLiterals: true
-        }
+          ignoreTemplateLiterals: true,
+        },
       ],
       'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
-      'jsx-a11y/click-events-have-key-events': 'off',
-      'node/no-deprecated-api': 2,
-    }
+      'jsx-a11y/click-events-have-key-events': 'off'
+    },
+    // Define React version settings
+    settings: {
+      react: {
+        pragma: 'React',
+        version: '17.0.2',
+      },
+    },
   },
 ];
-
-
