@@ -29,4 +29,3 @@ export default config = {
   enableRecovery: computeBool(process.env.ENABLE_RECOVERY, false),
   servedByCumulusAPI: computeBool(process.env.SERVED_BY_CUMULUS_API, '')
 };
-

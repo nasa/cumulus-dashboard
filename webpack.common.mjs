@@ -3,9 +3,9 @@ import '@babel/register';
 import path from 'path';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import CopyWebpackPlugin from 'copy-webpack-plugin';
+import CopyPlugin from 'copy-webpack-plugin';
 
-import config from './app/src/js/config';
+import config from './app/src/js/config/config.js';
 
 export default CommonConfig = {
   target: 'web',
@@ -33,11 +33,11 @@ export default CommonConfig = {
       fs: false,
       net: false,
       tls: false,
-      console: import('console-browserify'),
-      path: import('path-browserify'),
-      stream: import('stream-browserify'),
-      crypto: import('crypto-browserify'),
-      util: import('util'),
+      console: require.resolve('console-browserify'),
+      path: require.resolve('path-browserify'),
+      stream: require.resolve('stream-browserify'),
+      crypto: require.resolve('crypto-browserify'),
+      util: require.resolve('util'),
     },
   },
   module: {
@@ -137,7 +137,7 @@ export default CommonConfig = {
       title: 'Cumulus Dashboard',
       favicon: './app/src/public/favicon.ico'
     }),
-    new CopyWebpackPlugin({
+    new CopyPlugin({
       patterns: [{ from: './app/src/public', to: './' }],
     }),
     new webpack.ProvidePlugin({
@@ -159,4 +159,3 @@ export default CommonConfig = {
     }),
   ],
 };
-

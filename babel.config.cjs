@@ -13,9 +13,10 @@ export default {
   plugins: [
     '@babel/plugin-syntax-jsx',
     '@babel/plugin-transform-runtime',
-   {
-    tests:
+    'transform-commonjs',
+    {
+      tests:
       process.env.NODE_ENV === 'test' && !process.env.CYPRESS_TESTING ? ['babel-plugin-rewire'] : []
-   }
+    }
   ]
 };

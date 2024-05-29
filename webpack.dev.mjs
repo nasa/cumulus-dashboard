@@ -43,4 +43,3 @@ export default DevConfig = mergeWithRules({
   },
   plugins: [new webpack.HotModuleReplacementPlugin(), new ESLintPlugin()],
 });
-
