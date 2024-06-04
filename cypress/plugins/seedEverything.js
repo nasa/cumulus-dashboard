@@ -1,27 +1,27 @@
-const { testUtils } = require('@cumulus/api');
-const { promiseS3Upload } = require('@cumulus/aws-client/S3');
-const fs = require('fs');
-const path = require('path');
-const CSV = require('csv-string');
-const serveUtils = require('@cumulus/api/bin/serveUtils');
-const { eraseDataStack } = require('@cumulus/api/bin/serve');
-const {
+import testUtils from '@cumulus/api';
+import promiseS3Upload from '@cumulus/aws-client/S3';
+import fs from 'fs';
+import path from 'path';
+import CSV from 'csv-string';
+import serveUtils from '@cumulus/api/bin/serveUtils';
+import eraseDataStack from '@cumulus/api/bin/serve';
+import {
   localUserName,
   localStackName,
   localSystemBucket,
-} = require('@cumulus/api/bin/local-test-defaults');
+} from '@cumulus/api/bin/local-test-defaults';
 
-const collections = require('../fixtures/seeds/collectionsFixture.json');
-const executions = require('../fixtures/seeds/executionsFixture.json');
-const granules = require('../fixtures/seeds/granulesFixture.json');
-const granulesExecutions = require('../fixtures/seeds/granulesExecutionsFixture.json');
-const providers = require('../fixtures/seeds/providersFixture.json');
-const rules = require('../fixtures/seeds/rulesFixture.json');
-const pdrs = require('../fixtures/seeds/pdrsFixture.json');
-const reconciliationReports = require('../fixtures/seeds/reconciliationReportFixture.json');
+import collections from '../fixtures/seeds/collectionsFixture.json';
+import executions from '../fixtures/seeds/executionsFixture.json';
+import granules from '../fixtures/seeds/granulesFixture.json';
+import granulesExecutions from '../fixtures/seeds/granulesExecutionsFixture.json';
+import providers from '../fixtures/seeds/providersFixture.json';
+import rules from '../fixtures/seeds/rulesFixture.json';
+import pdrs from '../fixtures/seeds/pdrsFixture.json';
+import reconciliationReports from '../fixtures/seeds/reconciliationReportFixture.json';
 const reconciliationReportDir = path.resolve(__dirname, '../fixtures/seeds/reconciliation-reports');
 
-function resetIt() {
+export function resetIt() {
   process.env.system_bucket = localSystemBucket;
   process.env.stackName = localStackName;
   process.env.ReconciliationReportsTable = `${localStackName}-ReconciliationReportsTable`;
@@ -61,7 +61,7 @@ function seedPdrs() {
   return serveUtils.addPdrs(pdrs.results);
 }
 
-function uploadReconciliationReportFiles() {
+export function uploadReconciliationReportFiles() {
   const reconcileReportList = fs
     .readdirSync(reconciliationReportDir)
     .map((f) => {
@@ -97,7 +97,7 @@ function seedGranulesExecutions() {
   return serveUtils.addGranules(updatedGranules);
 }
 
-function seedEverything() {
+export function seedEverything() {
   return Promise.all([
     resetIt()
       .then(seedProviders)
@@ -111,9 +111,3 @@ function seedEverything() {
     uploadReconciliationReportFiles(),
   ]);
 }
-
-module.exports = {
-  resetIt,
-  seedEverything,
-  uploadReconciliationReportFiles,
-};

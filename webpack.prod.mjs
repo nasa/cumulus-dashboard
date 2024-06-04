@@ -1,18 +1,18 @@
-const path = require('path');
-const { mergeWithRules } = require('webpack-merge');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const TerserJsPlugin = require('terser-webpack-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const pkg = require('./package.json');
+import path from 'path';
+import mergeWithRules from 'webpack-merge';
+import CleanWebpackPlugin from 'clean-webpack-plugin';
+import TerserJsPlugin from 'terser-webpack-plugin';
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import pkg from './package.json';
 
-const CommonConfig = require('./webpack.common');
+import CommonConfig from './webpack.common.mjs';
 
 const servedByCumulusAPI = process.env.SERVED_BY_CUMULUS_API;
 
 const publicPath = servedByCumulusAPI ? './' : '/';
 
-const MainConfig = mergeWithRules({
+export default MainConfig = mergeWithRules({
   devtool: 'replace',
   module: {
     rules: {
@@ -100,5 +100,3 @@ const MainConfig = mergeWithRules({
     }),
   ],
 });
-
-module.exports = MainConfig;
