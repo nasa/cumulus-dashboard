@@ -43,10 +43,10 @@ export default CommonConfig = {
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.m?(js|jsx)$/,
         exclude: [
           /node_modules\/(?!(map-obj|snakecase-keys|strict-uri-encode|fast-xml-parser)\/).*/,
-          /font-awesome.config.js/,
+          /font-awesome.config.mjs/,
         ],
         use: [
           {
@@ -118,7 +118,7 @@ export default CommonConfig = {
         },
       },
       {
-        test: /font-awesome\.config\.js/,
+        test: /font-awesome\.config\.mjs/,
         use: [
           {
             loader: 'style-loader',

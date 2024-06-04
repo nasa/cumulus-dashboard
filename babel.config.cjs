@@ -1,7 +1,5 @@
-module.exports = function (api) {
-  api.cache(true);
-
-  const presets = [
+module.exports = {
+  presets: [
     [
       '@babel/preset-env', {
         targets: {
@@ -11,17 +9,13 @@ module.exports = function (api) {
       }
     ],
     '@babel/preset-react'
-  ];
-
-  const plugins = [
+  ],
+  plugins: [
     '@babel/plugin-syntax-jsx',
     '@babel/plugin-transform-runtime',
-    'transform-commonjs',
+    ['transform-commonjs', {
+      'synchronousImport': true
+    }],
     ...process.env.NODE_ENV === 'test' && !process.env.CYPRESS_TESTING ? ['babel-plugin-rewire'] : []
-  ];
-
-  return {
-    presets,
-    plugins
-  };
+  ]
 };

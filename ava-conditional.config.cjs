@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   require: ['./ava.config.js'],
   files: ['test/**/condition*', '!node_modules/', '!test/fixtures/**/*'],
   environmentVariables: {
