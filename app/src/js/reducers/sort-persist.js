@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit';
 import {
   SORTS,
-} from '../actions/types';
+} from '../actions/types.js';
 
 export const initialState = {
   granulesTable: [],

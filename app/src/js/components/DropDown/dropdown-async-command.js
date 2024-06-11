@@ -2,8 +2,8 @@ import React from 'react';
 import c from 'classnames';
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
-import AsyncCommand from '../AsyncCommands/AsyncCommands';
-import { addGlobalListener } from '../../utils/browser';
+import AsyncCommand from '../AsyncCommands/AsyncCommands.js';
+import { addGlobalListener } from '../../utils/browser.js';
 
 class DropdownAsync extends React.Component {
   constructor () {

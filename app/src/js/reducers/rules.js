@@ -1,13 +1,13 @@
 import { createReducer } from '@reduxjs/toolkit';
-import assignDate from './utils/assign-date';
-import removeDeleted from './utils/remove-deleted';
+import assignDate from './utils/assign-date.js';
+import removeDeleted from './utils/remove-deleted.js';
 import {
   createClearItemReducer,
   createErrorReducer,
   createInflightReducer,
   createSerialReducer,
   createSuccessReducer,
-} from './utils/reducer-creators';
+} from './utils/reducer-creators.js';
 import {
   RULES,
   RULES_INFLIGHT,
@@ -38,7 +38,7 @@ import {
   CLEAR_RULES_SEARCH,
   FILTER_RULES,
   CLEAR_RULES_FILTER,
-} from '../actions/types';
+} from '../actions/types.js';
 
 export const initialState = {
   list: {

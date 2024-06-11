@@ -1,4 +1,4 @@
-import { window } from './browser';
+import { window } from './browser.js';
 
 export const set = (token) => {
   if (window && window.localStorage && typeof window.localStorage.setItem === 'function') {

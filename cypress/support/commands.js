@@ -25,7 +25,7 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 import 'cypress-wait-until';
 import cloneDeep from 'lodash/cloneDeep';
-import { DELETE_TOKEN, SET_TOKEN } from '../../app/src/js/actions/types';
+import { DELETE_TOKEN, SET_TOKEN } from '../../app/src/js/actions/types.js';
 
 Cypress.Commands.add('login', () => {
   const authUrl = `${Cypress.config('baseUrl')}/auth`;

@@ -4,16 +4,16 @@ import { withRouter, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
 import PropTypes from 'prop-types';
-import Sidebar from '../Sidebar/sidebar';
-import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
-import ExecutionOverview from './overview';
-import ExecutionStatus from './execution-status';
-import ExecutionLogs from './execution-logs';
-import ExecutionEvents from './execution-events';
-import ExecutionsList from './executions-list';
+import Sidebar from '../Sidebar/sidebar.js';
+import DatePickerHeader from '../DatePickerHeader/DatePickerHeader.js';
+import ExecutionOverview from './overview.js';
+import ExecutionStatus from './execution-status.js';
+import ExecutionLogs from './execution-logs.js';
+import ExecutionEvents from './execution-events.js';
+import ExecutionsList from './executions-list.js';
 import { getCount, listExecutions } from '../../actions';
-import { strings } from '../locale';
-import { filterQueryParams } from '../../utils/url-helper';
+import { strings } from '../locale.js';
+import { filterQueryParams } from '../../utils/url-helper.js';
 
 const Executions = ({
   dispatch,

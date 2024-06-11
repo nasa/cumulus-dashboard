@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
-import { tally } from '../../utils/format';
-import { strings } from '../locale';
+import { tally } from '../../utils/format.js';
+import { strings } from '../locale.js';
 
 // defines the order in which the granules meta bar appears
 const granuleMeta = [

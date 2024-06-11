@@ -11,7 +11,7 @@ import {
   DATEPICKER_DATECHANGE,
   DATEPICKER_DROPDOWN_FILTER,
   DATEPICKER_HOUR_FORMAT
-} from '../../actions/types';
+} from '../../actions/types.js';
 import {
   allDateRanges,
   allHourFormats,
@@ -20,9 +20,9 @@ import {
   urlDateFormat,
   urlDateProps,
   findDateRangeByValue
-} from '../../utils/datepicker';
-import SimpleDropdown from '../DropDown/simple-dropdown';
-import Datepicker from './Datepicker';
+} from '../../utils/datepicker.js';
+import SimpleDropdown from '../DropDown/simple-dropdown.js';
+import Datepicker from './Datepicker.js';
 
 /*
  * If this is a shared URL, grab the date and time and update the datepicker

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 import './ProcessingModal.scss';
-import Spinner from '../Spinner/Spinner';
+import Spinner from '../Spinner/Spinner.js';
 
 class ProcessingModal extends React.Component {
   render () {

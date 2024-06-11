@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { fromNow, fromNowWithTooltip, tally } from '../format';
-import { getPersistentQueryParams } from '../url-helper';
+import { fromNow, fromNowWithTooltip, tally } from '../format.js';
+import { getPersistentQueryParams } from '../url-helper.js';
 
 export const tableColumns = [
   {

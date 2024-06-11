@@ -4,9 +4,9 @@ import { Dropdown as DropdownBootstrap } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import ErrorReport from '../Errors/report';
-import Tooltip from '../Tooltip/tooltip';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs.js';
+import ErrorReport from '../Errors/report.js';
+import Tooltip from '../Tooltip/tooltip.js';
 
 const backupOptionsInfo = <span>We have two options for operators to backup
   and recovery their data and investigate in the dashboard.  They are

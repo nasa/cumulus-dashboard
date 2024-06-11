@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import './css/main.scss';
 import './public/favicon.ico';
 
-import App from './js/App';
+import App from './js/App.js';
 
 // Broken - needs resolution in CUMULUS-3379
 /* if (process.env.NODE_ENV !== 'production') {

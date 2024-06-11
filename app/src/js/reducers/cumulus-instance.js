@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { ADD_INSTANCE_META } from '../actions/types';
+import { ADD_INSTANCE_META } from '../actions/types.js';
 
 export const initialState = {};
 

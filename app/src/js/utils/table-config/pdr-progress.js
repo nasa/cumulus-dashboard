@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { get } from 'object-path';
-import { tally, bool, nullValue, fromNowWithTooltip } from '../format';
-import ErrorReport from '../../components/Errors/report';
-import { getPersistentQueryParams } from '../url-helper';
+import { tally, bool, nullValue, fromNowWithTooltip } from '../format.js';
+import ErrorReport from '../../components/Errors/report.js';
+import { getPersistentQueryParams } from '../url-helper.js';
 
 function bar (completed, failed, text) {
   // show a sliver even if there's no progress

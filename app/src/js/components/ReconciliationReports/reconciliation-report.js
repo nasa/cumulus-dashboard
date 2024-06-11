@@ -7,11 +7,11 @@ import {
   getReconciliationReport,
   listWorkflows,
 } from '../../actions';
-import Loading from '../LoadingIndicator/loading-indicator';
-import InventoryReport from './inventory-report';
-import GnfReport from './gnf-report';
-import Legend from './legend';
-import BackupReport from './backup-report';
+import Loading from '../LoadingIndicator/loading-indicator.js';
+import InventoryReport from './inventory-report.js';
+import GnfReport from './gnf-report.js';
+import Legend from './legend.js';
+import BackupReport from './backup-report.js';
 
 const ReconciliationReport = ({
   dispatch = {},

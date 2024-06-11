@@ -3,16 +3,16 @@ import { Provider } from 'react-redux';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
 
-import ourConfigureStore, { history } from './store/configureStore';
+import ourConfigureStore, { history } from './store/configureStore.js';
 
 // Authorization & Error Handling
-// import ErrorBoundary from './components/Errors/ErrorBoundary';
-import NotFound from './components/404';
-import OAuth from './components/oauth';
+// import ErrorBoundary from './components/Errors/ErrorBoundary.js';
+import NotFound from './components/404.js';
+import OAuth from './components/oauth.js';
 
 // Components
-import Home from './components/home';
-import Main from './main';
+import Home from './components/home.js';
+import Main from './main.js';
 import Collections from './components/Collections';
 import Granules from './components/Granules';
 import Pdrs from './components/Pdr';

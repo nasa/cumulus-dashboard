@@ -2,14 +2,14 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { set } from 'object-path';
 import noop from 'lodash/noop';
-import { deconstructCollectionId, getCollectionId } from '../utils/format';
-import assignDate from './utils/assign-date';
+import { deconstructCollectionId, getCollectionId } from '../utils/format.js';
+import assignDate from './utils/assign-date.js';
 import {
   createClearItemReducer,
   createErrorReducer,
   createInflightReducer,
   createSuccessReducer
-} from './utils/reducer-creators';
+} from './utils/reducer-creators.js';
 import {
   CLEAR_COLLECTIONS_FILTER,
   CLEAR_COLLECTIONS_SEARCH,
@@ -37,7 +37,7 @@ import {
   OPTIONS_COLLECTIONNAME,
   OPTIONS_COLLECTIONNAME_INFLIGHT,
   OPTIONS_COLLECTIONNAME_ERROR,
-} from '../actions/types';
+} from '../actions/types.js';
 
 export const initialState = {
   list: {

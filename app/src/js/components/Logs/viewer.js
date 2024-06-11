@@ -6,11 +6,11 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import { interval, getLogs, clearLogs } from '../../actions';
 import _config from '../../config';
-import LoadingEllipsis from '../LoadingEllipsis/loading-ellipsis';
-import ErrorReport from '../Errors/report';
-import SimpleDropdown from '../DropDown/simple-dropdown';
-import { tally } from '../../utils/format';
-import { fetchCurrentTimeFilters } from '../../utils/datepicker';
+import LoadingEllipsis from '../LoadingEllipsis/loading-ellipsis.js';
+import ErrorReport from '../Errors/report.js';
+import SimpleDropdown from '../DropDown/simple-dropdown.js';
+import { tally } from '../../utils/format.js';
+import { fetchCurrentTimeFilters } from '../../utils/datepicker.js';
 
 const { logsUpdateInterval } = _config;
 

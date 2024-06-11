@@ -7,14 +7,14 @@ import slugify from 'slugify';
 import PropTypes from 'prop-types';
 import isFinite from 'lodash/isFinite';
 import isEmpty from 'lodash/isEmpty';
-import ErrorReport from '../Errors/report';
-import TextForm from '../TextAreaForm/text';
-import TextAreaForm from '../TextAreaForm/text-area';
-import SimpleDropdown from '../DropDown/simple-dropdown';
-import FormList from '../FormList/form-list';
-import SubForm from '../SubForm/sub-form';
-import t from '../../utils/strings';
-import { window } from '../../utils/browser';
+import ErrorReport from '../Errors/report.js';
+import TextForm from '../TextAreaForm/text.js';
+import TextAreaForm from '../TextAreaForm/text-area.js';
+import SimpleDropdown from '../DropDown/simple-dropdown.js';
+import FormList from '../FormList/form-list.js';
+import SubForm from '../SubForm/sub-form.js';
+import t from '../../utils/strings.js';
+import { window } from '../../utils/browser.js';
 
 const scrollTo =
   window && typeof window.scrollTo === 'function'

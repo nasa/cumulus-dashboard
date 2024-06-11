@@ -5,12 +5,12 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { get } from 'object-path';
 import { getSchema } from '../../actions';
-import Schema from '../FormSchema/schema';
-import Loading from '../LoadingIndicator/loading-indicator';
+import Schema from '../FormSchema/schema.js';
+import Loading from '../LoadingIndicator/loading-indicator.js';
 import _config from '../../config';
-import { strings } from '../locale';
-import { window } from '../../utils/browser';
-import { historyPushWithQueryParams } from '../../utils/url-helper';
+import { strings } from '../locale.js';
+import { window } from '../../utils/browser.js';
+import { historyPushWithQueryParams } from '../../utils/url-helper.js';
 
 const { updateDelay } = _config;
 

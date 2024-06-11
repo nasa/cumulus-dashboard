@@ -10,11 +10,11 @@ import {
   fromNowWithTooltip,
   formatCollectionId,
   fullDate
-} from '../format';
-import { strings } from '../../components/locale';
-import { getPersistentQueryParams } from '../url-helper';
-import { getEventDetails } from '../../components/Executions/execution-graph-utils';
-import Tooltip from '../../components/Tooltip/tooltip';
+} from '../format.js';
+import { strings } from '../../components/locale.js';
+import { getPersistentQueryParams } from '../url-helper.js';
+import { getEventDetails } from '../../components/Executions/execution-graph-utils.js';
+import Tooltip from '../../components/Tooltip/tooltip.js';
 import { getExecutionStatus } from '../../actions';
 
 export const formatEvents = (events) => {

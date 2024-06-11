@@ -6,7 +6,7 @@ import {
   EXECUTION_STATUS_ERROR,
   SEARCH_EXECUTION_EVENTS,
   CLEAR_EXECUTION_EVENTS_SEARCH,
-} from '../actions/types';
+} from '../actions/types.js';
 
 export const initialState = {
   data: {},

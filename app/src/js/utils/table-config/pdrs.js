@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { get } from 'object-path';
-import { seconds, bool, nullValue, collectionLink, displayCase, granuleLink, fromNowWithTooltip, deletePdrs, deleteGranules } from '../format';
+import { seconds, bool, nullValue, collectionLink, displayCase, granuleLink, fromNowWithTooltip, deletePdrs, deleteGranules } from '../format.js';
 import { deleteGranule, deletePdr } from '../../actions';
-import ErrorReport from '../../components/Errors/report';
-import { strings } from '../../components/locale';
-import { getPersistentQueryParams } from '../url-helper';
+import ErrorReport from '../../components/Errors/report.js';
+import { strings } from '../../components/locale.js';
+import { getPersistentQueryParams } from '../url-helper.js';
 
 export const tableColumns = [
   {

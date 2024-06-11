@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Popover from '../Popover/popover';
-const pckg = require('../../../../../package.json');
+import Popover from '../Popover/popover.js';
+import pckg from '../../../../../package.json';
 
 const Footer = ({
   api,

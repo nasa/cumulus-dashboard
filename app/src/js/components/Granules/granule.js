@@ -30,20 +30,20 @@ import {
   pdrLink,
   removeFromCmr,
   deleteText,
-} from '../../utils/format';
-import Table from '../SortableTable/SortableTable';
-import Loading from '../LoadingIndicator/loading-indicator';
-import LogViewer from '../Logs/viewer';
-import ErrorReport from '../Errors/report';
-import Metadata from '../Table/Metadata';
-import DropdownAsync from '../DropDown/dropdown-async-command';
-import SimpleDropdown from '../DropDown/simple-dropdown';
-import { strings } from '../locale';
+} from '../../utils/format.js';
+import Table from '../SortableTable/SortableTable.js';
+import Loading from '../LoadingIndicator/loading-indicator.js';
+import LogViewer from '../Logs/viewer.js';
+import ErrorReport from '../Errors/report.js';
+import Metadata from '../Table/Metadata.js';
+import DropdownAsync from '../DropDown/dropdown-async-command.js';
+import SimpleDropdown from '../DropDown/simple-dropdown.js';
+import { strings } from '../locale.js';
 import { workflowOptionNames } from '../../selectors';
-import { defaultWorkflowMeta, executeDialog } from '../../utils/table-config/granules';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import { historyPushWithQueryParams } from '../../utils/url-helper';
-import { getGranuleRecoveryJobStatusFromRecord } from '../../utils/recovery-status';
+import { defaultWorkflowMeta, executeDialog } from '../../utils/table-config/granules.js';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs.js';
+import { historyPushWithQueryParams } from '../../utils/url-helper.js';
+import { getGranuleRecoveryJobStatusFromRecord } from '../../utils/recovery-status.js';
 
 const link = 'Link';
 

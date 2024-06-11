@@ -5,7 +5,7 @@ import {
   WORKFLOWS_FROM_GRANULES_ERROR,
   WORKFLOWS_FROM_GRANULES_CLEAR_ERROR,
   CLEAR_WORKFLOWS_FROM_GRANULES,
-} from '../actions/types';
+} from '../actions/types.js';
 
 export const initialState = {
   workflows: {

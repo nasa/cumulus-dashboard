@@ -6,10 +6,10 @@ import {
   getCollectionId,
   lastUpdated,
   collectionHrefFromNameVersion,
-} from '../../utils/format';
-import { getPersistentQueryParams } from '../../utils/url-helper';
-import { strings } from '../locale';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+} from '../../utils/format.js';
+import { getPersistentQueryParams } from '../../utils/url-helper.js';
+import { strings } from '../locale.js';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs.js';
 
 const CollectionHeader = ({
   breadcrumbConfig,

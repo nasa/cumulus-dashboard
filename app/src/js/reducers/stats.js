@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import assignDate from './utils/assign-date';
+import assignDate from './utils/assign-date.js';
 import {
   STATS,
   STATS_INFLIGHT,
@@ -8,7 +8,7 @@ import {
   COUNT_SIDEBAR,
   COUNT_INFLIGHT,
   COUNT_ERROR,
-} from '../actions/types';
+} from '../actions/types.js';
 
 export const initialState = {
   stats: {

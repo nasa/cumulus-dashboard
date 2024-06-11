@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import { get } from 'object-path';
 
 import _config from '../../config';
-import DefaultModal from '../Modal/modal';
-import ErrorReport from '../Errors/report';
-import SimpleDropdown from '../DropDown/simple-dropdown';
-import TextArea from '../TextAreaForm/text-area';
+import DefaultModal from '../Modal/modal.js';
+import ErrorReport from '../Errors/report.js';
+import SimpleDropdown from '../DropDown/simple-dropdown.js';
+import TextArea from '../TextAreaForm/text-area.js';
 import {
   clearGranulesWorkflows,
   getGranulesWorkflows,

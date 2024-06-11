@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { withRouter, Route, Switch } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
-import Sidebar from '../Sidebar/sidebar';
-import WorkflowsOverview from './overview';
-import Workflow from './workflow';
-import { filterQueryParams } from '../../utils/url-helper';
+import Sidebar from '../Sidebar/sidebar.js';
+import WorkflowsOverview from './overview.js';
+import Workflow from './workflow.js';
+import { filterQueryParams } from '../../utils/url-helper.js';
 
 const Workflows = ({
   location,

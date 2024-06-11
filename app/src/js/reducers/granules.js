@@ -1,13 +1,13 @@
 import { del } from 'object-path';
 import { createReducer } from '@reduxjs/toolkit';
-import assignDate from './utils/assign-date';
-import removeDeleted from './utils/remove-deleted';
+import assignDate from './utils/assign-date.js';
+import removeDeleted from './utils/remove-deleted.js';
 import {
   createClearItemReducer,
   createErrorReducer,
   createInflightReducer,
   createSuccessReducer
-} from './utils/reducer-creators';
+} from './utils/reducer-creators.js';
 
 import {
   GRANULE,
@@ -52,7 +52,7 @@ import {
   FILTER_GRANULES,
   CLEAR_GRANULES_FILTER,
   TOGGLE_GRANULES_TABLE_COLUMNS,
-} from '../actions/types';
+} from '../actions/types.js';
 
 export const initialState = {
   list: {

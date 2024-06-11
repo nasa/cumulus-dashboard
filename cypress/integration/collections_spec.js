@@ -1,5 +1,5 @@
-import { shouldBeRedirectedToLogin } from '../support/assertions';
-import { collectionName, getCollectionId } from '../../app/src/js/utils/format';
+import { shouldBeRedirectedToLogin } from '../support/assertions.js';
+import { collectionName, getCollectionId } from '../../app/src/js/utils/format.js';
 
 describe('Dashboard Collections Page', () => {
   describe('When not logged in', () => {

@@ -2,17 +2,17 @@
 import compareVersions from 'compare-versions';
 import { get as getProperty } from 'object-path';
 import axios from 'axios';
-import get from 'lodash/get';
-import isEmpty from 'lodash/isEmpty';
-import cloneDeep from 'lodash/cloneDeep';
+import get from 'lodash/get.js';
+import isEmpty from 'lodash/isEmpty.js';
+import cloneDeep from 'lodash/cloneDeep.js';
 
-import { configureRequest } from './helpers';
+import { configureRequest } from './helpers.js';
 import _config from '../config';
-import { getCollectionId, collectionNameVersion } from '../utils/format';
-import { fetchCurrentTimeFilters } from '../utils/datepicker';
-import log from '../utils/log';
-import * as types from './types';
-import { historyPushWithQueryParams } from '../utils/url-helper';
+import { getCollectionId, collectionNameVersion } from '../utils/format.js';
+import { fetchCurrentTimeFilters } from '../utils/datepicker.js';
+import log from '../utils/log.js';
+import * as types from './types.js';
+import { historyPushWithQueryParams } from '../utils/url-helper.js';
 
 const { CALL_API } = types;
 const {
