@@ -1,4 +1,4 @@
-import { shouldBeRedirectedToLogin } from '../support/assertions';
+import { shouldBeRedirectedToLogin } from '../support/assertions.js';
 
 describe('Dashboard Providers Page', () => {
   describe('When not logged in', () => {

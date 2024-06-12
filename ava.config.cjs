@@ -6,17 +6,22 @@ module.exports = {
         [
           'babel-plugin-webpack-alias-7',
           {
-            config: './config/webpack.config.test.js',
+            config: './config/webpack.config.test.mjs',
           },
         ],
       ],
     },
-    extensions: ['js', 'jsx', 'ts'],
+    extensions: ['js', 'jsx', 'ts', 'mjs', 'cjs'],
   },
   require: ['@babel/register', './test/_setup-browser-env.js', 'ignore-styles'],
   timeout: '3m',
-  files: ['test/**/*', '!test/**/condition*', '!node_modules/', '!test/fixtures/**/*'],
+  files: [
+    'test/**/*',
+    '!test/**/condition*',
+    '!node_modules/',
+    '!test/fixtures/**/*',
+  ],
   environmentVariables: {
-    NODE_ENV: 'test'
-  }
+    NODE_ENV: 'test',
+  },
 };

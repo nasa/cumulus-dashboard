@@ -6,16 +6,16 @@ import { connect } from 'react-redux';
 import { withRouter, Redirect, Route, Switch } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import { getCount, listGranules } from '../../actions';
-import { strings } from '../locale';
-import AllGranules from './list';
-import GranuleOverview from './granule';
-import GranulesOverview from './overview';
-import ReconciliationReportList from '../ReconciliationReports/list';
-import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
-import { filterQueryParams } from '../../utils/url-helper';
-import Loading from '../LoadingIndicator/loading-indicator';
+import { strings } from '../locale.js';
+import AllGranules from './list.js';
+import GranuleOverview from './granule.js';
+import GranulesOverview from './overview.js';
+import ReconciliationReportList from '../ReconciliationReports/list.js';
+import DatePickerHeader from '../DatePickerHeader/DatePickerHeader.js';
+import { filterQueryParams } from '../../utils/url-helper.js';
+import Loading from '../LoadingIndicator/loading-indicator.js';
 
-const Sidebar = lazy(() => import('../Sidebar/sidebar'));
+const Sidebar = lazy(() => import('../Sidebar/sidebar.js'));
 
 const Granules = ({ dispatch, location, queryParams, stats }) => {
   const { pathname } = location;

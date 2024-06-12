@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Alert } from 'react-bootstrap';
-import DefaultModal from '../Modal/modal';
+import DefaultModal from '../Modal/modal.js';
 
 class DeleteCollectionModal extends React.Component {
   constructor (props) {

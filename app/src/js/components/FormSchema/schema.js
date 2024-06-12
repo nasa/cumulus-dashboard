@@ -5,16 +5,16 @@ import PropTypes from 'prop-types';
 import { get, set } from 'object-path';
 import noop from 'lodash/noop';
 import startCase from 'lodash/startCase';
-import { Form, formTypes } from '../Form/Form';
+import { Form, formTypes } from '../Form/Form.js';
 import {
   arrayWithLength,
   isArray,
   isNumber,
   isObject,
   isText,
-} from '../../utils/validate';
-import t from '../../utils/strings';
-import ErrorReport from '../Errors/report';
+} from '../../utils/validate.js';
+import t from '../../utils/strings.js';
+import ErrorReport from '../Errors/report.js';
 
 const { errors } = t;
 

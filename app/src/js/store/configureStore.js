@@ -4,9 +4,9 @@ import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { routerMiddleware } from 'connected-react-router';
 import { createLogger } from 'redux-logger';
 import { createRootReducer } from '../reducers';
-import { refreshTokenMiddleware } from '../middleware/token';
-import { requestMiddleware } from '../middleware/request';
-import { window } from '../utils/browser';
+import { refreshTokenMiddleware } from '../middleware/token.js';
+import { requestMiddleware } from '../middleware/request.js';
+import { window } from '../utils/browser.js';
 import config from '../config';
 
 let historyCreator;

@@ -22,12 +22,12 @@ import {
   enableRule,
   disableRule
 } from '../../actions';
-import Loading from '../LoadingIndicator/loading-indicator';
-import Metadata from '../Table/Metadata';
-import DropdownAsync from '../DropDown/dropdown-async-command';
-import ErrorReport from '../Errors/report';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
+import Loading from '../LoadingIndicator/loading-indicator.js';
+import Metadata from '../Table/Metadata.js';
+import DropdownAsync from '../DropDown/dropdown-async-command.js';
+import ErrorReport from '../Errors/report.js';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs.js';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper.js';
 
 const breadcrumbConfig = [
   {

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   styleLoader: 'style-loader!css-loader!sass-loader',
   styles: {
     mixins: true,

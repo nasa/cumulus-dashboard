@@ -3,12 +3,12 @@ import { Helmet } from 'react-helmet';
 import { withRouter, Route, Switch } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import PropTypes from 'prop-types';
-import Sidebar from '../Sidebar/sidebar';
-import AddProvider from './add';
-import EditProvider from './edit';
-import ProvidersOverview from './overview';
-import ProviderOverview from './provider';
-import { filterQueryParams } from '../../utils/url-helper';
+import Sidebar from '../Sidebar/sidebar.js';
+import AddProvider from './add.js';
+import EditProvider from './edit.js';
+import ProvidersOverview from './overview.js';
+import ProviderOverview from './provider.js';
+import { filterQueryParams } from '../../utils/url-helper.js';
 
 const Providers = ({
   location,

@@ -1,4 +1,4 @@
-import { encode } from '../utils/browser';
+import { encode } from '../utils/browser.js';
 // import executions from "../reducers/executions";
 
 const routes = [

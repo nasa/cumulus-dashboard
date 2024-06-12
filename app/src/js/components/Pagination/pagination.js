@@ -1,7 +1,7 @@
 import React from 'react';
 import Paginator from 'paginator';
 import PropTypes from 'prop-types';
-import Dropdown from '../DropDown/dropdown';
+import Dropdown from '../DropDown/dropdown.js';
 
 const noop = (e) => e.preventDefault();
 const disabled = ' pagination__link--disabled';

@@ -8,8 +8,8 @@ import {
   updateProvider,
   clearUpdateProvider
 } from '../../actions';
-import EditRecord from '../Edit/edit';
-import { isValidProvider } from '../../utils/validate';
+import EditRecord from '../Edit/edit.js';
+import { isValidProvider } from '../../utils/validate.js';
 
 const SCHEMA_KEY = 'provider';
 

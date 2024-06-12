@@ -3,9 +3,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { set } from 'object-path';
-import { Form, formTypes } from '../Form/Form';
-import { createFormConfig } from '../FormSchema/schema';
-import { isText } from '../../utils/validate';
+import { Form, formTypes } from '../Form/Form.js';
+import { createFormConfig } from '../FormSchema/schema.js';
+import { isText } from '../../utils/validate.js';
 
 class SubForm extends React.Component {
   constructor () {

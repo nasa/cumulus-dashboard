@@ -9,7 +9,7 @@ import {
   clearUpdateRule
 } from '../../actions';
 
-import EditRaw from '../EditRaw/edit-raw';
+import EditRaw from '../EditRaw/edit-raw.js';
 
 const SCHEMA_KEY = 'rule';
 

@@ -9,9 +9,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { Alert } from 'react-bootstrap';
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
-import { preventDefault } from '../../utils/noop';
-import DefaultModal from '../Modal/modal';
-import Ellipsis from '../LoadingEllipsis/loading-ellipsis';
+import { preventDefault } from '../../utils/noop.js';
+import DefaultModal from '../Modal/modal.js';
+import Ellipsis from '../LoadingEllipsis/loading-ellipsis.js';
 
 const AsyncCommand = ({
   action,

@@ -1,8 +1,8 @@
 import moment from 'moment';
-import { shouldBeRedirectedToLogin } from '../support/assertions';
-import { dateTimeFormat } from '../../app/src/js/utils/datepicker';
-import { tableColumns } from '../../app/src/js/utils/table-config/reconciliation-reports';
-import { displayCase } from '../../app/src/js/utils/format';
+import { shouldBeRedirectedToLogin } from '../support/assertions.js';
+import { dateTimeFormat } from '../../app/src/js/utils/datepicker.js';
+import { tableColumns } from '../../app/src/js/utils/table-config/reconciliation-reports.js';
+import { displayCase } from '../../app/src/js/utils/format.js';
 
 const tableColumnHeaders = tableColumns({ isGranules: false }).map((column) => column.Header);
 

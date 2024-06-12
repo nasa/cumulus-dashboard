@@ -1,5 +1,5 @@
-import { shouldBeRedirectedToLogin } from '../support/assertions';
-import { getCollectionId } from '../../app/src/js/utils/format';
+import { shouldBeRedirectedToLogin } from '../support/assertions.js';
+import { getCollectionId } from '../../app/src/js/utils/format.js';
 
 describe('Rules page', () => {
   it('when not logged in it should redirect to login page', () => {

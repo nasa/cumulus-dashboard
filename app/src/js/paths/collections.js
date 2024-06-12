@@ -1,5 +1,5 @@
-import { encode } from '../utils/browser';
-import { strings } from '../components/locale';
+import { encode } from '../utils/browser.js';
+import { strings } from '../components/locale.js';
 
 const collectionRoutes = [
   ['Overview', 'all']

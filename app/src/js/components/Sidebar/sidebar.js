@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { resolve } from 'path';
 import sections from '../../paths';
-import { getPersistentQueryParams } from '../../utils/url-helper';
+import { getPersistentQueryParams } from '../../utils/url-helper.js';
 import { toggleSidebar } from '../../actions';
-import Tooltip from '../Tooltip/tooltip';
+import Tooltip from '../Tooltip/tooltip.js';
 
 const currentPathClass = 'sidebar__nav--selected';
 

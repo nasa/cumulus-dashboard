@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit';
 import {
   CMR_INFO
-} from '../actions/types';
+} from '../actions/types.js';
 
 export const initialState = {
   cmrEnv: '',

@@ -10,9 +10,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { Alert } from 'react-bootstrap';
 import isArray from 'lodash/isArray';
-import AsyncCommand from '../AsyncCommands/AsyncCommands';
-import DefaultModal from '../Modal/modal';
-import ErrorReport from '../Errors/report';
+import AsyncCommand from '../AsyncCommands/AsyncCommands.js';
+import DefaultModal from '../Modal/modal.js';
+import ErrorReport from '../Errors/report.js';
 
 const CONCURRENCY = 3;
 

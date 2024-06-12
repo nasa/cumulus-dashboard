@@ -11,10 +11,10 @@ import {
   getCumulusInstanceMetadata,
 } from '../../actions';
 import { graphicsPath, nav } from '../../config';
-import { window } from '../../utils/browser';
-import { strings } from '../locale';
-import linkToKibana from '../../utils/kibana';
-import { getPersistentQueryParams } from '../../utils/url-helper';
+import { window } from '../../utils/browser.js';
+import { strings } from '../locale.js';
+import linkToKibana from '../../utils/kibana.js';
+import { getPersistentQueryParams } from '../../utils/url-helper.js';
 
 const paths = [
   [strings.collections, '/collections/all'],

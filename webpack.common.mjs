@@ -1,12 +1,13 @@
-require('@babel/register');
-const path = require('path');
-const webpack = require('webpack');
-const HtmlWebPackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+import '@babel/register';
 
-const config = require('./app/src/js/config');
+import path from 'path';
+import webpack from 'webpack';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import CopyPlugin from 'copy-webpack-plugin';
 
-const CommonConfig = {
+import config from './app/src/js/config/config.js';
+
+export default CommonConfig = {
   target: 'web',
   entry: [
     'core-js/stable',
@@ -42,10 +43,10 @@ const CommonConfig = {
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.m?(js|jsx)$/,
         exclude: [
           /node_modules\/(?!(map-obj|snakecase-keys|strict-uri-encode|fast-xml-parser)\/).*/,
-          /font-awesome.config.js/,
+          /font-awesome.config.mjs/,
         ],
         use: [
           {
@@ -117,7 +118,7 @@ const CommonConfig = {
         },
       },
       {
-        test: /font-awesome\.config\.js/,
+        test: /font-awesome\.config\.mjs/,
         use: [
           {
             loader: 'style-loader',
@@ -130,13 +131,13 @@ const CommonConfig = {
     ],
   },
   plugins: [
-    new HtmlWebPackPlugin({
+    new HtmlWebpackPlugin({
       template: path.join(__dirname, 'app/src/template.html'),
       filename: 'index.html',
       title: 'Cumulus Dashboard',
       favicon: './app/src/public/favicon.ico'
     }),
-    new CopyWebpackPlugin({
+    new CopyPlugin({
       patterns: [{ from: './app/src/public', to: './' }],
     }),
     new webpack.ProvidePlugin({
@@ -158,5 +159,3 @@ const CommonConfig = {
     }),
   ],
 };
-
-module.exports = CommonConfig;

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 import { Alert } from 'react-bootstrap';
-import ErrorReport from '../Errors/report';
+import ErrorReport from '../Errors/report.js';
 
 class CollectionDeletedErrorModal extends React.Component {
   constructor (props) {

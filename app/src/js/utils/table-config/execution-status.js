@@ -3,11 +3,11 @@ import path from 'path';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import get from 'lodash/get';
-import { displayCase, fullDate, parseJson } from '../format';
-import { getPersistentQueryParams } from '../url-helper';
-import linkToKibana from '../kibana';
-import { window } from '../browser';
-import DefaultModal from '../../components/Modal/modal';
+import { displayCase, fullDate, parseJson } from '../format.js';
+import { getPersistentQueryParams } from '../url-helper.js';
+import linkToKibana from '../kibana.js';
+import { window } from '../browser.js';
+import DefaultModal from '../../components/Modal/modal.js';
 
 export const tableColumns = [
   {

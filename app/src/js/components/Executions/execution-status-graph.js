@@ -10,8 +10,8 @@ import {
   workflowToGraph,
   addEventsToGraph,
   draw
-} from './execution-graph-utils';
-import { window } from '../../utils/browser';
+} from './execution-graph-utils.js';
+import { window } from '../../utils/browser.js';
 
 // dagre-d3 expects d3 to be attached to the window
 if (process.env.NODE_ENV !== 'test') window.d3 = d3;

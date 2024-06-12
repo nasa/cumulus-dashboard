@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { lazy, Suspense } from 'react';
-import Loading from '../LoadingIndicator/loading-indicator';
+import Loading from '../LoadingIndicator/loading-indicator.js';
 
-const Datepicker = lazy(() => import('../Datepicker/DatepickerRange'));
+const Datepicker = lazy(() => import('../Datepicker/DatepickerRange.js'));
 
 const DatePickerHeader = ({ heading, onChange, showDatePicker = true }) => (
   <>

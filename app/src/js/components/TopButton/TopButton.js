@@ -1,5 +1,5 @@
 import React from 'react';
-import { window } from '../../utils/browser';
+import { window } from '../../utils/browser.js';
 
 class TopButton extends React.Component {
   constructor (props) {

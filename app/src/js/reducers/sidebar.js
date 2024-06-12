@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { TOGGLE_SIDEBAR } from '../actions/types';
+import { TOGGLE_SIDEBAR } from '../actions/types.js';
 
 export const initialState = {
   open: true,

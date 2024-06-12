@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import assignDate from './utils/assign-date';
+import assignDate from './utils/assign-date.js';
 import {
   EXECUTIONS,
   EXECUTIONS_INFLIGHT,
@@ -11,7 +11,7 @@ import {
   EXECUTIONS_LIST,
   EXECUTIONS_LIST_INFLIGHT,
   EXECUTIONS_LIST_ERROR,
-} from '../actions/types';
+} from '../actions/types.js';
 
 export const initialState = {
   list: {

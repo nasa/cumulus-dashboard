@@ -13,14 +13,14 @@ import {
   listProviders,
   listGranules,
 } from '../../actions';
-import { historyPushWithQueryParams } from '../../utils/url-helper';
-import { reconciliationReportTypes } from '../../utils/type';
-import { dateTimeFormat } from '../../utils/datepicker';
-import SimpleDropdown from '../DropDown/simple-dropdown';
-import Tooltip from '../Tooltip/tooltip';
-import Datepicker from '../Datepicker/Datepicker';
-import TextForm from '../TextAreaForm/text';
-import { displayCase, getCollectionId } from '../../utils/format';
+import { historyPushWithQueryParams } from '../../utils/url-helper.js';
+import { reconciliationReportTypes } from '../../utils/type.js';
+import { dateTimeFormat } from '../../utils/datepicker.js';
+import SimpleDropdown from '../DropDown/simple-dropdown.js';
+import Tooltip from '../Tooltip/tooltip.js';
+import Datepicker from '../Datepicker/Datepicker.js';
+import TextForm from '../TextAreaForm/text.js';
+import { displayCase, getCollectionId } from '../../utils/format.js';
 
 const baseRoute = '/reconciliation-reports';
 const defaultReportType = 'Inventory';

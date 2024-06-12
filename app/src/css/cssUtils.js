@@ -1,8 +1,8 @@
-const path = require('path');
+import path from 'path';
 
-const resources = [
+export default resources = [
   'utils/utils.scss',
   'vendor/bootstrap/_vars.scss'
 ];
 
-module.exports = resources.map((file) => path.resolve(__dirname, file));
+return resources.map((file) => path.resolve(__dirname, file));

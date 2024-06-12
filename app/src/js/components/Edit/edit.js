@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import { get } from 'object-path';
 import { withRouter } from 'react-router-dom';
 import { getSchema } from '../../actions';
-import Loading from '../LoadingIndicator/loading-indicator';
-import Schema from '../FormSchema/schema';
-import merge from '../../utils/merge';
+import Loading from '../LoadingIndicator/loading-indicator.js';
+import Schema from '../FormSchema/schema.js';
+import merge from '../../utils/merge.js';
 import _config from '../../config';
-import { strings } from '../locale';
-import { historyPushWithQueryParams } from '../../utils/url-helper';
+import { strings } from '../locale.js';
+import { historyPushWithQueryParams } from '../../utils/url-helper.js';
 
 const { updateDelay } = _config;
 

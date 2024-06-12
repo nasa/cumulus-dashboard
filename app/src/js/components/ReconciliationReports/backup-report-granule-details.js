@@ -1,17 +1,17 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import List from '../Table/Table';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import Tooltip from '../Tooltip/tooltip';
+import List from '../Table/Table.js';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs.js';
+import Tooltip from '../Tooltip/tooltip.js';
 import {
   collectionLink,
   granuleLink,
   providerLink,
   fullDate,
-} from '../../utils/format';
-import Metadata from '../Table/Metadata';
-import { tableColumnsGranuleConflictDetails } from '../../utils/table-config/reconciliation-reports';
+} from '../../utils/format.js';
+import Metadata from '../Table/Metadata.js';
+import { tableColumnsGranuleConflictDetails } from '../../utils/table-config/reconciliation-reports.js';
 
 const renderDataLocation = (reportType, granule) => {
   const { cumulusFilesCount = 0, orcaFilesCount = 0 } = granule;

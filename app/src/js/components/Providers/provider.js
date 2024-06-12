@@ -3,18 +3,18 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import { get } from 'object-path';
-import AsyncCommand from '../AsyncCommands/AsyncCommands';
+import AsyncCommand from '../AsyncCommands/AsyncCommands.js';
 import { getProvider, deleteProvider, listCollections } from '../../actions';
-import { lastUpdated, deleteText } from '../../utils/format';
-import Loading from '../LoadingIndicator/loading-indicator';
-import LogViewer from '../Logs/viewer';
-import ErrorReport from '../Errors/report';
-import Metadata from '../Table/Metadata';
+import { lastUpdated, deleteText } from '../../utils/format.js';
+import Loading from '../LoadingIndicator/loading-indicator.js';
+import LogViewer from '../Logs/viewer.js';
+import ErrorReport from '../Errors/report.js';
+import Metadata from '../Table/Metadata.js';
 import {
   getPersistentQueryParams,
   historyPushWithQueryParams,
-} from '../../utils/url-helper';
-import { metaAccessors } from '../../utils/table-config/providers';
+} from '../../utils/url-helper.js';
+import { metaAccessors } from '../../utils/table-config/providers.js';
 
 const ProviderOverview = ({ dispatch, match, providers }) => {
   const { providerId } = match.params;

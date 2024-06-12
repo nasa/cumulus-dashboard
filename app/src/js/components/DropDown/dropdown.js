@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import { Typeahead } from 'react-bootstrap-typeahead';
-import { renderTypeaheadInput, renderTypeaheadMenu } from '../../utils/typeahead-helpers';
+import { renderTypeaheadInput, renderTypeaheadMenu } from '../../utils/typeahead-helpers.js';
 
 const Dropdown = ({
   action,

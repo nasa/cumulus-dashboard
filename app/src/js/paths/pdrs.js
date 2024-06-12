@@ -1,4 +1,4 @@
-import tally from './tally';
+import tally from './tally.js';
 
 const pdrRoutes = [
   ['Overview', null],
