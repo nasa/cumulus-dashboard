@@ -55,7 +55,7 @@ export default [
       'import/no-named-as-default': 0,
       'import/no-unresolved': 2, // to handle cjs node modules to esm
       'import/no-commonjs': 2, // to handle cjs node modules to esm
-      'import/extensions': [2, 'ignorePackages'], // to handle cjs node modules to esm
+      'import/extensions': [1, 'ignorePackages' ], // to handle cjs node modules to esm
       'lodash/import-scope': [2, 'method'],
       'lodash/prefer-constant': 0,
       'lodash/prefer-lodash-method': 0,
