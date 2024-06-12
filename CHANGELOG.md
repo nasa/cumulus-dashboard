@@ -27,8 +27,10 @@ This version of the dashboard requires Cumulus API >= v18.2.0
   - Upgrade node dependencies that were CommonJS(CJS) to ECMAScript Modules(ESM)
 - **CUMULUS-3659**
   - Change configuration files to work with ECMAScript Modules(ESM)
-  - **CUMULUS-3660**
+- **CUMULUS-3660**
   - Change app files to ECMAScript Modules(ESM) syntax
+- **CUMULUS-3661**
+  - Change unit and integration test files to ECMAScript Modules(ESM) syntax
 
 ## [v12.1.0] - 2023-10-27
 
