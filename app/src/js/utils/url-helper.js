@@ -1,7 +1,7 @@
 /* eslint-disable import/no-cycle */
-import get from 'lodash/get';
+import get from 'lodash/get.js';
 import queryString from 'query-string';
-import { history } from '../store/configureStore';
+import { history } from '../store/configureStore.js';
 
 /**
  * Retrieve initial value for component based on react-router's location.

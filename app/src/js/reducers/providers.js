@@ -1,13 +1,13 @@
 import { get, set } from 'object-path';
 import { createReducer } from '@reduxjs/toolkit';
 import noop from 'lodash/noop';
-import assignDate from './utils/assign-date';
+import assignDate from './utils/assign-date.js';
 import {
   createClearItemReducer,
   createErrorReducer,
   createInflightReducer,
   createSuccessReducer,
-} from './utils/reducer-creators';
+} from './utils/reducer-creators.js';
 import {
   PROVIDER,
   PROVIDER_INFLIGHT,
@@ -35,7 +35,7 @@ import {
   OPTIONS_PROVIDERNAME,
   OPTIONS_PROVIDERNAME_INFLIGHT,
   OPTIONS_PROVIDERNAME_ERROR,
-} from '../actions/types';
+} from '../actions/types.js';
 
 export const initialState = {
   list: {

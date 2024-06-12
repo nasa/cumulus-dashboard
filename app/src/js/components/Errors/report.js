@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { truncate } from '../../utils/format';
-import ShowMoreOrLess from './show-more-or-less';
-import CopyToClipboard from './copy-to-clipboard';
+import { truncate } from '../../utils/format.js';
+import ShowMoreOrLess from './show-more-or-less.js';
+import CopyToClipboard from './copy-to-clipboard.js';
 
 class ErrorReport extends React.Component {
   constructor () {

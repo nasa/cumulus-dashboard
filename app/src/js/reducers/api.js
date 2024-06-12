@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { get as getToken, set as setToken } from '../utils/auth';
+import { get as getToken, set as setToken } from '../utils/auth.js';
 import {
   DELETE_TOKEN,
   LOGIN,
@@ -10,7 +10,7 @@ import {
   REFRESH_TOKEN_ERROR,
   REFRESH_TOKEN_INFLIGHT,
   SET_TOKEN,
-} from '../actions/types';
+} from '../actions/types.js';
 
 export const initialState = {
   authenticated: getToken() !== null,

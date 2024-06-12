@@ -24,22 +24,22 @@ import {
   displayCase,
   bool,
   deleteText,
-} from '../../utils/format';
-import { granuleTableColumns, granuleBulkActions } from '../../utils/table-config/pdrs';
-import { renderProgress } from '../../utils/table-config/pdr-progress';
-import List from '../Table/Table';
-import LogViewer from '../Logs/viewer';
-import Dropdown from '../DropDown/dropdown';
-import Search from '../Search/search';
-import status from '../../utils/status';
-import Metadata from '../Table/Metadata';
-import Loading from '../LoadingIndicator/loading-indicator';
-import AsyncCommand from '../AsyncCommands/AsyncCommands';
-import ErrorReport from '../Errors/report';
-import GranulesProgress from '../Granules/progress';
-import { strings } from '../locale';
-import ListFilters from '../ListActions/ListFilters';
-import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
+} from '../../utils/format.js';
+import { granuleTableColumns, granuleBulkActions } from '../../utils/table-config/pdrs.js';
+import { renderProgress } from '../../utils/table-config/pdr-progress.js';
+import List from '../Table/Table.js';
+import LogViewer from '../Logs/viewer.js';
+import Dropdown from '../DropDown/dropdown.js';
+import Search from '../Search/search.js';
+import status from '../../utils/status.js';
+import Metadata from '../Table/Metadata.js';
+import Loading from '../LoadingIndicator/loading-indicator.js';
+import AsyncCommand from '../AsyncCommands/AsyncCommands.js';
+import ErrorReport from '../Errors/report.js';
+import GranulesProgress from '../Granules/progress.js';
+import { strings } from '../locale.js';
+import ListFilters from '../ListActions/ListFilters.js';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper.js';
 
 const metaAccessors = [
   {

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Card } from 'react-bootstrap';
-import { displayCase } from '../../utils/format';
+import { displayCase } from '../../utils/format.js';
 
 const conflictedCount = (tables) => tables.reduce((acc, cv) => acc + cv.data.length, 0);
 

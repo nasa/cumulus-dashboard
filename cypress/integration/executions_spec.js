@@ -1,5 +1,5 @@
-import { shouldBeRedirectedToLogin } from '../support/assertions';
-import { displayCase, fullDate } from '../../app/src/js/utils/format';
+import { shouldBeRedirectedToLogin } from '../support/assertions.js';
+import { displayCase, fullDate } from '../../app/src/js/utils/format.js';
 
 describe('Dashboard Executions Page', () => {
   describe('When not logged in', () => {

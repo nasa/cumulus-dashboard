@@ -2,8 +2,8 @@ import moment from 'moment';
 import uniqBy from 'lodash/fp/uniqBy';
 import { get } from 'object-path';
 import { createReducer } from '@reduxjs/toolkit';
-import { LOGS, LOGS_ERROR, LOGS_INFLIGHT, CLEAR_LOGS } from '../actions/types';
-import { metricsNotConfiguredMessage } from '../utils/log';
+import { LOGS, LOGS_ERROR, LOGS_INFLIGHT, CLEAR_LOGS } from '../actions/types.js';
+import { metricsNotConfiguredMessage } from '../utils/log.js';
 
 // https://momentjs.com/docs/#/displaying/
 const format = 'MM/DD/YY hh:mma ss:SSS[s]';

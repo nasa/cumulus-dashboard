@@ -9,8 +9,8 @@ import {
   listProviders,
   listCollections
 } from '../../actions';
-import AddRecord from '../Add/add';
-import { getCollectionId, nullValue, collectionNameVersion } from '../../utils/format';
+import AddRecord from '../Add/add.js';
+import { getCollectionId, nullValue, collectionNameVersion } from '../../utils/format.js';
 
 /**
  * Converts the Collection ID string associated with the `collection` property

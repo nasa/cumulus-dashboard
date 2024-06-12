@@ -4,7 +4,7 @@ import {
   API_VERSION_COMPATIBLE,
   API_VERSION_ERROR,
   API_VERSION_INCOMPATIBLE
-} from '../actions/types';
+} from '../actions/types.js';
 
 export const initialState = {
   versionNumber: '',

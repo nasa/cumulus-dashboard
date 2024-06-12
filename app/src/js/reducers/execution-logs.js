@@ -4,7 +4,7 @@ import {
   EXECUTION_LOGS,
   EXECUTION_LOGS_INFLIGHT,
   EXECUTION_LOGS_ERROR,
-} from '../actions/types';
+} from '../actions/types.js';
 
 const fields = ['stackName', 'version', 'executions', 'level', 'version', 'app_message', 'timestamp', 'sender', 'granules', 'logGroup'];
 const processLog = (logEntry) => pick(logEntry, fields);

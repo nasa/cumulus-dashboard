@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ErrorReport from './report';
+import ErrorReport from './report.js';
 
 class ErrorBoundary extends Component {
   constructor (props) {

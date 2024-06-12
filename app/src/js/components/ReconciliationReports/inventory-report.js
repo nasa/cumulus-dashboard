@@ -4,20 +4,20 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Collapse } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
-import TableCards from './table-cards';
+import TableCards from './table-cards.js';
 import {
   searchReconciliationReport,
   clearReconciliationSearch,
   filterReconciliationReport,
   clearReconciliationReportFilter,
 } from '../../actions';
-import List from '../Table/Table';
-import { reshapeReport } from './reshape-report';
-import { handleDownloadUrlClick, handleDownloadCsvClick } from '../../utils/download-file';
-import Search from '../Search/search';
-import Dropdown from '../DropDown/dropdown';
-import ReportHeading from './report-heading';
-import ListFilters from '../ListActions/ListFilters';
+import List from '../Table/Table.js';
+import { reshapeReport } from './reshape-report.js';
+import { handleDownloadUrlClick, handleDownloadCsvClick } from '../../utils/download-file.js';
+import Search from '../Search/search.js';
+import Dropdown from '../DropDown/dropdown.js';
+import ReportHeading from './report-heading.js';
+import ListFilters from '../ListActions/ListFilters.js';
 
 const bucketsForFilter = (allBuckets) => {
   const uniqueBuckets = [...new Set(allBuckets)];

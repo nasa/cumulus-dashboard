@@ -15,18 +15,18 @@ import {
   filterCollections,
   clearCollectionsFilter,
 } from '../../actions';
-import { lastUpdated, tally, getCollectionId } from '../../utils/format';
+import { lastUpdated, tally, getCollectionId } from '../../utils/format.js';
 import {
   bulkActions,
   recoverAction,
   tableColumns,
-} from '../../utils/table-config/collections';
-import Dropdown from '../DropDown/dropdown';
-import Search from '../Search/search';
-import List from '../Table/Table';
-import { strings } from '../locale';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import ListFilters from '../ListActions/ListFilters';
+} from '../../utils/table-config/collections.js';
+import Dropdown from '../DropDown/dropdown.js';
+import Search from '../Search/search.js';
+import List from '../Table/Table.js';
+import { strings } from '../locale.js';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs.js';
+import ListFilters from '../ListActions/ListFilters.js';
 
 const breadcrumbConfig = [
   {

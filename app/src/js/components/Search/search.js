@@ -5,11 +5,11 @@ import withQueryParams from 'react-router-query-params';
 import { withRouter } from 'react-router-dom';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { get } from 'object-path';
-import { getInitialValueFromLocation } from '../../utils/url-helper';
+import { getInitialValueFromLocation } from '../../utils/url-helper.js';
 import {
   renderSearchInput,
   renderSearchMenu,
-} from '../../utils/typeahead-helpers';
+} from '../../utils/typeahead-helpers.js';
 
 /**
  * Search

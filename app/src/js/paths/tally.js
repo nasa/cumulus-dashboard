@@ -1,5 +1,5 @@
 import { get } from 'object-path';
-import { tally } from '../utils/format';
+import { tally } from '../utils/format.js';
 function tallyFn (route, count) {
   // check for a filter function
   const filter = route[2];

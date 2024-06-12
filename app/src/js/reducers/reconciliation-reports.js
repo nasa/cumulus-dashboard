@@ -1,10 +1,10 @@
 import { createReducer } from '@reduxjs/toolkit';
-import assignDate from './utils/assign-date';
+import assignDate from './utils/assign-date.js';
 import {
   createErrorReducer,
   createInflightReducer,
   createSuccessReducer
-} from './utils/reducer-creators';
+} from './utils/reducer-creators.js';
 
 import {
   RECONCILIATION,
@@ -26,7 +26,7 @@ import {
   CLEAR_RECONCILIATION_SEARCH,
   FILTER_RECONCILIATION,
   CLEAR_RECONCILIATION_FILTER,
-} from '../actions/types';
+} from '../actions/types.js';
 
 export const initialState = {
   list: {

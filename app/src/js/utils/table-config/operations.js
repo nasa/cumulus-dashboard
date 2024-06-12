@@ -1,4 +1,4 @@
-import { fromNowWithTooltip, displayCase } from '../format';
+import { fromNowWithTooltip, displayCase } from '../format.js';
 
 export const tableColumns = [
   {

@@ -1,11 +1,11 @@
 import { createReducer } from '@reduxjs/toolkit';
-import assignDate from './utils/assign-date';
+import assignDate from './utils/assign-date.js';
 
 import {
   RECOVERY_GRANULE,
   RECOVERY_GRANULE_INFLIGHT,
   RECOVERY_GRANULE_ERROR,
-} from '../actions/types';
+} from '../actions/types.js';
 
 export const initialState = {
   list: {

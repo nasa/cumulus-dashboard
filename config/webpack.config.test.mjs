@@ -1,6 +1,6 @@
-const path = require('path');
+import * as path from 'path';
 
-module.exports = {
+const testConfig = {
   resolve: {
     extensions: ['.js', '.jsx', '.scss'],
     alias: {
@@ -19,15 +19,19 @@ module.exports = {
     ],
     '@babel/preset-react',
   ],
-  plugins: ['@babel/plugin-syntax-jsx'],
+  plugins: [
+    '@babel/plugin-syntax-jsx'
+  ],
   env: {
     test: {
       plugins: [
         [
           'babel-plugin-webpack-alias-7',
-          { config: './config/webpack.config.test.js', findConfig: true },
+          { config: './config/webpack.config.test.mjs', findConfig: true },
         ],
       ],
     },
   },
 };
+
+export default testConfig;

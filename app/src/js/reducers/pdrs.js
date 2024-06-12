@@ -1,10 +1,10 @@
 import { createReducer } from '@reduxjs/toolkit';
-import assignDate from './utils/assign-date';
+import assignDate from './utils/assign-date.js';
 import {
   createErrorReducer,
   createInflightReducer,
   createSuccessReducer,
-} from './utils/reducer-creators';
+} from './utils/reducer-creators.js';
 import {
   PDR,
   PDR_INFLIGHT,
@@ -19,7 +19,7 @@ import {
   PDR_DELETE,
   PDR_DELETE_INFLIGHT,
   PDR_DELETE_ERROR,
-} from '../actions/types';
+} from '../actions/types.js';
 
 export const initialState = {
   list: {

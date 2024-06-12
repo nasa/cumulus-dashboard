@@ -7,12 +7,12 @@ import Modal from 'react-bootstrap/Modal';
 import get from 'lodash/get';
 import { Helmet } from 'react-helmet';
 import { login, setTokenState } from '../actions';
-import { window } from '../utils/browser';
-import { buildRedirectUrl } from '../utils/format';
+import { window } from '../utils/browser.js';
+import { buildRedirectUrl } from '../utils/format.js';
 import _config from '../config';
-import ErrorReport from './Errors/report';
-import Header from './Header/header';
-import { historyPushWithQueryParams } from '../utils/url-helper';
+import ErrorReport from './Errors/report.js';
+import Header from './Header/header.js';
+import { historyPushWithQueryParams } from '../utils/url-helper.js';
 
 const { updateDelay, apiRoot, oauthMethod } = _config;
 

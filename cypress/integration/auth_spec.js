@@ -1,6 +1,6 @@
-import { shouldBeRedirectedToLogin, shouldHaveDeletedToken } from '../support/assertions';
+import { shouldBeRedirectedToLogin, shouldHaveDeletedToken } from '../support/assertions.js';
 import { listGranules } from '../../app/src/js/actions';
-import { SET_TOKEN } from '../../app/src/js/actions/types';
+import { SET_TOKEN } from '../../app/src/js/actions/types.js';
 
 describe('Dashboard authentication', () => {
   before(() => {

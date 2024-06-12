@@ -4,11 +4,11 @@ import {
   searchReconciliationReport,
   clearReconciliationSearch,
 } from '../../actions';
-import List from '../Table/Table';
-import Search from '../Search/search';
-import ReportHeading from './report-heading';
-import { handleDownloadUrlClick } from '../../utils/download-file';
-import { tableColumnsBackup } from '../../utils/table-config/reconciliation-reports';
+import List from '../Table/Table.js';
+import Search from '../Search/search.js';
+import ReportHeading from './report-heading.js';
+import { handleDownloadUrlClick } from '../../utils/download-file.js';
+import { tableColumnsBackup } from '../../utils/table-config/reconciliation-reports.js';
 
 const BackupReport = ({
   filterString,

@@ -8,8 +8,8 @@ import 'brace/theme/github';
 
 import Ace from 'react-ace';
 import config from '../../config';
-import { setWindowEditorRef } from '../../utils/browser';
-import ErrorReport from '../Errors/report';
+import { setWindowEditorRef } from '../../utils/browser.js';
+import ErrorReport from '../Errors/report.js';
 
 const minLinesDefault = 8;
 const maxLinesDefault = 18;

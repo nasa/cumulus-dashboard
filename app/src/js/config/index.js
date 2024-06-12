@@ -1,6 +1,6 @@
-const moment = require('moment');
+import moment from 'moment';
 
-const deploymentConfig = require('./config');
+const deploymentConfig = './config.js'; // this is a variable and not an import from config.js
 
 /**
 * These are base config values that you can override in your config.js file
@@ -37,4 +37,4 @@ const baseConfig = {
 const config = Object.assign({}, baseConfig, deploymentConfig);
 config.apiRoot = config.apiRoot.replace(/\/?$/, '/');
 
-module.exports = config;
+export default config;

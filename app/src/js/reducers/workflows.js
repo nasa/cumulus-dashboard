@@ -5,7 +5,7 @@ import {
   WORKFLOWS_ERROR,
   SEARCH_WORKFLOWS,
   CLEAR_WORKFLOWS_SEARCH,
-} from '../actions/types';
+} from '../actions/types.js';
 
 export const initialState = {
   list: {

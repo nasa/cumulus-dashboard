@@ -1,5 +1,5 @@
-import { shouldBeRedirectedToLogin } from '../support/assertions';
-import { collectionHrefFromId } from '../../app/src/js/utils/format';
+import { shouldBeRedirectedToLogin } from '../support/assertions.js';
+import { collectionHrefFromId } from '../../app/src/js/utils/format.js';
 
 describe('Dashboard Granules Page', () => {
   describe('When not logged in', () => {

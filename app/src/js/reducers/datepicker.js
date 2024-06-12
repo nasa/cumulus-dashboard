@@ -1,10 +1,10 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { msPerDay, findDateRangeByValue } from '../utils/datepicker';
+import { msPerDay, findDateRangeByValue } from '../utils/datepicker.js';
 import {
   DATEPICKER_DATECHANGE,
   DATEPICKER_DROPDOWN_FILTER,
   DATEPICKER_HOUR_FORMAT,
-} from '../actions/types';
+} from '../actions/types.js';
 
 // Also becomes default props for Datepicker
 export const initialState = () => ({

@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { SCHEMA } from '../actions/types';
+import { SCHEMA } from '../actions/types.js';
 
 export const initialState = {};
 

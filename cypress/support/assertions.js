@@ -1,8 +1,8 @@
-exports.shouldBeLoggedIn = () => {
+export const shouldBeLoggedIn = () => {
   cy.get('h1[class=heading--xlarge').should('have.text', 'CUMULUS Dashboard');
 };
 
-exports.shouldBeRedirectedToLogin = () => {
+export const shouldBeRedirectedToLogin = () => {
   cy.url().should('include', '/auth');
   cy.get('div[class=modal-content]').within(() => {
     cy.get('a').should('have.attr', 'href').and('include', 'token?');
@@ -10,7 +10,7 @@ exports.shouldBeRedirectedToLogin = () => {
   });
 };
 
-exports.shouldHaveNoToken = () => {
+export const shouldHaveNoToken = () => {
   cy.window().its('appStore').then((store) => {
     expect(store.getState().api.tokens.token).to.equal(null);
     cy.window().its('localStorage').invoke('getItem', 'auth-token').then((token) => {
@@ -19,7 +19,7 @@ exports.shouldHaveNoToken = () => {
   });
 };
 
-exports.shouldHaveDeletedToken = () => {
+export const shouldHaveDeletedToken = () => {
   cy.window().its('appStore').then((store) => {
     expect(store.getState().api.tokens.token).to.equal(null);
     cy.window().its('localStorage').invoke('getItem', 'auth-token').then((token) => {

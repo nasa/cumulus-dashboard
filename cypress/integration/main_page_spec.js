@@ -3,9 +3,9 @@ import {
   shouldBeRedirectedToLogin,
   shouldHaveNoToken,
   shouldHaveDeletedToken
-} from '../support/assertions';
+} from '../support/assertions.js';
 
-import { API_VERSION } from '../../app/src/js/actions/types';
+import { API_VERSION } from '../../app/src/js/actions/types.js';
 
 describe('Dashboard Home Page', () => {
   it('When not logged in it should redirect to login page', () => {

@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import assignDate from './utils/assign-date';
+import assignDate from './utils/assign-date.js';
 import {
   OPERATIONS,
   OPERATIONS_INFLIGHT,
@@ -11,7 +11,7 @@ import {
   CLEAR_OPERATIONS_FILTER,
   SEARCH_OPERATIONS,
   CLEAR_OPERATIONS_SEARCH,
-} from '../actions/types';
+} from '../actions/types.js';
 
 export const initialState = {
   list: {

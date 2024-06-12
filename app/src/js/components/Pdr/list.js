@@ -9,17 +9,17 @@ import {
   filterPdrs,
   clearPdrsFilter,
 } from '../../actions';
-import { lastUpdated, tally, displayCase } from '../../utils/format';
+import { lastUpdated, tally, displayCase } from '../../utils/format.js';
 import {
   tableColumns,
   errorTableColumns,
   bulkActions,
-} from '../../utils/table-config/pdrs';
-import Search from '../Search/search';
-import List from '../Table/Table';
+} from '../../utils/table-config/pdrs.js';
+import Search from '../Search/search.js';
+import List from '../Table/Table.js';
 
-import ListFilters from '../ListActions/ListFilters';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import ListFilters from '../ListActions/ListFilters.js';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs.js';
 
 const generateBreadcrumbConfig = (view) => [
   {
