@@ -1,5 +1,3 @@
-'use strict';
-
 import test from 'ava';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
@@ -7,7 +5,7 @@ import { shallow, configure } from 'enzyme';
 
 import Footer from '../../../app/src/js/components/Footer/footer.js';
 
-const pckg = require('../../../package.json');
+import pckg from '../../../package.json';
 
 configure({ adapter: new Adapter() });
 

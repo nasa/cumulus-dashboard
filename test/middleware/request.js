@@ -2,12 +2,12 @@ import test from 'ava';
 import nock from 'nock';
 import sinon from 'sinon';
 
-import { CALL_API } from '../../app/src/js/actions/types';
+import { CALL_API } from '../../app/src/js/actions/types.js';
 
 import {
   requestMiddleware,
   __RewireAPI__ as RequestRewireAPI
-} from '../../app/src/js/middleware/request';
+} from '../../app/src/js/middleware/request.js';
 
 const token = 'fake-token';
 

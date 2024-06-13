@@ -1,5 +1,3 @@
-'use strict';
-
 import test from 'ava';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
@@ -7,7 +5,7 @@ import { shallow, configure } from 'enzyme';
 
 import { BatchReingestConfirmContent,
   maxDisplayed
-} from '../../../app/src/js/components/ReingestGranules/BatchReingestConfirmContent';
+} from '../../../app/src/js/components/ReingestGranules/BatchReingestConfirmContent.js';
 
 configure({ adapter: new Adapter() });
 

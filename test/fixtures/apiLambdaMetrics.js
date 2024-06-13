@@ -1,5 +1,3 @@
-'use strict';
-
 export const apiLambdaFixture = `{
   "took": 42,
   "timed_out": false,

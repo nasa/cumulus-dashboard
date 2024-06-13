@@ -1,4 +1,3 @@
-'use strict';
 import test from 'ava';
 import {tableColumns} from '../../app/src/js/utils/table-config/pdrs.js';
 import {getProgress} from '../../app/src/js/utils/table-config/pdr-progress.js';

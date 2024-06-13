@@ -1,14 +1,12 @@
-'use strict';
-
 import test from 'ava';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { shallow, configure } from 'enzyme';
 
-import SimpleDropDown from '../../../app/src/js/components/DropDown/simple-dropdown';
-import TextArea from '../../../app/src/js/components/TextAreaForm/text-area';
-import { executeDialog } from '../../../app/src/js/utils/table-config/granules';
+import SimpleDropDown from '../../../app/src/js/components/DropDown/simple-dropdown.js';
+import TextArea from '../../../app/src/js/components/TextAreaForm/text-area.js';
+import { executeDialog } from '../../../app/src/js/utils/table-config/granules.js';
 
 configure({ adapter: new Adapter() });
 

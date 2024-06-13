@@ -1,5 +1,3 @@
-'use strict';
-
 import test from 'ava';
 import { configure, shallow } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
@@ -8,11 +6,11 @@ import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { listGranules } from '../../../app/src/js/actions';
-import { List } from '../../../app/src/js/components/Table/Table';
+import { List } from '../../../app/src/js/components/Table/Table.js';
 import Timer from '../../../app/src/js/components/Timer/timer.js';
-import { requestMiddleware } from '../../../app/src/js/middleware/request';
-import { initialState } from '../../../app/src/js/reducers/datepicker';
-import { errorTableColumns } from '../../../app/src/js/utils/table-config/granules';
+import { requestMiddleware } from '../../../app/src/js/middleware/request.js';
+import { initialState } from '../../../app/src/js/reducers/datepicker.js';
+import { errorTableColumns } from '../../../app/src/js/utils/table-config/granules.js';
 
 configure({ adapter: new Adapter() });
 

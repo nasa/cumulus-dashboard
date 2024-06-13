@@ -1,11 +1,9 @@
-'use strict';
-
 import test from 'ava';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
 import { shallow, configure } from 'enzyme';
 import { Provider } from 'react-redux';
-import { CollectionList } from '../../../app/src/js/components/Collections/list';
+import { CollectionList } from '../../../app/src/js/components/Collections/list.js';
 
 configure({ adapter: new Adapter() });
 

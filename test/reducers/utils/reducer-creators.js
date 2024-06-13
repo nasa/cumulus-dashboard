@@ -1,12 +1,10 @@
-'use strict';
-
 import test from 'ava';
 import {
   createInflightReducer,
   createSuccessReducer,
   createClearItemReducer,
   createErrorReducer
-} from '../../../app/src/js/reducers/utils/reducer-creators';
+} from '../../../app/src/js/reducers/utils/reducer-creators.js';
 
 test('createInflightReducer, creates a working inflight reducer', (t) => {
   const inputState = { key: 'value' };

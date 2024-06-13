@@ -1,5 +1,3 @@
-'use strict';
-
 import test from 'ava';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
@@ -7,8 +5,8 @@ import { shallow, configure } from 'enzyme';
 import * as redux from 'react-redux';
 import sinon from 'sinon';
 
-import { ExecutionEvents } from '../../../app/src/js/components/Executions/execution-events';
-import executionHistory from '../../../test/fixtures/execution-history-all';
+import { ExecutionEvents } from '../../../app/src/js/components/Executions/execution-events.js';
+import executionHistory from '../../../test/fixtures/execution-history-all.js';
 
 configure({ adapter: new Adapter() });
 

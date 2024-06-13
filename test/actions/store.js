@@ -4,8 +4,8 @@ import nock from 'nock';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import { CALL_API } from '../../app/src/js/actions/types';
-import { requestMiddleware } from '../../app/src/js/middleware/request';
+import { CALL_API } from '../../app/src/js/actions/types.js';
+import { requestMiddleware } from '../../app/src/js/middleware/request.js';
 
 const middlewares = [
   requestMiddleware,

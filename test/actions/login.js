@@ -3,9 +3,9 @@ import test from 'ava';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import { requestMiddleware } from '../../app/src/js/middleware/request';
+import { requestMiddleware } from '../../app/src/js/middleware/request.js';
 
-const actions = require('../../app/src/js/actions');
+const actions = '../../app/src/js/actions';
 
 const middlewares = [
   requestMiddleware,

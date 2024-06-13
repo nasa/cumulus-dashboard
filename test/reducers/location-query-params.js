@@ -1,8 +1,6 @@
-'use strict';
-
 import test from 'ava';
 import cloneDeep from 'lodash/cloneDeep';
-import reducer, { initialState } from '../../app/src/js/reducers/location-query-params';
+import reducer, { initialState } from '../../app/src/js/reducers/location-query-params.js';
 import { LOCATION_CHANGE } from 'connected-react-router';
 
 test('LOCATION_CHANGE reducer captures latest query params', (t) => {

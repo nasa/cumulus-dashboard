@@ -1,11 +1,9 @@
-'use strict';
-
 import test from 'ava';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
 import { shallow, configure } from 'enzyme';
 
-import { Header } from '../../../app/src/js/components/Header/header';
+import { Header } from '../../../app/src/js/components/Header/header.js';
 
 configure({ adapter: new Adapter() });
 

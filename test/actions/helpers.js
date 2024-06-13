@@ -1,4 +1,3 @@
-'use strict';
 import test from 'ava';
 
 import _config from '../../app/src/js/config';
@@ -7,7 +6,7 @@ import {
   formatError,
   getErrorMessage,
   configureRequest
-} from '../../app/src/js/actions/helpers';
+} from '../../app/src/js/actions/helpers.js';
 
 const getStateStub = () => ({
   api: {

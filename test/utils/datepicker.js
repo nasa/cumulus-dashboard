@@ -1,5 +1,3 @@
-'use strict';
-
 import test from 'ava';
 
 import {
@@ -8,9 +6,9 @@ import {
   allDateRanges,
   msPerDay,
   findDateRangeByValue
-} from '../../app/src/js/utils/datepicker';
+} from '../../app/src/js/utils/datepicker.js';
 
-import { initialState } from '../../app/src/js/reducers/datepicker';
+import { initialState } from '../../app/src/js/reducers/datepicker.js';
 
 const testState = initialState();
 

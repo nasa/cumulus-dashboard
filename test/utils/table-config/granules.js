@@ -1,10 +1,8 @@
-'use strict';
-
 import test from 'ava';
 import sinon from 'sinon';
 import cloneDeep from 'lodash/cloneDeep';
 
-import { __RewireAPI__ as GranulesRewireAPI } from '../../../app/src/js/utils/table-config/granules';
+import { __RewireAPI__ as GranulesRewireAPI } from '../../../app/src/js/utils/table-config/granules.js';
 
 const setOnConfirm = GranulesRewireAPI.__get__('setOnConfirm');
 const containsPublishedGranules = GranulesRewireAPI.__get__('containsPublishedGranules');

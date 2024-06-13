@@ -1,5 +1,3 @@
-'use strict';
-
 import test from 'ava';
 import { get } from 'object-path';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';

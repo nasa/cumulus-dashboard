@@ -1,7 +1,6 @@
-'use strict';
 import test from 'ava';
 import reducer from '../../app/src/js/reducers/collections.js';
-import { COLLECTIONS } from '../../app/src/js/actions/types';
+import { COLLECTIONS } from '../../app/src/js/actions/types.js';
 
 test('reducers/collections', function (t) {
   const initialState = {

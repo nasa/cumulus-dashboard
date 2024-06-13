@@ -1,6 +1,5 @@
-'use strict';
 import test from 'ava';
-import reducer, { initialState } from '../../app/src/js/reducers/stats';
+import reducer, { initialState } from '../../app/src/js/reducers/stats.js';
 import sinon from 'sinon';
 import cloneDeep from 'lodash/cloneDeep';
 import {
@@ -10,7 +9,7 @@ import {
   COUNT,
   COUNT_INFLIGHT,
   COUNT_ERROR
-} from '../../app/src/js/actions/types';
+} from '../../app/src/js/actions/types.js';
 
 test('verify initial state', (t) => {
   const newState = reducer(initialState, { data: {}, type: 'ANY_OTHER_TYPE' });
