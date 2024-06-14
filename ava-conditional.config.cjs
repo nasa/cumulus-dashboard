@@ -1,5 +1,5 @@
 module.exports = {
-  require: ['./ava.config.js'],
+  require: ['./ava.config.cjs'],
   files: ['test/**/condition*', '!node_modules/', '!test/fixtures/**/*'],
   environmentVariables: {
     HIDE_PDR: 'false',

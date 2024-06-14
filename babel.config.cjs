@@ -13,9 +13,7 @@ module.exports = {
   plugins: [
     '@babel/plugin-syntax-jsx',
     '@babel/plugin-transform-runtime',
-    ['transform-commonjs', {
-      'synchronousImport': true
-    }],
+    'transform-commonjs',
     ...process.env.NODE_ENV === 'test' && !process.env.CYPRESS_TESTING ? ['babel-plugin-rewire'] : []
   ]
 };
