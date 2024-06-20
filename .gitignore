@@ -16,3 +16,4 @@ node_modules/
 test/fake-api/db/*.json
 tmp/
 yarn.lock
+script.sh
