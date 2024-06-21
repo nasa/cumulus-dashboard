@@ -1,6 +1,7 @@
 import moment from 'moment';
+import _config from './config.js';
 
-const deploymentConfig = './config.js'; // this is a variable and not an import from config.js
+const deploymentConfig = _config; // this is a variable and not an import from config.js
 
 /**
 * These are base config values that you can override in your config.js file

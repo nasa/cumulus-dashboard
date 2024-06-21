@@ -1,18 +1,22 @@
 import path from 'path';
-import mergeWithRules from 'webpack-merge';
-import CleanWebpackPlugin from 'clean-webpack-plugin';
+import { fileURLToPath } from 'url';
+import { mergeWithRules } from 'webpack-merge';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import TerserJsPlugin from 'terser-webpack-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import pkg from './package.json';
+import * as pkg from './package.json' assert { type: 'json' };
 
 import CommonConfig from './webpack.common.mjs';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const servedByCumulusAPI = process.env.SERVED_BY_CUMULUS_API;
 
 const publicPath = servedByCumulusAPI ? './' : '/';
 
-export default MainConfig = mergeWithRules({
+const MainConfig = mergeWithRules({
   devtool: 'replace',
   module: {
     rules: {
@@ -100,3 +104,5 @@ export default MainConfig = mergeWithRules({
     }),
   ],
 });
+
+export default MainConfig;

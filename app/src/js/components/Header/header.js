@@ -10,11 +10,13 @@ import {
   getCMRInfo,
   getCumulusInstanceMetadata,
 } from '../../actions';
-import { graphicsPath, nav } from '../../config';
+import _config from '../../config/config.js';
 import { window } from '../../utils/browser.js';
 import { strings } from '../locale.js';
 import linkToKibana from '../../utils/kibana.js';
 import { getPersistentQueryParams } from '../../utils/url-helper.js';
+
+const { graphicsPath, nav} = _config;
 
 const paths = [
   [strings.collections, '/collections/all'],

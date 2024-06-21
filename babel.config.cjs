@@ -4,8 +4,9 @@ module.exports = {
       '@babel/preset-env', {
         targets: {
           node: '16.19.0',
-          esmodules: true
-        }
+          esmodules: true,
+        },
+        modules: 'auto',
       }
     ],
     '@babel/preset-react'
@@ -13,7 +14,7 @@ module.exports = {
   plugins: [
     '@babel/plugin-syntax-jsx',
     '@babel/plugin-transform-runtime',
-    'transform-commonjs',
+    '@babel/plugin-syntax-import-assertions',
     ...process.env.NODE_ENV === 'test' && !process.env.CYPRESS_TESTING ? ['babel-plugin-rewire'] : []
   ]
 };

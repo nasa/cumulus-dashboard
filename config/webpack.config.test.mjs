@@ -1,8 +1,12 @@
-import * as path from 'path';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const testConfig = {
   resolve: {
-    extensions: ['.js', '.jsx', '.scss'],
+    extensions: ['.js', '.jsx', '.mjs', '.cjs', '.scss'],
     alias: {
       path: path.join(__dirname, './app/src'),
     },

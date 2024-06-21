@@ -1,13 +1,17 @@
 import '@babel/register';
 
 import path from 'path';
+import { fileURLToPath } from 'url';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 
 import config from './app/src/js/config/config.js';
 
-export default CommonConfig = {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const CommonConfig = {
   target: 'web',
   entry: [
     'core-js/stable',
@@ -19,12 +23,15 @@ export default CommonConfig = {
     chunkFilename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
+/*     library: {
+      type: 'module',
+  }, */
   },
   optimization: {
     moduleIds: 'deterministic',
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.scss'],
+    extensions: ['.js', '.jsx', '.cjs', '.mjs', '.scss'],
     alias: {
       Fonts: path.join(__dirname, 'app/src/assets/fonts'),
       Images: path.join(__dirname, 'app/src/assets/images'),
@@ -33,11 +40,12 @@ export default CommonConfig = {
       fs: false,
       net: false,
       tls: false,
-      console: require.resolve('console-browserify'),
-      path: require.resolve('path-browserify'),
-      stream: require.resolve('stream-browserify'),
-      crypto: require.resolve('crypto-browserify'),
-      util: require.resolve('util'),
+      console: 'console-browserify',
+      path: 'path-browserify',
+      stream: 'stream-browserify',
+      crypto: 'crypto-browserify',
+      util: 'util',
+      vm: 'vm-browserify'
     },
   },
   module: {
@@ -56,6 +64,9 @@ export default CommonConfig = {
             },
           },
         ],
+        resolve: {
+          fullySpecified: false,
+        },
       },
       {
         test: /\.html$/,
@@ -158,4 +169,9 @@ export default CommonConfig = {
       SERVED_BY_CUMULUS_API: config.servedByCumulusAPI,
     }),
   ],
+/*   experiments: {
+    outputModule: true,
+  }, */
 };
+
+export default CommonConfig;

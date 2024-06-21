@@ -22,17 +22,17 @@
   "scripts": {
     "audit-ci": "audit-ci --config $(pwd)/audit-ci.json",
     "serve:prod": "NODE_ENV=production http-server dist -p ${PORT:-3000} --proxy http://localhost:${PORT:-3000}?",
-    "serve": "NODE_ENV=development webpack-dev-server --open --config webpack.dev.js",
-    "serve-hot": "NODE_ENV=development webpack-dev-server --open --hot --config webpack.dev.js",
+    "serve": "NODE_ENV=development webpack-dev-server --open --config webpack.dev.mjs",
+    "serve-hot": "NODE_ENV=development webpack-dev-server --open --hot --config webpack.dev.mjs",
     "serve-cypress": "npm run serve",
-    "build": "NODE_ENV=production webpack --config webpack.prod.js",
+    "build": "NODE_ENV=production webpack --config webpack.prod.mjs",
     "watch": "webpack --watch",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
     "cypress": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost CYPRESS_TESTING=true NODE_ENV=test cypress open",
     "cypress-ci": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost CYPRESS_TESTING=true NODE_ENV=test cypress run --spec 'cypress/integration/*' --config video=false",
-    "test": "npm run lint && ava && ava --config ava-conditional.config.js",
-    "test-unit-only": "ava && ava --config ava-conditional.config.js",
+    "test": "npm run lint && ava && ava --config ava-conditional.config.cjs",
+    "test-unit-only": "ava && ava --config ava-conditional.config.cjs",
     "seed-database": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost NODE_ENV=test PG_HOST=localhost PG_USER=postgres PG_PASSWORD=password PG_DATABASE=postgres node ./localAPI/runSeedDatabase.js",
     "serve-api": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost NODE_ENV=test cmr_provider=CUMULUS FAKE_AUTH=true ./node_modules/@cumulus/api/bin/cli.js serve --no-reseed",
     "debug-api": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost NODE_ENV=test cmr_provider=CUMULUS FAKE_AUTH=true node --inspect-brk ./node_modules/@cumulus/api/bin/cli.js serve --no-reseed",
@@ -80,7 +80,6 @@
     "axios": "^1.6.8",
     "babel-loader": "^8.2.1",
     "babel-plugin-rewire": "^1.2.0",
-    "babel-plugin-transform-commonjs": "^1.1.6",
     "babel-plugin-webpack-alias-7": "^0.1.1",
     "babelify": "^10.0.0",
     "browser-env": "^3.3.0",
@@ -140,6 +139,7 @@
     "webpackbar": "^5.0.2"
   },
   "dependencies": {
+    "@babel/plugin-syntax-import-assertions": "^7.24.7",
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
@@ -158,6 +158,7 @@
     "d3-color": "3.1.0",
     "dagre-d3": "^0.6.4",
     "deepmerge": "^4.2.2",
+    "esm": "^3.2.25",
     "final-form": "4.20.4",
     "global": "^4.3.1",
     "globals": "^13.19.0",
@@ -203,7 +204,8 @@
     "stream-browserify": "^3.0.0",
     "stubborn-queue": "^2.0.0",
     "url": "^0.11.0",
-    "util": "^0.12.4"
+    "util": "^0.12.4",
+    "vm-browserify": "^1.1.2"
   },
   "optionalDependencies": {
     "cypress": "8.7.0"

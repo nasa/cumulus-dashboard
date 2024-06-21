@@ -1,3 +1,5 @@
+import { presets } from "./babel.config.cjs";
+
 module.exports = {
   babel: {
     testOptions: {
@@ -10,10 +12,11 @@ module.exports = {
           },
         ],
       ],
+      ...presets
     },
     extensions: ['js', 'jsx', 'ts', 'mjs', 'cjs'],
   },
-  require: ['@babel/register', './test/_setup-browser-env.js', 'ignore-styles'],
+  require: ['esm', '@babel/register', './test/_setup-browser-env.js', 'ignore-styles'],
   timeout: '3m',
   files: [
     'test/**/*',

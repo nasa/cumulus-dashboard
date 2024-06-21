@@ -103,12 +103,14 @@ export default [
         ecmaVersion: 'latest',
         ecmaFeatures: {
           jsx: true,
+          modules: true
         },
         allowImportExportEverywhere: true,
+        importAttributes: true,
         sourceType: 'module', // to handle esm
         requireConfigFile: false,
         babelOptions: {
-          configFile: true,
+          configFile: './babel.config.cjs',
         },
       },
       globals: {
