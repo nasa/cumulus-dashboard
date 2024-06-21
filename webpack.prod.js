@@ -7,7 +7,7 @@ import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import * as pkg from './package.json' assert { type: 'json' };
 
-import CommonConfig from './webpack.common.mjs';
+import CommonConfig from './webpack.common.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

@@ -52,6 +52,7 @@ const CommonConfig = {
     rules: [
       {
         test: /\.m?(js|jsx)$/,
+        type: 'javascript/auto',
         exclude: [
           /node_modules\/(?!(map-obj|snakecase-keys|strict-uri-encode|fast-xml-parser)\/).*/,
           /font-awesome.config.mjs/,
@@ -60,7 +61,16 @@ const CommonConfig = {
           {
             loader: 'babel-loader',
             options: {
-              presets: ['@babel/preset-env', '@babel/preset-react'],
+              sourceType: 'unambiguous',
+              presets: [
+                '@babel/preset-env', 
+                {
+                  corejs: '3.0.0',
+                  debug: false,
+                  modules: false,
+                },
+                '@babel/preset-react'
+              ],
             },
           },
         ],
@@ -129,7 +139,7 @@ const CommonConfig = {
         },
       },
       {
-        test: /font-awesome\.config\.mjs/,
+        test: /font-awesome\.config\.js/,
         use: [
           {
             loader: 'style-loader',
@@ -168,6 +178,13 @@ const CommonConfig = {
       ENABLE_RECOVERY: config.enableRecovery,
       SERVED_BY_CUMULUS_API: config.servedByCumulusAPI,
     }),
+    [
+      '@babel/plugin-transform-runtime',
+      {
+        helpers: true,
+        useESModules: true
+      }
+    ]
   ],
 /*   experiments: {
     outputModule: true,

@@ -6,6 +6,7 @@ const __dirname = path.dirname(__filename);
 
 const testConfig = {
   resolve: {
+    fullySpecified: false,
     extensions: ['.js', '.jsx', '.mjs', '.cjs', '.scss'],
     alias: {
       path: path.join(__dirname, './app/src'),

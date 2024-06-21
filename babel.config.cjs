@@ -4,9 +4,8 @@ module.exports = {
       '@babel/preset-env', {
         targets: {
           node: '16.19.0',
-          esmodules: true,
         },
-        modules: 'auto',
+        modules: false,
       }
     ],
     '@babel/preset-react'
