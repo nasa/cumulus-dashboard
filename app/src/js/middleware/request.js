@@ -1,17 +1,17 @@
 /* eslint-disable import/no-cycle */
 import qs from 'qs';
-import _config from '../config';
+import _config from '../config/index.js';
 import { CALL_API } from '../actions/types.js';
 import {
   configureRequest,
   addRequestAuthorization
-} from '../actions/helpers';
+} from '../actions/helpers.js';
 import log from '../utils/log.js';
 import { isValidApiRequestAction } from './validate.js';
 
 // Use require to allow for mocking
 import axios from 'axios';
-import { loginError } from '../actions';
+import { loginError } from '../actions/index.js';
 
 const apiRootHost = new URL(_config.apiRoot).host;
 

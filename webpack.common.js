@@ -64,12 +64,7 @@ const CommonConfig = {
               sourceType: 'unambiguous',
               presets: [
                 '@babel/preset-env', 
-                {
-                  corejs: '3.0.0',
-                  debug: false,
-                  modules: false,
-                },
-                '@babel/preset-react'
+                '@babel/preset-react',
               ],
             },
           },
@@ -139,7 +134,7 @@ const CommonConfig = {
         },
       },
       {
-        test: /font-awesome\.config\.js/,
+        test: /font-awesome\.config\.mjs/,
         use: [
           {
             loader: 'style-loader',
@@ -178,13 +173,6 @@ const CommonConfig = {
       ENABLE_RECOVERY: config.enableRecovery,
       SERVED_BY_CUMULUS_API: config.servedByCumulusAPI,
     }),
-    [
-      '@babel/plugin-transform-runtime',
-      {
-        helpers: true,
-        useESModules: true
-      }
-    ]
   ],
 /*   experiments: {
     outputModule: true,

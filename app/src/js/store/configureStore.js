@@ -3,11 +3,11 @@ import { createHashHistory, createBrowserHistory } from 'history';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { routerMiddleware } from 'connected-react-router';
 import { createLogger } from 'redux-logger';
-import { createRootReducer } from '../reducers';
+import { createRootReducer } from '../reducers/index.js';
 import { refreshTokenMiddleware } from '../middleware/token.js';
 import { requestMiddleware } from '../middleware/request.js';
 import { window } from '../utils/browser.js';
-import config from '../config';
+import config from '../config/config.js';
 
 let historyCreator;
 

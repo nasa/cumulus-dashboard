@@ -7,7 +7,7 @@ import thunk from 'redux-thunk';
 import {
   applyRecoveryWorkflowToCollection,
   applyRecoveryWorkflowToGranule
-} from '../../app/src/js/actions';
+} from '../../app/src/js/actions/index.js';
 import {
   constructCollectionId
 } from '../../app/src/js/utils/format.js';

@@ -1,7 +1,7 @@
 import test from 'ava';
 import reducer, { initialState } from '../../app/src/js/reducers/stats.js';
 import sinon from 'sinon';
-import cloneDeep from 'lodash/cloneDeep';
+import cloneDeep from 'lodash/cloneDeep.js';
 import {
   STATS,
   STATS_INFLIGHT,

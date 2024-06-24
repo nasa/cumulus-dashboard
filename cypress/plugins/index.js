@@ -14,7 +14,7 @@ import webpack from '@cypress/webpack-preprocessor';
 import cypressFailed from 'cypress-failed-log/src/failed';
 import { testUtils } from '@cumulus/api';
 import { createJwtToken } from '@cumulus/api/lib/token';
-import webpackCommon from '../../webpack.common.mjs';
+import webpackCommon from '../../webpack.common.js';
 
 import { seedEverything } from './seedEverything.js';
 

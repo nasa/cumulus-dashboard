@@ -1,7 +1,9 @@
 /* eslint-disable import/no-cycle */
-import { createReducer } from '@reduxjs/toolkit';
+// import { createReducer } from '@reduxjs/toolkit';
+import * as toolkitRaw from '@reduxjs/toolkit';
+const { createReducer } = toolkitRaw.default ?? toolkitRaw;
 import { set } from 'object-path';
-import noop from 'lodash/noop';
+import noop from 'lodash/noop.js';
 import { deconstructCollectionId, getCollectionId } from '../utils/format.js';
 import assignDate from './utils/assign-date.js';
 import {

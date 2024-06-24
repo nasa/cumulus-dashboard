@@ -2,7 +2,7 @@ import React from 'react';
 import { get } from 'object-path';
 import { Link } from 'react-router-dom';
 import { seconds, tally, collectionNameVersion, fromNowWithTooltip, CopyCellPopover, collectionHrefFromNameVersion, recoverCollectionText } from '../format.js';
-import { deleteCollection } from '../../actions';
+import { deleteCollection } from '../../actions/index.js';
 import { strings } from '../../components/locale.js';
 import BatchDeleteConfirmContent from '../../components/DeleteCollection/BatchDeleteConfirmContent.js';
 import BatchDeleteCompleteContent from '../../components/DeleteCollection/BatchDeleteCompleteContent.js';

@@ -1,4 +1,6 @@
-import { createReducer } from '@reduxjs/toolkit';
+// import { createReducer } from '@reduxjs/toolkit';
+import * as toolkitRaw from '@reduxjs/toolkit';
+const { createReducer } = toolkitRaw.default ?? toolkitRaw;
 import {
   WORKFLOWS_FROM_GRANULES,
   WORKFLOWS_FROM_GRANULES_INFLIGHT,

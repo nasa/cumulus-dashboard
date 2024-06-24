@@ -1,4 +1,6 @@
-import { createReducer } from '@reduxjs/toolkit';
+// import { createReducer } from '@reduxjs/toolkit';
+import * as toolkitRaw from '@reduxjs/toolkit';
+const { createReducer } = toolkitRaw.default ?? toolkitRaw;
 import { get as getToken, set as setToken } from '../utils/auth.js';
 import {
   DELETE_TOKEN,

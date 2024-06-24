@@ -4,7 +4,6 @@ module.exports = {
     testOptions: {
       plugins: [
         '@babel/plugin-syntax-jsx',
-        '@babel/plugin-transform-modules-commonjs',
         [
           'babel-plugin-webpack-alias-7',
           {

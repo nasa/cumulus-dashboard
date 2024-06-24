@@ -1,4 +1,6 @@
-import { createReducer } from '@reduxjs/toolkit';
+// import { createReducer } from '@reduxjs/toolkit';
+import * as toolkitRaw from '@reduxjs/toolkit';
+const { createReducer } = toolkitRaw.default ?? toolkitRaw;
 import { ADD_INSTANCE_META } from '../actions/types.js';
 
 export const initialState = {};

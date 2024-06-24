@@ -1,5 +1,5 @@
 import test from 'ava';
-import cloneDeep from 'lodash/cloneDeep';
+import cloneDeep from 'lodash/cloneDeep.js';
 import reducer, { initialState } from '../../app/src/js/reducers/providers.js';
 import { UPDATE_PROVIDER, OPTIONS_PROVIDERNAME } from '../../app/src/js/actions/types.js';
 

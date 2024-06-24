@@ -1,6 +1,6 @@
 import test from 'ava';
 import sinon from 'sinon';
-import cloneDeep from 'lodash/cloneDeep';
+import cloneDeep from 'lodash/cloneDeep.js';
 import reducer, { filterData, initialState } from '../../app/src/js/reducers/workflows.js';
 
 const testData = [

@@ -1,3 +1,5 @@
+/* eslint-env node */
+
 import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
 

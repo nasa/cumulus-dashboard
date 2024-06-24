@@ -1,4 +1,6 @@
-import { createReducer } from '@reduxjs/toolkit';
+// import { createReducer } from '@reduxjs/toolkit';
+import * as toolkitRaw from '@reduxjs/toolkit';
+const { createReducer } = toolkitRaw.default ?? toolkitRaw;
 import { SCHEMA } from '../actions/types.js';
 
 export const initialState = {};

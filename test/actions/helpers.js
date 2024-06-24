@@ -1,6 +1,6 @@
 import test from 'ava';
 
-import _config from '../../app/src/js/config';
+import _config from '../../app/src/js/config/index.js';
 import {
   addRequestAuthorization,
   formatError,

@@ -1,6 +1,6 @@
 /* eslint-disable import/no-cycle */
 import { get as getProperty } from 'object-path';
-import _config from '../config';
+import _config from '../config/index.js';
 import { filterQueryParams } from '../utils/url-helper.js';
 
 export const formatError = (response = {}, body = {}) => {

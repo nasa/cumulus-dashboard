@@ -1,7 +1,9 @@
 import moment from 'moment';
-import uniqBy from 'lodash/fp/uniqBy';
+import uniqBy from 'lodash/fp/uniqBy.js';
 import { get } from 'object-path';
-import { createReducer } from '@reduxjs/toolkit';
+// import { createReducer } from '@reduxjs/toolkit';
+import * as toolkitRaw from '@reduxjs/toolkit';
+const { createReducer } = toolkitRaw.default ?? toolkitRaw;
 import { LOGS, LOGS_ERROR, LOGS_INFLIGHT, CLEAR_LOGS } from '../actions/types.js';
 import { metricsNotConfiguredMessage } from '../utils/log.js';
 

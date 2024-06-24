@@ -1,4 +1,6 @@
-import { createReducer } from '@reduxjs/toolkit';
+// import { createReducer } from '@reduxjs/toolkit';
+import * as toolkitRaw from '@reduxjs/toolkit';
+const { createReducer } = toolkitRaw.default ?? toolkitRaw;
 import { TIMER_START, TIMER_STOP, TIMER_SET_COUNTDOWN } from '../actions/types.js';
 
 export const initialState = {

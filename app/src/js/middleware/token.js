@@ -2,8 +2,8 @@
 import { get } from 'object-path';
 import { decode as jwtDecode } from 'jsonwebtoken';
 
-import { loginError, refreshAccessToken } from '../actions';
-import config from '../config';
+import { loginError, refreshAccessToken } from '../actions/index.js';
+import config from '../config/index.js';
 import { isValidApiRequestAction } from './validate.js';
 
 const refreshInterval = Math.ceil((config.updateInterval + 1000) / 1000);

@@ -2,12 +2,12 @@
 import compareVersions from 'compare-versions';
 import { get as getProperty } from 'object-path';
 import axios from 'axios';
-import get from 'lodash/get';
-import isEmpty from 'lodash/isEmpty';
-import cloneDeep from 'lodash/cloneDeep';
+import { get } from 'lodash/get.js';
+import { isEmpty } from 'lodash/isEmpty.js';
+import { cloneDeep } from 'lodash/cloneDeep.js';
 
 import { configureRequest } from './helpers.js';
-import _config from '../config';
+import _config from '../config/index.js';
 import { getCollectionId, collectionNameVersion } from '../utils/format.js';
 import { fetchCurrentTimeFilters } from '../utils/datepicker.js';
 import log from '../utils/log.js';

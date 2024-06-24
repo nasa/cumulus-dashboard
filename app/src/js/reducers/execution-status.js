@@ -1,5 +1,7 @@
-import { createReducer } from '@reduxjs/toolkit';
-import get from 'lodash/get';
+// import { createReducer } from '@reduxjs/toolkit';
+import * as toolkitRaw from '@reduxjs/toolkit';
+const { createReducer } = toolkitRaw.default ?? toolkitRaw;
+import get from 'lodash/get.js';
 import {
   EXECUTION_STATUS,
   EXECUTION_STATUS_INFLIGHT,
