@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import queue from 'stubborn-queue';
@@ -33,51 +33,56 @@ const CONCURRENCY = 3;
  * within getModalOptions.
  */
 
-export class BatchCommand extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      callbacks: {},
-      activeModal: false,
-      completed: 0,
-      status: null,
-      modalOptions: null,
-      errorMessage: null,
-      meta: {},
-    };
-    this.isRunning = false;
-    this.buildId = this.buildId.bind(this);
-    this.confirm = this.confirm.bind(this);
-    this.cancel = this.cancel.bind(this);
-    this.start = this.start.bind(this);
-    this.initAction = this.initAction.bind(this);
-    this.onComplete = this.onComplete.bind(this);
-    this.createErrorMessage = this.createErrorMessage.bind(this);
-    this.cleanup = this.cleanup.bind(this);
-    this.isInflight = this.isInflight.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.closeModal = this.closeModal.bind(this);
-    this.updateMeta = this.updateMeta.bind(this);
-  }
+export const BatchCommand = ({
+  action,
+  dispatch,
+  state,
+  text = '',
+  selected = [],
+  className = '',
+  clearError,
+  onSuccess,
+  onError,
+  confirmOptions = [],
+  getModalOptions,
+  history
+}) => {
+  const [componentState, setComponentState] = useState({
+    callbacks: {},
+    activeModal: false,
+    completed: 0,
+    status: null,
+    modalOptions: null,
+    errorMessage: null,
+    meta: {},
+  });
+  const [isRunning, setIsRunning] = useState(false);
 
-  buildId(item) {
+  function buildId(item) {
     return (typeof item === 'string') ? item : item.granuleId;
   }
 
-  updateMeta(meta) {
-    this.setState({ meta: { ...this.state.meta, ...meta } });
+  function updateMeta(meta) {
+    setComponentState((prevState) => ({
+      ...prevState,
+      meta: { ...prevState.meta, ...meta }
+    }));
   }
 
-  closeModal() {
-    this.setState({ activeModal: false });
-    this.setState({ meta: {} });
+  function closeModal() {
+    setComponentState((prevState) => ({
+      ...prevState,
+      activeModal: false,
+      meta: {}
+    }));
   }
 
-  componentDidUpdate() {
-    if (this.isRunning) return;
-    this.isRunning = true;
-    const { state } = this.props;
-    const { callbacks, completed } = this.state;
+  useEffect(() => {
+    if (isRunning) return;
+
+    setIsRunning(true);
+
+    const { callbacks, completed } = componentState;
 
     // on success or error, call and remove the saved callback
     Object.keys(callbacks).forEach((id) => {
@@ -87,67 +92,79 @@ export class BatchCommand extends React.Component {
 
       if (state[id].status === 'success' || state[id].status === 'error') {
         delete callbacks[id];
-        this.setState({ callbacks, completed: completed + 1 });
+        setComponentState((prevState) => ({
+          ...prevState,
+          callbacks,
+          completed: completed + 1,
+        }));
       }
     });
-    this.isRunning = false;
-  }
+    setIsRunning(false);
+  }, [isRunning, componentState, state]);
 
-  confirm() {
-    const { selected, history, getModalOptions } = this.props;
+  function confirm() {
     if (typeof getModalOptions === 'function') {
       const modalOptions = getModalOptions({
         selected,
         history,
         isOnModalConfirm: true,
         isOnModalComplete: false,
-        closeModal: this.closeModal,
+        closeModal,
       });
-      this.setState({ modalOptions });
+      setComponentState((prevState) => ({
+        ...prevState,
+        modalOptions,
+      }));
 
       // if we're replacing the onConfirm function, we don't want to continue with the current one
       if (modalOptions.onConfirm) {
         return;
       }
     }
-    if (!this.isInflight()) this.start();
+    if (!isInflight()) start();
   }
 
-  cancel() {
+  function cancel() {
     // prevent cancel when inflight
-    if (!this.isInflight()) this.setState({ activeModal: false });
+    if (!isInflight()) {
+      setComponentState((prevState) => ({
+        ...prevState,
+        activeModal: false,
+      }));
+    }
   }
 
-  start() {
-    const { selected } = this.props;
+  function start() {
     // if we have inflight callbacks, don't allow further clicks
-    if (!Array.isArray(selected) || !selected.length || this.isInflight()) { return false; }
+    if (!Array.isArray(selected) || !selected.length || isInflight()) { return false; }
     const q = queue(CONCURRENCY);
     for (let i = 0; i < selected.length; i += 1) {
-      q.add(this.initAction, this.buildId(selected[i]));
+      q.add(initAction, buildId(selected[i]));
     }
-    q.done(this.onComplete);
+    q.done(onComplete);
   }
 
   // save a reference to the callback in state, then init the action
-  initAction(id, callback) {
-    const { dispatch, action } = this.props;
-    const { callbacks, meta } = this.state;
+  function initAction(id, callback) {
+    const { callbacks, meta } = componentState;
     callbacks[id] = callback;
-    this.setState({ callbacks });
+    setComponentState((prevState) => ({
+      ...prevState,
+      callbacks
+    }));
     return dispatch(action(id, meta));
   }
 
   // immediately change the UI to show either success or error
-  onComplete(errors, results) {
-    const {
-      getModalOptions,
-      selected,
-      history,
-    } = this.props;
+  function onComplete(errors, results) {
     // turn array of errors from queue into single error for ui
-    const errorMessage = this.createErrorMessage(errors);
-    this.setState({ errorMessage, results, status: errorMessage ? 'error' : 'success' });
+    const errorMessage = createErrorMessage(errors);
+    setComponentState((prevState) => ({
+      ...prevState,
+      errorMessage,
+      results,
+      status: errorMessage ? 'error' : 'success'
+    }));
     if (typeof getModalOptions === 'function') {
       // setTimeout(() => {
       const modalOptions = getModalOptions({
@@ -157,76 +174,85 @@ export class BatchCommand extends React.Component {
         errors,
         errorMessage,
         isOnModalComplete: true,
-        closeModal: this.closeModal,
+        closeModal,
       });
-      this.setState({ modalOptions, status: null });
+      setComponentState((prevState) => ({
+        ...prevState,
+        modalOptions,
+        status: null
+      }));
     }
   }
 
   // combine multiple errors into one
-  createErrorMessage(errors) {
-    if (!errors || !errors.length) return;
+  function createErrorMessage(errors) {
+    if (!errors || !errors.length) return '';
     return `${errors.length} error(s) occurred: \n${errors
       .map((err) => err.error.toString())
       .join('\n')}`;
   }
 
   // call onSuccess and onError functions as needed
-  cleanup(e) {
-    const { errorMessage, results } = this.state;
-    const {
-      clearError,
-      dispatch,
-      onSuccess,
-      onError,
-      selected,
-    } = this.props;
+  function cleanup(e) {
+    const { errorMessage, results } = componentState;
+
     if (errorMessage && typeof onError === 'function') onError(errorMessage);
     if (results && results.length && typeof onSuccess === 'function') { onSuccess(results, errorMessage); }
 
     if (typeof clearError === 'function') {
-      selected.forEach((item) => dispatch(clearError(this.buildId(item))));
+      selected.forEach((item) => dispatch(clearError(buildId(item))));
     }
 
-    this.setState({ activeModal: false, completed: 0, errorMessage: null, results: null, status: null });
+    setComponentState((prevState) => ({
+      ...prevState,
+      activeModal: false,
+      completed: 0,
+      errorMessage: null,
+      results: null,
+      status: null,
+    }));
   }
 
-  isInflight() {
-    return !!Object.keys(this.state.callbacks).length;
+  function isInflight() {
+    return !!Object.keys(componentState.callbacks).length;
   }
 
-  handleClick() {
-    const { selected, history, getModalOptions } = this.props;
+  function handleClick() {
     if (typeof getModalOptions === 'function') {
       const modalOptions = getModalOptions({
-        onChange: this.updateMeta,
+        onChange: updateMeta,
         selected,
         history,
-        closeModal: this.closeModal,
+        closeModal,
       });
-      this.setState({ modalOptions });
+      setComponentState((prevState) => ({
+        ...prevState,
+        modalOptions,
+      }));
     }
-    if (this.props.confirm) {
-      this.setState({ activeModal: true, completed: 0 });
-    } else this.start();
+    if (confirm) {
+      setComponentState((prevState) => ({
+        ...prevState,
+        activeModal: true,
+        completed: 0,
+      }));
+    } else start();
   }
 
-  render() {
-    const { text, selected, className, confirm, confirmOptions } = this.props;
-    const { activeModal, completed, errorMessage, status, modalOptions } = this.state;
-    const todo = selected.length;
-    const inflight = this.isInflight();
+  const { activeModal, completed, errorMessage, status, modalOptions } = componentState;
+  const todo = selected.length;
+  const inflight = isInflight();
 
-    // show button as disabled when loading, and in the delay before we clean up.
-    const buttonClass = inflight ? 'button--disabled' : '';
-    const confirmResult = confirm(todo);
-    const confirmTextArray = isArray(confirmResult) ? confirmResult : [confirmResult];
-    const percentage = todo ? ((completed * 100) / todo).toFixed(2) : 0;
+  // show button as disabled when loading, and in the delay before we clean up.
+  const buttonClass = inflight ? 'button--disabled' : '';
+  const confirmResult = confirm(todo);
+  const confirmTextArray = isArray(confirmResult) ? confirmResult : [confirmResult];
+  const percentage = todo ? ((completed * 100) / todo).toFixed(2) : 0;
 
-    return (
+  return (
       <div>
         <AsyncCommand
-          action={this.handleClick}
+          action={handleClick}
           text={text}
           className={className}
           hidden={!activeModal && (!todo || !!inflight)}
@@ -243,10 +269,10 @@ export class BatchCommand extends React.Component {
           <DefaultModal
             className="batch-async-modal"
             /* Need to separate cancel and close button functions because cancel is secondary and close is primary */
-            onCancel={status ? this.cleanup : this.cancel}
+            onCancel={status ? cleanup : cancel}
             cancelButtonText={status ? 'Close' : 'Cancel'}
-            onCloseModal={status ? this.cleanup : this.cancel}
-            onConfirm={this.confirm}
+            onCloseModal={status ? cleanup : cancel}
+            onConfirm={confirm}
             title={text}
             showModal={activeModal}
             confirmButtonClass={`${buttonClass} button--submit`}
@@ -299,14 +325,13 @@ export class BatchCommand extends React.Component {
           </DefaultModal>
         </div>
       </div>
-    );
-  }
-}
+  );
+};
 
 BatchCommand.propTypes = {
-  action: PropTypes.func,
-  dispatch: PropTypes.func,
-  state: PropTypes.object,
+  action: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  state: PropTypes.object.isRequired,
   text: PropTypes.string,
   selected: PropTypes.array,
   className: PropTypes.string,
@@ -316,7 +341,7 @@ BatchCommand.propTypes = {
   confirm: PropTypes.func,
   confirmOptions: PropTypes.array,
   getModalOptions: PropTypes.func,
-  history: PropTypes.object,
+  history: PropTypes.object.isRequired,
 };
 
 export default withRouter(BatchCommand);
