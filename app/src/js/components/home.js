@@ -25,6 +25,7 @@ import linkToKibana from '../utils/kibana';
 import DatepickerRange from './Datepicker/DatepickerRange';
 import { strings } from './locale';
 import { getPersistentQueryParams } from '../utils/url-helper';
+// import InactivityModal from './Modal/InactivityModal';
 
 class Home extends React.Component {
   constructor (props) {
@@ -34,6 +35,7 @@ class Home extends React.Component {
 
   componentDidMount () {
     const { dispatch } = this.props;
+    console.log('4444444444 getCumulusInstanceData ', getCumulusInstanceMetadata);
     dispatch(getCumulusInstanceMetadata())
       .then(() => this.query());
   }
@@ -177,6 +179,7 @@ class Home extends React.Component {
             />
           )}
         </div>
+        {/* <InactivityModal /> */}
       </div>
     );
   }

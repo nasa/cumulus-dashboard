@@ -41,7 +41,8 @@ class OAuth extends React.Component {
 
   componentDidMount () {
     const { token } = this.props.queryParams;
-    // tbd
+
+    console.log('00000000 token ', token);
     if (token) {
       const { dispatch } = this.props;
       this.setState({ token }, () => dispatch(login(token)));
