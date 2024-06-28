@@ -1,6 +1,4 @@
-// import { createReducer } from '@reduxjs/toolkit';
-import * as toolkitRaw from '@reduxjs/toolkit';
-const { createReducer } = toolkitRaw.default ?? toolkitRaw;
+import { createReducer } from '@reduxjs/toolkit';
 import {
   CMR_INFO
 } from '../actions/types.js';
@@ -11,10 +9,11 @@ export const initialState = {
   cmrOauthProvider: ''
 };
 
-export default createReducer(initialState, {
-  [CMR_INFO]: (state, action) => {
-    state.cmrEnv = action.data.cmr.environment;
-    state.cmrProvider = action.data.cmr.provider;
-    state.cmrOauthProvider = action.data.cmr.oauth_provider || '';
-  },
+export default createReducer(initialState, (builder) => {
+  builder
+    .addCase(CMR_INFO, (state, action) => {
+      state.cmrEnv = action.data.cmr.environment;
+      state.cmrProvider = action.data.cmr.provider;
+      state.cmrOauthProvider = action.data.cmr.oauth_provider || '';
+    });
 });

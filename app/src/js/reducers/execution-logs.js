@@ -1,7 +1,5 @@
 import pick from 'lodash/pick.js';
-// import { createReducer } from '@reduxjs/toolkit';
-import * as toolkitRaw from '@reduxjs/toolkit';
-const { createReducer } = toolkitRaw.default ?? toolkitRaw;
+import { createReducer } from '@reduxjs/toolkit';
 import {
   EXECUTION_LOGS,
   EXECUTION_LOGS_INFLIGHT,

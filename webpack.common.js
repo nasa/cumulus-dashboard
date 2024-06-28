@@ -1,5 +1,5 @@
 import '@babel/register';
-
+import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import webpack from 'webpack';
@@ -12,20 +12,22 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const CommonConfig = {
-  target: 'web',
+  target: ['web','es6' ],
   entry: [
     'core-js/stable',
     'regenerator-runtime/runtime',
     './app/src/index.js',
   ],
+  node: {
+    global: true,
+    __filename: true,
+    __dirname: true,
+},
   output: {
     filename: 'bundle.js',
     chunkFilename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
-/*     library: {
-      type: 'module',
-  }, */
   },
   optimization: {
     moduleIds: 'deterministic',
@@ -40,12 +42,6 @@ const CommonConfig = {
       fs: false,
       net: false,
       tls: false,
-      console: 'console-browserify',
-      path: 'path-browserify',
-      stream: 'stream-browserify',
-      crypto: 'crypto-browserify',
-      util: 'util',
-      vm: 'vm-browserify'
     },
   },
   module: {
@@ -144,6 +140,7 @@ const CommonConfig = {
           },
         ],
       },
+      { test: /\.node$/, use: "node-loader" }
     ],
   },
   plugins: [
@@ -155,6 +152,9 @@ const CommonConfig = {
     }),
     new CopyPlugin({
       patterns: [{ from: './app/src/public', to: './' }],
+    }),
+    new NodePolyfillPlugin({
+      additionalAliases: ['console', 'path', 'stream', 'crypto', 'util', 'vm', 'process'],
     }),
     new webpack.ProvidePlugin({
       jQuery: 'jquery', // can use jquery anywhere in the app without having to require it
@@ -174,9 +174,6 @@ const CommonConfig = {
       SERVED_BY_CUMULUS_API: config.servedByCumulusAPI,
     }),
   ],
-/*   experiments: {
-    outputModule: true,
-  }, */
 };
 
 export default CommonConfig;

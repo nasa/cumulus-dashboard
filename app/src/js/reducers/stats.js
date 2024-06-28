@@ -1,6 +1,4 @@
-// import { createReducer } from '@reduxjs/toolkit';
-import * as toolkitRaw from '@reduxjs/toolkit';
-const { createReducer } = toolkitRaw.default ?? toolkitRaw;
+import { createReducer } from '@reduxjs/toolkit';
 import assignDate from './utils/assign-date.js';
 import {
   STATS,
@@ -53,48 +51,49 @@ function shimEmptyCount(count) {
   return [completed, failed, running, queued];
 }
 
-export default createReducer(initialState, {
-  [STATS]: (state, action) => {
-    state.stats.data = assignDate(action.data);
-    state.stats.inflight = false;
-    state.stats.error = null;
-  },
-  [STATS_INFLIGHT]: (state) => {
-    state.stats.inflight = true;
-  },
-  [STATS_ERROR]: (state, action) => {
-    state.stats.inflight = false;
-    state.stats.error = action.error;
-  },
-  [COUNT]: (state, action) => {
-    const { count, meta } = action.data;
-    const { field } = meta || {};
-    const statsCount =
-      field === 'status' ? shimEmptyCount(count) : count;
-    state.count.inflight = false;
-    state.count.error = null;
-    state.count.data[action.config.params.type] = {
-      ...action.data,
-      count: statsCount,
-    };
-  },
-  [COUNT_SIDEBAR]: (state, action) => {
-    const { count, meta } = action.data;
-    const { field } = meta || {};
-    const statsCount =
-      field === 'status' ? shimEmptyCount(count) : count;
-    state.count.inflight = false;
-    state.count.error = null;
-    state.count.sidebar[action.config.params.type] = {
-      ...action.data,
-      count: statsCount,
-    };
-  },
-  [COUNT_INFLIGHT]: (state) => {
-    state.count.inflight = true;
-  },
-  [COUNT_ERROR]: (state, action) => {
-    state.count.inflight = false;
-    state.count.error = action.error;
-  },
+export default createReducer(initialState, (builder) => {
+  builder
+    .addCase(STATS, (state, action) => {
+      state.stats.data = assignDate(action.data);
+      state.stats.inflight = false;
+      state.stats.error = null;
+    })
+    .addCase(STATS_INFLIGHT, (state) => {
+      state.stats.inflight = true;
+    })
+    .addCase(STATS_ERROR, (state, action) => {
+      state.stats.inflight = false;
+      state.stats.error = action.error;
+    })
+    .addCase(COUNT, (state, action) => {
+      const { count, meta } = action.data;
+      const { field } = meta || {};
+      const statsCount =
+        field === 'status' ? shimEmptyCount(count) : count;
+      state.count.inflight = false;
+      state.count.error = null;
+      state.count.data[action.config.params.type] = {
+        ...action.data,
+        count: statsCount,
+      };
+    })
+    .addCase(COUNT_SIDEBAR, (state, action) => {
+      const { count, meta } = action.data;
+      const { field } = meta || {};
+      const statsCount =
+        field === 'status' ? shimEmptyCount(count) : count;
+      state.count.inflight = false;
+      state.count.error = null;
+      state.count.sidebar[action.config.params.type] = {
+        ...action.data,
+        count: statsCount,
+      };
+    })
+    .addCase(COUNT_INFLIGHT, (state) => {
+      state.count.inflight = true;
+    })
+    .addCase(COUNT_ERROR, (state, action) => {
+      state.count.inflight = false;
+      state.count.error = action.error;
+    });
 });

@@ -1,6 +1,4 @@
-// import { createReducer } from '@reduxjs/toolkit';
-import * as toolkitRaw from '@reduxjs/toolkit';
-const { createReducer } = toolkitRaw.default ?? toolkitRaw;
+import { createReducer } from '@reduxjs/toolkit';
 import {
   WORKFLOWS,
   WORKFLOWS_INFLIGHT,
@@ -36,27 +34,28 @@ export const filterData = (data, filterString = '') => data.filter(
     item.name.toLowerCase().includes(filterString.toLowerCase())
 );
 
-export default createReducer(initialState, {
-  [WORKFLOWS]: (state, action) => {
-    const filteredData = filterData(action.data, state.searchString);
+export default createReducer(initialState, (builder) => {
+  builder
+    .addCase(WORKFLOWS, (state, action) => {
+      const filteredData = filterData(action.data, state.searchString);
 
-    state.map = mapByName(filteredData);
-    state.list.data = filteredData;
-    state.list.meta = { queriedAt: Date.now() };
-    state.list.inflight = false;
-    state.list.error = false;
-  },
-  [WORKFLOWS_INFLIGHT]: (state) => {
-    state.list.inflight = true;
-  },
-  [WORKFLOWS_ERROR]: (state, action) => {
-    state.list.inflight = false;
-    state.list.error = action.error;
-  },
-  [SEARCH_WORKFLOWS]: (state, action) => {
-    state.searchString = action.searchString;
-  },
-  [CLEAR_WORKFLOWS_SEARCH]: (state) => {
-    state.searchString = '';
-  },
+      state.map = mapByName(filteredData);
+      state.list.data = filteredData;
+      state.list.meta = { queriedAt: Date.now() };
+      state.list.inflight = false;
+      state.list.error = false;
+    })
+    .addCase(WORKFLOWS_INFLIGHT, (state) => {
+      state.list.inflight = true;
+    })
+    .addCase(WORKFLOWS_ERROR, (state, action) => {
+      state.list.inflight = false;
+      state.list.error = action.error;
+    })
+    .addCase(SEARCH_WORKFLOWS, (state, action) => {
+      state.searchString = action.searchString;
+    })
+    .addCase(CLEAR_WORKFLOWS_SEARCH, (state) => {
+      state.searchString = '';
+    });
 });

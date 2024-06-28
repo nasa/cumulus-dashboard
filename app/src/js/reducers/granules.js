@@ -1,7 +1,5 @@
 import { del } from 'object-path';
-// import { createReducer } from '@reduxjs/toolkit';
-import * as toolkitRaw from '@reduxjs/toolkit';
-const { createReducer } = toolkitRaw.default ?? toolkitRaw;
+import { createReducer } from '@reduxjs/toolkit';
 import assignDate from './utils/assign-date.js';
 import removeDeleted from './utils/remove-deleted.js';
 import {
@@ -76,24 +74,25 @@ export const initialState = {
 const getConfigRequestId = ({ config: { requestId } }) => requestId;
 const getRequestId = ({ requestId }) => requestId;
 
-export default createReducer(initialState, {
-  [GRANULE]: (state, action) => {
+export default createReducer(initialState, (builder) => {
+  builder
+  .addCase(GRANULE, (state, action) => {
     state.map[action.id] = {
       inflight: false,
       data: assignDate(action.data),
     };
     delete state.deleted[action.id];
-  },
-  [GRANULE_INFLIGHT]: (state, action) => {
+  })
+  .addCase(GRANULE_INFLIGHT, (state, action) => {
     state.map[action.id] = { inflight: true };
-  },
-  [GRANULE_ERROR]: (state, action) => {
+  })
+  .addCase(GRANULE_ERROR, (state, action) => {
     state.map[action.id] = {
       inflight: false,
       error: action.error,
     };
-  },
-  [GRANULES]: (state, action) => {
+  })
+  .addCase(GRANULES, (state, action) => {
     state.list = {
       ...state.list,
       data: removeDeleted('granuleId', action.data.results, state.deleted),
@@ -101,30 +100,34 @@ export default createReducer(initialState, {
       inflight: false,
       error: false
     };
-  },
-  [GRANULES_INFLIGHT]: (state) => {
+  })
+  .addCase(GRANULES_INFLIGHT, (state) => {
     state.list.inflight = true;
-  },
-  [GRANULES_ERROR]: (state, action) => {
+  })
+  .addCase(GRANULES_ERROR, (state, action) => {
     state.list.inflight = false;
     state.list.error = action.error;
-  },
+  });
 
-  [GRANULE_REPROCESS]: createSuccessReducer('reprocessed'),
+  [GRANULE_REPROCESS]: createSuccessReducer('reprocessed')
   [GRANULE_REPROCESS_INFLIGHT]: createInflightReducer('reprocessed'),
   [GRANULE_REPROCESS_ERROR]: createErrorReducer('reprocessed'),
+
   [GRANULE_REINGEST]: createSuccessReducer('reingested'),
   [GRANULE_REINGEST_INFLIGHT]: createInflightReducer('reingested'),
   [GRANULE_REINGEST_ERROR]: createErrorReducer('reingested'),
   [GRANULE_REINGEST_CLEAR_ERROR]: createClearItemReducer('reingested'),
+
   [GRANULE_APPLYWORKFLOW]: createSuccessReducer('executed'),
   [GRANULE_APPLYWORKFLOW_INFLIGHT]: createInflightReducer('executed'),
   [GRANULE_APPLYWORKFLOW_ERROR]: createErrorReducer('executed'),
   [GRANULE_APPLYWORKFLOW_CLEAR_ERROR]: createClearItemReducer('executed'),
+
   [GRANULE_REMOVE]: createSuccessReducer('removed'),
   [GRANULE_REMOVE_INFLIGHT]: createInflightReducer('removed'),
   [GRANULE_REMOVE_ERROR]: createErrorReducer('removed'),
   [GRANULE_REMOVE_CLEAR_ERROR]: createClearItemReducer('removed'),
+
   [BULK_GRANULE_DELETE]: createSuccessReducer('bulkDelete', getConfigRequestId),
   [BULK_GRANULE_DELETE_INFLIGHT]: createInflightReducer('bulkDelete', getConfigRequestId),
   [BULK_GRANULE_DELETE_ERROR]: createErrorReducer('bulkDelete', getConfigRequestId),
@@ -139,6 +142,7 @@ export default createReducer(initialState, {
     const requestId = getRequestId(action);
     del(state, ['bulk', requestId, 'error']);
   },
+
   [BULK_GRANULE_REINGEST]: createSuccessReducer('bulkReingest', getConfigRequestId),
   [BULK_GRANULE_REINGEST_INFLIGHT]: createInflightReducer('bulkReingest', getConfigRequestId),
   [BULK_GRANULE_REINGEST_ERROR]: createErrorReducer('bulkReingest', getConfigRequestId),
@@ -146,24 +150,25 @@ export default createReducer(initialState, {
     const requestId = getRequestId(action);
     del(state, ['bulkReingest', requestId, 'error']);
   },
+  
   [GRANULE_DELETE]: createSuccessReducer('deleted'),
-  [GRANULE_DELETE_INFLIGHT]: createInflightReducer('deleted'),
-  [GRANULE_DELETE_ERROR]: createErrorReducer('deleted'),
-  [GRANULE_DELETE_CLEAR_ERROR]: createClearItemReducer('deleted'),
+  [GRANULE_DELETE_INFLIGHT]: createInflightReducer('deleted')
+  [GRANULE_DELETE_ERROR]: createErrorReducer('deleted')
+  [GRANULE_DELETE_CLEAR_ERROR]: createClearItemReducer('deleted')
 
-  [SEARCH_GRANULES]: (state, action) => {
+  .addCase(SEARCH_GRANULES, (state, action) => {
     state.list.params.infix = action.infix;
-  },
-  [CLEAR_GRANULES_SEARCH]: (state) => {
+  })
+  .addCase(CLEAR_GRANULES_SEARCH, (state) => {
     state.list.params.infix = null;
-  },
-  [FILTER_GRANULES]: (state, action) => {
+  })
+  .addCase(FILTER_GRANULES, (state, action) => {
     state.list.params[action.param.key] = action.param.value;
-  },
-  [CLEAR_GRANULES_FILTER]: (state, action) => {
+  })
+  .addCase(CLEAR_GRANULES_FILTER, (state, action) => {
     state.list.params[action.paramKey] = null;
-  },
-  [TOGGLE_GRANULES_TABLE_COLUMNS]: (state, action) => {
+  })
+  .addCase(TOGGLE_GRANULES_TABLE_COLUMNS, (state, action) => {
     const recoveryStatus = 'recoveryStatus';
     const { hiddenColumns, allColumns } = action;
     if (hiddenColumns.includes(recoveryStatus) && state.list.params.getRecoveryStatus) {
@@ -173,5 +178,5 @@ export default createReducer(initialState, {
       state.list.params.getRecoveryStatus !== true) {
       state.list.params.getRecoveryStatus = true;
     }
-  }
+  });
 });

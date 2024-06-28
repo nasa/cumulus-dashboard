@@ -1,7 +1,5 @@
 /* eslint-disable import/no-cycle */
-// import { createReducer } from '@reduxjs/toolkit';
-import * as toolkitRaw from '@reduxjs/toolkit';
-const { createReducer } = toolkitRaw.default ?? toolkitRaw;
+import { createReducer } from '@reduxjs/toolkit';
 import { set } from 'object-path';
 import noop from 'lodash/noop.js';
 import { deconstructCollectionId, getCollectionId } from '../utils/format.js';

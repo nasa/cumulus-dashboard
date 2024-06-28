@@ -1,7 +1,6 @@
-import { get, set } from 'object-path';
-// import { createReducer } from '@reduxjs/toolkit';
-import * as toolkitRaw from '@reduxjs/toolkit';
-const { createReducer } = toolkitRaw.default ?? toolkitRaw;
+import * as objectPath from 'object-path/index.js';
+const { get, set } = objectPath;
+import { createReducer } from '@reduxjs/toolkit';
 import noop from 'lodash/noop.js';
 import assignDate from './utils/assign-date.js';
 import {

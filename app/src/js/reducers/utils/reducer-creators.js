@@ -1,4 +1,4 @@
-import { del } from 'object-path';
+import del from 'object-path';
 
 /**
  * Returns the value of the `id` property of the specified object.

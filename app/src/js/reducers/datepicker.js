@@ -1,6 +1,4 @@
-// import { createReducer } from '@reduxjs/toolkit';
-import * as toolkitRaw from '@reduxjs/toolkit';
-const { createReducer } = toolkitRaw.default ?? toolkitRaw;
+import { createReducer } from '@reduxjs/toolkit';
 import { msPerDay, findDateRangeByValue } from '../utils/datepicker.js';
 import {
   DATEPICKER_DATECHANGE,
@@ -46,8 +44,9 @@ const recentData = () => ({
   dateRange: findDateRangeByValue('Recent'),
 });
 
-export default createReducer(initialState(), {
-  [DATEPICKER_DROPDOWN_FILTER]: (state, action) => {
+export default createReducer(initialState(), (builder) => {
+  builder
+    .addCase(DATEPICKER_DROPDOWN_FILTER, (state, action) => {
     const { data } = action;
 
     switch (data.dateRange.label) {
@@ -69,11 +68,11 @@ export default createReducer(initialState(), {
         );
         break;
     }
-  },
-  [DATEPICKER_DATECHANGE]: (state, action) => {
+  })
+  .addCase(DATEPICKER_DATECHANGE, (state, action) => {
     Object.assign(state, action.data);
-  },
-  [DATEPICKER_HOUR_FORMAT]: (state, action) => {
+  })
+  .addCase(DATEPICKER_HOUR_FORMAT, (state, action) => {
     state.hourFormat = action.data;
-  },
+  });
 });

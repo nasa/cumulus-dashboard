@@ -1,5 +1,5 @@
 import test from 'ava';
-import { cloneDeep } from 'lodash/cloneDeep.js';
+import cloneDeep from 'lodash/cloneDeep.js';
 import reducer, { initialState } from '../../app/src/js/reducers/granules.js';
 import {
   BULK_GRANULE,

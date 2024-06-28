@@ -1,9 +1,7 @@
 import moment from 'moment';
 import uniqBy from 'lodash/fp/uniqBy.js';
-import { get } from 'object-path';
-// import { createReducer } from '@reduxjs/toolkit';
-import * as toolkitRaw from '@reduxjs/toolkit';
-const { createReducer } = toolkitRaw.default ?? toolkitRaw;
+import get from 'object-path';
+import { createReducer } from '@reduxjs/toolkit';
 import { LOGS, LOGS_ERROR, LOGS_INFLIGHT, CLEAR_LOGS } from '../actions/types.js';
 import { metricsNotConfiguredMessage } from '../utils/log.js';
 
@@ -24,40 +22,41 @@ export const initialState = {
   error: false,
 };
 
-export default createReducer(initialState, {
-  [LOGS]: (state, action) => {
-    const { data } = action;
+export default createReducer(initialState, (builder) => {
+  builder
+    .addCase(LOGS, (state, action) => {
+      const { data } = action;
 
-    if (Array.isArray(data.results) && data.results.length) {
-      state.items = uniqBy((item) => item.key)(data.results
-        .map(processLog)
-        .filter((result) => result.timestamp && result.displayText));
-    }
+      if (Array.isArray(data.results) && data.results.length) {
+        state.items = uniqBy((item) => item.key)(data.results
+          .map(processLog)
+          .filter((result) => result.timestamp && result.displayText));
+      }
 
-    state.inflight = false;
-    state.queriedAt = Date.now();
-    state.error = false;
-  },
-  [LOGS_INFLIGHT]: (state, action) => {
-    const query = get(action.config, 'params.q', '');
+      state.inflight = false;
+      state.queriedAt = Date.now();
+      state.error = false;
+    })
+    .addCase(LOGS_INFLIGHT, (state, action) => {
+      const query = get(action.config, 'params.q', '');
 
-    if (state.query !== query) {
-      state.query = query;
+      if (state.query !== query) {
+        state.query = query;
+        state.items = [];
+      }
+
+      state.inflight = true;
+    })
+    .addCase(LOGS_ERROR, (state, action) => {
+      state.inflight = false;
+      state.error = action.error;
+      if (action.error === metricsNotConfiguredMessage) {
+        state.metricsNotConfigured = true;
+      }
+    })
+    .addCase(CLEAR_LOGS, (state, action) => {
+      state.inflight = false;
+      state.error = action.error;
       state.items = [];
-    }
-
-    state.inflight = true;
-  },
-  [LOGS_ERROR]: (state, action) => {
-    state.inflight = false;
-    state.error = action.error;
-    if (action.error === metricsNotConfiguredMessage) {
-      state.metricsNotConfigured = true;
-    }
-  },
-  [CLEAR_LOGS]: (state, action) => {
-    state.inflight = false;
-    state.error = action.error;
-    state.items = [];
-  },
+    });
 });

@@ -23,7 +23,7 @@ import Operations from './components/Operations';
 import Rules from './components/Rules';
 import ReconciliationReports from './components/ReconciliationReports';
 
-import config from './config';
+import config from './config/index.js';
 
 console.log('Environment', config.environment);
 
