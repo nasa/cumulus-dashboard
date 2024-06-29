@@ -82,8 +82,8 @@ const axiosFetch = (requestConfig, requestAction, start, next, id, type) => {
       }
       return handleError({ id, type, error, requestAction }, next);
     });
-  // console.log('000000 axiosFetch ', getResult);
-  return getResult;
+  console.log('000000 axiosFetch ', getResult);
+  return Promise.resolve(getResult);
 };
 
 // sets timeout for race condition
@@ -92,7 +92,7 @@ const fetchWithTimeout = (requestConfig, requestAction, start, next, id, type, t
   const timeoutPromise = new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
       clearTimeout(timer);
-      reject(new Error('Request timed out')); // Rejects the promise
+      reject(new Error('Request timed out friend')); // Rejects the promise <model props />
     }, timeout);
   });
   // console.log('1111111111 axiosFetch ', axiosFetch(requestConfig, requestAction, start, next));
@@ -102,22 +102,25 @@ const fetchWithTimeout = (requestConfig, requestAction, start, next, id, type, t
   ]);
 };
 
-const fetchData = (requestConfig, requestAction, start, next, id, type) => {
-  fetchWithTimeout(requestConfig, requestAction, start, next, id, type, 7000)
-    .then((response) => {
-      // console.log('33333333333 response', response);
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log('======= ', data);
-    })
-    .catch((error) => {
-      console.error('Failed to fetch:', error);
-    });
-};
+// const fetchData = (requestConfig, requestAction, start, next, id, type) => fetchWithTimeout(
+//   requestConfig,
+//   requestAction,
+//   start,
+//   next,
+//   id,
+//   type,
+//   7000
+// )
+//   .then((response) => {
+//     console.log('33333333333 response', response);
+//     return response.json();
+//   })
+//   .then((data) => {
+//     console.log('======= ', data);
+//   })
+//   .catch((error) => {
+//     console.error('Failed to fetch:', error);
+//   });
 
 export const requestMiddleware =
   ({ dispatch, getState }) => (next) => (action) => {
@@ -152,7 +155,7 @@ export const requestMiddleware =
 
       const start = new Date();
       return (
-        fetchData(requestConfig, requestAction, start, next, id, type)
+        fetchWithTimeout(requestConfig, requestAction, start, next, id, type, 0)
         // axiosFetch()
       );
     }

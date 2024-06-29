@@ -35,7 +35,7 @@ class Home extends React.Component {
 
   componentDidMount () {
     const { dispatch } = this.props;
-    console.log('4444444444 getCumulusInstanceData ', getCumulusInstanceMetadata);
+    console.log('4444444444 getCumulusInstanceData ', dispatch(getCumulusInstanceMetadata()));
     dispatch(getCumulusInstanceMetadata())
       .then(() => this.query());
   }
