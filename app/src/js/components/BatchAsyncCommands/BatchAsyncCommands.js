@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import queue from 'stubborn-queue';
@@ -37,104 +37,111 @@ export const BatchCommand = ({
   action,
   dispatch,
   state,
-  text = '',
-  selected = [],
-  className = '',
+  text,
+  selected,
+  className,
   clearError,
   onSuccess,
   onError,
-  confirmOptions = [],
+  confirmOptions,
   getModalOptions,
   history
 }) => {
-  const [componentState, setComponentState] = useState({
-    callbacks: {},
-    activeModal: false,
-    completed: 0,
-    status: null,
-    modalOptions: null,
-    errorMessage: null,
-    meta: {},
-  });
-  const [isRunning, setIsRunning] = useState(false);
+  const [activeModal, setActiveModal] = useState(false);
+  const [completed, setCompleted] = useState(0);
+  const [modalOptions, setModalOptions] = useState(null);
+  const [status, setStatus] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [meta, setMeta] = useState({});
+  const [results, setResults] = useState(null);
+  const callbacksRef = useRef({});
+  const isRunningRef = useRef(false);
 
-  function buildId(item) {
+  // eslint-disable-next-line arrow-body-style
+  const buildId = (item) => {
     return (typeof item === 'string') ? item : item.granuleId;
-  }
+  };
 
-  function updateMeta(meta) {
-    setComponentState((prevState) => ({
-      ...prevState,
-      meta: { ...prevState.meta, ...meta }
+  const updateMeta = (newMeta) => {
+    setMeta((prevMeta) => ({
+      ...prevMeta,
+      ...newMeta
     }));
-  }
+  };
 
-  function closeModal() {
-    setComponentState((prevState) => ({
-      ...prevState,
-      activeModal: false,
-      meta: {}
-    }));
-  }
+  const closeModal = () => {
+    setActiveModal(false);
+    setMeta({});
+  };
+
+  const isInflight = () => !!Object.keys(callbacksRef.current).length;
 
   useEffect(() => {
-    if (isRunning) return;
-
-    setIsRunning(true);
-
-    const { callbacks, completed } = componentState;
+    if (isRunningRef.current) return;
+    isRunningRef.current = true;
+    const newCallbacks = { ...callbacksRef.current };
 
     // on success or error, call and remove the saved callback
-    Object.keys(callbacks).forEach((id) => {
-      if (!state[id] || !callbacks[id]) return;
-      if (state[id].status === 'success') callbacks[id](null, id);
-      else if (state[id].status === 'error') { callbacks[id]({ error: state[id].error, id }); }
+    Object.keys(callbacksRef.current).forEach((id) => {
+      if (!state[id] || !callbacksRef.current[id]) return;
+      if (state[id].status === 'success') callbacksRef.current[id](null, id);
+      else if (state[id].status === 'error') { callbacksRef.current[id]({ error: state[id].error, id }); }
 
       if (state[id].status === 'success' || state[id].status === 'error') {
-        delete callbacks[id];
-        setComponentState((prevState) => ({
-          ...prevState,
-          callbacks,
-          completed: completed + 1,
-        }));
+        delete newCallbacks[id];
+        setCompleted((prevCompleted) => prevCompleted + 1);
+        callbacksRef.cureent = newCallbacks;
       }
     });
-    setIsRunning(false);
-  }, [isRunning, componentState, state]);
+    isRunningRef.current = false;
+  }, [state]);
 
-  function confirm() {
-    if (typeof getModalOptions === 'function') {
-      const modalOptions = getModalOptions({
-        selected,
-        history,
-        isOnModalConfirm: true,
-        isOnModalComplete: false,
-        closeModal,
-      });
-      setComponentState((prevState) => ({
-        ...prevState,
-        modalOptions,
-      }));
+  // combine multiple errors into one
+  const createErrorMessage = (errors) => {
+    if (!errors || !errors.length) return null;
+    return `${errors.length} error(s) occurred: \n${errors
+      .map((err) => err.error.toString())
+      .join('\n')}`;
+  };
 
-      // if we're replacing the onConfirm function, we don't want to continue with the current one
-      if (modalOptions.onConfirm) {
-        return;
-      }
-    }
-    if (!isInflight()) start();
-  }
-
-  function cancel() {
+  const cancel = () => {
     // prevent cancel when inflight
     if (!isInflight()) {
-      setComponentState((prevState) => ({
-        ...prevState,
-        activeModal: false,
-      }));
+      setActiveModal(false);
     }
-  }
+  };
 
-  function start() {
+  // save a reference to the callback in state, then init the action
+  const initAction = (id, callback) => {
+    callbacksRef.current[id] = callback;
+    return dispatch(action(id, meta));
+  };
+
+  // immediately change the UI to show either success or error
+  const onComplete = (errors) => {
+    // turn array of errors from queue into single error for ui
+    const generatedErrorMessage = createErrorMessage(errors);
+    setErrorMessage(generatedErrorMessage);
+    setStatus(generatedErrorMessage ? 'error' : 'success');
+    setResults(results);
+
+    if (typeof getModalOptions === 'function') {
+      // setTimeout(() => {
+      const modalOpts = getModalOptions({
+        history,
+        selected,
+        results,
+        errors,
+        errorMessage: generatedErrorMessage,
+        isOnModalComplete: true,
+        closeModal,
+      });
+      setModalOptions(modalOpts);
+      setStatus(null);
+    }
+  };
+
+  const start = () => {
     // if we have inflight callbacks, don't allow further clicks
     if (!Array.isArray(selected) || !selected.length || isInflight()) { return false; }
     const q = queue(CONCURRENCY);
@@ -142,60 +149,29 @@ export const BatchCommand = ({
       q.add(initAction, buildId(selected[i]));
     }
     q.done(onComplete);
-  }
+  };
 
-  // save a reference to the callback in state, then init the action
-  function initAction(id, callback) {
-    const { callbacks, meta } = componentState;
-    callbacks[id] = callback;
-    setComponentState((prevState) => ({
-      ...prevState,
-      callbacks
-    }));
-    return dispatch(action(id, meta));
-  }
-
-  // immediately change the UI to show either success or error
-  function onComplete(errors, results) {
-    // turn array of errors from queue into single error for ui
-    const errorMessage = createErrorMessage(errors);
-    setComponentState((prevState) => ({
-      ...prevState,
-      errorMessage,
-      results,
-      status: errorMessage ? 'error' : 'success'
-    }));
+  const confirm = () => {
     if (typeof getModalOptions === 'function') {
-      // setTimeout(() => {
-      const modalOptions = getModalOptions({
-        history,
+      const modalOpts = getModalOptions({
         selected,
-        results,
-        errors,
-        errorMessage,
-        isOnModalComplete: true,
+        history,
+        isOnModalConfirm: true,
+        isOnModalComplete: false,
         closeModal,
       });
-      setComponentState((prevState) => ({
-        ...prevState,
-        modalOptions,
-        status: null
-      }));
-    }
-  }
+      setModalOptions(modalOpts);
 
-  // combine multiple errors into one
-  function createErrorMessage(errors) {
-    if (!errors || !errors.length) return '';
-    return `${errors.length} error(s) occurred: \n${errors
-      .map((err) => err.error.toString())
-      .join('\n')}`;
-  }
+      // if we're replacing the onConfirm function, we don't want to continue with the current one
+      if (modalOpts && modalOptions.onConfirm) {
+        return;
+      }
+    }
+    if (!isInflight()) start();
+  };
 
   // call onSuccess and onError functions as needed
-  function cleanup(e) {
-    const { errorMessage, results } = componentState;
-
+  const cleanup = (e) => {
     if (errorMessage && typeof onError === 'function') onError(errorMessage);
     if (results && results.length && typeof onSuccess === 'function') { onSuccess(results, errorMessage); }
 
@@ -203,50 +179,33 @@ export const BatchCommand = ({
       selected.forEach((item) => dispatch(clearError(buildId(item))));
     }
 
-    setComponentState((prevState) => ({
-      ...prevState,
-      activeModal: false,
-      completed: 0,
-      errorMessage: null,
-      results: null,
-      status: null,
-    }));
-  }
+    setActiveModal(false);
+    setCompleted(0);
+    setErrorMessage(null);
+    setStatus(null);
+  };
 
-  function isInflight() {
-    return !!Object.keys(componentState.callbacks).length;
-  }
-
-  function handleClick() {
+  const handleClick = () => {
     if (typeof getModalOptions === 'function') {
-      const modalOptions = getModalOptions({
+      const modalOpts = getModalOptions({
         onChange: updateMeta,
         selected,
         history,
         closeModal,
       });
-      setComponentState((prevState) => ({
-        ...prevState,
-        modalOptions,
-      }));
+      setModalOptions(modalOpts);
     }
     if (confirm) {
-      setComponentState((prevState) => ({
-        ...prevState,
-        activeModal: true,
-        completed: 0,
-      }));
+      setActiveModal(true);
+      setCompleted(0);
     } else start();
-  }
-
-  const { activeModal, completed, errorMessage, status, modalOptions } = componentState;
+  };
   const todo = selected.length;
   const inflight = isInflight();
 
   // show button as disabled when loading, and in the delay before we clean up.
   const buttonClass = inflight ? 'button--disabled' : '';
-  const confirmResult = confirm(todo);
-  const confirmTextArray = isArray(confirmResult) ? confirmResult : [confirmResult];
+  const confirmTextArray = isArray(confirm) ? confirm : [confirm];
   const percentage = todo ? ((completed * 100) / todo).toFixed(2) : 0;
 
   return (
