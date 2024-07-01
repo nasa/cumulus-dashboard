@@ -37,13 +37,13 @@ export const BatchCommand = ({
   action,
   dispatch,
   state,
-  text,
-  selected,
-  className,
+  text = '',
+  selected = [],
+  className = '',
   clearError,
   onSuccess,
   onError,
-  confirmOptions,
+  confirmOptions = [],
   getModalOptions,
   history
 }) => {
