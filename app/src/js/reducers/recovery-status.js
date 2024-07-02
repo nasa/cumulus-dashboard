@@ -16,30 +16,34 @@ export const initialState = {
   map: {},
 };
 
-export default createReducer(initialState, {
-  [RECOVERY_GRANULE]: (state, action) => {
-    state.map[action.id] = {
-      data: assignDate(action.data),
-      error: false,
-      inflight: false,
-    };
-  },
-  [RECOVERY_GRANULE_INFLIGHT]: (state, action) => {
-    state.map[action.id] = { inflight: true };
-  },
-  [RECOVERY_GRANULE_ERROR]: (state, action) => {
-    let actionError = {};
-    try {
-      actionError = JSON.parse(action.error);
-    } catch (_) {
-      // empty
-    }
-
-    if (actionError.errorType !== 'NotFound' && actionError.httpStatus !== 404) {
+export default createReducer(initialState, (builder) => {
+  builder
+    .addCase(RECOVERY_GRANULE, (state, action) => {
       state.map[action.id] = {
-        error: action.error,
+        data: assignDate(action.data),
+        error: false,
         inflight: false,
       };
-    }
-  },
+    })
+    .addCase(RECOVERY_GRANULE_INFLIGHT, (state, action) => {
+      state.map[action.id] = { inflight: true };
+    })
+    .addCase(RECOVERY_GRANULE_ERROR, (state, action) => {
+      let actionError = {};
+      try {
+        actionError = JSON.parse(action.error);
+      } catch (_) {
+        // empty
+      }
+
+      if (
+        actionError.errorType !== 'NotFound' &&
+        actionError.httpStatus !== 404
+      ) {
+        state.map[action.id] = {
+          error: action.error,
+          inflight: false,
+        };
+      }
+    });
 });

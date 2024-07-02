@@ -23,41 +23,42 @@ export const initialState = {
   },
 };
 
-export default createReducer(initialState, {
-  [DELETE_TOKEN]: (state) => {
-    setToken('');
-    state.tokens.token = null;
-  },
-  [LOGIN]: (state) => {
-    state.authenticated = true;
-    state.inflight = false;
-  },
-  [LOGIN_ERROR]: (state, action) => {
-    state.error = action.error;
-    state.inflight = false;
-    state.authenticated = false;
-  },
-  [LOGIN_INFLIGHT]: (state) => {
-    state.inflight = true;
-  },
-  [LOGOUT]: (state) => {
-    state.authenticated = false;
-  },
-  [REFRESH_TOKEN]: (state, action) => {
-    setToken(action.token);
-    state.tokens.token = action.token;
-    state.tokens.error = null;
-    state.tokens.inflight = false;
-  },
-  [REFRESH_TOKEN_ERROR]: (state, action) => {
-    state.tokens.error = action.error;
-    state.tokens.inflight = false;
-  },
-  [REFRESH_TOKEN_INFLIGHT]: (state) => {
-    state.tokens.inflight = true;
-  },
-  [SET_TOKEN]: (state, action) => {
-    setToken(action.token);
-    state.tokens.token = action.token;
-  },
+export default createReducer(initialState, (builder) => {
+  builder
+    .addCase(DELETE_TOKEN, (state) => {
+      setToken('');
+      state.tokens.token = null;
+    })
+    .addCase(LOGIN, (state) => {
+      state.authenticated = true;
+      state.inflight = false;
+    })
+    .addCase(LOGIN_ERROR, (state, action) => {
+      state.error = action.error;
+      state.inflight = false;
+      state.authenticated = false;
+    })
+    .addCase(LOGIN_INFLIGHT, (state) => {
+      state.inflight = true;
+    })
+    .addCase(LOGOUT, (state) => {
+      state.authenticated = false;
+    })
+    .addCase(REFRESH_TOKEN, (state, action) => {
+      setToken(action.token);
+      state.tokens.token = action.token;
+      state.tokens.error = null;
+      state.tokens.inflight = false;
+    })
+    .addCase(REFRESH_TOKEN_ERROR, (state, action) => {
+      state.tokens.error = action.error;
+      state.tokens.inflight = false;
+    })
+    .addCase(REFRESH_TOKEN_INFLIGHT, (state) => {
+      state.tokens.inflight = true;
+    })
+    .addCase(SET_TOKEN, (state, action) => {
+      setToken(action.token);
+      state.tokens.token = action.token;
+    });
 });

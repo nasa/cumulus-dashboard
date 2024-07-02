@@ -32,50 +32,54 @@ export const initialState = {
   deleted: {},
 };
 
-export default createReducer(initialState, {
-  [PDR]: (state, action) => {
-    state.map[action.id] = {
-      inflight: false,
-      data: assignDate(action.data),
-    };
-    // https://github.com/nasa/cumulus-dashboard/issues/284
-    delete state.deleted[action.id];
-  },
-  [PDR_INFLIGHT]: (state, action) => {
-    state.map[action.id] = { inflight: true };
-  },
-  [PDR_ERROR]: (state, action) => {
-    state.map[action.id] = {
-      inflight: false,
-      error: action.error,
-    };
-  },
-  [PDRS]: (state, action) => {
-    state.list.data = action.data.results;
-    state.list.meta = assignDate(action.data.meta);
-    state.list.inflight = false;
-    state.list.error = false;
-  },
-  [PDRS_INFLIGHT]: (state) => {
-    state.list.inflight = true;
-  },
-  [PDRS_ERROR]: (state, action) => {
-    state.list.inflight = false;
-    state.list.error = action.error;
-  },
-  [SEARCH_PDRS]: (state, action) => {
-    state.list.params.infix = action.infix;
-  },
-  [CLEAR_PDRS_SEARCH]: (state) => {
-    delete state.list.params.infix;
-  },
-  [FILTER_PDRS]: (state, action) => {
-    state.list.params[action.param.key] = action.param.value;
-  },
-  [CLEAR_PDRS_FILTER]: (state, action) => {
-    delete state.list.params[action.paramKey];
-  },
-  [PDR_DELETE]: createSuccessReducer('deleted'),
-  [PDR_DELETE_INFLIGHT]: createInflightReducer('deleted'),
-  [PDR_DELETE_ERROR]: createErrorReducer('deleted'),
+export default createReducer(initialState, (builder) => {
+  builder
+    .addCase(PDR, (state, action) => {
+      state.map[action.id] = {
+        inflight: false,
+        data: assignDate(action.data),
+      };
+      // https://github.com/nasa/cumulus-dashboard/issues/284
+      delete state.deleted[action.id];
+    })
+    .addCase(PDR_INFLIGHT, (state, action) => {
+      state.map[action.id] = { inflight: true };
+    })
+    .addCase(PDR_ERROR, (state, action) => {
+      state.map[action.id] = {
+        inflight: false,
+        error: action.error,
+      };
+    })
+    .addCase(PDRS, (state, action) => {
+      state.list.data = action.data.results;
+      state.list.meta = assignDate(action.data.meta);
+      state.list.inflight = false;
+      state.list.error = false;
+    })
+    .addCase(PDRS_INFLIGHT, (state) => {
+      state.list.inflight = true;
+    })
+    .addCase(PDRS_ERROR, (state, action) => {
+      state.list.inflight = false;
+      state.list.error = action.error;
+    })
+    // Search
+    .addCase(SEARCH_PDRS, (state, action) => {
+      state.list.params.infix = action.infix;
+    })
+    .addCase(CLEAR_PDRS_SEARCH, (state) => {
+      delete state.list.params.infix;
+    })
+    // Filter
+    .addCase(FILTER_PDRS, (state, action) => {
+      state.list.params[action.param.key] = action.param.value;
+    })
+    .addCase(CLEAR_PDRS_FILTER, (state, action) => {
+      delete state.list.params[action.paramKey];
+    })
+    // Deleted
+    .addCase(PDR_DELETE, createSuccessReducer('deleted'))
+    .addCase(PDR_DELETE_INFLIGHT, createInflightReducer('deleted'))
+    .addCase(PDR_DELETE_ERROR, createErrorReducer('deleted'));
 });

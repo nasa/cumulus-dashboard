@@ -1,4 +1,4 @@
-import { del } from 'object-path';
+import  del  from 'object-path';
 import { createReducer } from '@reduxjs/toolkit';
 import assignDate from './utils/assign-date.js';
 import removeDeleted from './utils/remove-deleted.js';
@@ -6,7 +6,7 @@ import {
   createClearItemReducer,
   createErrorReducer,
   createInflightReducer,
-  createSuccessReducer
+  createSuccessReducer,
 } from './utils/reducer-creators.js';
 
 import {
@@ -76,107 +76,139 @@ const getRequestId = ({ requestId }) => requestId;
 
 export default createReducer(initialState, (builder) => {
   builder
-  .addCase(GRANULE, (state, action) => {
-    state.map[action.id] = {
-      inflight: false,
-      data: assignDate(action.data),
-    };
-    delete state.deleted[action.id];
-  })
-  .addCase(GRANULE_INFLIGHT, (state, action) => {
-    state.map[action.id] = { inflight: true };
-  })
-  .addCase(GRANULE_ERROR, (state, action) => {
-    state.map[action.id] = {
-      inflight: false,
-      error: action.error,
-    };
-  })
-  .addCase(GRANULES, (state, action) => {
-    state.list = {
-      ...state.list,
-      data: removeDeleted('granuleId', action.data.results, state.deleted),
-      meta: assignDate(action.data.meta),
-      inflight: false,
-      error: false
-    };
-  })
-  .addCase(GRANULES_INFLIGHT, (state) => {
-    state.list.inflight = true;
-  })
-  .addCase(GRANULES_ERROR, (state, action) => {
-    state.list.inflight = false;
-    state.list.error = action.error;
-  });
-
-  [GRANULE_REPROCESS]: createSuccessReducer('reprocessed')
-  [GRANULE_REPROCESS_INFLIGHT]: createInflightReducer('reprocessed'),
-  [GRANULE_REPROCESS_ERROR]: createErrorReducer('reprocessed'),
-
-  [GRANULE_REINGEST]: createSuccessReducer('reingested'),
-  [GRANULE_REINGEST_INFLIGHT]: createInflightReducer('reingested'),
-  [GRANULE_REINGEST_ERROR]: createErrorReducer('reingested'),
-  [GRANULE_REINGEST_CLEAR_ERROR]: createClearItemReducer('reingested'),
-
-  [GRANULE_APPLYWORKFLOW]: createSuccessReducer('executed'),
-  [GRANULE_APPLYWORKFLOW_INFLIGHT]: createInflightReducer('executed'),
-  [GRANULE_APPLYWORKFLOW_ERROR]: createErrorReducer('executed'),
-  [GRANULE_APPLYWORKFLOW_CLEAR_ERROR]: createClearItemReducer('executed'),
-
-  [GRANULE_REMOVE]: createSuccessReducer('removed'),
-  [GRANULE_REMOVE_INFLIGHT]: createInflightReducer('removed'),
-  [GRANULE_REMOVE_ERROR]: createErrorReducer('removed'),
-  [GRANULE_REMOVE_CLEAR_ERROR]: createClearItemReducer('removed'),
-
-  [BULK_GRANULE_DELETE]: createSuccessReducer('bulkDelete', getConfigRequestId),
-  [BULK_GRANULE_DELETE_INFLIGHT]: createInflightReducer('bulkDelete', getConfigRequestId),
-  [BULK_GRANULE_DELETE_ERROR]: createErrorReducer('bulkDelete', getConfigRequestId),
-  [BULK_GRANULE_DELETE_CLEAR_ERROR]: (state, action) => {
-    const requestId = getRequestId(action);
-    del(state, ['bulkDelete', requestId, 'error']);
-  },
-  [BULK_GRANULE]: createSuccessReducer('bulk', getConfigRequestId),
-  [BULK_GRANULE_INFLIGHT]: createInflightReducer('bulk', getConfigRequestId),
-  [BULK_GRANULE_ERROR]: createErrorReducer('bulk', getConfigRequestId),
-  [BULK_GRANULE_CLEAR_ERROR]: (state, action) => {
-    const requestId = getRequestId(action);
-    del(state, ['bulk', requestId, 'error']);
-  },
-
-  [BULK_GRANULE_REINGEST]: createSuccessReducer('bulkReingest', getConfigRequestId),
-  [BULK_GRANULE_REINGEST_INFLIGHT]: createInflightReducer('bulkReingest', getConfigRequestId),
-  [BULK_GRANULE_REINGEST_ERROR]: createErrorReducer('bulkReingest', getConfigRequestId),
-  [BULK_GRANULE_REINGEST_CLEAR_ERROR]: (state, action) => {
-    const requestId = getRequestId(action);
-    del(state, ['bulkReingest', requestId, 'error']);
-  },
-  
-  [GRANULE_DELETE]: createSuccessReducer('deleted'),
-  [GRANULE_DELETE_INFLIGHT]: createInflightReducer('deleted')
-  [GRANULE_DELETE_ERROR]: createErrorReducer('deleted')
-  [GRANULE_DELETE_CLEAR_ERROR]: createClearItemReducer('deleted')
-
-  .addCase(SEARCH_GRANULES, (state, action) => {
-    state.list.params.infix = action.infix;
-  })
-  .addCase(CLEAR_GRANULES_SEARCH, (state) => {
-    state.list.params.infix = null;
-  })
-  .addCase(FILTER_GRANULES, (state, action) => {
-    state.list.params[action.param.key] = action.param.value;
-  })
-  .addCase(CLEAR_GRANULES_FILTER, (state, action) => {
-    state.list.params[action.paramKey] = null;
-  })
-  .addCase(TOGGLE_GRANULES_TABLE_COLUMNS, (state, action) => {
-    const recoveryStatus = 'recoveryStatus';
-    const { hiddenColumns, allColumns } = action;
-    if (hiddenColumns.includes(recoveryStatus) && state.list.params.getRecoveryStatus) {
-      delete state.list.params.getRecoveryStatus;
-    } else if (!hiddenColumns.includes(recoveryStatus) &&
-      allColumns.includes(recoveryStatus) &&
-      state.list.params.getRecoveryStatus !== true) {
-      state.list.params.getRecoveryStatus = true;
-    }
-  });
+    .addCase(GRANULE, (state, action) => {
+      state.map[action.id] = {
+        inflight: false,
+        data: assignDate(action.data),
+      };
+      delete state.deleted[action.id];
+    })
+    .addCase(GRANULE_INFLIGHT, (state, action) => {
+      state.map[action.id] = { inflight: true };
+    })
+    .addCase(GRANULE_ERROR, (state, action) => {
+      state.map[action.id] = {
+        inflight: false,
+        error: action.error,
+      };
+    })
+    .addCase(GRANULES, (state, action) => {
+      state.list = {
+        ...state.list,
+        data: removeDeleted('granuleId', action.data.results, state.deleted),
+        meta: assignDate(action.data.meta),
+        inflight: false,
+        error: false,
+      };
+    })
+    .addCase(GRANULES_INFLIGHT, (state) => {
+      state.list.inflight = true;
+    })
+    .addCase(GRANULES_ERROR, (state, action) => {
+      state.list.inflight = false;
+      state.list.error = action.error;
+    })
+    // Reprocessed
+    .addCase(GRANULE_REPROCESS, createSuccessReducer('reprocessed'))
+    .addCase(GRANULE_REPROCESS_INFLIGHT, createInflightReducer('reprocessed'))
+    .addCase(GRANULE_REPROCESS_ERROR, createErrorReducer('reprocessed'))
+    // Reingested
+    .addCase(GRANULE_REINGEST, createSuccessReducer('reingested'))
+    .addCase(GRANULE_REINGEST_INFLIGHT, createInflightReducer('reingested'))
+    .addCase(GRANULE_REINGEST_ERROR, createErrorReducer('reingested'))
+    .addCase(GRANULE_REINGEST_CLEAR_ERROR, createClearItemReducer('reingested'))
+    // Executed
+    .addCase(GRANULE_APPLYWORKFLOW, createSuccessReducer('executed'))
+    .addCase(GRANULE_APPLYWORKFLOW_INFLIGHT, createInflightReducer('executed'))
+    .addCase(GRANULE_APPLYWORKFLOW_ERROR, createErrorReducer('executed'))
+    .addCase(
+      GRANULE_APPLYWORKFLOW_CLEAR_ERROR,
+      createClearItemReducer('executed')
+    )
+    // Removed
+    .addCase(GRANULE_REMOVE, createSuccessReducer('removed'))
+    .addCase(GRANULE_REMOVE_INFLIGHT, createInflightReducer('removed'))
+    .addCase(GRANULE_REMOVE_ERROR, createErrorReducer('removed'))
+    .addCase(GRANULE_REMOVE_CLEAR_ERROR, createClearItemReducer('removed'))
+    // Bulk Delete
+    .addCase(
+      BULK_GRANULE_DELETE,
+      createSuccessReducer('bulkDelete', getConfigRequestId)
+    )
+    .addCase(
+      BULK_GRANULE_DELETE_INFLIGHT,
+      createInflightReducer('bulkDelete', getConfigRequestId)
+    )
+    .addCase(
+      BULK_GRANULE_DELETE_ERROR,
+      createErrorReducer('bulkDelete', getConfigRequestId)
+    )
+    .addCase(BULK_GRANULE_DELETE_CLEAR_ERROR, (state, action) => {
+      const requestId = getRequestId(action);
+      del(state, ['bulkDelete', requestId, 'error']);
+    })
+    // Bulk Operations
+    .addCase(BULK_GRANULE, createSuccessReducer('bulk', getConfigRequestId))
+    .addCase(
+      BULK_GRANULE_INFLIGHT,
+      createInflightReducer('bulk', getConfigRequestId)
+    )
+    .addCase(BULK_GRANULE_ERROR, createErrorReducer('bulk', getConfigRequestId))
+    .addCase(BULK_GRANULE_CLEAR_ERROR, (state, action) => {
+      const requestId = getRequestId(action);
+      del(state, ['bulk', requestId, 'error']);
+    })
+    // Bulk Reingest
+    .addCase(
+      BULK_GRANULE_REINGEST,
+      createSuccessReducer('bulkReingest', getConfigRequestId)
+    )
+    .addCase(
+      BULK_GRANULE_REINGEST_INFLIGHT,
+      createInflightReducer('bulkReingest', getConfigRequestId)
+    )
+    .addCase(
+      BULK_GRANULE_REINGEST_ERROR,
+      createErrorReducer('bulkReingest', getConfigRequestId)
+    )
+    .addCase(BULK_GRANULE_REINGEST_CLEAR_ERROR, (state, action) => {
+      const requestId = getRequestId(action);
+      del(state, ['bulkReingest', requestId, 'error']);
+    })
+    // Deleted
+    .addCase(GRANULE_DELETE, createSuccessReducer('deleted'))
+    .addCase(GRANULE_DELETE_INFLIGHT, createInflightReducer('deleted'))
+    .addCase(GRANULE_DELETE_ERROR, createErrorReducer('deleted'))
+    .addCase(GRANULE_DELETE_CLEAR_ERROR, createClearItemReducer('deleted'))
+    //Search
+    .addCase(SEARCH_GRANULES, (state, action) => {
+      state.list.params.infix = action.infix;
+    })
+    .addCase(CLEAR_GRANULES_SEARCH, (state) => {
+      state.list.params.infix = null;
+    })
+    //Filter
+    .addCase(FILTER_GRANULES, (state, action) => {
+      state.list.params[action.param.key] = action.param.value;
+    })
+    .addCase(CLEAR_GRANULES_FILTER, (state, action) => {
+      state.list.params[action.paramKey] = null;
+    })
+    // Table Columns
+    .addCase(TOGGLE_GRANULES_TABLE_COLUMNS, (state, action) => {
+      const recoveryStatus = 'recoveryStatus';
+      const { hiddenColumns, allColumns } = action;
+      if (
+        hiddenColumns.includes(recoveryStatus) &&
+        state.list.params.getRecoveryStatus
+      ) {
+        delete state.list.params.getRecoveryStatus;
+      } else if (
+        !hiddenColumns.includes(recoveryStatus) &&
+        allColumns.includes(recoveryStatus) &&
+        state.list.params.getRecoveryStatus !== true
+      ) {
+        state.list.params.getRecoveryStatus = true;
+      }
+    });
 });

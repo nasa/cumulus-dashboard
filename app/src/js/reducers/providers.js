@@ -55,90 +55,99 @@ export const initialState = {
   stopped: {},
 };
 
-export default createReducer(initialState, {
-  [PROVIDER]: (state, action) => {
-    const { id, data } = action;
+export default createReducer(initialState, (builder) => {
+  builder
+    .addCase(PROVIDER, (state, action) => {
+      const { id, data } = action;
 
-    state.map[id] = {
-      inflight: false,
-      data,
-      error: null,
-    };
+      state.map[id] = {
+        inflight: false,
+        data,
+        error: null,
+      };
 
-    if (get(state, ['deleted', id, 'status']) !== 'error') {
-      delete state.deleted[id];
-    }
-  },
-  [PROVIDER_INFLIGHT]: (state, action) => {
-    state.map[action.id] = { inflight: true };
-  },
-  [PROVIDER_ERROR]: createErrorReducer('map'),
-  [NEW_PROVIDER]: createSuccessReducer('created'),
-  [NEW_PROVIDER_INFLIGHT]: createInflightReducer('created'),
-  [NEW_PROVIDER_ERROR]: createErrorReducer('created'),
-  [PROVIDER_COLLECTIONS]: (state, { id, data }) => {
-    state.collections[id] = { data: data.results.map((c) => c.collectionName) };
-  },
-  [PROVIDER_COLLECTIONS_INFLIGHT]: (state, action) => {
-    state.collections[action.id] = { inflight: true };
-  },
-  [PROVIDER_COLLECTIONS_ERROR]: (state, action) => {
-    state.collections[action.id] = {
-      inflight: false,
-      error: action.error,
-    };
-  },
-  [UPDATE_PROVIDER]: (state, action) => {
-    const { id, data } = action;
-    state.map[id] = { data };
-    state.updated = { ...state.updated, [id]: { status: 'success' } };
-  },
-  [UPDATE_PROVIDER_INFLIGHT]: createInflightReducer('updated'),
-  [UPDATE_PROVIDER_ERROR]: createErrorReducer('updated'),
-  [UPDATE_PROVIDER_CLEAR]: createClearItemReducer('updated'),
-  [PROVIDERS]: (state, action) => {
-    state.list.data = action.data.results;
-    state.list.meta = assignDate(action.data.meta);
-    state.list.inflight = false;
-    state.list.error = false;
-  },
-  [PROVIDERS_INFLIGHT]: (state) => {
-    state.list.inflight = true;
-  },
-  [PROVIDERS_ERROR]: (state, action) => {
-    state.list.inflight = false;
-    state.list.error = action.error;
-  },
-  [SEARCH_PROVIDERS]: (state, action) => {
-    state.list.params.infix = action.infix;
-  },
-  [CLEAR_PROVIDERS_SEARCH]: (state) => {
-    delete state.list.params.infix;
-  },
-  [FILTER_PROVIDERS]: (state, action) => {
-    state.list.params[action.param.key] = action.param.value;
-  },
-  [CLEAR_PROVIDERS_FILTER]: (state, action) => {
-    delete state.list.params[action.paramKey];
-  },
-  [PROVIDER_DELETE]: createSuccessReducer('deleted'),
-  [PROVIDER_DELETE_INFLIGHT]: createInflightReducer('deleted'),
-  [PROVIDER_DELETE_ERROR]: createErrorReducer('deleted'),
-  [OPTIONS_PROVIDERNAME]: (state, action) => {
-    // Map the list response to an object with key-value pairs like:
-    // displayValue: optionElementValue
-    const options = action.data.results.map(
-      (provider) => ({
+      if (get(state, ['deleted', id, 'status']) !== 'error') {
+        delete state.deleted[id];
+      }
+    })
+    .addCase(PROVIDER_INFLIGHT, (state, action) => {
+      state.map[action.id] = { inflight: true };
+    })
+    .addCase(PROVIDER_ERROR, createErrorReducer('map'))
+    // Created
+    .addCase(NEW_PROVIDER, createSuccessReducer('created'))
+    .addCase(NEW_PROVIDER_INFLIGHT, createInflightReducer('created'))
+    .addCase(NEW_PROVIDER_ERROR, createErrorReducer('created'))
+    // Collections
+    .addCase(PROVIDER_COLLECTIONS, (state, { id, data }) => {
+      state.collections[id] = {
+        data: data.results.map((c) => c.collectionName),
+      };
+    })
+    .addCase(PROVIDER_COLLECTIONS_INFLIGHT, (state, action) => {
+      state.collections[action.id] = { inflight: true };
+    })
+    .addCase(PROVIDER_COLLECTIONS_ERROR, (state, action) => {
+      state.collections[action.id] = {
+        inflight: false,
+        error: action.error,
+      };
+    })
+    // Update
+    .addCase(UPDATE_PROVIDER, (state, action) => {
+      const { id, data } = action;
+      state.map[id] = { data };
+      state.updated = { ...state.updated, [id]: { status: 'success' } };
+    })
+    .addCase(UPDATE_PROVIDER_INFLIGHT, createInflightReducer('updated'))
+    .addCase(UPDATE_PROVIDER_ERROR, createErrorReducer('updated'))
+    .addCase(UPDATE_PROVIDER_CLEAR, createClearItemReducer('updated'))
+    .addCase(PROVIDERS, (state, action) => {
+      state.list.data = action.data.results;
+      state.list.meta = assignDate(action.data.meta);
+      state.list.inflight = false;
+      state.list.error = false;
+    })
+    .addCase(PROVIDERS_INFLIGHT, (state) => {
+      state.list.inflight = true;
+    })
+    // Error
+    .addCase(PROVIDERS_ERROR, (state, action) => {
+      state.list.inflight = false;
+      state.list.error = action.error;
+    })
+    // Search
+    .addCase(SEARCH_PROVIDERS, (state, action) => {
+      state.list.params.infix = action.infix;
+    })
+    .addCase(CLEAR_PROVIDERS_SEARCH, (state) => {
+      delete state.list.params.infix;
+    })
+    // Filter
+    .addCase(FILTER_PROVIDERS, (state, action) => {
+      state.list.params[action.param.key] = action.param.value;
+    })
+    .addCase(CLEAR_PROVIDERS_FILTER, (state, action) => {
+      delete state.list.params[action.paramKey];
+    })
+    // Deleted
+    .addCase(PROVIDER_DELETE, createSuccessReducer('deleted'))
+    .addCase(PROVIDER_DELETE_INFLIGHT, createInflightReducer('deleted'))
+    .addCase(PROVIDER_DELETE_ERROR, createErrorReducer('deleted'))
+    // Options Name
+    .addCase(OPTIONS_PROVIDERNAME, (state, action) => {
+      // Map the list response to an object with key-value pairs like:
+      // displayValue: optionElementValue
+      const options = action.data.results.map((provider) => ({
         id: provider.id,
-        label: provider.id
-      }),
-    );
+        label: provider.id,
+      }));
 
-    set(state.dropdowns, 'provider.options', options);
-  },
-  [OPTIONS_PROVIDERNAME_INFLIGHT]: noop,
-  [OPTIONS_PROVIDERNAME_ERROR]: (state, action) => {
-    set(state.dropdowns, 'provider.options', []);
-    state.list.error = action.error;
-  },
+      set(state.dropdowns, 'provider.options', options);
+    })
+    .addCase(OPTIONS_PROVIDERNAME_INFLIGHT, noop)
+    .addCase(OPTIONS_PROVIDERNAME_ERROR, (state, action) => {
+      set(state.dropdowns, 'provider.options', []);
+      state.list.error = action.error;
+    });
 });
