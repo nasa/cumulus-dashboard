@@ -90,7 +90,7 @@ export const BatchCommand = ({
       if (state[id].status === 'success' || state[id].status === 'error') {
         delete newCallbacks[id];
         setCompleted((prevCompleted) => prevCompleted + 1);
-        callbacksRef.cureent = newCallbacks;
+        callbacksRef.current = newCallbacks;
       }
     });
     isRunningRef.current = false;
@@ -300,7 +300,7 @@ BatchCommand.propTypes = {
   confirm: PropTypes.func,
   confirmOptions: PropTypes.array,
   getModalOptions: PropTypes.func,
-  history: PropTypes.object.isRequired,
+  history: PropTypes.object,
 };
 
 export default withRouter(BatchCommand);
