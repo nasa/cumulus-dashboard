@@ -1,5 +1,4 @@
-import * as objectPath from 'object-path/index.js';
-const { get, set } = objectPath;
+import objectPath from 'object-path';
 import { createReducer } from '@reduxjs/toolkit';
 import noop from 'lodash/noop.js';
 import assignDate from './utils/assign-date.js';
@@ -66,7 +65,7 @@ export default createReducer(initialState, (builder) => {
         error: null,
       };
 
-      if (get(state, ['deleted', id, 'status']) !== 'error') {
+      if (objectPath.get(state, ['deleted', id, 'status']) !== 'error') {
         delete state.deleted[id];
       }
     })
@@ -143,11 +142,11 @@ export default createReducer(initialState, (builder) => {
         label: provider.id,
       }));
 
-      set(state.dropdowns, 'provider.options', options);
+      objectPath.set(state.dropdowns, 'provider.options', options);
     })
     .addCase(OPTIONS_PROVIDERNAME_INFLIGHT, noop)
     .addCase(OPTIONS_PROVIDERNAME_ERROR, (state, action) => {
-      set(state.dropdowns, 'provider.options', []);
+      objectPath.set(state.dropdowns, 'provider.options', []);
       state.list.error = action.error;
     });
 });

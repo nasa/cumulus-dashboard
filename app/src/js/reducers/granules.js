@@ -1,4 +1,4 @@
-import  del  from 'object-path';
+import objectPath from 'object-path';
 import { createReducer } from '@reduxjs/toolkit';
 import assignDate from './utils/assign-date.js';
 import removeDeleted from './utils/remove-deleted.js';
@@ -145,7 +145,7 @@ export default createReducer(initialState, (builder) => {
     )
     .addCase(BULK_GRANULE_DELETE_CLEAR_ERROR, (state, action) => {
       const requestId = getRequestId(action);
-      del(state, ['bulkDelete', requestId, 'error']);
+      objectPath.del(state, ['bulkDelete', requestId, 'error']);
     })
     // Bulk Operations
     .addCase(BULK_GRANULE, createSuccessReducer('bulk', getConfigRequestId))
@@ -156,7 +156,7 @@ export default createReducer(initialState, (builder) => {
     .addCase(BULK_GRANULE_ERROR, createErrorReducer('bulk', getConfigRequestId))
     .addCase(BULK_GRANULE_CLEAR_ERROR, (state, action) => {
       const requestId = getRequestId(action);
-      del(state, ['bulk', requestId, 'error']);
+      objectPath.del(state, ['bulk', requestId, 'error']);
     })
     // Bulk Reingest
     .addCase(
@@ -173,7 +173,7 @@ export default createReducer(initialState, (builder) => {
     )
     .addCase(BULK_GRANULE_REINGEST_CLEAR_ERROR, (state, action) => {
       const requestId = getRequestId(action);
-      del(state, ['bulkReingest', requestId, 'error']);
+      objectPath.del(state, ['bulkReingest', requestId, 'error']);
     })
     // Deleted
     .addCase(GRANULE_DELETE, createSuccessReducer('deleted'))
