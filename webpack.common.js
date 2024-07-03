@@ -1,10 +1,11 @@
 import '@babel/register';
-import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
 import path from 'path';
 import { fileURLToPath } from 'url';
+// Plugins
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
+import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
 
 import config from './app/src/js/config/config.js';
 
@@ -154,12 +155,12 @@ const CommonConfig = {
       patterns: [{ from: './app/src/public', to: './' }],
     }),
     new NodePolyfillPlugin({
-      additionalAliases: ['console', 'path', 'stream', 'crypto', 'util', 'vm', 'process'],
+      additionalAliases: ['console', 'path', 'stream', 'crypto', 'util', 'vm'],
     }),
     new webpack.ProvidePlugin({
       jQuery: 'jquery', // can use jquery anywhere in the app without having to require it
       $: 'jquery',
-      process: 'process/browser',
+      process: 'process/browser.js',
     }),
     new webpack.EnvironmentPlugin({
       APIROOT: config.apiRoot,

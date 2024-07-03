@@ -35,9 +35,6 @@ const DevConfig = mergeWithRules({
   module: {
     rules: [
       {
-        resolve: {
-          fullySpecified: false,
-        },
         test: /\.(css|scss)$/,
         use: [
           {
