@@ -20,7 +20,7 @@ import { seedEverything } from './seedEverything.js';
 
 process.env.TOKEN_SECRET = crypto.randomBytes(10).toString('hex');
 
-export default options = (on) => {
+export default function plugin(on) {
   const webpackOptions = {
     // send in the options from your webpack.config.js, so it works the same
     // as your app's code
@@ -53,4 +53,6 @@ export default options = (on) => {
     },
     failed: cypressFailed()
   });
-};
+  return plugin();
+}
+

@@ -14,7 +14,7 @@ import babelParser from '@babel/eslint-parser';
 
 export default [
   {
-    files: ['**/*.js', '**/*.jsx'],
+    files: ['**/*.{js,jsx,ts,tsx}'],
     // global rules
     rules: { 
       ...js.configs.recommended.rules,
@@ -80,7 +80,7 @@ export default [
   },
   // global ignores that replace .eslintignore for flat config
   {
-    ignores: ['test/**', 'dist/**', 'docker/**'],
+    ignores: ['test/**', 'dist/**', 'docker/**', 'node_modules'],
   },
   // declare imported configs
   {
@@ -96,6 +96,7 @@ export default [
       'react-hooks': reactHooks,
     },
   },
+  // declare parser options - we use babel
   {
     languageOptions: {
       parser: babelParser,
@@ -105,10 +106,10 @@ export default [
           jsx: true,
           modules: true
         },
-        allowImportExportEverywhere: true,
+        allowImportExportEverywhere: false,
         importAttributes: true,
         sourceType: 'module', // to handle esm
-        requireConfigFile: false,
+        requireConfigFile: true,
         babelOptions: {
           configFile: './babel.config.cjs',
         },
@@ -127,7 +128,7 @@ export default [
     settings: {
       react: {
         pragma: 'React',
-        version: '17.0.2',
+        version: 'detect',
       },
     },
   },

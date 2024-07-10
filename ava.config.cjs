@@ -1,10 +1,13 @@
 module.exports = {
   babel: {
-    extensions: ['.js', '.jsx', '.mjs', '.cjs'],
+    extensions: ['.js', '.jsx'],
     testOptions: {
+      babelrc: true,
+      configFile: './babel.config.cjs',
       plugins: [
         '@babel/plugin-syntax-jsx',
         [
+          // Webpack
           'babel-plugin-webpack-alias-7',
           {
             config: './config/webpack.config.test.js',
@@ -14,7 +17,7 @@ module.exports = {
       presets: [
         ['module:@ava/babel/stage-4', 
           {
-            modules: false
+            modules: false // Disable ava converting ESM syntax to CommonJS
           }
         ]
       ]

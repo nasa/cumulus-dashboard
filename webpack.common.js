@@ -6,6 +6,7 @@ import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
+import ESLintWebpackPlugin from 'eslint-webpack-plugin';
 
 import config from './app/src/js/config/config.js';
 
@@ -48,7 +49,7 @@ const CommonConfig = {
   module: {
     rules: [
       {
-        test: /\.m?(js|jsx)$/,
+        test: /\.(?:js|mjs|cjs)$/,
         type: 'javascript/auto',
         exclude: [
           /node_modules\/(?!(map-obj|snakecase-keys|strict-uri-encode|fast-xml-parser)\/).*/,
@@ -58,11 +59,7 @@ const CommonConfig = {
           {
             loader: 'babel-loader',
             options: {
-              sourceType: 'unambiguous',
-              presets: [
-                '@babel/preset-env', 
-                '@babel/preset-react',
-              ],
+              sourceType: 'module',
             },
           },
         ],
@@ -156,6 +153,11 @@ const CommonConfig = {
     }),
     new NodePolyfillPlugin({
       additionalAliases: ['console', 'path', 'stream', 'crypto', 'util', 'vm'],
+    }),
+    new ESLintWebpackPlugin({
+      configType: 'flat',
+      eslintPath: 'eslint/use-at-your-own-risk',
+      overrideConfigFile: 'eslint.config.js',
     }),
     new webpack.ProvidePlugin({
       jQuery: 'jquery', // can use jquery anywhere in the app without having to require it

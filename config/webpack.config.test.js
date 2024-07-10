@@ -1,3 +1,4 @@
+// This config is for ava tests to work with webpack and babel
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -6,7 +7,7 @@ const __dirname = path.dirname(__filename);
 
 const testConfig = {
   resolve: {
-    extensions: ['.js', '.jsx', '.mjs', '.cjs', '.scss'],
+    extensions: ['.js', '.jsx', '.mjs', '.cjs'],
     alias: {
       path: path.join(__dirname, './app/src'),
     },
@@ -31,7 +32,7 @@ const testConfig = {
       plugins: [
         [
           'babel-plugin-webpack-alias-7',
-          { config: './config/webpack.config.test.mjs', findConfig: true },
+          { config: './config/webpack.config.test.js', findConfig: true },
         ],
       ],
     },
