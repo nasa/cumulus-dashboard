@@ -80,7 +80,7 @@ export default [
   },
   // global ignores that replace .eslintignore for flat config
   {
-    ignores: ['test/**', 'dist/**', 'docker/**', 'node_modules'],
+    ignores: ['test/**/*.js', 'dist/**', 'docker/**', 'node_modules'],
   },
   // declare imported configs
   {
@@ -96,9 +96,9 @@ export default [
       'react-hooks': reactHooks,
     },
   },
-  // declare parser options - we use babel
   {
     languageOptions: {
+      // declare parser options - we use babel
       parser: babelParser,
       parserOptions: {
         ecmaVersion: 'latest',
@@ -114,11 +114,13 @@ export default [
           configFile: './babel.config.cjs',
         },
       },
+      // declare global properties
       globals: {
         ...globals.browser,
         ...globals.node,
         ...globals.mocha,
         ...globals.react,
+        ...globals.es6,
         cy: true,
         Cypress: true,
         expect: true,

@@ -34,4 +34,5 @@ module.exports = {
   environmentVariables: {
     NODE_ENV: 'test',
   },
-};
+  nodeArguments: ['--experimental-modules'] // Support for ESM
+  };

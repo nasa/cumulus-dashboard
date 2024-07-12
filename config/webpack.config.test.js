@@ -37,6 +37,11 @@ const testConfig = {
       ],
     },
   },
+  ava: {
+    nodeArguments: [
+      '--experimental-modules' // Support for ESM
+    ]
+  }
 };
 
 export default testConfig;
