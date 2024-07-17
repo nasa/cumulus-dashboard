@@ -117,7 +117,7 @@ export const BatchCommand = ({
   const start = () => {
     // if we have inflight callbacks, don't allow further clicks
     if (!Array.isArray(selected) || !selected.length || isInflight()) { return false; }
-    const q = queue(CONCURRENCY);
+    const q = queue(initAction, CONCURRENCY);
     selected.forEach((item) => {
       q.add(initAction, buildId(item));
     });
@@ -177,7 +177,7 @@ export const BatchCommand = ({
     setCompleted(0);
     setErrorMsg(null);
     setStatus(null);
-    setResults([]);
+    setResults(null);
   };
 
   const isInflight = () => !!Object.keys(callbacks).length;
