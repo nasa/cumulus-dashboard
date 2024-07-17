@@ -82,7 +82,7 @@ export const BatchCommand = ({
           const newCallbacks = { ...callbacks };
           delete newCallbacks[id];
           setCallbacks(newCallbacks);
-          setCallbacks((prevCompleted) => prevCompleted + 1);
+          setCompleted((prevCompleted) => prevCompleted + 1);
         }
       });
       isRunning.current = false;
@@ -177,6 +177,7 @@ export const BatchCommand = ({
     setCompleted(0);
     setErrorMsg(null);
     setStatus(null);
+    setResults(null);
   };
 
   const isInflight = () => !!Object.keys(callbacks).length;
@@ -256,7 +257,7 @@ export const BatchCommand = ({
             <>
               <div>
                 <Alert variant="danger"><strong>Error</strong></Alert>
-                <ErrorReport report= {errorMsg}/>
+                <ErrorReport report={errorMsg} />
               </div>
             </>
             }
@@ -269,8 +270,8 @@ export const BatchCommand = ({
                 ))}</div>
                 <div className="modal__internal modal__formcenter">
                   {confirmOptions &&
-                    confirmOptions.map((option) => (
-                      <div key={`option-${confirmOptions.indexOf(option)}`}>
+                    confirmOptions.map((option, index) => (
+                      <div key={`option-${index}`}>
                         {option}
                         <br />
                       </div>))
