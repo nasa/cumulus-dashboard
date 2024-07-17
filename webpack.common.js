@@ -138,7 +138,6 @@ const CommonConfig = {
           },
         ],
       },
-      { test: /\.node$/, use: "node-loader" }
     ],
   },
   plugins: [

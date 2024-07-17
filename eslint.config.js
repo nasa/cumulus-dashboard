@@ -2,11 +2,11 @@
 import js from '@eslint/js';
 import globals from 'globals';
 import airbnbBase from 'eslint-config-airbnb-base';
-import standard from 'eslint-config-standard';
+// import standard from 'eslint-config-standard';
 import eslintComments from 'eslint-plugin-eslint-comments';
 import importPlugin from 'eslint-plugin-import';
 import lodash from 'eslint-plugin-lodash';
-import jsxAlly from 'eslint-plugin-jsx-a11y';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
 import node from 'eslint-plugin-node';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
@@ -17,8 +17,17 @@ export default [
     files: ['**/*.{js,jsx,ts,tsx}'],
     // global rules
     rules: { 
+      // replaces 'extends' for plugins
       ...js.configs.recommended.rules,
-
+      ...airbnbBase.configs.recommended.rules,
+      ...eslintComments.configs.recommended.rules,
+      ...importPlugin.configs.recommended.rules,
+      ...lodash.configs.recommended.rules,
+      ...jsxA11y.configs.recommended.rules,
+      ...node.configs.recommended.rules,
+      ...react.configs.recommended.rules,
+      ...reactHooks.configs.recommended.rules,
+      
       // Rule Meaning: 0 - rule off, 1 - rule on as a warning, 2 - rule on as an error (exit code is 1 when triggered)
       'no-unused-vars': 1,
       'no-undef': 1,
@@ -47,7 +56,7 @@ export default [
       'react-hooks/exhaustive-deps': 1,
       'eslint-comments/no-unused-disable': 1,
       'eslint-comments/disable-enable-pair': [
-        'error',
+        2,
         { allowWholeFile: true },
       ],
       'import/no-extraneous-dependencies': 0,
@@ -60,7 +69,7 @@ export default [
       'lodash/prefer-constant': 0,
       'lodash/prefer-lodash-method': 0,
       'lodash/prefer-lodash-typecheck': 0,
-      'no-param-reassign': ['error', { props: false }],
+      'no-param-reassign': [2, { props: false }],
       'class-methods-use-this': 0,
       'consistent-return': 0,
       'no-console': 0,
@@ -73,7 +82,7 @@ export default [
           ignoreTemplateLiterals: true,
         },
       ],
-      'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
+      'no-plusplus': [2, { allowForLoopAfterthoughts: true }],
       'jsx-a11y/click-events-have-key-events': 0,
       'node/no-deprecated-api': 2
     },
@@ -86,11 +95,11 @@ export default [
   {
     plugins: {
       'airbnb-base': airbnbBase,
-      'standard': standard,
+      // 'standard': standard,
       'eslint-comments': eslintComments,
       'import': importPlugin,
       'lodash': lodash,
-      'jsx-a11y': jsxAlly,
+      'jsx-a11y': jsxA11y,
       'node': node,
       'react': react,
       'react-hooks': reactHooks,
@@ -111,6 +120,7 @@ export default [
         sourceType: 'module', // to handle esm
         requireConfigFile: true,
         babelOptions: {
+          babelrc: true,
           configFile: './babel.config.cjs',
         },
       },
@@ -121,9 +131,10 @@ export default [
         ...globals.mocha,
         ...globals.react,
         ...globals.es6,
-        cy: true,
-        Cypress: true,
-        expect: true,
+        // Cypress variables
+        cy: 'writable',
+        Cypress: 'writable',
+        expect: 'writable',
       },
     },
     // Define React version settings
@@ -132,6 +143,21 @@ export default [
         pragma: 'React',
         version: 'detect',
       },
+    },
+     // rules for config files in cjs and mjs
+    files: ['**/*.{cjs,mjs}'],
+    rules: { 
+      // Rule Meaning: 0 - rule off, 1 - rule on as a warning, 2 - rule on as an error (exit code is 1 when triggered)
+      'no-unused-vars': 1,
+      'no-undef': 1,
+      'comma-dangle': [2, 'only-multiline'],
+      'space-before-function-paren': [
+        1, { anonymous: 'ignore', named: 'ignore', asyncArrow: 'ignore' },
+      ],
+      semi: [2, 'always'],
+      'no-extra-semi': 2,
+      'semi-spacing': [2, { before: false, after: true }],
+      'new-cap': [2, { properties: false }],
     },
   },
 ];

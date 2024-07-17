@@ -2,7 +2,6 @@
 module.exports = {
     targets: {
       node: '16.19.0',
-      esmodules: true,
     },
   presets: [
     '@babel/preset-env',

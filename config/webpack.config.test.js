@@ -13,15 +13,7 @@ const testConfig = {
     },
   },
   presets: [
-    [
-      '@babel/preset-env',
-      {
-        targets: {
-          node: '16.19.0',
-          esmodules: true,
-        },
-      },
-    ],
+    '@babel/preset-env',
     '@babel/preset-react',
   ],
   plugins: [
