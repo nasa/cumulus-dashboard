@@ -14,7 +14,7 @@ import {
   clearGranulesFilter,
   listGranules,
   getOptionsCollectionName,
-} from '../../actions';
+} from '../../actions/index.js';
 import {
   lastUpdated,
   nullValue,

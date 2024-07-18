@@ -11,7 +11,7 @@ import {
   getCumulusInstanceMetadata,
   searchExecutionEvents,
   clearExecutionEventsSearch,
-} from '../../actions';
+} from '../../actions/index.js';
 
 import { tableColumns } from '../../utils/table-config/execution-status.js';
 

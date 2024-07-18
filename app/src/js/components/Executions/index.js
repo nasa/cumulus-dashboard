@@ -11,7 +11,7 @@ import ExecutionStatus from './execution-status.js';
 import ExecutionLogs from './execution-logs.js';
 import ExecutionEvents from './execution-events.js';
 import ExecutionsList from './executions-list.js';
-import { getCount, listExecutions } from '../../actions';
+import { getCount, listExecutions } from '../../actions/index.js';
 import { strings } from '../locale.js';
 import { filterQueryParams } from '../../utils/url-helper.js';
 

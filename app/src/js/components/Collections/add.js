@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { createCollection, getSchema } from '../../actions';
+import { createCollection, getSchema } from '../../actions/index.js';
 import { getCollectionId, collectionHrefFromId } from '../../utils/format.js';
 import { removeReadOnly } from '../FormSchema/schema.js';
 import AddRaw from '../AddRaw/add-raw.js';

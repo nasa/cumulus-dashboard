@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import get from 'lodash/get';
+import get from 'lodash/get.js';
 import {
   getReconciliationReport,
   listWorkflows,
-} from '../../actions';
+} from '../../actions/index.js';
 import Loading from '../LoadingIndicator/loading-indicator.js';
 import InventoryReport from './inventory-report.js';
 import GnfReport from './gnf-report.js';

@@ -7,7 +7,7 @@ import {
   listWorkflows,
   searchWorkflows,
   clearWorkflowsSearch,
-} from '../../actions';
+} from '../../actions/index.js';
 import List from '../Table/Table.js';
 import ListFilters from '../ListActions/ListFilters.js';
 import Search from '../Search/search.js';

@@ -8,7 +8,7 @@ import {
   listPdrs,
   filterPdrs,
   clearPdrsFilter,
-} from '../../actions';
+} from '../../actions/index.js';
 import { lastUpdated, tally, displayCase } from '../../utils/format.js';
 import {
   tableColumns,

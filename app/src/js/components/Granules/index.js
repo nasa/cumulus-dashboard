@@ -5,7 +5,7 @@ import { get } from 'object-path';
 import { connect } from 'react-redux';
 import { withRouter, Redirect, Route, Switch } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
-import { getCount, listGranules } from '../../actions';
+import { getCount, listGranules } from '../../actions/index.js';
 import { strings } from '../locale.js';
 import AllGranules from './list.js';
 import GranuleOverview from './granule.js';

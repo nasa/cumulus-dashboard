@@ -18,7 +18,7 @@ import {
   clearGranulesSearch,
   listWorkflows,
   getOptionsProviderName,
-} from '../../actions';
+} from '../../actions/index.js';
 import {
   bulkActions,
   defaultWorkflowMeta,
@@ -30,7 +30,7 @@ import List from '../Table/Table.js';
 import Dropdown from '../DropDown/dropdown.js';
 import Search from '../Search/search.js';
 import { granuleStatus as statusOptions } from '../../utils/status.js';
-import { workflowOptionNames } from '../../selectors';
+import { workflowOptionNames } from '../../selectors/index.js';
 import ListFilters from '../ListActions/ListFilters.js';
 import CollectionHeader from './collection-header.js';
 

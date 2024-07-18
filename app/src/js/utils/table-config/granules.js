@@ -29,7 +29,7 @@ import {
   removeGranule,
   removeGranuleClearError,
   removeAndDeleteGranule
-} from '../../actions';
+} from '../../actions/index.js';
 import ErrorReport from '../../components/Errors/report.js';
 import { strings } from '../../components/locale.js';
 import SimpleDropdown from '../../components/DropDown/simple-dropdown.js';

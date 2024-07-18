@@ -12,7 +12,7 @@ import {
   listExecutions,
   listGranules,
   listRules,
-} from '../actions';
+} from '../actions/index.js';
 import {
   nullValue,
   tally,

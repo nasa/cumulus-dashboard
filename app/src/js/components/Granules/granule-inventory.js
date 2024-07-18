@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import queryString from 'query-string';
-import { createReconciliationReport } from '../../actions';
+import { createReconciliationReport } from '../../actions/index.js';
 import { historyPushWithQueryParams } from '../../utils/url-helper.js';
 import DefaultModal from '../Modal/modal.js';
 import TextForm from '../TextAreaForm/text.js';

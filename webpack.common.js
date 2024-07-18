@@ -6,7 +6,7 @@ import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
-import ESLintWebpackPlugin from 'eslint-webpack-plugin';
+// import ESLintWebpackPlugin from 'eslint-webpack-plugin';
 
 import config from './app/src/js/config/config.js';
 
@@ -39,6 +39,7 @@ const CommonConfig = {
     alias: {
       Fonts: path.join(__dirname, 'app/src/assets/fonts'),
       Images: path.join(__dirname, 'app/src/assets/images'),
+      process: 'process/browser.js',
     },
     fallback: {
       fs: false,
@@ -59,7 +60,7 @@ const CommonConfig = {
           {
             loader: 'babel-loader',
             options: {
-              sourceType: 'module',
+              sourceType: 'module', // For ESM with babel
             },
           },
         ],
@@ -153,11 +154,11 @@ const CommonConfig = {
     new NodePolyfillPlugin({
       additionalAliases: ['console', 'path', 'stream', 'crypto', 'util', 'vm'],
     }),
-    new ESLintWebpackPlugin({
+/*     new ESLintWebpackPlugin({
       configType: 'flat',
       eslintPath: 'eslint/use-at-your-own-risk',
       overrideConfigFile: 'eslint.config.js',
-    }),
+    }), */
     new webpack.ProvidePlugin({
       jQuery: 'jquery', // can use jquery anywhere in the app without having to require it
       $: 'jquery',

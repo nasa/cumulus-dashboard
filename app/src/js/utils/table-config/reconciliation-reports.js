@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import get from 'lodash/get';
 
 import { nullValue, dateOnly, IndicatorWithTooltip, collectionHrefFromId, providerLink } from '../format.js';
-import { getReconciliationReport, deleteReconciliationReport, listReconciliationReports } from '../../actions';
+import { getReconciliationReport, deleteReconciliationReport, listReconciliationReports } from '../../actions/index.js';
 import { getPersistentQueryParams } from '../url-helper.js';
 
 export const tableColumns = ({ dispatch, isGranules, query }) => ([

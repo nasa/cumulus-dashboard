@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import isEmpty from 'lodash/isEmpty';
+import isEmpty from 'lodash/isEmpty.js';
 import SimplePagination from '../Pagination/simple-pagination.js';
 import Pagination from '../Pagination/pagination.js';
 import Dropdown from '../DropDown/dropdown.js';
 import pageSizeOptions from '../../utils/page-size.js';
-import _config from '../../config';
+import _config from '../../config/index.js';
 
 const { defaultPageLimit } = _config;
 

@@ -4,9 +4,9 @@ import Ace from 'react-ace';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import { getCollection } from '../../actions';
+import { getCollection } from '../../actions/index.js';
 import { getCollectionId, nullValue } from '../../utils/format.js';
-import config from '../../config';
+import config from '../../config/index.js';
 import Loading from '../LoadingIndicator/loading-indicator.js';
 import CollectionHeader from './collection-header.js';
 

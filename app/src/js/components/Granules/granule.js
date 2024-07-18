@@ -17,7 +17,7 @@ import {
   deleteGranule,
   applyWorkflowToGranule,
   listWorkflows,
-} from '../../actions';
+} from '../../actions/index.js';
 import {
   displayCase,
   IndicatorWithTooltip,
@@ -39,7 +39,7 @@ import Metadata from '../Table/Metadata.js';
 import DropdownAsync from '../DropDown/dropdown-async-command.js';
 import SimpleDropdown from '../DropDown/simple-dropdown.js';
 import { strings } from '../locale.js';
-import { workflowOptionNames } from '../../selectors';
+import { workflowOptionNames } from '../../selectors/index.js';
 import { defaultWorkflowMeta, executeDialog } from '../../utils/table-config/granules.js';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs.js';
 import { historyPushWithQueryParams } from '../../utils/url-helper.js';

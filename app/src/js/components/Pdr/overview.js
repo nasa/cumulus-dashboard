@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { listPdrs, getCount, clearPdrsFilter, filterPdrs, refreshCumulusDbConnection } from '../../actions';
+import { listPdrs, getCount, clearPdrsFilter, filterPdrs, refreshCumulusDbConnection } from '../../actions/index.js';
 import { lastUpdated, tally } from '../../utils/format.js';
 import { bulkActions } from '../../utils/table-config/pdrs.js';
 import { tableColumns } from '../../utils/table-config/pdr-progress.js';

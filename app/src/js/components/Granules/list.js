@@ -15,7 +15,7 @@ import {
   getCount,
   getOptionsProviderName,
   toggleGranulesTableColumns,
-} from '../../actions';
+} from '../../actions/index.js';
 import { lastUpdated, tally, displayCase } from '../../utils/format.js';
 import {
   defaultHiddenColumns,

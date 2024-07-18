@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 
-import _config from '../../config';
+import _config from '../../config/index.js';
 import DefaultModal from '../Modal/modal.js';
 import ErrorReport from '../Errors/report.js';
 import SimpleDropdown from '../DropDown/simple-dropdown.js';
@@ -12,7 +12,7 @@ import {
   clearGranulesWorkflows,
   getGranulesWorkflows,
   getGranulesWorkflowsClearError
-} from '../../actions';
+} from '../../actions/index.js';
 
 const { kibanaRoot } = _config;
 

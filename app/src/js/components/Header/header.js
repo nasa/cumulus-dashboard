@@ -3,13 +3,13 @@ import c from 'classnames';
 import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import get from 'lodash/get';
+import get from 'lodash/get.js';
 import {
   logout,
   getApiVersion,
   getCMRInfo,
   getCumulusInstanceMetadata,
-} from '../../actions';
+} from '../../actions/index.js';
 import _config from '../../config/config.js';
 import { window } from '../../utils/browser.js';
 import { strings } from '../locale.js';

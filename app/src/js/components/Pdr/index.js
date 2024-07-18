@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { withRouter, Route, Switch } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar.js';
-import { getCount, listPdrs } from '../../actions';
+import { getCount, listPdrs } from '../../actions/index.js';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader.js';
 import Pdr from './pdr.js';
 import PdrOverview from './overview.js';

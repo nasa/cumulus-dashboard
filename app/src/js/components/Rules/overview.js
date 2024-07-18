@@ -10,7 +10,7 @@ import {
   filterRules,
   clearRulesFilter,
   refreshCumulusDbConnection,
-} from '../../actions';
+} from '../../actions/index.js';
 import { lastUpdated, tally } from '../../utils/format.js';
 import List from '../Table/Table.js';
 import Search from '../Search/search.js';

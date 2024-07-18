@@ -15,7 +15,7 @@ import { strings } from '../../components/locale.js';
 import { getPersistentQueryParams } from '../url-helper.js';
 import { getEventDetails } from '../../components/Executions/execution-graph-utils.js';
 import Tooltip from '../../components/Tooltip/tooltip.js';
-import { getExecutionStatus } from '../../actions';
+import { getExecutionStatus } from '../../actions/index.js';
 
 export const formatEvents = (events) => {
   const mutableEvents = cloneDeep(events);

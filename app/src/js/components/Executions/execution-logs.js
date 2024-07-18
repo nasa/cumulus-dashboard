@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { getExecutionLogs } from '../../actions';
+import { getExecutionLogs } from '../../actions/index.js';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs.js';
 
 import ErrorReport from '../Errors/report.js';

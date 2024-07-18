@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import get from 'lodash/get';
-import { getExecutionStatus, getCumulusInstanceMetadata } from '../../actions';
+import { getExecutionStatus, getCumulusInstanceMetadata } from '../../actions/index.js';
 import {
   metaAccessors,
   associatedGranulesTableColumns,

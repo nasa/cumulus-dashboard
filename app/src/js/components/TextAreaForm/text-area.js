@@ -7,7 +7,7 @@ import 'brace/mode/json';
 import 'brace/theme/github';
 
 import Ace from 'react-ace';
-import config from '../../config';
+import config from '../../config/index.js';
 import { setWindowEditorRef } from '../../utils/browser.js';
 import ErrorReport from '../Errors/report.js';
 

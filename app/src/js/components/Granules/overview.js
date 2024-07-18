@@ -19,7 +19,7 @@ import {
   getOptionsProviderName,
   refreshCumulusDbConnection,
   toggleGranulesTableColumns,
-} from '../../actions';
+} from '../../actions/index.js';
 import { lastUpdated, tally } from '../../utils/format.js';
 import {
   bulkActions,
@@ -32,7 +32,7 @@ import {
 } from '../../utils/table-config/granules.js';
 import { granuleStatus as statusOptions } from '../../utils/status.js';
 import { strings } from '../locale.js';
-import { workflowOptionNames } from '../../selectors';
+import { workflowOptionNames } from '../../selectors/index.js';
 import List from '../Table/Table.js';
 import Dropdown from '../DropDown/dropdown.js';
 import Search from '../Search/search.js';

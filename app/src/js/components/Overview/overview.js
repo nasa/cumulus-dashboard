@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { get } from 'object-path';
 import Loading from '../LoadingIndicator/loading-indicator.js';
 import { displayCase, numLargeTooltip } from '../../utils/format.js';
-import { getCount } from '../../actions';
+import { getCount } from '../../actions/index.js';
 
 const Overview = ({
   dispatch,

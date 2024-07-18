@@ -7,7 +7,7 @@ import {
   getProvider,
   updateProvider,
   clearUpdateProvider
-} from '../../actions';
+} from '../../actions/index.js';
 import EditRecord from '../Edit/edit.js';
 import { isValidProvider } from '../../utils/validate.js';
 

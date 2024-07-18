@@ -11,7 +11,7 @@ import {
   bulkGranuleClearError,
   bulkGranuleDeleteClearError,
   bulkGranuleReingestClearError,
-} from '../../actions';
+} from '../../actions/index.js';
 import BulkGranuleModal from './bulk-granule-modal.js';
 import { historyPushWithQueryParams } from '../../utils/url-helper.js';
 import DefaultModal from '../Modal/modal.js';

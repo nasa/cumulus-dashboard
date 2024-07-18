@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { displayCase } from '../../utils/format.js';
-import _config from '../../config';
+import _config from '../../config/index.js';
 
 import TextArea from '../TextAreaForm/text-area.js';
 import DefaultModal from '../Modal/modal.js';

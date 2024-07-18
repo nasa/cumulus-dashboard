@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import { get } from 'object-path';
 import AsyncCommand from '../AsyncCommands/AsyncCommands.js';
-import { getProvider, deleteProvider, listCollections } from '../../actions';
+import { getProvider, deleteProvider, listCollections } from '../../actions/index.js';
 import { lastUpdated, deleteText } from '../../utils/format.js';
 import Loading from '../LoadingIndicator/loading-indicator.js';
 import LogViewer from '../Logs/viewer.js';

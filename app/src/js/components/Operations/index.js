@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar.js';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader.js';
 import OperationOverview from './overview.js';
-import { listOperations } from '../../actions';
+import { listOperations } from '../../actions/index.js';
 import { strings } from '../locale.js';
 import { filterQueryParams } from '../../utils/url-helper.js';
 

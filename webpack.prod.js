@@ -12,6 +12,8 @@ import CommonConfig from './webpack.common.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+//const pkg = JSON.parse('./package.json');
+
 const servedByCumulusAPI = process.env.SERVED_BY_CUMULUS_API;
 
 const publicPath = servedByCumulusAPI ? './' : '/';

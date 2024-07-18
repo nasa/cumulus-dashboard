@@ -14,14 +14,14 @@ import {
   disableText,
   deleteText,
   rerunText,
-} from '../../utils/format';
+} from '../../utils/format.js';
 import {
   getRule,
   deleteRule,
   rerunRule,
   enableRule,
   disableRule
-} from '../../actions';
+} from '../../actions/index.js';
 import Loading from '../LoadingIndicator/loading-indicator.js';
 import Metadata from '../Table/Metadata.js';
 import DropdownAsync from '../DropDown/dropdown-async-command.js';

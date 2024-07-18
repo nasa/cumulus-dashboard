@@ -19,7 +19,7 @@ import {
   applyWorkflowToGranule,
   applyRecoveryWorkflowToGranule,
   refreshCumulusDbConnection,
-} from '../../actions';
+} from '../../actions/index.js';
 import {
   collectionName as collectionLabelForId,
   getCollectionId,
@@ -48,7 +48,7 @@ import { strings } from '../locale.js';
 import Overview from '../Overview/overview.js';
 import Search from '../Search/search.js';
 import List from '../Table/Table.js';
-import { workflowOptionNames } from '../../selectors';
+import { workflowOptionNames } from '../../selectors/index.js';
 
 const breadcrumbConfig = [
   {

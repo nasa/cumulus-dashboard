@@ -11,7 +11,7 @@ import {
   filterProviders,
   clearProvidersFilter,
   refreshCumulusDbConnection,
-} from '../../actions';
+} from '../../actions/index.js';
 import { lastUpdated } from '../../utils/format.js';
 import { tableColumns } from '../../utils/table-config/providers.js';
 import List from '../Table/Table.js';

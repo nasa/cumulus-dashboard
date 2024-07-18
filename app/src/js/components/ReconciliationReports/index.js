@@ -6,7 +6,7 @@ import { withRouter, Route, Switch } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar.js';
 import { strings } from '../locale.js';
-import { getCount, listReconciliationReports } from '../../actions';
+import { getCount, listReconciliationReports } from '../../actions/index.js';
 import CreateReconciliationReport from './create.js';
 import ReconciliationReportList from './list.js';
 import ReconciliationReport from './reconciliation-report.js';

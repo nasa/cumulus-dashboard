@@ -12,8 +12,8 @@ import {
   listWorkflows,
   getOptionsCollectionName,
   refreshCumulusDbConnection,
-} from '../../actions';
-import { workflowOptions as workflowSelectOptions } from '../../selectors';
+} from '../../actions/index.js';
+import { workflowOptions as workflowSelectOptions } from '../../selectors/index.js';
 import { tally, lastUpdated } from '../../utils/format.js';
 import statusOptions from '../../utils/status.js';
 import { tableColumns } from '../../utils/table-config/executions.js';

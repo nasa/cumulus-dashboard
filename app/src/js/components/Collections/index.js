@@ -14,7 +14,7 @@ import CollectionGranules from './granules.js';
 import CollectionIngest from './ingest.js';
 import CollectionLogs from './logs.js';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader.js';
-import { listCollections } from '../../actions';
+import { listCollections } from '../../actions/index.js';
 import { filterQueryParams } from '../../utils/url-helper.js';
 
 const Collections = ({ dispatch, location, logs, queryParams }) => {

@@ -9,7 +9,7 @@ import {
   listReconciliationReports,
   filterReconciliationReports,
   refreshCumulusDbConnection,
-} from '../../actions';
+} from '../../actions/index.js';
 import { lastUpdated } from '../../utils/format.js';
 import { reconciliationReportStatus as statusOptions } from '../../utils/status.js';
 import { reconciliationReportTypes as reportTypeOptions } from '../../utils/type.js';

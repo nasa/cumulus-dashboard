@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import cloneDeep from 'lodash/cloneDeep';
+import cloneDeep from 'lodash/cloneDeep.js';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Collapse } from 'react-bootstrap';
@@ -10,7 +10,7 @@ import {
   clearReconciliationSearch,
   filterReconciliationReport,
   clearReconciliationReportFilter,
-} from '../../actions';
+} from '../../actions/index.js';
 import List from '../Table/Table.js';
 import { reshapeReport } from './reshape-report.js';
 import { handleDownloadUrlClick, handleDownloadCsvClick } from '../../utils/download-file.js';

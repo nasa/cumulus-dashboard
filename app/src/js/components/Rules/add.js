@@ -8,7 +8,7 @@ import {
   listWorkflows,
   listProviders,
   listCollections
-} from '../../actions';
+} from '../../actions/index.js';
 import AddRecord from '../Add/add.js';
 import { getCollectionId, nullValue, collectionNameVersion } from '../../utils/format.js';
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import cloneDeep from 'lodash/cloneDeep';
+import cloneDeep from 'lodash/cloneDeep.js';
 import {
   clearOperationsFilter,
   filterOperations,
@@ -15,7 +15,7 @@ import {
   listOperations,
   listWorkflows,
   refreshCumulusDbConnection,
-} from '../../actions';
+} from '../../actions/index.js';
 import { tally } from '../../utils/format.js';
 import List from '../Table/Table.js';
 import Dropdown from '../DropDown/dropdown.js';

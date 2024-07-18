@@ -8,7 +8,7 @@ import {
   clearGranulesWorkflows,
   getGranulesWorkflows,
   getGranulesWorkflowsClearError
-} from '../../actions';
+} from '../../actions/index.js';
 import ErrorReport from '../Errors/report.js';
 import SimpleDropdown from '../DropDown/simple-dropdown.js';
 

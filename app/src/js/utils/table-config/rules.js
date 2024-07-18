@@ -4,7 +4,7 @@ import {
   enableRule,
   disableRule,
   deleteRule
-} from '../../actions';
+} from '../../actions/index.js';
 import {
   getFormattedCollectionId,
   collectionLink,

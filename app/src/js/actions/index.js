@@ -426,7 +426,7 @@ export const toggleGranulesTableColumns = (hiddenColumns, allColumns) => ({
   allColumns
 });
 
-export const getOptionsCollectionName = (options) => ({
+export const getOptionsCollectionName = () => ({
   [CALL_API]: {
     type: types.OPTIONS_COLLECTIONNAME,
     method: 'GET',

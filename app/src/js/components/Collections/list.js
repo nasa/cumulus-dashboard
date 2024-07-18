@@ -14,7 +14,7 @@ import {
   searchCollections,
   filterCollections,
   clearCollectionsFilter,
-} from '../../actions';
+} from '../../actions/index.js';
 import { lastUpdated, tally, getCollectionId } from '../../utils/format.js';
 import {
   bulkActions,

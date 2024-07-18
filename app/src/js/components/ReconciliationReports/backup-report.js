@@ -3,7 +3,7 @@ import React from 'react';
 import {
   searchReconciliationReport,
   clearReconciliationSearch,
-} from '../../actions';
+} from '../../actions/index.js';
 import List from '../Table/Table.js';
 import Search from '../Search/search.js';
 import ReportHeading from './report-heading.js';

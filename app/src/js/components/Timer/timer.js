@@ -2,13 +2,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import isEqual from 'lodash/isEqual';
-import _config from '../../config';
+import isEqual from 'lodash/isEqual.js';
+import _config from '../../config/index.js';
 import {
   TIMER_START,
   TIMER_STOP,
   TIMER_SET_COUNTDOWN,
-} from '../../actions/types';
+} from '../../actions/types.js';
 
 const { updateInterval } = _config;
 const oneSecondTick = 1000;

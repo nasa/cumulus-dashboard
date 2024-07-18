@@ -7,7 +7,7 @@ import {
   getCollection,
   updateCollection,
   clearUpdateCollection,
-} from '../../actions';
+} from '../../actions/index.js';
 import { getCollectionId, collectionHrefFromNameVersion } from '../../utils/format.js';
 import EditRaw from '../EditRaw/edit-raw.js';
 

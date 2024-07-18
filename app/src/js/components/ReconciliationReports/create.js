@@ -12,7 +12,7 @@ import {
   listCollections,
   listProviders,
   listGranules,
-} from '../../actions';
+} from '../../actions/index.js';
 import { historyPushWithQueryParams } from '../../utils/url-helper.js';
 import { reconciliationReportTypes } from '../../utils/type.js';
 import { dateTimeFormat } from '../../utils/datepicker.js';

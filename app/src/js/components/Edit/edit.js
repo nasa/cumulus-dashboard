@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 import { withRouter } from 'react-router-dom';
-import { getSchema } from '../../actions';
+import { getSchema } from '../../actions/index.js';
 import Loading from '../LoadingIndicator/loading-indicator.js';
 import Schema from '../FormSchema/schema.js';
 import merge from '../../utils/merge.js';
-import _config from '../../config';
+import _config from '../../config/index.js';
 import { strings } from '../locale.js';
 import { historyPushWithQueryParams } from '../../utils/url-helper.js';
 
