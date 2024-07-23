@@ -24,7 +24,7 @@ This version of the dashboard requires Cumulus API >= v18.2.0
 - **Snyk Security Fix**
   - Upgraded axios from 1.6.0 to 1.6.8
 - **CUMULUS-2356**
-  - Removed gitc localization
+  - Removed gitc localization in dashboard
 
 ## [v12.1.0] - 2023-10-27
 
