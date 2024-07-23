@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -96,4 +97,4 @@ OAuth.propTypes = {
 
 export { OAuth };
 
-export default withRouter(withQueryParams()(OAuth));
+export default withRouter(withQueryParams()(connect((state) => state)(OAuth)));
