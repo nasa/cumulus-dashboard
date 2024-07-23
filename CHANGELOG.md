@@ -10,11 +10,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 This version of the dashboard requires Cumulus API >= v18.2.0
 
 ### Changed
-
+- **CUMULUS-3805**
+  - Updated collections to sort by timestamp instead of duration
+  - Changed the initialSortField of tables using createdAt to updatedAt
 - **CUMULUS-3619**
-    - Added Accessibility link to footer
-    - Modified unit tests to accomodate new changes.
-
+  - Added Accessibility link to footer
+  - Modified unit tests to accomodate new changes.
 - **CUMULUS-3502**
   - Upgraded localstack to v3.0.0
   - Bumped node version from 14.19.1 to 16.19.0 to match Core
