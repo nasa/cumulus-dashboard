@@ -20,7 +20,6 @@ export default [
       'dist/**',
       'docker/**',
       'node_modules',
-      '**/*.config.js',
       '!**/eslint.config.js',
     ],
     // declare imported configs
@@ -108,7 +107,7 @@ export default [
         sourceType: 'module', // to handle esm
         requireConfigFile: true,
         babelOptions: {
-          babelrc: true,
+          babelrc: false,
           configFile: './babel.config.cjs',
         },
       },

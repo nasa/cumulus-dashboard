@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import isEqual from 'lodash/isEqual';
+import isEqual from 'lodash/isEqual.js';
 import _config from './config/index.js';
 import { displayCase } from './utils/format.js';
 import Header from './components/Header/header.js';

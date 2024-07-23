@@ -23,7 +23,7 @@ module.exports = {
       ]
     },
   },
-  require: ['esm', '@babel/register', './test/_setup-browser-env.js', 'ignore-styles'],
+  require: ['@babel/register', './test/_setup-browser-env.js', 'ignore-styles'],
   timeout: '3m',
   files: [
     'test/**/*',

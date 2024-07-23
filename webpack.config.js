@@ -6,7 +6,7 @@ import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
-// import ESLintWebpackPlugin from 'eslint-webpack-plugin';
+import ESLintPlugin from 'eslint-webpack-plugin';
 
 import config from './app/src/js/config/config.js';
 
@@ -14,7 +14,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const CommonConfig = {
-  target: ['web','es6' ],
+  target: ['web', 'es6'],
   entry: [
     'core-js/stable',
     'regenerator-runtime/runtime',
@@ -24,12 +24,16 @@ const CommonConfig = {
     global: true,
     __filename: true,
     __dirname: true,
-},
+  },
+  experiments: {
+    outputModule: true, // enable ESM
+  },
   output: {
     filename: 'bundle.js',
     chunkFilename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
+    module: true, // generate ESM output
   },
   optimization: {
     moduleIds: 'deterministic',
@@ -39,8 +43,9 @@ const CommonConfig = {
     alias: {
       Fonts: path.join(__dirname, 'app/src/assets/fonts'),
       Images: path.join(__dirname, 'app/src/assets/images'),
-      process: 'process/browser.js',
+      process: 'process/browser.js'
     },
+    // conditionNames: ['import', 'node'],
     fallback: {
       fs: false,
       net: false,
@@ -82,7 +87,6 @@ const CommonConfig = {
           {
             loader: 'css-loader', // Translates CSS into CommonJS
             options: {
-              sourceMap: true,
               importLoaders: 1,
             },
           },
@@ -154,16 +158,19 @@ const CommonConfig = {
     new NodePolyfillPlugin({
       additionalAliases: ['console', 'path', 'stream', 'crypto', 'util', 'vm'],
     }),
-/*     new ESLintWebpackPlugin({
+    new ESLintPlugin({
       configType: 'flat',
       eslintPath: 'eslint/use-at-your-own-risk',
       overrideConfigFile: 'eslint.config.js',
-    }), */
+    }),
     new webpack.ProvidePlugin({
       jQuery: 'jquery', // can use jquery anywhere in the app without having to require it
       $: 'jquery',
       process: 'process/browser.js',
     }),
+/*     new webpack.DefinePlugin({
+      'process.env': JSON.stringify(process.env)
+    }), */
     new webpack.EnvironmentPlugin({
       APIROOT: config.apiRoot,
       AWS_REGION: config.awsRegion,
