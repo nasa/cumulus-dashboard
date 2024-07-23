@@ -109,7 +109,7 @@ class OperationOverview extends React.Component {
             tableColumns={tableColumns}
             query={this.generateQuery()}
             rowId="id"
-            initialSortId="createdAt"
+            initialSortId="updatedAt"
             filterAction={filterOperations}
             filterClear={clearOperationsFilter}
             tableId="operations"
