@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Provider } from 'react-redux';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
@@ -47,35 +47,25 @@ const MainRoutes = () => (
 );
 
 // generate the root App Component
-class App extends Component {
-  constructor (props) {
-    super(props);
-    this.state = {};
-    this.store = ourConfigureStore({});
-    this.isLoggedIn = this.isLoggedIn.bind(this);
-  }
+const App = () => {
+  const [store] = useState(ourConfigureStore({}));
+  const isLoggedIn = () => store.getState().api.authenticated;
 
-  isLoggedIn () {
-    return this.store.getState().api.authenticated;
-  }
-
-  render () {
-    return (
+  return (
       // <ErrorBoundary> // Add after troublshooting other errors
       // Routes
       <div className="routes">
-        <Provider store={this.store}>
+        <Provider store={store}>
           <ConnectedRouter history={history}>
             <Switch>
               <Redirect exact from='/login' to='/auth' />
-              <Route path='/auth' render={() => (this.isLoggedIn() ? <Redirect to='/' /> : <OAuth />)} />
-              <Route path='/' render={() => (this.isLoggedIn() ? <MainRoutes /> : <Redirect to='/auth' />)} />
+              <Route path='/auth' render={() => (isLoggedIn() ? <Redirect to='/' /> : <OAuth />)} />
+              <Route path='/' render={() => (isLoggedIn() ? <MainRoutes /> : <Redirect to='/auth' />)} />
             </Switch>
           </ConnectedRouter>
         </Provider>
       </div>
-    );
-  }
-}
+  );
+};
 
 export default App;
