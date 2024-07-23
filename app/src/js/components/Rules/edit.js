@@ -7,9 +7,9 @@ import {
   getRule,
   updateRule,
   clearUpdateRule
-} from '../../actions';
+} from '../../actions/index.js';
 
-import EditRaw from '../EditRaw/edit-raw';
+import EditRaw from '../EditRaw/edit-raw.js';
 
 const SCHEMA_KEY = 'rule';
 

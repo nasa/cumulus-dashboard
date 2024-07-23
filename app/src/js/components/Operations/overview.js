@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import cloneDeep from 'lodash/cloneDeep';
+import cloneDeep from 'lodash/cloneDeep.js';
 import {
   clearOperationsFilter,
   filterOperations,
@@ -15,15 +15,15 @@ import {
   listOperations,
   listWorkflows,
   refreshCumulusDbConnection,
-} from '../../actions';
-import { tally } from '../../utils/format';
-import List from '../Table/Table';
-import Dropdown from '../DropDown/dropdown';
-import Search from '../Search/search';
-import { tableColumns } from '../../utils/table-config/operations';
-import ListFilters from '../ListActions/ListFilters';
-import { operationStatus } from '../../utils/status';
-import { operationTypes } from '../../utils/type';
+} from '../../actions/index.js';
+import { tally } from '../../utils/format.js';
+import List from '../Table/Table.js';
+import Dropdown from '../DropDown/dropdown.js';
+import Search from '../Search/search.js';
+import { tableColumns } from '../../utils/table-config/operations.js';
+import ListFilters from '../ListActions/ListFilters.js';
+import { operationStatus } from '../../utils/status.js';
+import { operationTypes } from '../../utils/type.js';
 
 class OperationOverview extends React.Component {
   constructor(props) {

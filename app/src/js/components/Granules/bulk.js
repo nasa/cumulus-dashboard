@@ -11,10 +11,10 @@ import {
   bulkGranuleClearError,
   bulkGranuleDeleteClearError,
   bulkGranuleReingestClearError,
-} from '../../actions';
-import BulkGranuleModal from './bulk-granule-modal';
-import { historyPushWithQueryParams } from '../../utils/url-helper';
-import DefaultModal from '../Modal/modal';
+} from '../../actions/index.js';
+import BulkGranuleModal from './bulk-granule-modal.js';
+import { historyPushWithQueryParams } from '../../utils/url-helper.js';
+import DefaultModal from '../Modal/modal.js';
 
 const generateAsyncRequestId = () => Math.random().toString(36).substring(2, 15) +
   Math.random().toString(36).substring(2, 15);

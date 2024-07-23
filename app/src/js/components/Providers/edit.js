@@ -7,9 +7,9 @@ import {
   getProvider,
   updateProvider,
   clearUpdateProvider
-} from '../../actions';
-import EditRecord from '../Edit/edit';
-import { isValidProvider } from '../../utils/validate';
+} from '../../actions/index.js';
+import EditRecord from '../Edit/edit.js';
+import { isValidProvider } from '../../utils/validate.js';
 
 const SCHEMA_KEY = 'provider';
 

@@ -1,4 +1,4 @@
-import { del } from 'object-path';
+import objectPath from 'object-path';
 
 /**
  * Returns the value of the `id` property of the specified object.
@@ -35,7 +35,7 @@ const idProp = ({ id }) => id;
  */
 export const createClearItemReducer = (stateProp, idSelector = idProp) => (state, action) => {
   const id = idSelector(action);
-  del(state, [stateProp, id]);
+  objectPath.del(state, [stateProp, id]);
 };
 
 /**

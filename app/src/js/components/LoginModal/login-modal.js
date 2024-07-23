@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 import get from 'lodash/get';
-import { login, setTokenState } from '../../actions';
-import { window } from '../../utils/browser';
-import { updateDelay } from '../../config';
-import ErrorReport from '../Errors/report';
-import Text from '../TextAreaForm/text';
-import { historyPushWithQueryParams } from '../../utils/url-helper';
+import { login, setTokenState } from '../../actions/index.js';
+import { window } from '../../utils/browser.js';
+import { updateDelay } from '../../config/index.js';
+import ErrorReport from '../Errors/report.js';
+import Text from '../TextAreaForm/text.js';
+import { historyPushWithQueryParams } from '../../utils/url-helper.js';
 
 class LoginModal extends React.Component {
   constructor () {

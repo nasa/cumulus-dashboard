@@ -11,11 +11,11 @@ import classNames from 'classnames';
 import omit from 'lodash/omit';
 import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination, useExpanded } from 'react-table';
 import { useDispatch } from 'react-redux';
-import TableHeader from '../TableHeader/table-header';
-import SimplePagination from '../Pagination/simple-pagination';
-import TableFilters from '../Table/TableFilters';
-import ListFilters from '../ListActions/ListFilters';
-import { sortPersist } from '../../actions/index';
+import TableHeader from '../TableHeader/table-header.js';
+import SimplePagination from '../Pagination/simple-pagination.js';
+import TableFilters from '../Table/TableFilters.js';
+import ListFilters from '../ListActions/ListFilters.js';
+import { sortPersist } from '../../actions/index.js';
 
 const getColumnWidth = (rows, accessor, headerText, originalWidth) => {
   const maxWidth = 400;

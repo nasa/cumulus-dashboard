@@ -1,5 +1,3 @@
-'use strict';
-
 export const apiGatewayFixture = `{
   "took": 424,
   "timed_out": false,

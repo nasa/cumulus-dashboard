@@ -4,11 +4,11 @@ import Ace from 'react-ace';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import { getCollection } from '../../actions';
-import { getCollectionId, nullValue } from '../../utils/format';
-import config from '../../config';
-import Loading from '../LoadingIndicator/loading-indicator';
-import CollectionHeader from './collection-header';
+import { getCollection } from '../../actions/index.js';
+import { getCollectionId, nullValue } from '../../utils/format.js';
+import config from '../../config/index.js';
+import Loading from '../LoadingIndicator/loading-indicator.js';
+import CollectionHeader from './collection-header.js';
 
 const breadcrumbConfig = [
   {

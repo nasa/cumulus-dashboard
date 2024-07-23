@@ -9,18 +9,18 @@
 // ***********************************************************
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
-const crypto = require('crypto');
-const webpack = require('@cypress/webpack-preprocessor');
-const cypressFailed = require('cypress-failed-log/src/failed');
-const { testUtils } = require('@cumulus/api');
-const { createJwtToken } = require('@cumulus/api/lib/token');
-const webpackCommon = require('../../webpack.common');
+import crypto from 'crypto';
+import webpack from '@cypress/webpack-preprocessor';
+import cypressFailed from 'cypress-failed-log/src/failed';
+import { testUtils } from '@cumulus/api';
+import { createJwtToken } from '@cumulus/api/lib/token';
+import webpackCommon from '../../webpack.common.js';
 
-const { seedEverything } = require('./seedEverything');
+import { seedEverything } from './seedEverything.js';
 
 process.env.TOKEN_SECRET = crypto.randomBytes(10).toString('hex');
 
-module.exports = (on) => {
+export default function plugin(on) {
   const webpackOptions = {
     // send in the options from your webpack.config.js, so it works the same
     // as your app's code
@@ -53,4 +53,6 @@ module.exports = (on) => {
     },
     failed: cypressFailed()
   });
-};
+  return plugin();
+}
+

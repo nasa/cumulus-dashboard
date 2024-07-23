@@ -1,12 +1,11 @@
-'use strict';
 import test from 'ava';
-import reducer, { initialState } from '../../app/src/js/reducers/api-version';
+import reducer, { initialState } from '../../app/src/js/reducers/api-version.js';
 import {
   API_VERSION,
   API_VERSION_ERROR,
   API_VERSION_COMPATIBLE,
   API_VERSION_INCOMPATIBLE
-} from '../../app/src/js/actions/types';
+} from '../../app/src/js/actions/types.js';
 
 test('verify initial state', (t) => {
   const newState = reducer(initialState, { data: {}, type: 'ANY_OTHER_TYPE' });

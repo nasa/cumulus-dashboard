@@ -1,5 +1,5 @@
-import window from 'global/window';
-import document from 'global/document';
+import window from 'global/window.js';
+import document from 'global/document.js';
 export const encode = (str) => (window.encodeURI ? window.encodeURI(str) : str);
 
 // add an event listener on document that returns it's cleanup function

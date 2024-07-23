@@ -3,11 +3,11 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
-import { listExecutionsByGranule } from '../../actions';
-import { tableColumns } from '../../utils/table-config/executions-list';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import List from '../Table/Table';
-import ExecutionSnapshot from './execution-snapshot';
+import { listExecutionsByGranule } from '../../actions/index.js';
+import { tableColumns } from '../../utils/table-config/executions-list.js';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs.js';
+import List from '../Table/Table.js';
+import ExecutionSnapshot from './execution-snapshot.js';
 
 const breadcrumbConfig = [
   {

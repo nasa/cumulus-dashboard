@@ -3,10 +3,10 @@ import Ace from 'react-ace';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { listWorkflows } from '../../actions';
-import config from '../../config';
-import { setWindowEditorRef } from '../../utils/browser';
-import Loading from '../LoadingIndicator/loading-indicator';
+import { listWorkflows } from '../../actions/index.js';
+import config from '../../config/index.js';
+import { setWindowEditorRef } from '../../utils/browser.js';
+import Loading from '../LoadingIndicator/loading-indicator.js';
 
 class Workflow extends React.Component {
   constructor () {

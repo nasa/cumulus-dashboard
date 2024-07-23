@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
-import { getSchema } from '../../actions';
-import { removeReadOnly } from '../FormSchema/schema';
-import { displayCase } from '../../utils/format';
-import Loading from '../LoadingIndicator/loading-indicator';
-import TextArea from '../TextAreaForm/text-area';
-import DefaultModal from '../Modal/modal';
-import _config from '../../config';
-import { historyPushWithQueryParams } from '../../utils/url-helper';
+import { getSchema } from '../../actions/index.js';
+import { removeReadOnly } from '../FormSchema/schema.js';
+import { displayCase } from '../../utils/format.js';
+import Loading from '../LoadingIndicator/loading-indicator.js';
+import TextArea from '../TextAreaForm/text-area.js';
+import DefaultModal from '../Modal/modal.js';
+import _config from '../../config/index.js';
+import { historyPushWithQueryParams } from '../../utils/url-helper.js';
 
 const { updateDelay } = _config;
 

@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import DeleteCollectionModal from './DeleteCollectionModal';
-import CollectionDeletedConfirmModal from './CollectionDeletedConfirmModal';
-import CollectionDeletedErrorModal from './CollectionDeletedErrorModal';
-import GranulesRedirectModal from './GranulesRedirectModal';
-import { collectionName as collectionLabelForId } from '../../utils/format';
+import DeleteCollectionModal from './DeleteCollectionModal.js';
+import CollectionDeletedConfirmModal from './CollectionDeletedConfirmModal.js';
+import CollectionDeletedErrorModal from './CollectionDeletedErrorModal.js';
+import GranulesRedirectModal from './GranulesRedirectModal.js';
+import { collectionName as collectionLabelForId } from '../../utils/format.js';
 
 class DeleteCollection extends React.Component {
   constructor (props) {

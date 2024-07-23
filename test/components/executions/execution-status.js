@@ -1,12 +1,10 @@
-'use strict';
-
 import test from 'ava';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
 import { shallow, configure } from 'enzyme';
 
-import { ExecutionStatus } from '../../../app/src/js/components/Executions/execution-status';
-import executionHistory from '../../../test/fixtures/execution-history-all';
+import { ExecutionStatus } from '../../../app/src/js/components/Executions/execution-status.js';
+import executionHistory from '../../fixtures/execution-history-all.js';
 
 configure({ adapter: new Adapter() });
 

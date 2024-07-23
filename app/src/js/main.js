@@ -2,14 +2,14 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import isEqual from 'lodash/isEqual';
-import _config from './config';
-import { displayCase } from './utils/format';
-import Header from './components/Header/header';
-import Footer from './components/Footer/footer';
-import TopButton from './components/TopButton/TopButton';
-import { getLogs } from './actions';
-import { initialState as logsInitialState } from './reducers/logs';
+import isEqual from 'lodash/isEqual.js';
+import _config from './config/index.js';
+import { displayCase } from './utils/format.js';
+import Header from './components/Header/header.js';
+import Footer from './components/Footer/footer.js';
+import TopButton from './components/TopButton/TopButton.js';
+import { getLogs } from './actions/index.js';
+import { initialState as logsInitialState } from './reducers/logs.js';
 
 const { target, environment } = _config;
 

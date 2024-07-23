@@ -1,12 +1,10 @@
-'use strict';
-
 import test from 'ava';
-import cloneDeep from 'lodash/cloneDeep';
-import reducer, { initialState } from '../../app/src/js/reducers/rules';
+import cloneDeep from 'lodash/cloneDeep.js';
+import reducer, { initialState } from '../../app/src/js/reducers/rules.js';
 import {
   RULE_DISABLE_INFLIGHT,
   RULE_ENABLE
-} from '../../app/src/js/actions/types';
+} from '../../app/src/js/actions/types.js';
 
 test('RULE_ENABLE reducer', (t) => {
   const inputState = cloneDeep(initialState);

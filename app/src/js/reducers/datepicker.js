@@ -1,17 +1,17 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { msPerDay, findDateRangeByValue } from '../utils/datepicker';
+import { msPerDay, findDateRangeByValue } from '../utils/datepicker.js';
 import {
   DATEPICKER_DATECHANGE,
   DATEPICKER_DROPDOWN_FILTER,
   DATEPICKER_HOUR_FORMAT,
-} from '../actions/types';
+} from '../actions/types.js';
 
 // Also becomes default props for Datepicker
 export const initialState = () => ({
   startDateTime: null,
   endDateTime: null,
   dateRange: findDateRangeByValue('Custom'),
-  hourFormat: '12HR'
+  hourFormat: '12HR',
 });
 
 /**
@@ -44,34 +44,35 @@ const recentData = () => ({
   dateRange: findDateRangeByValue('Recent'),
 });
 
-export default createReducer(initialState(), {
-  [DATEPICKER_DROPDOWN_FILTER]: (state, action) => {
-    const { data } = action;
+export default createReducer(initialState(), (builder) => {
+  builder
+    .addCase(DATEPICKER_DROPDOWN_FILTER, (state, action) => {
+      const { data } = action;
 
-    switch (data.dateRange.label) {
-      case 'Custom':
-      case 'All':
-        Object.assign(state, data, {
-          startDateTime: null,
-          endDateTime: null,
-        });
-        break;
-      case 'Recent':
-        Object.assign(state, data, recentData());
-        break;
-      default:
-        Object.assign(
-          state,
-          computeDateTimeDelta(data.dateRange.value),
-          data
-        );
-        break;
-    }
-  },
-  [DATEPICKER_DATECHANGE]: (state, action) => {
-    Object.assign(state, action.data);
-  },
-  [DATEPICKER_HOUR_FORMAT]: (state, action) => {
-    state.hourFormat = action.data;
-  },
+      switch (data.dateRange.label) {
+        case 'Custom':
+        case 'All':
+          Object.assign(state, data, {
+            startDateTime: null,
+            endDateTime: null,
+          });
+          break;
+        case 'Recent':
+          Object.assign(state, data, recentData());
+          break;
+        default:
+          Object.assign(
+            state,
+            computeDateTimeDelta(data.dateRange.value),
+            data
+          );
+          break;
+      }
+    })
+    .addCase(DATEPICKER_DATECHANGE, (state, action) => {
+      Object.assign(state, action.data);
+    })
+    .addCase(DATEPICKER_HOUR_FORMAT, (state, action) => {
+      state.hourFormat = action.data;
+    });
 });

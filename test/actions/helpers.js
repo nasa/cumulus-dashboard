@@ -1,13 +1,12 @@
-'use strict';
 import test from 'ava';
 
-import _config from '../../app/src/js/config';
+import _config from '../../app/src/js/config/index.js';
 import {
   addRequestAuthorization,
   formatError,
   getErrorMessage,
   configureRequest
-} from '../../app/src/js/actions/helpers';
+} from '../../app/src/js/actions/helpers.js';
 
 const getStateStub = () => ({
   api: {

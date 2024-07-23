@@ -9,21 +9,21 @@ import {
   listReconciliationReports,
   filterReconciliationReports,
   refreshCumulusDbConnection,
-} from '../../actions';
-import { lastUpdated } from '../../utils/format';
-import { reconciliationReportStatus as statusOptions } from '../../utils/status';
-import { reconciliationReportTypes as reportTypeOptions } from '../../utils/type';
-import { getPersistentQueryParams } from '../../utils/url-helper';
+} from '../../actions/index.js';
+import { lastUpdated } from '../../utils/format.js';
+import { reconciliationReportStatus as statusOptions } from '../../utils/status.js';
+import { reconciliationReportTypes as reportTypeOptions } from '../../utils/type.js';
+import { getPersistentQueryParams } from '../../utils/url-helper.js';
 import {
   tableColumns,
   bulkActions,
-} from '../../utils/table-config/reconciliation-reports';
-import LoadingEllipsis from '../LoadingEllipsis/loading-ellipsis';
-import Dropdown from '../DropDown/dropdown';
-import Search from '../Search/search';
-import List from '../Table/Table';
-import ListFilters from '../ListActions/ListFilters';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+} from '../../utils/table-config/reconciliation-reports.js';
+import LoadingEllipsis from '../LoadingEllipsis/loading-ellipsis.js';
+import Dropdown from '../DropDown/dropdown.js';
+import Search from '../Search/search.js';
+import List from '../Table/Table.js';
+import ListFilters from '../ListActions/ListFilters.js';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs.js';
 
 const breadcrumbConfig = [
   {

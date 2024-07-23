@@ -1,5 +1,5 @@
-import { shouldBeRedirectedToLogin } from '../support/assertions';
-import { collectionName, collectionHrefFromId } from '../../app/src/js/utils/format';
+import { shouldBeRedirectedToLogin } from '../support/assertions.js';
+import { collectionName, collectionHrefFromId } from '../../app/src/js/utils/format.js';
 
 describe('Dashboard PDRs Page', () => {
   describe('When not logged in', () => {

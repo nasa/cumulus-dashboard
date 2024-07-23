@@ -1,12 +1,10 @@
-'use strict';
-
 import test from 'ava';
-import reducer, { initialState } from '../../app/src/js/reducers/timer';
+import reducer, { initialState } from '../../app/src/js/reducers/timer.js';
 import {
   TIMER_START,
   TIMER_SET_COUNTDOWN,
   TIMER_STOP,
-} from '../../app/src/js/actions/types';
+} from '../../app/src/js/actions/types.js';
 
 test('initialState begins with timer off', (t) => {
   const expected = { running: false, seconds: -1 };

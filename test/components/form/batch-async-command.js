@@ -1,11 +1,9 @@
-'use strict';
-
 import test from 'ava';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
 import { configure, shallow } from 'enzyme';
 
-import { BatchCommand } from '../../../app/src/js/components/BatchAsyncCommands/BatchAsyncCommands';
+import { BatchCommand } from '../../../app/src/js/components/BatchAsyncCommands/BatchAsyncCommands.js';
 
 configure({ adapter: new Adapter() });
 

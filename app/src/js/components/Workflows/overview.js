@@ -2,16 +2,16 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { tally } from '../../utils/format';
+import { tally } from '../../utils/format.js';
 import {
   listWorkflows,
   searchWorkflows,
   clearWorkflowsSearch,
-} from '../../actions';
-import List from '../Table/Table';
-import ListFilters from '../ListActions/ListFilters';
-import Search from '../Search/search';
-import { tableColumns } from '../../utils/table-config/workflows';
+} from '../../actions/index.js';
+import List from '../Table/Table.js';
+import ListFilters from '../ListActions/ListFilters.js';
+import Search from '../Search/search.js';
+import { tableColumns } from '../../utils/table-config/workflows.js';
 
 const WorkflowOverview = ({ dispatch, queryParams, workflows }) => {
   const { list, searchString } = workflows;

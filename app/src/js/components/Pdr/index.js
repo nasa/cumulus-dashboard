@@ -5,14 +5,14 @@ import { get } from 'object-path';
 import { connect } from 'react-redux';
 import { withRouter, Route, Switch } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
-import Sidebar from '../Sidebar/sidebar';
-import { getCount, listPdrs } from '../../actions';
-import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
-import Pdr from './pdr';
-import PdrOverview from './overview';
-import PdrList from './list';
-import { strings } from '../locale';
-import { filterQueryParams } from '../../utils/url-helper';
+import Sidebar from '../Sidebar/sidebar.js';
+import { getCount, listPdrs } from '../../actions/index.js';
+import DatePickerHeader from '../DatePickerHeader/DatePickerHeader.js';
+import Pdr from './pdr.js';
+import PdrOverview from './overview.js';
+import PdrList from './list.js';
+import { strings } from '../locale.js';
+import { filterQueryParams } from '../../utils/url-helper.js';
 
 const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
   const { pathname } = location;

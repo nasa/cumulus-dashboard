@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { resolve } from 'path';
-import sections from '../../paths';
-import { getPersistentQueryParams } from '../../utils/url-helper';
-import { toggleSidebar } from '../../actions';
-import Tooltip from '../Tooltip/tooltip';
+import sections from '../../paths/index.js';
+import { getPersistentQueryParams } from '../../utils/url-helper.js';
+import { toggleSidebar } from '../../actions/index.js';
+import Tooltip from '../Tooltip/tooltip.js';
 
 const currentPathClass = 'sidebar__nav--selected';
 

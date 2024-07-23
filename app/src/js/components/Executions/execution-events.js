@@ -11,17 +11,17 @@ import {
   getCumulusInstanceMetadata,
   searchExecutionEvents,
   clearExecutionEventsSearch,
-} from '../../actions';
+} from '../../actions/index.js';
 
-import { tableColumns } from '../../utils/table-config/execution-status';
+import { tableColumns } from '../../utils/table-config/execution-status.js';
 
-import ErrorReport from '../Errors/report';
-import Search from '../Search/search';
+import ErrorReport from '../Errors/report.js';
+import Search from '../Search/search.js';
 
-import SortableTable from '../SortableTable/SortableTable';
-import ListFilters from '../ListActions/ListFilters';
-import { formatEvents } from '../../utils/table-config/executions';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import SortableTable from '../SortableTable/SortableTable.js';
+import ListFilters from '../ListActions/ListFilters.js';
+import { formatEvents } from '../../utils/table-config/executions.js';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs.js';
 
 const breadcrumbConfig = [
   {

@@ -1,5 +1,3 @@
-'use strict';
-
 export const teaLambdaFixture = `{
   "took": 42,
   "timed_out": false,

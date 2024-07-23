@@ -1,9 +1,7 @@
-'use strict';
-
 import test from 'ava';
-import cloneDeep from 'lodash/cloneDeep';
-import reducer, { initialState } from '../../app/src/js/reducers/providers';
-import { UPDATE_PROVIDER, OPTIONS_PROVIDERNAME } from '../../app/src/js/actions/types';
+import cloneDeep from 'lodash/cloneDeep.js';
+import reducer, { initialState } from '../../app/src/js/reducers/providers.js';
+import { UPDATE_PROVIDER, OPTIONS_PROVIDERNAME } from '../../app/src/js/actions/types.js';
 
 test('UPDATE_PROVIDER reducer', (t) => {
   const inputState = cloneDeep(initialState);

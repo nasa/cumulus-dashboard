@@ -4,10 +4,10 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import queryString from 'query-string';
-import { createReconciliationReport } from '../../actions';
-import { historyPushWithQueryParams } from '../../utils/url-helper';
-import DefaultModal from '../Modal/modal';
-import TextForm from '../TextAreaForm/text';
+import { createReconciliationReport } from '../../actions/index.js';
+import { historyPushWithQueryParams } from '../../utils/url-helper.js';
+import DefaultModal from '../Modal/modal.js';
+import TextForm from '../TextAreaForm/text.js';
 
 const GranuleInventory = ({
   history,

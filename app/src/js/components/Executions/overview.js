@@ -12,17 +12,17 @@ import {
   listWorkflows,
   getOptionsCollectionName,
   refreshCumulusDbConnection,
-} from '../../actions';
-import { workflowOptions as workflowSelectOptions } from '../../selectors';
-import { tally, lastUpdated } from '../../utils/format';
-import statusOptions from '../../utils/status';
-import { tableColumns } from '../../utils/table-config/executions';
-import List from '../Table/Table';
-import Dropdown from '../DropDown/dropdown';
-import Search from '../Search/search';
-import Overview from '../Overview/overview';
-import ListFilters from '../ListActions/ListFilters';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+} from '../../actions/index.js';
+import { workflowOptions as workflowSelectOptions } from '../../selectors/index.js';
+import { tally, lastUpdated } from '../../utils/format.js';
+import statusOptions from '../../utils/status.js';
+import { tableColumns } from '../../utils/table-config/executions.js';
+import List from '../Table/Table.js';
+import Dropdown from '../DropDown/dropdown.js';
+import Search from '../Search/search.js';
+import Overview from '../Overview/overview.js';
+import ListFilters from '../ListActions/ListFilters.js';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs.js';
 
 const breadcrumbConfig = [
   {

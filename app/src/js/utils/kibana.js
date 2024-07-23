@@ -1,4 +1,4 @@
-import _config from '../config';
+import _config from '../config/index.js';
 
 const kibanaConfigured = () => !!_config.kibanaRoot;
 

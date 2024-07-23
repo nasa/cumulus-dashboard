@@ -1,9 +1,13 @@
-const webpack = require('webpack');
-const { mergeWithRules } = require('webpack-merge');
-const path = require('path');
-const ESLintPlugin = require('eslint-webpack-plugin');
+import webpack from 'webpack';
+import { mergeWithRules } from 'webpack-merge';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import ESLintPlugin from 'eslint-webpack-plugin';
 
-const CommonConfig = require('./webpack.common');
+import CommonConfig from './webpack.config.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const DevConfig = mergeWithRules({
   devtool: 'replace',
@@ -44,4 +48,4 @@ const DevConfig = mergeWithRules({
   plugins: [new webpack.HotModuleReplacementPlugin(), new ESLintPlugin()],
 });
 
-module.exports = DevConfig;
+export default DevConfig;

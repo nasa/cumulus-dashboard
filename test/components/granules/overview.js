@@ -1,12 +1,10 @@
-'use strict';
-
 import test from 'ava';
 import { get } from 'object-path';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { shallow, configure } from 'enzyme';
-import { GranulesOverview } from '../../../app/src/js/components/Granules/overview';
+import { GranulesOverview } from '../../../app/src/js/components/Granules/overview.js';
 
 configure({ adapter: new Adapter() });
 

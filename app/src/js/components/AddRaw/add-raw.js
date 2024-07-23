@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
-import { displayCase } from '../../utils/format';
-import _config from '../../config';
+import { displayCase } from '../../utils/format.js';
+import _config from '../../config/index.js';
 
-import TextArea from '../TextAreaForm/text-area';
-import DefaultModal from '../Modal/modal';
-import { historyPushWithQueryParams } from '../../utils/url-helper';
+import TextArea from '../TextAreaForm/text-area.js';
+import DefaultModal from '../Modal/modal.js';
+import { historyPushWithQueryParams } from '../../utils/url-helper.js';
 
 const { updateDelay } = _config;
 

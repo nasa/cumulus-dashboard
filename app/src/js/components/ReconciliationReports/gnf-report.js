@@ -1,17 +1,17 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import groupBy from 'lodash/groupBy';
+import groupBy from 'lodash/groupBy.js';
 import {
   searchReconciliationReport,
   clearReconciliationSearch,
-} from '../../actions';
-import List from '../Table/Table';
-import Search from '../Search/search';
-import ReportHeading from './report-heading';
-import { handleDownloadUrlClick } from '../../utils/download-file';
-import { tableColumnsGnf } from '../../utils/table-config/reconciliation-reports';
-import { getFilesSummary, getGranuleFilesSummary } from './reshape-report';
-import { getCollectionId } from '../../utils/format';
+} from '../../actions/index.js';
+import List from '../Table/Table.js';
+import Search from '../Search/search.js';
+import ReportHeading from './report-heading.js';
+import { handleDownloadUrlClick } from '../../utils/download-file.js';
+import { tableColumnsGnf } from '../../utils/table-config/reconciliation-reports.js';
+import { getFilesSummary, getGranuleFilesSummary } from './reshape-report.js';
+import { getCollectionId } from '../../utils/format.js';
 
 const GnfReport = ({
   filterString,

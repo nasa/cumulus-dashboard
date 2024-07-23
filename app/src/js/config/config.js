@@ -30,4 +30,4 @@ const config = {
   servedByCumulusAPI: computeBool(process.env.SERVED_BY_CUMULUS_API, '')
 };
 
-module.exports = config;
+export default config;

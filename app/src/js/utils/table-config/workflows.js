@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { awsRegion } from '../../config';
-import { getPersistentQueryParams } from '../url-helper';
+import _config from '../../config/config.js';
+import { getPersistentQueryParams } from '../url-helper.js';
+
+const { awsRegion } = _config;
 
 export const makeSteps = (row) => {
   try {

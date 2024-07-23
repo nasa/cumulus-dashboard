@@ -1,60 +1,77 @@
-require('@babel/register');
-const path = require('path');
-const webpack = require('webpack');
-const HtmlWebPackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+import '@babel/register';
+import path from 'path';
+import { fileURLToPath } from 'url';
+// Plugins
+import webpack from 'webpack';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import CopyPlugin from 'copy-webpack-plugin';
+import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
+import ESLintPlugin from 'eslint-webpack-plugin';
 
-const config = require('./app/src/js/config');
+import config from './app/src/js/config/config.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const CommonConfig = {
-  target: 'web',
+  target: ['web', 'es6'],
   entry: [
     'core-js/stable',
     'regenerator-runtime/runtime',
     './app/src/index.js',
   ],
+  node: {
+    global: true,
+    __filename: true,
+    __dirname: true,
+  },
+  experiments: {
+    outputModule: true, // enable ESM
+  },
   output: {
     filename: 'bundle.js',
     chunkFilename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
+    module: true, // generate ESM output
   },
   optimization: {
     moduleIds: 'deterministic',
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.scss'],
+    extensions: ['.js', '.jsx', '.cjs', '.mjs', '.scss'],
     alias: {
       Fonts: path.join(__dirname, 'app/src/assets/fonts'),
       Images: path.join(__dirname, 'app/src/assets/images'),
+      process: 'process/browser.js'
     },
+    // conditionNames: ['import', 'node'],
     fallback: {
       fs: false,
       net: false,
       tls: false,
-      console: require.resolve('console-browserify'),
-      path: require.resolve('path-browserify'),
-      stream: require.resolve('stream-browserify'),
-      crypto: require.resolve('crypto-browserify'),
-      util: require.resolve('util'),
     },
   },
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.(?:js|mjs|cjs)$/,
+        type: 'javascript/auto',
         exclude: [
           /node_modules\/(?!(map-obj|snakecase-keys|strict-uri-encode|fast-xml-parser)\/).*/,
-          /font-awesome.config.js/,
+          /font-awesome.config.mjs/,
         ],
         use: [
           {
             loader: 'babel-loader',
             options: {
-              presets: ['@babel/preset-env', '@babel/preset-react'],
+              sourceType: 'module', // For ESM with babel
             },
           },
         ],
+        resolve: {
+          fullySpecified: false,
+        },
       },
       {
         test: /\.html$/,
@@ -70,7 +87,6 @@ const CommonConfig = {
           {
             loader: 'css-loader', // Translates CSS into CommonJS
             options: {
-              sourceMap: true,
               importLoaders: 1,
             },
           },
@@ -117,7 +133,7 @@ const CommonConfig = {
         },
       },
       {
-        test: /font-awesome\.config\.js/,
+        test: /font-awesome\.config\.mjs/,
         use: [
           {
             loader: 'style-loader',
@@ -130,20 +146,31 @@ const CommonConfig = {
     ],
   },
   plugins: [
-    new HtmlWebPackPlugin({
+    new HtmlWebpackPlugin({
       template: path.join(__dirname, 'app/src/template.html'),
       filename: 'index.html',
       title: 'Cumulus Dashboard',
       favicon: './app/src/public/favicon.ico'
     }),
-    new CopyWebpackPlugin({
+    new CopyPlugin({
       patterns: [{ from: './app/src/public', to: './' }],
+    }),
+    new NodePolyfillPlugin({
+      additionalAliases: ['console', 'path', 'stream', 'crypto', 'util', 'vm'],
+    }),
+    new ESLintPlugin({
+      configType: 'flat',
+      eslintPath: 'eslint/use-at-your-own-risk',
+      overrideConfigFile: 'eslint.config.js',
     }),
     new webpack.ProvidePlugin({
       jQuery: 'jquery', // can use jquery anywhere in the app without having to require it
       $: 'jquery',
-      process: 'process/browser',
+      process: 'process/browser.js',
     }),
+/*     new webpack.DefinePlugin({
+      'process.env': JSON.stringify(process.env)
+    }), */
     new webpack.EnvironmentPlugin({
       APIROOT: config.apiRoot,
       AWS_REGION: config.awsRegion,
@@ -159,4 +186,4 @@ const CommonConfig = {
   ],
 };
 
-module.exports = CommonConfig;
+export default CommonConfig;

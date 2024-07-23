@@ -1,13 +1,13 @@
 /* eslint node/no-deprecated-api: 0 */
 import path from 'path';
 import url from 'url';
-import { getCollectionId } from '../../utils/format';
+import { getCollectionId } from '../../utils/format.js';
 import {
   tableColumnsCollections,
   tableColumnsFiles,
   tableColumnsGranules,
   tableColumnsS3Files,
-} from '../../utils/table-config/reconciliation-reports';
+} from '../../utils/table-config/reconciliation-reports.js';
 
 export const getFilesSummary = ({ onlyInDynamoDb = [], onlyInS3 = [], okCountByGranule }) => {
   const filesInS3 = onlyInS3.map((d) => {

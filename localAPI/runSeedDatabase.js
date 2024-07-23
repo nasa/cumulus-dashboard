@@ -1,4 +1,4 @@
-const { seedEverything } = require('../cypress/plugins/seedEverything');
+import seedEverything from '../cypress/plugins/seedEverything.js';
 
 seedEverything()
   .then(() => console.log('Seeded Database with cypress fixtures'))

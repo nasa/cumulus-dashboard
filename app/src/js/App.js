@@ -3,27 +3,27 @@ import { Provider } from 'react-redux';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
 
-import ourConfigureStore, { history } from './store/configureStore';
+import ourConfigureStore, { history } from './store/configureStore.js';
 
 // Authorization & Error Handling
-// import ErrorBoundary from './components/Errors/ErrorBoundary';
-import NotFound from './components/404';
-import OAuth from './components/oauth';
+// import ErrorBoundary from './components/Errors/ErrorBoundary.js';
+import NotFound from './components/404.js';
+import OAuth from './components/oauth.js';
 
 // Components
-import Home from './components/home';
-import Main from './main';
-import Collections from './components/Collections';
-import Granules from './components/Granules';
-import Pdrs from './components/Pdr';
-import Providers from './components/Providers';
-import Workflows from './components/Workflows';
-import Executions from './components/Executions';
-import Operations from './components/Operations';
-import Rules from './components/Rules';
-import ReconciliationReports from './components/ReconciliationReports';
+import Home from './components/home.js';
+import Main from './main.js';
+import Collections from './components/Collections/index.js';
+import Granules from './components/Granules/index.js';
+import Pdrs from './components/Pdr/index.js';
+import Providers from './components/Providers/index.js';
+import Workflows from './components/Workflows/index.js';
+import Executions from './components/Executions/index.js';
+import Operations from './components/Operations/index.js';
+import Rules from './components/Rules/index.js';
+import ReconciliationReports from './components/ReconciliationReports/index.js';
 
-import config from './config';
+import config from './config/index.js';
 
 console.log('Environment', config.environment);
 

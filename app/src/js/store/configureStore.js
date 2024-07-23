@@ -1,13 +1,13 @@
 /* eslint-disable import/no-cycle */
 import { createHashHistory, createBrowserHistory } from 'history';
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import { routerMiddleware } from 'connected-react-router';
 import { createLogger } from 'redux-logger';
-import { createRootReducer } from '../reducers';
-import { refreshTokenMiddleware } from '../middleware/token';
-import { requestMiddleware } from '../middleware/request';
-import { window } from '../utils/browser';
-import config from '../config';
+import { createRootReducer } from '../reducers/index.js';
+import { refreshTokenMiddleware } from '../middleware/token.js';
+import { requestMiddleware } from '../middleware/request.js';
+import { window } from '../utils/browser.js';
+import config from '../config/config.js';
 
 let historyCreator;
 
@@ -37,7 +37,6 @@ const middlewares = [
   routerMiddleware(history), // for dispatching history actions
   refreshTokenMiddleware,
   requestMiddleware,
-  ...getDefaultMiddleware()
 ];
 
 if (isDevelopment) {
@@ -52,8 +51,9 @@ if (isDevelopment) {
 export default function ourConfigureStore (preloadedState) {
   const store = configureStore({
     reducer: createRootReducer(history), // root reducer with router state
-    middleware: middlewares,
-    preloadedState
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(middlewares),
+    preloadedState,
   });
 
   if (window && window.Cypress && window.Cypress.env('TESTING') === true) {

@@ -1,6 +1,6 @@
-import { encode } from '../utils/browser';
-import tally from './tally';
-import { strings } from '../components/locale';
+import { encode } from '../utils/browser.js';
+import tally from './tally.js';
+import { strings } from '../components/locale.js';
 
 const granuleRoutes = [
   ['Overview', null],

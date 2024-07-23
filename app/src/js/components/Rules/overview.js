@@ -10,12 +10,12 @@ import {
   filterRules,
   clearRulesFilter,
   refreshCumulusDbConnection,
-} from '../../actions';
-import { lastUpdated, tally } from '../../utils/format';
-import List from '../Table/Table';
-import Search from '../Search/search';
-import { tableColumns, bulkActions } from '../../utils/table-config/rules';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+} from '../../actions/index.js';
+import { lastUpdated, tally } from '../../utils/format.js';
+import List from '../Table/Table.js';
+import Search from '../Search/search.js';
+import { tableColumns, bulkActions } from '../../utils/table-config/rules.js';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs.js';
 
 const breadcrumbConfig = [
   {

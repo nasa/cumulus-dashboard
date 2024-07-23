@@ -3,18 +3,20 @@ import c from 'classnames';
 import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import get from 'lodash/get';
+import get from 'lodash/get.js';
 import {
   logout,
   getApiVersion,
   getCMRInfo,
   getCumulusInstanceMetadata,
-} from '../../actions';
-import { graphicsPath, nav } from '../../config';
-import { window } from '../../utils/browser';
-import { strings } from '../locale';
-import linkToKibana from '../../utils/kibana';
-import { getPersistentQueryParams } from '../../utils/url-helper';
+} from '../../actions/index.js';
+import _config from '../../config/config.js';
+import { window } from '../../utils/browser.js';
+import { strings } from '../locale.js';
+import linkToKibana from '../../utils/kibana.js';
+import { getPersistentQueryParams } from '../../utils/url-helper.js';
+
+const { graphicsPath, nav} = _config;
 
 const paths = [
   [strings.collections, '/collections/all'],

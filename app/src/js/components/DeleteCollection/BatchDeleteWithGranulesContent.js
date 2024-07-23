@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { collectionNameVersion } from '../../utils/format';
+import { collectionNameVersion } from '../../utils/format.js';
 
 const BatchDeleteWithGranulesContent = ({ selectionsWithGranules }) => (
   <>

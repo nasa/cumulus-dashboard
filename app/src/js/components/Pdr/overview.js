@@ -3,17 +3,17 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { listPdrs, getCount, clearPdrsFilter, filterPdrs, refreshCumulusDbConnection } from '../../actions';
-import { lastUpdated, tally } from '../../utils/format';
-import { bulkActions } from '../../utils/table-config/pdrs';
-import { tableColumns } from '../../utils/table-config/pdr-progress';
-import List from '../Table/Table';
-import Overview from '../Overview/overview';
-import Dropdown from '../DropDown/dropdown';
-import statusOptions from '../../utils/status';
-import ListFilters from '../ListActions/ListFilters';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import { getPersistentQueryParams } from '../../utils/url-helper';
+import { listPdrs, getCount, clearPdrsFilter, filterPdrs, refreshCumulusDbConnection } from '../../actions/index.js';
+import { lastUpdated, tally } from '../../utils/format.js';
+import { bulkActions } from '../../utils/table-config/pdrs.js';
+import { tableColumns } from '../../utils/table-config/pdr-progress.js';
+import List from '../Table/Table.js';
+import Overview from '../Overview/overview.js';
+import Dropdown from '../DropDown/dropdown.js';
+import statusOptions from '../../utils/status.js';
+import ListFilters from '../ListActions/ListFilters.js';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs.js';
+import { getPersistentQueryParams } from '../../utils/url-helper.js';
 
 const breadcrumbConfig = [
   {

@@ -8,9 +8,9 @@ import {
   clearGranulesWorkflows,
   getGranulesWorkflows,
   getGranulesWorkflowsClearError
-} from '../../actions';
-import ErrorReport from '../Errors/report';
-import SimpleDropdown from '../DropDown/simple-dropdown';
+} from '../../actions/index.js';
+import ErrorReport from '../Errors/report.js';
+import SimpleDropdown from '../DropDown/simple-dropdown.js';
 
 export const maxDisplayed = 10;
 

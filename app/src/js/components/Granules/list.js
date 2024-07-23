@@ -15,8 +15,8 @@ import {
   getCount,
   getOptionsProviderName,
   toggleGranulesTableColumns,
-} from '../../actions';
-import { lastUpdated, tally, displayCase } from '../../utils/format';
+} from '../../actions/index.js';
+import { lastUpdated, tally, displayCase } from '../../utils/format.js';
 import {
   defaultHiddenColumns,
   tableColumns,
@@ -25,14 +25,14 @@ import {
   defaultWorkflowMeta,
   executeDialog,
   groupAction,
-} from '../../utils/table-config/granules';
-import List from '../Table/Table';
-import LogViewer from '../Logs/viewer';
-import Dropdown from '../DropDown/dropdown';
-import Search from '../Search/search';
+} from '../../utils/table-config/granules.js';
+import List from '../Table/Table.js';
+import LogViewer from '../Logs/viewer.js';
+import Dropdown from '../DropDown/dropdown.js';
+import Search from '../Search/search.js';
 import { workflowOptionNames } from '../../selectors';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import ListFilters from '../ListActions/ListFilters';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs.js';
+import ListFilters from '../ListActions/ListFilters.js';
 
 const generateBreadcrumbConfig = (view) => [
   {

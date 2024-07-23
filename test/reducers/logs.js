@@ -1,10 +1,8 @@
-'use strict';
-
 import test from 'ava';
-import reducer from '../../app/src/js/reducers/logs';
-import { LOGS_ERROR } from '../../app/src/js/actions/types';
-import { initialState } from '../../app/src/js/reducers/logs';
-import { metricsNotConfiguredMessage } from '../../app/src/js/utils/log';
+import reducer from '../../app/src/js/reducers/logs.js';
+import { LOGS_ERROR } from '../../app/src/js/actions/types.js';
+import { initialState } from '../../app/src/js/reducers/logs.js';
+import { metricsNotConfiguredMessage } from '../../app/src/js/utils/log.js';
 
 test('LOGS_ERROR sets metricsNotConfigured to true when error indicated metrics is not configured', (t) => {
   const action = {

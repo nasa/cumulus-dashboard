@@ -1,8 +1,6 @@
-'use strict';
-
 import test from 'ava';
-import reducer from '../../app/src/js/reducers/sidebar';
-import { TOGGLE_SIDEBAR } from '../../app/src/js/actions/types';
+import reducer from '../../app/src/js/reducers/sidebar.js';
+import { TOGGLE_SIDEBAR } from '../../app/src/js/actions/types.js';
 
 test('initialState begins with sidebar open', (t) => {
   const expected = { open: true };

@@ -8,7 +8,7 @@ import {
   getCollectionId,
   displayCase,
   collectionHrefFromNameVersion,
-} from '../../utils/format';
+} from '../../utils/format.js';
 import {
   listGranules,
   filterGranules,
@@ -18,21 +18,21 @@ import {
   clearGranulesSearch,
   listWorkflows,
   getOptionsProviderName,
-} from '../../actions';
+} from '../../actions/index.js';
 import {
   bulkActions,
   defaultWorkflowMeta,
   executeDialog,
   groupAction,
   tableColumns,
-} from '../../utils/table-config/granules';
-import List from '../Table/Table';
-import Dropdown from '../DropDown/dropdown';
-import Search from '../Search/search';
-import { granuleStatus as statusOptions } from '../../utils/status';
-import { workflowOptionNames } from '../../selectors';
-import ListFilters from '../ListActions/ListFilters';
-import CollectionHeader from './collection-header';
+} from '../../utils/table-config/granules.js';
+import List from '../Table/Table.js';
+import Dropdown from '../DropDown/dropdown.js';
+import Search from '../Search/search.js';
+import { granuleStatus as statusOptions } from '../../utils/status.js';
+import { workflowOptionNames } from '../../selectors/index.js';
+import ListFilters from '../ListActions/ListFilters.js';
+import CollectionHeader from './collection-header.js';
 
 const CollectionGranules = ({
   dispatch,

@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import test from 'ava';
 import cloneDeep from 'lodash/cloneDeep';

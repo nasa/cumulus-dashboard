@@ -1,14 +1,12 @@
-'use strict';
-
 import test from 'ava';
 import sinon from 'sinon';
-import reducer, { initialState } from '../../app/src/js/reducers/datepicker';
-import { allDateRanges, msPerDay, findDateRangeByValue } from '../../app/src/js/utils/datepicker';
+import reducer, { initialState } from '../../app/src/js/reducers/datepicker.js';
+import { allDateRanges, msPerDay, findDateRangeByValue } from '../../app/src/js/utils/datepicker.js';
 import {
   DATEPICKER_DATECHANGE,
   DATEPICKER_DROPDOWN_FILTER,
   DATEPICKER_HOUR_FORMAT
-} from '../../app/src/js/actions/types';
+} from '../../app/src/js/actions/types.js';
 
 test('verify initial state', (t) => {
   const inputstate = { some: 'initialState' };

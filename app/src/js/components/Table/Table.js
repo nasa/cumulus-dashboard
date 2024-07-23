@@ -6,16 +6,16 @@ import isNil from 'lodash/isNil';
 import isEqual from 'lodash/isEqual';
 import omitBy from 'lodash/omitBy';
 import noop from 'lodash/noop';
-import ErrorReport from '../Errors/report';
-import Loading from '../LoadingIndicator/loading-indicator';
-import Pagination from '../Pagination/pagination';
+import ErrorReport from '../Errors/report.js';
+import Loading from '../LoadingIndicator/loading-indicator.js';
+import Pagination from '../Pagination/pagination.js';
 // Lodash
-import ListActions from '../ListActions/ListActions';
-import TableHeader from '../TableHeader/table-header';
-import ListFilters from '../ListActions/ListFilters';
-import TableFilters from './TableFilters';
+import ListActions from '../ListActions/ListActions.js';
+import TableHeader from '../TableHeader/table-header.js';
+import ListFilters from '../ListActions/ListFilters.js';
+import TableFilters from './TableFilters.js';
 
-const SortableTable = lazy(() => import('../SortableTable/SortableTable'));
+const SortableTable = lazy(() => import('../SortableTable/SortableTable.js'));
 
 function buildSortKey(sortProps) {
   return sortProps

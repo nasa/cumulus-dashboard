@@ -1,5 +1,5 @@
 /* eslint-disable-next-line import/no-unresolved */
-const { graphql } = require('@octokit/graphql');
+import { graphql } from '@octokit/graphql';
 
 // Query Github API for first commit on target ref and see if it has an associated pull request
 async function getPrsForRef(headRefName, baseRefName) {

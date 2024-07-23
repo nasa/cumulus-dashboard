@@ -1,5 +1,3 @@
-'use strict';
-
 import test from 'ava';
 import sinon from 'sinon';
 
@@ -9,7 +7,7 @@ import {
   getPersistentQueryParams,
   historyPushWithQueryParams,
   __RewireAPI__ as URLHelperRewireAPI
-} from '../../app/src/js/utils/url-helper';
+} from '../../app/src/js/utils/url-helper.js';
 
 URLHelperRewireAPI.__Rewire__('history', {
   push: sinon.fake(),

@@ -2,16 +2,16 @@ import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import get from 'lodash/get';
+import get from 'lodash/get.js';
 import {
   getReconciliationReport,
   listWorkflows,
-} from '../../actions';
-import Loading from '../LoadingIndicator/loading-indicator';
-import InventoryReport from './inventory-report';
-import GnfReport from './gnf-report';
-import Legend from './legend';
-import BackupReport from './backup-report';
+} from '../../actions/index.js';
+import Loading from '../LoadingIndicator/loading-indicator.js';
+import InventoryReport from './inventory-report.js';
+import GnfReport from './gnf-report.js';
+import Legend from './legend.js';
+import BackupReport from './backup-report.js';
 
 const ReconciliationReport = ({
   dispatch = {},

@@ -4,15 +4,15 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter, Route, Switch } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
-import Sidebar from '../Sidebar/sidebar';
-import { strings } from '../locale';
-import { getCount, listReconciliationReports } from '../../actions';
-import CreateReconciliationReport from './create';
-import ReconciliationReportList from './list';
-import ReconciliationReport from './reconciliation-report';
-import BackupReportGranuleDetails from './backup-report-granule-details';
-import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
-import { filterQueryParams } from '../../utils/url-helper';
+import Sidebar from '../Sidebar/sidebar.js';
+import { strings } from '../locale.js';
+import { getCount, listReconciliationReports } from '../../actions/index.js';
+import CreateReconciliationReport from './create.js';
+import ReconciliationReportList from './list.js';
+import ReconciliationReport from './reconciliation-report.js';
+import BackupReportGranuleDetails from './backup-report-granule-details.js';
+import DatePickerHeader from '../DatePickerHeader/DatePickerHeader.js';
+import { filterQueryParams } from '../../utils/url-helper.js';
 
 const ReconciliationReports = ({
   dispatch,

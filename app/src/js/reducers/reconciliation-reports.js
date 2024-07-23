@@ -1,10 +1,10 @@
 import { createReducer } from '@reduxjs/toolkit';
-import assignDate from './utils/assign-date';
+import assignDate from './utils/assign-date.js';
 import {
   createErrorReducer,
   createInflightReducer,
-  createSuccessReducer
-} from './utils/reducer-creators';
+  createSuccessReducer,
+} from './utils/reducer-creators.js';
 
 import {
   RECONCILIATION,
@@ -26,7 +26,7 @@ import {
   CLEAR_RECONCILIATION_SEARCH,
   FILTER_RECONCILIATION,
   CLEAR_RECONCILIATION_FILTER,
-} from '../actions/types';
+} from '../actions/types.js';
 
 export const initialState = {
   list: {
@@ -40,68 +40,73 @@ export const initialState = {
   deleted: {},
 };
 
-export default createReducer(initialState, {
-  [RECONCILIATION]: (state, action) => {
-    state.map[action.id] = {
-      inflight: false,
-      data: assignDate(action.data),
-    };
-    delete state.deleted[action.id];
-  },
-  [RECONCILIATION_INFLIGHT]: (state, action) => {
-    state.map[action.id] = { inflight: true };
-  },
-  [RECONCILIATION_ERROR]: (state, action) => {
-    state.map[action.id] = {
-      inflight: false,
-      error: action.error,
-    };
-  },
-  [RECONCILIATIONS]: (state, action) => {
-    const reports = action.data.results;
-    state.list.data = reports;
-    state.list.meta = assignDate(action.data.meta);
-    state.list.inflight = false;
-    state.list.error = false;
-  },
-  [RECONCILIATIONS_INFLIGHT]: (state) => {
-    state.list.inflight = true;
-  },
-  [RECONCILIATIONS_ERROR]: (state, action) => {
-    state.list.inflight = false;
-    state.list.error = action.error;
-  },
-  [RECONCILIATION_DELETE]: createSuccessReducer('deleted'),
-  [RECONCILIATION_DELETE_INFLIGHT]: createInflightReducer('deleted'),
-  [RECONCILIATION_DELETE_ERROR]: createErrorReducer('deleted'),
-  [SEARCH_RECONCILIATIONS]: (state, action) => {
-    state.list.params.infix = action.infix;
-  },
-  [CLEAR_RECONCILIATIONS_SEARCH]: (state) => {
-    delete state.list.params.infix;
-  },
-  [NEW_RECONCILIATION_INFLIGHT]: (state) => {
-    state.createReportInflight = true;
-  },
-  [NEW_RECONCILIATION]: (state) => {
-    state.createReportInflight = false;
-  },
-  [FILTER_RECONCILIATIONS]: (state, action) => {
-    state.list.params[action.param.key] = action.param.value;
-  },
-  [CLEAR_RECONCILIATIONS_FILTER]: (state, action) => {
-    state.list.params[action.paramKey] = null;
-  },
-  [SEARCH_RECONCILIATION]: (state, action) => {
-    state.searchString = action.searchString;
-  },
-  [CLEAR_RECONCILIATION_SEARCH]: (state) => {
-    state.searchString = null;
-  },
-  [FILTER_RECONCILIATION]: (state, action) => {
-    state.list.params[action.param.key] = action.param.value;
-  },
-  [CLEAR_RECONCILIATION_FILTER]: (state, action) => {
-    state.list.params[action.paramKey] = null;
-  }
+export default createReducer(initialState, (builder) => {
+  builder
+    .addCase(RECONCILIATION, (state, action) => {
+      state.map[action.id] = {
+        inflight: false,
+        data: assignDate(action.data),
+      };
+      delete state.deleted[action.id];
+    })
+    .addCase(RECONCILIATION_INFLIGHT, (state, action) => {
+      state.map[action.id] = { inflight: true };
+    })
+    .addCase(RECONCILIATION_ERROR, (state, action) => {
+      state.map[action.id] = {
+        inflight: false,
+        error: action.error,
+      };
+    })
+    .addCase(RECONCILIATIONS, (state, action) => {
+      const reports = action.data.results;
+      state.list.data = reports;
+      state.list.meta = assignDate(action.data.meta);
+      state.list.inflight = false;
+      state.list.error = false;
+    })
+    .addCase(RECONCILIATIONS_INFLIGHT, (state) => {
+      state.list.inflight = true;
+    })
+    .addCase(RECONCILIATIONS_ERROR, (state, action) => {
+      state.list.inflight = false;
+      state.list.error = action.error;
+    })
+    // Deleted
+    .addCase(RECONCILIATION_DELETE, createSuccessReducer('deleted'))
+    .addCase(RECONCILIATION_DELETE_INFLIGHT, createInflightReducer('deleted'))
+    .addCase(RECONCILIATION_DELETE_ERROR, createErrorReducer('deleted'))
+    .addCase(SEARCH_RECONCILIATIONS, (state, action) => {
+      state.list.params.infix = action.infix;
+    })
+
+    .addCase(CLEAR_RECONCILIATIONS_SEARCH, (state) => {
+      delete state.list.params.infix;
+    })
+
+    .addCase(NEW_RECONCILIATION_INFLIGHT, (state) => {
+      state.createReportInflight = true;
+    })
+    .addCase(NEW_RECONCILIATION, (state) => {
+      state.createReportInflight = false;
+    })
+    .addCase(FILTER_RECONCILIATIONS, (state, action) => {
+      state.list.params[action.param.key] = action.param.value;
+    })
+    .addCase(CLEAR_RECONCILIATIONS_FILTER, (state, action) => {
+      state.list.params[action.paramKey] = null;
+    })
+    .addCase(SEARCH_RECONCILIATION, (state, action) => {
+      state.searchString = action.searchString;
+    })
+
+    .addCase(CLEAR_RECONCILIATION_SEARCH, (state) => {
+      state.searchString = null;
+    })
+    .addCase(FILTER_RECONCILIATION, (state, action) => {
+      state.list.params[action.param.key] = action.param.value;
+    })
+    .addCase(CLEAR_RECONCILIATION_FILTER, (state, action) => {
+      state.list.params[action.paramKey] = null;
+    });
 });

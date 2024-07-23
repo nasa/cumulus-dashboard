@@ -7,9 +7,9 @@ import {
   getCollection,
   updateCollection,
   clearUpdateCollection,
-} from '../../actions';
-import { getCollectionId, collectionHrefFromNameVersion } from '../../utils/format';
-import EditRaw from '../EditRaw/edit-raw';
+} from '../../actions/index.js';
+import { getCollectionId, collectionHrefFromNameVersion } from '../../utils/format.js';
+import EditRaw from '../EditRaw/edit-raw.js';
 
 const SCHEMA_KEY = 'collection';
 

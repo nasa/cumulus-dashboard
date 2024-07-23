@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 
-import _config from '../../config';
-import DefaultModal from '../Modal/modal';
-import ErrorReport from '../Errors/report';
-import SimpleDropdown from '../DropDown/simple-dropdown';
-import TextArea from '../TextAreaForm/text-area';
+import _config from '../../config/index.js';
+import DefaultModal from '../Modal/modal.js';
+import ErrorReport from '../Errors/report.js';
+import SimpleDropdown from '../DropDown/simple-dropdown.js';
+import TextArea from '../TextAreaForm/text-area.js';
 import {
   clearGranulesWorkflows,
   getGranulesWorkflows,
   getGranulesWorkflowsClearError
-} from '../../actions';
+} from '../../actions/index.js';
 
 const { kibanaRoot } = _config;
 

@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import assignDate from './utils/assign-date';
+import assignDate from './utils/assign-date.js';
 import {
   OPERATIONS,
   OPERATIONS_INFLIGHT,
@@ -11,7 +11,7 @@ import {
   CLEAR_OPERATIONS_FILTER,
   SEARCH_OPERATIONS,
   CLEAR_OPERATIONS_SEARCH,
-} from '../actions/types';
+} from '../actions/types.js';
 
 export const initialState = {
   list: {
@@ -26,43 +26,46 @@ export const initialState = {
   map: {},
 };
 
-export default createReducer(initialState, {
-  [OPERATIONS]: (state, action) => {
-    state.list.data = action.data.results;
-    state.list.meta = assignDate(action.data.meta);
-    state.list.inflight = false;
-    state.list.error = false;
-  },
-  [OPERATIONS_INFLIGHT]: (state) => {
-    state.list.inflight = true;
-  },
-  [OPERATIONS_ERROR]: (state, action) => {
-    state.list.inflight = false;
-    state.list.error = action.error;
-  },
-  [OPERATION]: (state, action) => {
-    state.list.data = action.data.results;
-    state.list.meta = assignDate(action.data.meta);
-    state.list.inflight = false;
-    state.list.error = false;
-  },
-  [OPERATION_INFLIGHT]: (state) => {
-    state.list.inflight = true;
-  },
-  [OPERATION_ERROR]: (state, action) => {
-    state.list.inflight = false;
-    state.list.error = action.error;
-  },
-  [FILTER_OPERATIONS]: (state, action) => {
-    state.list.params[action.param.key] = action.param.value;
-  },
-  [CLEAR_OPERATIONS_FILTER]: (state, action) => {
-    delete state.list.params[action.paramKey];
-  },
-  [SEARCH_OPERATIONS]: (state, action) => {
-    state.list.internal.infix = action.infix;
-  },
-  [CLEAR_OPERATIONS_SEARCH]: (state) => {
-    delete state.list.internal.infix;
-  },
+export default createReducer(initialState, (builder) => {
+  builder
+    .addCase(OPERATIONS, (state, action) => {
+      state.list.data = action.data.results;
+      state.list.meta = assignDate(action.data.meta);
+      state.list.inflight = false;
+      state.list.error = false;
+    })
+    .addCase(OPERATIONS_INFLIGHT, (state) => {
+      state.list.inflight = true;
+    })
+    .addCase(OPERATIONS_ERROR, (state, action) => {
+      state.list.inflight = false;
+      state.list.error = action.error;
+    })
+    .addCase(OPERATION, (state, action) => {
+      state.list.data = action.data.results;
+      state.list.meta = assignDate(action.data.meta);
+      state.list.inflight = false;
+      state.list.error = false;
+    })
+    .addCase(OPERATION_INFLIGHT, (state) => {
+      state.list.inflight = true;
+    })
+    .addCase(OPERATION_ERROR, (state, action) => {
+      state.list.inflight = false;
+      state.list.error = action.error;
+    })
+    // Filter
+    .addCase(FILTER_OPERATIONS, (state, action) => {
+      state.list.params[action.param.key] = action.param.value;
+    })
+    .addCase(CLEAR_OPERATIONS_FILTER, (state, action) => {
+      delete state.list.params[action.paramKey];
+    })
+    // Search
+    .addCase(SEARCH_OPERATIONS, (state, action) => {
+      state.list.internal.infix = action.infix;
+    })
+    .addCase(CLEAR_OPERATIONS_SEARCH, (state) => {
+      delete state.list.internal.infix;
+    });
 });

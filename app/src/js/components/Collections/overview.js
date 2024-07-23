@@ -19,7 +19,7 @@ import {
   applyWorkflowToGranule,
   applyRecoveryWorkflowToGranule,
   refreshCumulusDbConnection,
-} from '../../actions';
+} from '../../actions/index.js';
 import {
   collectionName as collectionLabelForId,
   getCollectionId,
@@ -27,9 +27,9 @@ import {
   lastUpdated,
   collectionHrefFromNameVersion,
   collectionHrefFromId,
-} from '../../utils/format';
-import { granuleStatus as statusOptions } from '../../utils/status';
-import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
+} from '../../utils/format.js';
+import { granuleStatus as statusOptions } from '../../utils/status.js';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper.js';
 import {
   bulkActions,
   defaultHiddenColumns,
@@ -38,17 +38,17 @@ import {
   groupAction,
   recoverAction,
   tableColumns,
-} from '../../utils/table-config/granules';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import DeleteCollection from '../DeleteCollection/DeleteCollection';
-import Dropdown from '../DropDown/dropdown';
-import AsyncDropdown from '../DropDown/async-dropdown';
-import ListFilters from '../ListActions/ListFilters';
-import { strings } from '../locale';
-import Overview from '../Overview/overview';
-import Search from '../Search/search';
-import List from '../Table/Table';
-import { workflowOptionNames } from '../../selectors';
+} from '../../utils/table-config/granules.js';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs.js';
+import DeleteCollection from '../DeleteCollection/DeleteCollection.js';
+import Dropdown from '../DropDown/dropdown.js';
+import AsyncDropdown from '../DropDown/async-dropdown.js';
+import ListFilters from '../ListActions/ListFilters.js';
+import { strings } from '../locale.js';
+import Overview from '../Overview/overview.js';
+import Search from '../Search/search.js';
+import List from '../Table/Table.js';
+import { workflowOptionNames } from '../../selectors/index.js';
 
 const breadcrumbConfig = [
   {

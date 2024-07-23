@@ -1,1 +1,7 @@
-require('browser-env')({ url: 'https://example.com' });
+import browserEnv from 'browser-env';
+
+browserEnv(
+    { 
+        url: 'https://example.com' 
+    }
+);

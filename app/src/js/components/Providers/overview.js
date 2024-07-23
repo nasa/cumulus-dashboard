@@ -11,11 +11,11 @@ import {
   filterProviders,
   clearProvidersFilter,
   refreshCumulusDbConnection,
-} from '../../actions';
-import { lastUpdated } from '../../utils/format';
-import { tableColumns } from '../../utils/table-config/providers';
-import List from '../Table/Table';
-import { getPersistentQueryParams } from '../../utils/url-helper';
+} from '../../actions/index.js';
+import { lastUpdated } from '../../utils/format.js';
+import { tableColumns } from '../../utils/table-config/providers.js';
+import List from '../Table/Table.js';
+import { getPersistentQueryParams } from '../../utils/url-helper.js';
 
 class ProvidersOverview extends React.Component {
   constructor() {

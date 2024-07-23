@@ -19,8 +19,8 @@ import {
   getOptionsProviderName,
   refreshCumulusDbConnection,
   toggleGranulesTableColumns,
-} from '../../actions';
-import { lastUpdated, tally } from '../../utils/format';
+} from '../../actions/index.js';
+import { lastUpdated, tally } from '../../utils/format.js';
 import {
   bulkActions,
   defaultHiddenColumns,
@@ -29,16 +29,16 @@ import {
   groupAction,
   recoverAction,
   tableColumns,
-} from '../../utils/table-config/granules';
-import { granuleStatus as statusOptions } from '../../utils/status';
-import { strings } from '../locale';
-import { workflowOptionNames } from '../../selectors';
-import List from '../Table/Table';
-import Dropdown from '../DropDown/dropdown';
-import Search from '../Search/search';
-import Overview from '../Overview/overview';
-import ListFilters from '../ListActions/ListFilters';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+} from '../../utils/table-config/granules.js';
+import { granuleStatus as statusOptions } from '../../utils/status.js';
+import { strings } from '../locale.js';
+import { workflowOptionNames } from '../../selectors/index.js';
+import List from '../Table/Table.js';
+import Dropdown from '../DropDown/dropdown.js';
+import Search from '../Search/search.js';
+import Overview from '../Overview/overview.js';
+import ListFilters from '../ListActions/ListFilters.js';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs.js';
 
 const breadcrumbConfig = [
   {

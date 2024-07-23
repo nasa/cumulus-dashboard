@@ -4,7 +4,7 @@ import {
   enableRule,
   disableRule,
   deleteRule
-} from '../../actions';
+} from '../../actions/index.js';
 import {
   getFormattedCollectionId,
   collectionLink,
@@ -13,9 +13,9 @@ import {
   enableRules,
   disableRules,
   deleteRules,
-} from '../format';
-import { strings } from '../../components/locale';
-import { getPersistentQueryParams } from '../url-helper';
+} from '../format.js';
+import { strings } from '../../components/locale.js';
+import { getPersistentQueryParams } from '../url-helper.js';
 
 export const tableColumns = [
   {

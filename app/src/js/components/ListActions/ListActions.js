@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Collapse } from 'react-bootstrap';
-import BatchAsyncCommand from '../BatchAsyncCommands/BatchAsyncCommands';
-import Timer from '../Timer/timer';
+import BatchAsyncCommand from '../BatchAsyncCommands/BatchAsyncCommands.js';
+import Timer from '../Timer/timer.js';
 
 const ListActions = ({
   children,

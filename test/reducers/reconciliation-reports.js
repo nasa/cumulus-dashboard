@@ -1,11 +1,9 @@
-'use strict';
-
 import test from 'ava';
-import cloneDeep from 'lodash/cloneDeep';
-import reducer, { initialState } from '../../app/src/js/reducers/reconciliation-reports';
+import cloneDeep from 'lodash/cloneDeep.js';
+import reducer, { initialState } from '../../app/src/js/reducers/reconciliation-reports.js';
 import {
   RECONCILIATIONS
-} from '../../app/src/js/actions/types';
+} from '../../app/src/js/actions/types.js';
 
 test('RECONCILIATIONS reducer', function (t) {
   const reports = [

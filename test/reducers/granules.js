@@ -1,8 +1,6 @@
-'use strict';
-
 import test from 'ava';
-import cloneDeep from 'lodash/cloneDeep';
-import reducer, { initialState } from '../../app/src/js/reducers/granules';
+import cloneDeep from 'lodash/cloneDeep.js';
+import reducer, { initialState } from '../../app/src/js/reducers/granules.js';
 import {
   BULK_GRANULE,
   BULK_GRANULE_CLEAR_ERROR,
@@ -10,7 +8,7 @@ import {
   BULK_GRANULE_DELETE_CLEAR_ERROR,
   BULK_GRANULE_REINGEST,
   BULK_GRANULE_REINGEST_CLEAR_ERROR
-} from '../../app/src/js/actions/types';
+} from '../../app/src/js/actions/types.js';
 
 test('BULK_GRANULE', (t) => {
   const inputState = cloneDeep(initialState);

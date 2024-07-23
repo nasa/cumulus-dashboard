@@ -1,5 +1,3 @@
-'use strict';
-
 export const s3AccessFixture = `{
   "took": 49,
   "timed_out": false,

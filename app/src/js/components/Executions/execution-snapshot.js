@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { Alert } from 'react-bootstrap';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
-import SortableTable from '../SortableTable/SortableTable';
-import { getExecutionStatus } from '../../actions';
-import { formatEvents, subColumns } from '../../utils/table-config/executions';
+import SortableTable from '../SortableTable/SortableTable.js';
+import { getExecutionStatus } from '../../actions/index.js';
+import { formatEvents, subColumns } from '../../utils/table-config/executions.js';
 
 const ExecutionSnapshot = ({
   dispatch,

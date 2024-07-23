@@ -12,19 +12,19 @@ import {
   listExecutions,
   listGranules,
   listRules,
-} from '../actions';
+} from '../actions/index.js';
 import {
   nullValue,
   tally,
   seconds
-} from '../utils/format';
-import { pageSection, sectionHeader } from './Section/section';
-import List from './Table/Table';
-import { errorTableColumns } from '../utils/table-config/granules';
-import linkToKibana from '../utils/kibana';
-import DatepickerRange from './Datepicker/DatepickerRange';
-import { strings } from './locale';
-import { getPersistentQueryParams } from '../utils/url-helper';
+} from '../utils/format.js';
+import { pageSection, sectionHeader } from './Section/section.js';
+import List from './Table/Table.js';
+import { errorTableColumns } from '../utils/table-config/granules.js';
+import linkToKibana from '../utils/kibana.js';
+import DatepickerRange from './Datepicker/DatepickerRange.js';
+import { strings } from './locale.js';
+import { getPersistentQueryParams } from '../utils/url-helper.js';
 
 class Home extends React.Component {
   constructor (props) {

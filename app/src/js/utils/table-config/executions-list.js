@@ -6,8 +6,8 @@ import {
   displayCase,
   seconds,
   fromNowWithTooltip
-} from '../format';
-import { getPersistentQueryParams } from '../url-helper';
+} from '../format.js';
+import { getPersistentQueryParams } from '../url-helper.js';
 
 export const tableColumns = [
   {

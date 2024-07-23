@@ -4,20 +4,20 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import get from 'lodash/get';
-import { getExecutionStatus, getCumulusInstanceMetadata } from '../../actions';
+import { getExecutionStatus, getCumulusInstanceMetadata } from '../../actions/index.js';
 import {
   metaAccessors,
   associatedGranulesTableColumns,
-} from '../../utils/table-config/execution-status';
+} from '../../utils/table-config/execution-status.js';
 
-import List from '../Table/Table';
-import ErrorReport from '../Errors/report';
+import List from '../Table/Table.js';
+import ErrorReport from '../Errors/report.js';
 
-import ExecutionStatusGraph from './execution-status-graph';
-import Metadata from '../Table/Metadata';
-import Loading from '../LoadingIndicator/loading-indicator';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import { handleDownloadUrlClick } from '../../utils/download-file';
+import ExecutionStatusGraph from './execution-status-graph.js';
+import Metadata from '../Table/Metadata.js';
+import Loading from '../LoadingIndicator/loading-indicator.js';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs.js';
+import { handleDownloadUrlClick } from '../../utils/download-file.js';
 
 const breadcrumbConfig = [
   {

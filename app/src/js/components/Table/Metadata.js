@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
-import { nullValue } from '../../utils/format';
+import { nullValue } from '../../utils/format.js';
 
 const Metadata = ({
   data,

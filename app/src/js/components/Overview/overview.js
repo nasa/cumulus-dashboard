@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import withQueryParams from 'react-router-query-params';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import Loading from '../LoadingIndicator/loading-indicator';
-import { displayCase, numLargeTooltip } from '../../utils/format';
-import { getCount } from '../../actions';
+import Loading from '../LoadingIndicator/loading-indicator.js';
+import { displayCase, numLargeTooltip } from '../../utils/format.js';
+import { getCount } from '../../actions/index.js';
 
 const Overview = ({
   dispatch,

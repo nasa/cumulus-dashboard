@@ -4,15 +4,15 @@ import withQueryParams from 'react-router-query-params';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
-import get from 'lodash/get';
+import get from 'lodash/get.js';
 import { Helmet } from 'react-helmet';
-import { login, setTokenState } from '../actions';
-import { window } from '../utils/browser';
-import { buildRedirectUrl } from '../utils/format';
-import _config from '../config';
-import ErrorReport from './Errors/report';
-import Header from './Header/header';
-import { historyPushWithQueryParams } from '../utils/url-helper';
+import { login, setTokenState } from '../actions/index.js';
+import { window } from '../utils/browser.js';
+import { buildRedirectUrl } from '../utils/format.js';
+import _config from '../config/index.js';
+import ErrorReport from './Errors/report.js';
+import Header from './Header/header.js';
+import { historyPushWithQueryParams } from '../utils/url-helper.js';
 
 const { updateDelay, apiRoot, oauthMethod } = _config;
 

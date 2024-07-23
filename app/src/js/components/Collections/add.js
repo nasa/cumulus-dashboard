@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { createCollection, getSchema } from '../../actions';
-import { getCollectionId, collectionHrefFromId } from '../../utils/format';
-import { removeReadOnly } from '../FormSchema/schema';
-import AddRaw from '../AddRaw/add-raw';
+import { createCollection, getSchema } from '../../actions/index.js';
+import { getCollectionId, collectionHrefFromId } from '../../utils/format.js';
+import { removeReadOnly } from '../FormSchema/schema.js';
+import AddRaw from '../AddRaw/add-raw.js';
 
 const AddCollection = ({ location = {}, collections, dispatch, schema }) => {
   const [defaultValue, setDefaultValue] = useState({});

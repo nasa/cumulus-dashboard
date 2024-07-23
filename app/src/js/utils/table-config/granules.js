@@ -19,7 +19,7 @@ import {
   deleteGranules,
   removeGranulesFromCmr,
   removeFromCmrDelete,
-} from '../format';
+} from '../format.js';
 import {
   applyWorkflowToGranuleClearError,
   deleteGranule,
@@ -29,16 +29,16 @@ import {
   removeGranule,
   removeGranuleClearError,
   removeAndDeleteGranule
-} from '../../actions';
-import ErrorReport from '../../components/Errors/report';
-import { strings } from '../../components/locale';
-import SimpleDropdown from '../../components/DropDown/simple-dropdown';
-import BulkGranule from '../../components/Granules/bulk';
-import BatchReingestConfirmContent from '../../components/ReingestGranules/BatchReingestConfirmContent';
-import BatchReingestCompleteContent from '../../components/ReingestGranules/BatchReingestCompleteContent';
-import TextArea from '../../components/TextAreaForm/text-area';
-import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
-import GranuleInventory from '../../components/Granules/granule-inventory';
+} from '../../actions/index.js';
+import ErrorReport from '../../components/Errors/report.js';
+import { strings } from '../../components/locale.js';
+import SimpleDropdown from '../../components/DropDown/simple-dropdown.js';
+import BulkGranule from '../../components/Granules/bulk.js';
+import BatchReingestConfirmContent from '../../components/ReingestGranules/BatchReingestConfirmContent.js';
+import BatchReingestCompleteContent from '../../components/ReingestGranules/BatchReingestCompleteContent.js';
+import TextArea from '../../components/TextAreaForm/text-area.js';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper.js';
+import GranuleInventory from '../../components/Granules/granule-inventory.js';
 
 export const groupAction = {
   title: 'Granule Actions',

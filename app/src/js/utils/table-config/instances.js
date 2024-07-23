@@ -1,4 +1,4 @@
-import { tally } from '../format';
+import { tally } from '../format.js';
 
 export const tableColumns = [
   {
