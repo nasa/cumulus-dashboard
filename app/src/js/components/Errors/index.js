@@ -2,14 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-class Errors extends React.Component {
-  constructor () {
-    super();
-    this.displayName = 'Errors';
-  }
-
-  render () {
-    return (
+const Errors = ({ children }) => (
       <div className='page__errors'>
         <div className='content__header'>
           <div className='row'>
@@ -18,13 +11,11 @@ class Errors extends React.Component {
         </div>
         <div className='page__content page__content'>
           <div className='row'>
-            {this.props.children}
+            {children}
           </div>
         </div>
       </div>
-    );
-  }
-}
+);
 
 Errors.propTypes = {
   children: PropTypes.object
