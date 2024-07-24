@@ -301,6 +301,7 @@ export const tableColumnsGranuleConflictDetails = ({ reportType }) => {
       id: 'onlyInOrca',
       accessor: 'reason',
       // TODO: Updated ES lint rules caused a changeset-unrelated violation - this should be fixed
+      // eslint-disable-next-line react/prop-types
       Cell: ({ cell: { value } }) => (
         (value === 'onlyInOrca') ? checkButton : nullValue
       ),
@@ -311,6 +312,7 @@ export const tableColumnsGranuleConflictDetails = ({ reportType }) => {
       id: 'shouldBeExcludedFromOrca',
       accessor: 'reason',
       // TODO: Updated ES lint rules caused a changeset-unrelated violation - this should be fixed
+      // eslint-disable-next-line react/prop-types
       Cell: ({ cell: { value } }) => (
         (value === 'shouldBeExcludedFromOrca') ? checkButton : nullValue
       ),
@@ -339,6 +341,7 @@ export const tableColumnsGranuleConflictDetails = ({ reportType }) => {
       id: 'onlyInCumulus',
       accessor: 'reason',
       // TODO: Updated ES lint rules caused a changeset-unrelated violation - this should be fixed
+      // eslint-disable-next-line react/prop-types
       Cell: ({ cell: { value } }) => (
         (value === 'onlyInCumulus') ? checkButton : nullValue
       ),
