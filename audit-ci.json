@@ -2,5 +2,5 @@
   "high": true,
   "pass-enoaudit": true,
   "retry-count": 20,
-  "allowlist": ["d3-color", "hoek", "webpack-dev-middleware"]
+  "allowlist": ["braces", "d3-color", "hoek", "webpack-dev-middleware", "ws"]
 }
