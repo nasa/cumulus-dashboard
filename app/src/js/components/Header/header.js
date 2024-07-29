@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useCallback, useRef } from 'react';
 import c from 'classnames';
 import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
@@ -29,43 +29,45 @@ const paths = [
   ['Reconciliation Reports', '/reconciliation-reports'],
 ];
 
-class Header extends React.Component {
-  constructor() {
-    super();
-    this.logout = this.logout.bind(this);
-    this.className = this.className.bind(this);
-    this.linkTo = this.linkTo.bind(this);
-  }
+const Header = ({
+  api,
+  dispatch,
+  location,
+  minimal,
+  locationQueryParams,
+}) => {
+  const mounted = useRef(false);
 
-  componentDidMount() {
-    const { dispatch, api } = this.props;
-    if (api.authenticated) {
-      dispatch(getApiVersion());
-      dispatch(getCMRInfo());
-      dispatch(getCumulusInstanceMetadata());
-    }
-  }
-
-  logout() {
-    const { dispatch } = this.props;
+  const handleLogout = useCallback(() => {
     dispatch(logout()).then(() => {
       if (get(window, 'location.reload')) {
         window.location.reload();
       }
     });
-  }
+  }, [dispatch]);
 
-  className(path) {
-    const active = this.props.location.pathname?.slice(0, path.length) === path; // nav issue with router
+  useEffect(() => {
+    if (api.authenticated && mounted.current) {
+      dispatch(getApiVersion());
+      dispatch(getCMRInfo());
+      dispatch(getCumulusInstanceMetadata());
+    }
+    return () => {
+      mounted.current = false;
+    };
+  }, [api.authenticated, dispatch]);
+
+  const className = (path) => {
+    const active = location.pathname?.slice(0, path.length) === path; // nav issue with router
     const menuItem = path.replace('/', '');
     const order = `nav__order-${!nav.order.includes(menuItem) ? 2 : nav.order.indexOf(menuItem)}`;
     return c({
       active,
       [order]: true,
     });
-  }
+  };
 
-  linkTo(path, search) {
+  const linkTo = (path, search) => {
     if (path[0] === 'Logs') {
       const kibanaLink = linkToKibana();
       return (
@@ -76,18 +78,16 @@ class Header extends React.Component {
     }
 
     return <Link to={{ pathname: path[1], search }}>{path[0]}</Link>;
-  }
+  };
 
-  render() {
-    const { api, location, minimal, locationQueryParams } = this.props;
-    const { authenticated } = api;
-    const locationSearch = getPersistentQueryParams(location);
-    const activePaths = paths.filter((path) => !nav.exclude[path[0]]);
-    const logoPath =
-      graphicsPath.substr(-1) === '/'
-        ? `${graphicsPath}${strings.logo}`
-        : `${graphicsPath}/${strings.logo}`;
-    return (
+  const locationSearch = getPersistentQueryParams(location);
+  const activePaths = paths.filter((path) => !nav.exclude[path[0]]);
+  const logoPath =
+    graphicsPath.substr(-1) === ('/')
+      ? `${graphicsPath}${strings.logo}`
+      : `${graphicsPath}/${strings.logo}`;
+
+  return (
       <div className="header" role='banner'>
         <div className="row">
           <h1 className="logo">
@@ -100,14 +100,14 @@ class Header extends React.Component {
               ? (
               <ul>
                 {activePaths.map((path) => (
-                  <li key={path[0]} className={this.className(path[1])}>
-                    {this.linkTo(path, locationQueryParams.search[path[1]] || locationSearch)}
+                  <li key={path[0]} className={className(path[1])}>
+                    {linkTo(path, locationQueryParams.search[path[1]] || locationSearch)}
                   </li>
                 ))}
                 <li className="rightalign nav__order-8">
-                  {authenticated
+                  {api.authenticated
                     ? (
-                    <button onClick={this.logout}>
+                    <button onClick={handleLogout}>
                       <span className="log-icon"></span>Log out
                     </button>
                       )
@@ -123,22 +123,20 @@ class Header extends React.Component {
           </nav>
         </div>
       </div>
-    );
-  }
-}
+  );
+};
 
 Header.propTypes = {
   api: PropTypes.object,
   dispatch: PropTypes.func,
   location: PropTypes.object,
   minimal: PropTypes.bool,
-  cumulusInstance: PropTypes.object,
-  datepicker: PropTypes.object,
   locationQueryParams: PropTypes.object,
 };
 
 export { Header };
 
 export default withRouter(connect((state) => ({
-  locationQueryParams: state.locationQueryParams
+  locationQueryParams: state.locationQueryParams,
+  api: state.api
 }))(Header));
