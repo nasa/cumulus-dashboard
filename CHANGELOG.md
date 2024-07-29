@@ -23,6 +23,9 @@ This version of the dashboard requires Cumulus API >= v18.2.0
     `@cumulus/aws-client@18.2.0-alpha.0` to work with localstack v3.0.0
 - **Snyk Security Fix**
   - Upgraded axios from 1.6.0 to 1.6.8
+- **CUMULUS-3810**
+  - converted the following files form class to functional components: home.js, 
+  header.js, index.js, oauth.js, app.js, and 404.js
 
 ## [v12.1.0] - 2023-10-27
 
