@@ -33,7 +33,7 @@ Setting the following environment variables can override the default values.
 | DAAC\_NAME | An identifier: e.g. LPDAAC, | *Local* |
 | ENABLE\_RECOVERY | If true, adds recovery options to the granule and collection pages. | *false* |
 | HIDE\_PDR | Whether to hide (or show) the PDR menu. | *true* |
-| LABELS | Choose `gitc` or `daac` localization. | *daac* |
+| LABELS |Select `daac` localization. | *daac* |
 | STAGE | Identifier displayed at top of dashboard page: e.g. PROD, UAT | *development* |
 | KIBANAROOT | \<optional\>  Points to a Kibana endpoint. | |
 
