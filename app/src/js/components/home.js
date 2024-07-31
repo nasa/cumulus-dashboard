@@ -172,6 +172,9 @@ const Home = ({
 };
 
 Home.propTypes = {
+  cumulusInstance: PropTypes.object,
+  datepicker: PropTypes.object,
+  dist: PropTypes.object,
   executions: PropTypes.object,
   granules: PropTypes.object,
   rules: PropTypes.object,
@@ -183,8 +186,12 @@ Home.propTypes = {
 export { Home };
 
 export default withRouter(withQueryParams()(connect((state) => ({
+  cumulusInstance: state.cumulusInstance,
+  datepicker: state.datepicker,
+  dist: state.dist,
   executions: state.executions,
   granules: state.granules,
   rules: state.rules,
-  stats: state.stats
+  stats: state.stats,
+  pdrs: state.pdrs
 }))(Home)));

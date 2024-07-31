@@ -131,6 +131,8 @@ Header.propTypes = {
   dispatch: PropTypes.func,
   location: PropTypes.object,
   minimal: PropTypes.bool,
+  cumulusInstance: PropTypes.object,
+  datepicker: PropTypes.object,
   locationQueryParams: PropTypes.object,
 };
 
