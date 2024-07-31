@@ -13,6 +13,7 @@ This version of the dashboard requires Cumulus API >= v18.2.0
 - **CUMULUS-3805**
   - Updated collections to sort by timestamp instead of duration
   - Changed the initialSortField of tables using createdAt to updatedAt
+  - Removed the duration column from the Collections table
 - **CUMULUS-3619**
   - Added Accessibility link to footer
   - Modified unit tests to accomodate new changes.
