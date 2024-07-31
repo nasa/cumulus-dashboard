@@ -140,27 +140,24 @@ export const BatchCommand = ({
     setErrorMsg(errMsg);
     setStatus(errMsg ? 'error' : 'success');
     setResults(errors ? [] : selected.map((item) => buildId(item)));
-    setTimeout(() => {
-      if (typeof getModalOptions === 'function') {
-        // setTimeout(() => {
-        const modalOptions = getModalOptions({
-          history,
-          selected,
-          results: selected.map((item) => buildId(item)),
-          errors,
-          errorMessage: errMsg,
-          isOnModalComplete: true,
-          closeModal
-        });
-        setModalOpts(modalOptions);
-        setStatus(null);
-      }
-    }, 0);
+    if (typeof getModalOptions === 'function') {
+      const modalOptions = getModalOptions({
+        history,
+        selected,
+        results: selected.map((item) => buildId(item)),
+        errors,
+        errorMessage: errMsg,
+        isOnModalComplete: true,
+        closeModal
+      });
+      setModalOpts(modalOptions);
+      setStatus(null);
+    }
   };
 
   // combine multiple errors into one
   const createErrorMessage = (errors) => {
-    if (!errors || !errors.length) return null;
+    if (!errors || !errors.length) return;
     return `${errors.length} error(s) occurred: \n${errors
       .map((err) => err.error.toString())
       .join('\n')}`;
@@ -261,7 +258,7 @@ export const BatchCommand = ({
               </div>
             </>
             }
-            {!inflight && !status && (!modalOpts || !modalOpts.children) && (
+            {(!inflight && !status) && (!modalOpts || !modalOpts.children) && (
               <>
                 <div>{confirmTextArray.map((confirmText, index) => (
                   <React.Fragment key={index}>

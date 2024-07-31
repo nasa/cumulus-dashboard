@@ -24,8 +24,8 @@ This version of the dashboard requires Cumulus API >= v18.2.0
 - **Snyk Security Fix**
   - Upgraded axios from 1.6.0 to 1.6.8
 - **CUMULUS-2668**
-    - Refactored DeleteCollectionModal and BatchAsyncCommands from class to function components.
-    - Modified unit tests to accomodate new changes.
+  - Refactored DeleteCollectionModal and BatchAsyncCommands from class to function components.
+  - Modified unit tests to accomodate new changes.
 
 ## [v12.1.0] - 2023-10-27
 
