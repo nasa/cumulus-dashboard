@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
 import { withRouter } from 'react-router-dom';
@@ -16,81 +16,76 @@ import { historyPushWithQueryParams } from '../utils/url-helper';
 
 const { updateDelay, apiRoot, oauthMethod } = _config;
 
-class OAuth extends React.Component {
-  constructor () {
-    super();
-    this.state = {
-      token: null,
-      error: null
-    };
-  }
+const OAuth = ({
+  dispatch,
+  api,
+  location,
+  apiVersion,
+  queryParams,
+}) => {
+  const [token, setToken] = useState(null);
 
-  componentDidUpdate (prevProps) {
-    // delay-close the modal if it's open
-    if (this.props.api.authenticated &&
-        this.props.api.authenticated !== prevProps.api.authenticated) {
-      prevProps.dispatch(setTokenState(this.state.token));
-      const { pathname } = prevProps.location;
+  useEffect(() => {
+    if (api.authenticated) {
+      dispatch(setTokenState(token));
+      const { pathname } = location;
       if (pathname !== '/auth' && get(window, 'location.reload')) {
         setTimeout(() => window.location.reload(), updateDelay);
       } else if (pathname === '/auth') {
         setTimeout(() => historyPushWithQueryParams('/'), updateDelay); // react isn't seeing this a function
       }
     }
-  }
+  }, [api.authenticated, dispatch, location, token]);
 
-  componentDidMount () {
-    const { token } = this.props.queryParams;
-    if (token) {
-      const { dispatch } = this.props;
-      this.setState({ token }, () => dispatch(login(token)));
+  useEffect(() => {
+    const { token: queryToken } = queryParams;
+    if (queryToken) {
+      setToken(queryToken);
+      dispatch(login(queryToken));
+    }
+  }, [queryParams, dispatch]);
+
+  let button;
+  if (!api.authenticated && !api.inflight) {
+    const redirect = buildRedirectUrl(window.location);
+    if (oauthMethod === 'launchpad') {
+      button = <div style={{ textAlign: 'center' }}><a className="button button--oauth" href={new URL(`saml/login?RelayState=${redirect}`, apiRoot).href}>Login with Launchpad</a></div>;
+    } else {
+      button = <div style={{ textAlign: 'center' }}><a className="button button--oauth" href={new URL(`token?state=${redirect}`, apiRoot).href} >Login with Earthdata Login</a></div>;
     }
   }
 
-  render () {
-    const { dispatch, api, apiVersion } = this.props;
-    let button;
-    if (!api.authenticated && !api.inflight) {
-      const redirect = buildRedirectUrl(window.location);
-      if (oauthMethod === 'launchpad') {
-        button = <div style={{ textAlign: 'center' }}><a className="button button--oauth" href={new URL(`saml/login?RelayState=${redirect}`, apiRoot).href}>Login with Launchpad</a></div>;
-      } else {
-        button = <div style={{ textAlign: 'center' }}><a className="button button--oauth" href={new URL(`token?state=${redirect}`, apiRoot).href} >Login with Earthdata Login</a></div>;
-      }
-    }
-
-    return (
-      <div className='app'>
-        <Helmet>
-          <title>Cumulus Login</title>
-        </Helmet>
-        <Header dispatch={dispatch} api={api} apiVersion={apiVersion} minimal={true}/>
-        <main className='main' role='main'>
-          <div className="modal-content">
-            <Modal
-              dialogClassName="oauth-modal"
-              show= {true}
-              centered
-              size="sm"
-              aria-labelledby="modal__oauth-modal"
-              role="main"
-            >
-              <Modal.Header className="oauth-modal__header"></Modal.Header>
-              <h1><Modal.Title id="modal__oauth-modal" className="oauth-modal__title">Welcome To Cumulus Dashboard</Modal.Title></h1>
-              <Modal.Body>
-                { api.inflight ? <h2 className='heading--medium'>Authenticating ... </h2> : null }
-                { api.error ? <ErrorReport report={api.error} /> : null }
-              </Modal.Body>
-              <Modal.Footer>
-                { button }
-              </Modal.Footer>
-            </Modal>
-          </div>
-        </main>
-      </div>
-    );
-  }
-}
+  return (
+    <div className='app'>
+      <Helmet>
+        <title>Cumulus Login</title>
+      </Helmet>
+      <Header dispatch={dispatch} api={api} apiVersion={apiVersion} minimal={true}/>
+      <main className='main' role='main'>
+        <div className="modal-content">
+          <Modal
+            dialogClassName="oauth-modal"
+            show= {true}
+            centered
+            size="sm"
+            aria-labelledby="modal__oauth-modal"
+            role="main"
+          >
+            <Modal.Header className="oauth-modal__header"></Modal.Header>
+            <h1><Modal.Title id="modal__oauth-modal" className="oauth-modal__title">Welcome To Cumulus Dashboard</Modal.Title></h1>
+            <Modal.Body>
+              { api.inflight ? <h2 className='heading--medium'>Authenticating ... </h2> : null }
+              { api.error ? <ErrorReport report={api.error} /> : null }
+            </Modal.Body>
+            <Modal.Footer>
+              { button }
+            </Modal.Footer>
+          </Modal>
+        </div>
+      </main>
+    </div>
+  );
+};
 
 OAuth.propTypes = {
   dispatch: PropTypes.func,
