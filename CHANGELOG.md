@@ -26,6 +26,12 @@ This version of the dashboard requires Cumulus API >= v18.2.0
 - **CUMULUS-3810**
   - converted the following files from class to functional components: home.js, 
   header.js, index.js, oauth.js, app.js, and 404.js
+- **CUMULUS-2668**
+  - Refactored DeleteCollectionModal and BatchAsyncCommands from class to function components.
+  - Modified unit tests to accomodate new changes.
+- **CUMULUS-2356**
+  - Removed gitc localization
+  - Allowlisted braces, ws, and fast-xml-parser
 
 ## [v12.1.0] - 2023-10-27
 

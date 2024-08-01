@@ -3,16 +3,15 @@
 import test from 'ava';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
-import { configure, shallow } from 'enzyme';
+import { configure, mount } from 'enzyme';
 
 import { BatchCommand } from '../../../app/src/js/components/BatchAsyncCommands/BatchAsyncCommands';
 
 configure({ adapter: new Adapter() });
 
-test('collect multiple errors', function (t) {
+test.cb('collect multiple errors', function (t) {
   const noop = () => {};
 
-  return new Promise((resolve, reject) => {
     const selected = [
       '0-error',
       '1-pass',
@@ -24,7 +23,7 @@ test('collect multiple errors', function (t) {
     const done = () => {
       count++;
       if (count === 2) {
-        resolve();
+        t.end();
       }
     };
 
@@ -51,8 +50,12 @@ test('collect multiple errors', function (t) {
       }
 
       process.nextTick(() => {
-        command.setProps(item);
+        command.update();
       });
+    };
+
+    const cleanup = () => {
+      console.log('Cleanup called');
     };
 
     const item = {
@@ -62,7 +65,7 @@ test('collect multiple errors', function (t) {
       confirm: noop
     };
 
-    const command = shallow(
+    const command = mount(
       <BatchCommand
         key={item.text}
         dispatch={noop}
@@ -73,12 +76,14 @@ test('collect multiple errors', function (t) {
         onSuccess={onSuccess}
         onError={onError}
         selected={selected}
+        cleanup={cleanup}
       />
     );
 
-    command.instance().start();
+    command.find('AsyncCommand').props().action();
     setTimeout(()=> {
-      command.instance().cleanup();
-    }, 1000)
+      command.update();
+      command.find('BatchCommand').props().cleanup();
+      t.end();
+    }, 1000);
   });
-});
