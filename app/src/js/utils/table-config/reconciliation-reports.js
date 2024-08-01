@@ -31,8 +31,8 @@ export const tableColumns = ({ dispatch, isGranules, query }) => ([
     accessor: 'status'
   },
   {
-    Header: 'Date Updated',
-    accessor: 'updatedAt',
+    Header: 'Date Generated',
+    accessor: 'createdAt',
     Cell: ({ cell: { value } }) => dateOnly(value)
   },
   {
