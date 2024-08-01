@@ -162,7 +162,7 @@ const Home = ({
               list={granules.list}
               action={listGranules}
               tableColumns={errorTableColumns}
-              initialSortId='timestamp'
+              initialSortId='updatedAt'
               query={generateQuery()}
             />
           )}

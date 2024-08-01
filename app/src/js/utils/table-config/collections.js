@@ -78,10 +78,10 @@ export const tableColumns = [
     width: 100
   },
   {
-    Header: 'Timestamp',
-    accessor: 'timestamp',
+    Header: 'Updated',
+    accessor: 'updatedAt',
     Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
-    id: 'timestamp'
+    id: 'updatedAt'
   }
 ];
 

@@ -27,9 +27,9 @@ export const tableColumns = [
   },
   {
     Header: 'Last Updated',
-    accessor: 'timestamp',
+    accessor: 'updatedAt',
     Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
-    id: 'timestamp'
+    id: 'updatedAt'
   }
 ];
 
