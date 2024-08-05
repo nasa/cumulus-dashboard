@@ -74,8 +74,8 @@ export const tableColumns = [
     },
   },
   {
-    Header: 'Timestamp',
-    accessor: 'timestamp',
+    Header: 'Updated',
+    accessor: 'updatedAt',
     Cell: ({ cell: { value } }) => fullDate(value),
   },
 ];
