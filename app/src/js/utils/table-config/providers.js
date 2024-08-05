@@ -26,10 +26,10 @@ export const tableColumns = [
     accessor: 'port'
   },
   {
-    Header: 'Last Updated',
-    accessor: 'timestamp',
+    Header: 'Updated',
+    accessor: 'updatedAt',
     Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
-    id: 'timestamp'
+    id: 'updatedAt'
   }
 ];
 
