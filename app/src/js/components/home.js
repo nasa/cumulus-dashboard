@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -26,40 +26,36 @@ import DatepickerRange from './Datepicker/DatepickerRange';
 import { strings } from './locale';
 import { getPersistentQueryParams } from '../utils/url-helper';
 
-class Home extends React.Component {
-  constructor (props) {
-    super(props);
-    this.query = this.query.bind(this);
-  }
+const Home = ({
+  stats,
+  executions,
+  granules,
+  rules,
+  dispatch,
+  location,
+}) => {
+  const generateQuery = () => ({
+    error__exists: true,
+    status: 'failed',
+    limit: 20
+  });
 
-  componentDidMount () {
-    const { dispatch } = this.props;
-    dispatch(getCumulusInstanceMetadata())
-      .then(() => this.query());
-  }
-
-  query () {
-    const { dispatch } = this.props;
+  const query = useCallback(() => {
     dispatch(getStats());
     dispatch(getCount({ type: 'granules', field: 'status' }));
     dispatch(listExecutions({}));
-    dispatch(listGranules(this.generateQuery()));
+    dispatch(listGranules(generateQuery()));
     dispatch(listRules({}));
-  }
+  }, [dispatch]);
 
-  generateQuery () {
-    return {
-      error__exists: true,
-      status: 'failed',
-      limit: 20
-    };
-  }
+  useEffect(() => {
+    dispatch(getCumulusInstanceMetadata())
+      .then(() => query());
+  }, [dispatch, query]);
 
-  isExternalLink (link) {
-    return link && link.match('https?://');
-  }
+  const isExternalLink = (link) => link && link.match('https?://');
 
-  getCountColor (type, count) {
+  const getCountColor = (type, count) => {
     if (type === 'Failed' && count > 0) {
       if (count > 99) {
         return 'red';
@@ -67,9 +63,9 @@ class Home extends React.Component {
       return 'yellow';
     }
     return 'blue';
-  }
+  };
 
-  buttonListSection (items, title, listId, sectionId) {
+  const buttonListSection = (items, title, listId, sectionId) => {
     const data = items.filter((d) => d[0] !== nullValue);
     if (!data.length) return null;
     return pageSection(
@@ -81,15 +77,15 @@ class Home extends React.Component {
             const value = d[0];
             return (
               <li key={d[1]}>
-                {this.isExternalLink(d[2])
+                {isExternalLink(d[2])
                   ? (
                     <a id={d[1]} href={d[2]} className='overview-num' target='_blank'>
-                      <span className={`num--large num--large--${this.getCountColor(d[1], value)}`}>{value}</span> {d[1]}
+                      <span className={`num--large num--large--${getCountColor(d[1], value)}`}>{value}</span> {d[1]}
                     </a>
                     )
                   : (
-                    <Link id={d[1]} className='overview-num' to={{ pathname: d[2], search: getPersistentQueryParams(this.props.location) }}>
-                      <span className={`num--large num--large--${this.getCountColor(d[1], value)}`}>{value}</span> {d[1]}
+                    <Link id={d[1]} className='overview-num' to={{ pathname: d[2], search: getPersistentQueryParams(location) }}>
+                      <span className={`num--large num--large--${getCountColor(d[1], value)}`}>{value}</span> {d[1]}
                     </Link>
                     )}
               </li>
@@ -98,41 +94,35 @@ class Home extends React.Component {
         </ul>
       </div>
     );
-  }
+  };
 
-  getCountByKey (counts, key) {
+  const getCountByKey = (counts, key) => {
     const granuleCount = counts.find((c) => c.key === key);
+    return granuleCount ? granuleCount.count : 0;
+  };
 
-    if (granuleCount) {
-      return granuleCount.count;
-    }
-  }
+  const { stats: statsData, count } = stats;
+  const searchString = getPersistentQueryParams(location);
+  const overview = [
+    [tally(get(statsData.data, 'errors.value')), 'Errors', linkToKibana()],
+    [tally(get(statsData.data, 'collections.value')), strings.collections, '/collections'],
+    [tally(get(statsData.data, 'granules.value')), strings.granules, '/granules'],
+    [tally(get(executions, 'list.meta.count')), 'Executions', '/executions'],
+    [tally(get(rules, 'list.meta.count')), 'Ingest Rules', '/rules'],
+    [seconds(get(statsData.data, 'processingTime.value', nullValue)), 'Average processing Time', '/']
+  ];
 
-  render () {
-    const { list } = this.props.granules;
-    const { stats, count } = this.props.stats;
-    const { location } = this.props;
-    const searchString = getPersistentQueryParams(location);
-    const overview = [
-      [tally(get(stats.data, 'errors.value')), 'Errors', linkToKibana()],
-      [tally(get(stats.data, 'collections.value')), strings.collections, '/collections'],
-      [tally(get(stats.data, 'granules.value')), strings.granules, '/granules'],
-      [tally(get(this.props.executions, 'list.meta.count')), 'Executions', '/executions'],
-      [tally(get(this.props.rules, 'list.meta.count')), 'Ingest Rules', '/rules'],
-      [seconds(get(stats.data, 'processingTime.value', nullValue)), 'Average processing Time', '/']
-    ];
+  const granuleCount = get(count.data, 'granules.meta.count');
+  const numGranules = !Number.isNaN(+granuleCount) ? `${tally(granuleCount)}` : 0;
+  const granuleStatus = get(count.data, 'granules.count', []);
 
-    const granuleCount = get(count.data, 'granules.meta.count');
-    const numGranules = !Number.isNaN(+granuleCount) ? `${tally(granuleCount)}` : 0;
-    const granuleStatus = get(count.data, 'granules.count', []);
+  const updated = [
+    [tally(getCountByKey(granuleStatus, 'running')), 'Running', '/granules/running'],
+    [tally(getCountByKey(granuleStatus, 'completed')), 'Completed', '/granules/completed'],
+    [tally(getCountByKey(granuleStatus, 'failed')), 'Failed', '/granules/failed'],
+  ];
 
-    const updated = [
-      [tally(this.getCountByKey(granuleStatus, 'running')), 'Running', '/granules/running'],
-      [tally(this.getCountByKey(granuleStatus, 'completed')), 'Completed', '/granules/completed'],
-      [tally(this.getCountByKey(granuleStatus, 'failed')), 'Failed', '/granules/failed'],
-    ];
-
-    return (
+  return (
       <div className='page__home'>
         <Helmet>
           <title> Cumulus Home  </title>
@@ -148,19 +138,19 @@ class Home extends React.Component {
             <>Select date and time to refine your results. <em>Time is UTC.</em></>,
             'datetime',
             <div className='datetime__range_wrapper'>
-              <DatepickerRange onChange={this.query}/>
+              <DatepickerRange onChange={query}/>
             </div>
           )}
 
           {sectionHeader('Metrics Overview', 'metricsOverview')}
-          {this.buttonListSection(overview, 'Updates')}
+          {buttonListSection(overview, 'Updates')}
 
           {sectionHeader(
             'Granules Updates',
             'updateGranules',
             <Link className='link--secondary link--learn-more' to={{ pathname: '/granules', search: searchString }}>{strings.view_granules_overview}</Link>
           )}
-          {this.buttonListSection(
+          {buttonListSection(
             updated,
             <>{strings.granules_updated}<span className='num-title'>{numGranules}</span></>
           )}
@@ -169,18 +159,17 @@ class Home extends React.Component {
             strings.granules_errors,
             'listGranules',
             <List
-              list={list}
+              list={granules.list}
               action={listGranules}
               tableColumns={errorTableColumns}
-              initialSortId='timestamp'
-              query={this.generateQuery()}
+              initialSortId='updatedAt'
+              query={generateQuery()}
             />
           )}
         </div>
       </div>
-    );
-  }
-}
+  );
+};
 
 Home.propTypes = {
   cumulusInstance: PropTypes.object,
@@ -202,7 +191,7 @@ export default withRouter(withQueryParams()(connect((state) => ({
   dist: state.dist,
   executions: state.executions,
   granules: state.granules,
-  pdrs: state.pdrs,
   rules: state.rules,
-  stats: state.stats
+  stats: state.stats,
+  pdrs: state.pdrs
 }))(Home)));

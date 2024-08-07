@@ -10,11 +10,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 This version of the dashboard requires Cumulus API >= v18.2.0
 
 ### Changed
-
+- **CUMULUS-3805**
+  - Updated collections to sort by timestamp instead of duration
+  - Changed the initialSortField of tables using createdAt to updatedAt
+  - Removed the duration column from the Collections table
 - **CUMULUS-3619**
-    - Added Accessibility link to footer
-    - Modified unit tests to accomodate new changes.
-
+  - Added Accessibility link to footer
+  - Modified unit tests to accomodate new changes.
 - **CUMULUS-3502**
   - Upgraded localstack to v3.0.0
   - Bumped node version from 14.19.1 to 16.19.0 to match Core
@@ -23,6 +25,15 @@ This version of the dashboard requires Cumulus API >= v18.2.0
     `@cumulus/aws-client@18.2.0-alpha.0` to work with localstack v3.0.0
 - **Snyk Security Fix**
   - Upgraded axios from 1.6.0 to 1.6.8
+- **CUMULUS-3810**
+  - converted the following files from class to functional components: home.js, 
+  header.js, index.js, oauth.js, app.js, and 404.js
+- **CUMULUS-2668**
+  - Refactored DeleteCollectionModal and BatchAsyncCommands from class to function components.
+  - Modified unit tests to accomodate new changes.
+- **CUMULUS-2356**
+  - Removed gitc localization
+  - Allowlisted braces, ws, and fast-xml-parser
 
 ## [v12.1.0] - 2023-10-27
 

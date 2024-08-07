@@ -100,7 +100,7 @@ class ProvidersOverview extends React.Component {
             query={this.generateQuery()}
             bulkActions={bulkActions}
             rowId="name"
-            initialSortId="timestamp"
+            initialSortId="updatedAt"
             filterAction={filterProviders}
             filterClear={clearProvidersFilter}
             tableId="providers"

@@ -102,9 +102,9 @@ export const tableColumns = [
   },
   {
     Header: 'Updated',
-    accessor: 'timestamp',
+    accessor: 'updatedAt',
     Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
-    id: 'timestamp'
+    id: 'updatedAt'
   }
 ];
 
@@ -139,9 +139,9 @@ export const errorTableColumns = [
   },
   {
     Header: 'Updated',
-    accessor: 'timestamp',
+    accessor: 'updatedAt',
     Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
-    id: 'timestamp'
+    id: 'updatedAt'
   }
 ];
 

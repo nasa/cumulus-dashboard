@@ -192,7 +192,7 @@ class GranulesOverview extends React.Component {
             groupAction={groupAction}
             rowId="granuleId"
             initialHiddenColumns={defaultHiddenColumns}
-            initialSortId="timestamp"
+            initialSortId="updatedAt"
             filterAction={filterGranules}
             filterClear={clearGranulesFilter}
             onSelect={this.updateSelection}
