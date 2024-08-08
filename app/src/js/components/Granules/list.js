@@ -30,7 +30,7 @@ import List from '../Table/Table.js';
 import LogViewer from '../Logs/viewer.js';
 import Dropdown from '../DropDown/dropdown.js';
 import Search from '../Search/search.js';
-import { workflowOptionNames } from '../../selectors';
+import { workflowOptionNames } from '../../selectors/index.js';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs.js';
 import ListFilters from '../ListActions/ListFilters.js';
 

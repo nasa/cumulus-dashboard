@@ -14,7 +14,7 @@ import webpack from '@cypress/webpack-preprocessor';
 import cypressFailed from 'cypress-failed-log/src/failed';
 import { testUtils } from '@cumulus/api';
 import { createJwtToken } from '@cumulus/api/lib/token';
-import webpackCommon from '../../webpack.common.js';
+import webpackConfig from '../../webpack.config.js';
 
 import { seedEverything } from './seedEverything.js';
 
@@ -24,7 +24,7 @@ export default function plugin(on) {
   const webpackOptions = {
     // send in the options from your webpack.config.js, so it works the same
     // as your app's code
-    webpackOptions: webpackCommon,
+    webpackOptions: webpackConfig,
     watchOptions: {},
   };
   const user = 'testUser';

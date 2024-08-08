@@ -1,0 +1,15 @@
+// This config is used in eslint config for parsing
+{ 
+  "presets": [     
+    "@babel/preset-react",
+    ["@babel/preset-env", { "modules": false }]
+  ],
+  "plugins": [ 
+    "@babel/plugin-syntax-jsx",
+    "@babel/plugin-transform-runtime",
+    "@babel/plugin-syntax-import-assertions",
+    //"@babel/plugin-transform-modules-commonjs",
+    ["babel-plugin-transform-import-meta", { "module": "ES6" }] // For import.meta support
+    //"...process.env.NODE_ENV === 'test' && !process.env.CYPRESS_TESTING ? ['babel-plugin-rewire'] : []"
+  ]
+}

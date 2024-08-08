@@ -1,4 +1,3 @@
-import '@babel/register';
 import path from 'path';
 import { fileURLToPath } from 'url';
 // Plugins

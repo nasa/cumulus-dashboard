@@ -5,7 +5,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import { listGranules } from '../../../app/src/js/actions';
+import { listGranules } from '../../../app/src/js/actions/index.js';
 import { List } from '../../../app/src/js/components/Table/Table.js';
 import Timer from '../../../app/src/js/components/Timer/timer.js';
 import { requestMiddleware } from '../../../app/src/js/middleware/request.js';

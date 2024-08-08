@@ -1,7 +1,7 @@
 // New FlatConfig ESLint
 import js from '@eslint/js';
 import globals from 'globals';
-import airbnbBase from 'eslint-config-airbnb-base';
+import eslintConfigAirbnbBase from 'eslint-config-airbnb-base';
 import eslintComments from 'eslint-plugin-eslint-comments';
 import importPlugin from 'eslint-plugin-import';
 import lodash from 'eslint-plugin-lodash';
@@ -10,6 +10,7 @@ import node from 'eslint-plugin-node';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import babelParser from '@babel/eslint-parser';
+
 
 export default [
   {
@@ -24,7 +25,7 @@ export default [
     ],
     // declare imported configs
     plugins: {
-      'airbnb-base': airbnbBase,
+      'airbnb-base': eslintConfigAirbnbBase,
       'eslint-comments': eslintComments,
       import: importPlugin,
       lodash: lodash,
@@ -105,10 +106,10 @@ export default [
         allowImportExportEverywhere: false,
         importAttributes: true,
         sourceType: 'module', // to handle esm
-        requireConfigFile: true,
+        requireConfigFile: false,
         babelOptions: {
           babelrc: false,
-          configFile: './babel.config.cjs',
+          configFile: './babel.config.json',
         },
       },
       // declare global properties

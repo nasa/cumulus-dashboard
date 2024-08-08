@@ -2,8 +2,8 @@ module.exports = {
   babel: {
     extensions: ['.js', '.jsx'],
     testOptions: {
-      babelrc: true,
-      configFile: './babel.config.cjs',
+/*       babelrc: true,
+      configFile: './babel.config.json', */
       plugins: [
         '@babel/plugin-syntax-jsx',
         [
