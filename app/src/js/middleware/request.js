@@ -58,11 +58,6 @@ const axiosFetch = (requestConfig, requestAction, start, next, id, type) => {
   const getResult = axios(requestConfig).then((response) => {
     const { data } = response;
     const duration = new Date() - start;
-    // const requestAction = requestConfig.requestAction;
-    // const id = requestAction.id;
-    // const type = requestAction.type;
-    // console.log('9999999 requestConfig ', requestConfig, requestAction);
-    console.log('555555555 id ', id);
     log(id ? `${type}: ${id}` : type, `${duration}ms`);
     return next({ id, type, data, config: requestAction });
   })
@@ -82,45 +77,21 @@ const axiosFetch = (requestConfig, requestAction, start, next, id, type) => {
       }
       return handleError({ id, type, error, requestAction }, next);
     });
-  console.log('000000 axiosFetch ', getResult);
   return Promise.resolve(getResult);
 };
 
 // sets timeout for race condition
-const fetchWithTimeout = (requestConfig, requestAction, start, next, id, type, timeout = 70000) => {
-  console.log('888888 requestAction ', requestAction);
+const fetchWithTimeout = (requestConfig, requestAction, start, next, id, type, timeout = 1000) => {
   const timeoutPromise = new Promise((resolve, reject) => {
-    const timer = setTimeout(() => {
-      clearTimeout(timer);
-      reject(new Error('Request timed out friend')); // Rejects the promise <model props />
+    setTimeout(() => {
+      resolve(new Error('Promise rejected')); // Rejects the promise
     }, timeout);
   });
-  // console.log('1111111111 axiosFetch ', axiosFetch(requestConfig, requestAction, start, next));
   return Promise.race([
     axiosFetch(requestConfig, requestAction, start, next, id, type),
     timeoutPromise
   ]);
 };
-
-// const fetchData = (requestConfig, requestAction, start, next, id, type) => fetchWithTimeout(
-//   requestConfig,
-//   requestAction,
-//   start,
-//   next,
-//   id,
-//   type,
-//   7000
-// )
-//   .then((response) => {
-//     console.log('33333333333 response', response);
-//     return response.json();
-//   })
-//   .then((data) => {
-//     console.log('======= ', data);
-//   })
-//   .catch((error) => {
-//     console.error('Failed to fetch:', error);
-//   });
 
 export const requestMiddleware =
   ({ dispatch, getState }) => (next) => (action) => {
@@ -137,7 +108,6 @@ export const requestMiddleware =
       }
 
       const { id, type } = requestAction;
-      console.log('77777777 id ', id, requestAction);
       const defaultRequestConfig = {
         paramsSerializer(params) {
           return qs.stringify(params, { arrayFormat: 'brackets' });

@@ -27,6 +27,7 @@ import cumulusInstance from './cumulus-instance';
 import sidebar from './sidebar';
 import sorts from './sort-persist';
 import locationQueryParams from './location-query-params';
+import inactivityModal from './inactivity-modal';
 
 const def = (state, _action) => state || {};
 
@@ -58,6 +59,7 @@ export const reducers = {
   recoveryStatus,
   sorts,
   locationQueryParams,
+  inactivityModal
 };
 
 export const createRootReducer = (history) => combineReducers({

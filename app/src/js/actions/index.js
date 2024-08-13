@@ -159,8 +159,7 @@ export const searchCollections = (infix) => ({ type: types.SEARCH_COLLECTIONS, i
 export const clearCollectionsSearch = () => ({ type: types.CLEAR_COLLECTIONS_SEARCH });
 export const filterCollections = (param) => ({ type: types.FILTER_COLLECTIONS, param });
 export const clearCollectionsFilter = (paramKey) => ({ type: types.CLEAR_COLLECTIONS_FILTER, paramKey });
-// eslint-disable-next-line no-sequences
-export const getCumulusInstanceMetadata = () => (console.log('00000 hello friend'), {
+export const getCumulusInstanceMetadata = () => ({
   [CALL_API]: {
     type: types.ADD_INSTANCE_META,
     method: 'GET',
@@ -899,3 +898,7 @@ export const clearReconciliationReportFilter = (paramKey) => ({ type: types.CLEA
 
 export const toggleSidebar = () => ({ type: types.TOGGLE_SIDEBAR });
 export const sortPersist = (tableId, sortBy) => ({ type: types.SORTS, tableId, sortBy });
+
+export const idleTimerShowModal = (dispatch) => dispatch({ type: types.IDLE_TIMER_SHOW_MODAL });
+export const idleTimerLastKeypress = (dispatch) => dispatch({ type: types.IDLE_TIMER_LAST_KEY_PRESS });
+// logout action

@@ -25,7 +25,7 @@ import linkToKibana from '../utils/kibana';
 import DatepickerRange from './Datepicker/DatepickerRange';
 import { strings } from './locale';
 import { getPersistentQueryParams } from '../utils/url-helper';
-// import InactivityModal from './Modal/InactivityModal';
+import InactivityModal from './Modal/inactivityModal';
 
 class Home extends React.Component {
   constructor (props) {
@@ -136,6 +136,7 @@ class Home extends React.Component {
 
     return (
       <div className='page__home'>
+        <div className='inactivity'><InactivityModal /></div>
         <Helmet>
           <title> Cumulus Home  </title>
         </Helmet>
@@ -179,7 +180,6 @@ class Home extends React.Component {
             />
           )}
         </div>
-        {/* <InactivityModal /> */}
       </div>
     );
   }
@@ -194,7 +194,8 @@ Home.propTypes = {
   rules: PropTypes.object,
   stats: PropTypes.object,
   dispatch: PropTypes.func,
-  location: PropTypes.object
+  location: PropTypes.object,
+  inactivityModal: PropTypes.object
 };
 
 export { Home };
@@ -207,5 +208,6 @@ export default withRouter(withQueryParams()(connect((state) => ({
   granules: state.granules,
   pdrs: state.pdrs,
   rules: state.rules,
-  stats: state.stats
+  stats: state.stats,
+  inactivityModal: state.inactivityModal
 }))(Home)));
