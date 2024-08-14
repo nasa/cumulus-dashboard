@@ -25,7 +25,7 @@ import linkToKibana from '../utils/kibana';
 import DatepickerRange from './Datepicker/DatepickerRange';
 import { strings } from './locale';
 import { getPersistentQueryParams } from '../utils/url-helper';
-import InactivityModal from './Modal/inactivityModal';
+import InactivityModal from './Modal/InactivityModal';
 
 const Home = ({
   stats,
@@ -125,7 +125,6 @@ const Home = ({
 
   return (
       <div className='page__home'>
-        <div className='inactivity'><InactivityModal /></div>
         <Helmet>
           <title> Cumulus Home  </title>
         </Helmet>
@@ -134,7 +133,7 @@ const Home = ({
             <h1 className='heading--xlarge'>{strings.dashboard}</h1>
           </div>
         </div>
-
+        <div className='inactivity'><InactivityModal /></div>
         <div className='page__content page__content--nosidebar'>
           {pageSection(
             <>Select date and time to refine your results. <em>Time is UTC.</em></>,

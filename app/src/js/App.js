@@ -8,7 +8,7 @@ import ourConfigureStore, { history } from './store/configureStore';
 // Authorization & Error Handling
 // import ErrorBoundary from './components/Errors/ErrorBoundary';
 import NotFound from './components/404';
-import OAuth from './components/oauth';
+import { OAuth } from './components/oauth';
 
 // Components
 import Home from './components/home';

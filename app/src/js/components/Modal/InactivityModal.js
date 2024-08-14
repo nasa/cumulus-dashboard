@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // import { IDLE_TIMER_TOGGLE_MODAL, IDLE_TIMER_LAST_KEY_PRESS, IDLE_TIMER_LOGOUT_TIMER } from '../../actions/types';
 import { idleTimerShowModal, idleTimerLastKeypress } from '../../actions/index';
+// import DefaultModal from './modal';
 
 const InactivityModal = ({
   showModal,
@@ -54,15 +55,16 @@ const InactivityModal = ({
 
   return (
     <div>
-      { (
-        <div className='modal'>
-          <div className='modal-content'>
-            <h2>Session Timeout Warning</h2>
-            <p>Your session will end after 5 minutes of inactivity.</p>
-            <button onClick={handleShowModal}>Close</button>
-          </div>
-        </div>
-      )}
+      {/* <DefaultModal
+      title = {text}
+      className='IAModal'
+      onCancel={successModal ? success : cancel}
+      onCloseModal={cancel}
+      onConfirm={confirm}
+      showModal={confirmModal || successModal}
+      hasConfirmButton={!successModal}
+      cancelButtonText={successModal ? 'Close' : 'Cancel'}
+      /> */}
     </div>
   );
 };
