@@ -78,7 +78,7 @@ const ActivePdrs = ({ match, pdrs, queryParams }) => {
           query={query}
           bulkActions={generateBulkActions()}
           rowId="pdrName"
-          initialSortId="timestamp"
+          initialSortId="updatedAt"
           filterAction={filterPdrs}
           filterClear={clearPdrsFilter}
           tableId="pdrs"

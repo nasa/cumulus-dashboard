@@ -92,7 +92,7 @@ class PdrOverview extends React.Component {
             list={list}
             action={listPdrs}
             tableColumns={tableColumns}
-            initialSortId="timestamp"
+            initialSortId="updatedAt"
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId="pdrName"
