@@ -7,9 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-This version of the dashboard requires Cumulus API >= v18.2.0
+This version of the dashboard requires Cumulus API >= v18.3.3
 
 ### Changed
+
 - **CUMULUS-3805**
   - Updated collections to sort by timestamp instead of duration
   - Changed the initialSortField of tables using createdAt to updatedAt
@@ -34,6 +35,9 @@ This version of the dashboard requires Cumulus API >= v18.2.0
 - **CUMULUS-2356**
   - Removed gitc localization
   - Allowlisted braces, ws, and fast-xml-parser
+- **UMULUS-3706**
+  - Bumped node version from 16.19.0 to 20.12.2 to match Core
+  - Updated the dashboard to use `@cumulus/api@18.3.3` and `@cumulus/aws-client@18.3.3`.
 
 ## [v12.1.0] - 2023-10-27
 
