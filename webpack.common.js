@@ -127,6 +127,14 @@ const CommonConfig = {
           },
         ],
       },
+      {
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: 'javascript/auto',
+        resolve: {
+          fullySpecified: false
+        }
+      },
     ],
   },
   plugins: [
