@@ -39,7 +39,6 @@ This version of the dashboard requires Cumulus API >= v18.3.3
   - Bumped node version from 16.19.0 to 20.12.2 to match Core
   - Updated the dashboard to use `@cumulus/api@18.3.3` and `@cumulus/aws-client@18.3.3`.
   - Upgraded postgres image to postgres:13.9-alpine
-  - Upgraded cypress to 13.13.3
 
 ## [v12.1.0] - 2023-10-27
 
