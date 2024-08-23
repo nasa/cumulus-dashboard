@@ -1,84 +1,104 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // import { IDLE_TIMER_TOGGLE_MODAL, IDLE_TIMER_LAST_KEY_PRESS, IDLE_TIMER_LOGOUT_TIMER } from '../../actions/types';
-import { idleTimerShowModal, idleTimerLastKeypress } from '../../actions/index';
-// import DefaultModal from './modal';
+// import { idleTimerShowModal, idleTimerLastKeypress } from '../../actions/index';
+import DefaultModal from './modal';
 
 const InactivityModal = ({
+  text = 'Session Timeout Warning',
   showModal,
-  lastKeyPress,
-  logoutTimer
+  // className,
+  // error,
+  onConfirm,
+  onCloseModal,
+  onCancel
 }) => {
-  //   const [lastKeyPress, setLastKeyPress] = useState(Date.now());
-  //   const [showModal, setShowModal] = useState(false);
+  // const [confirmModal, setConfirmModal] = useState(false);
+  // const [successModal, setSuccessModal] = useState(false);
+  const [lastKeyPress, setLastKeyPress] = useState(Date.now());
+  const [hasModal, setHasModal] = useState(true);
 
-  // Function to update the lastKeyPress time
-  //   const handleKeyPress = () => {
-  //     setLastKeyPress(Date.now());
-  //     if (showModal) {
-  //       setShowModal(false); // hide modal if user resumes activity
-  //     }
-  //   };
-
-  function handleShowModal() {
-    idleTimerShowModal();
+  function handleConfirm() {
+    setLastKeyPress(Date.now());
+    if (hasModal) {
+      setHasModal(false); // hide modal if user resumes activity
+    }
   }
 
-  function handleLastKeypress() {
-    idleTimerLastKeypress();
+  function handleCancel() {
+    // closeModal
+  }
+
+  function handleLogout() {
+
   }
 
   // Effect to setup event listeners for keyboard activity
   useEffect(() => {
-    window.addEventListener('keydown', handleLastKeypress);
+    // Function to update the lastKeyPress time
+    const handleKeypress = () => {
+      setLastKeyPress(Date.now());
+      if (hasModal) {
+        setHasModal(false); // hide modal if user resumes activity
+      }
+    };
+    window.addEventListener('keydown', handleKeypress);
 
     return () => {
-      window.removeEventListener('keydown', handleLastKeypress);
+      window.removeEventListener('keydown', handleKeypress);
     };
-  }, []);
-  // Dependencies array includes showModal to update listener when modal state changes
+  }, [hasModal]);
 
   // Effect to handle showing the modal after 30 minutes of inactivity
   useEffect(() => {
-    // console.log('lastkp: ', state.lastKeyPress);
-    // console.log('showmodal: ', state.showModal);
     const checkInactivity = setInterval(() => {
-      if (Date.now() - lastKeyPress > 3000 && !showModal) {
-        // 1800000 ms = 30 minutes
-        handleShowModal(true);
+      if (Date.now() - lastKeyPress > 3000 && !hasModal) { // 1800000 ms = 30 minutes
+        setHasModal(true);
       }
     }, 60000); // Check every minute (60000 ms)
 
     return () => clearInterval(checkInactivity);
-  }, [showModal, lastKeyPress]);
+  }, [hasModal, lastKeyPress]);
 
   return (
     <div>
-      {/* <DefaultModal
+      <DefaultModal
       title = {text}
       className='IAModal'
-      onCancel={successModal ? success : cancel}
-      onCloseModal={cancel}
-      onConfirm={confirm}
-      showModal={confirmModal || successModal}
-      hasConfirmButton={!successModal}
-      cancelButtonText={successModal ? 'Close' : 'Cancel'}
-      /> */}
+      onCancel={handleLogout}
+      onCloseModal={handleCancel}
+      onConfirm={handleConfirm}
+      showModal={hasModal}
+      hasConfirmButton={hasModal}
+      cancelButtonText='Cancel'
+      confirmButtonText='Continue'
+      />
     </div>
   );
 };
 
 const mapStateToProps = (state) => ({
-  showModal: state.showModal,
+  hasModal: state.hasModal,
   lastKeyPress: state.lastKeyPress,
   logoutTimer: state.logoutTimer
 });
 
 InactivityModal.propTypes = {
-  showModal: PropTypes.bool,
+  hasModal: PropTypes.bool,
   lastKeyPress: PropTypes.string,
-  logoutTimer: PropTypes.object
+  logoutTimer: PropTypes.object,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  text: PropTypes.string,
+  className: PropTypes.string,
+  cancelButtonText: PropTypes.string,
+  confirmButtonText: PropTypes.string,
+  showModal: PropTypes.bool,
+  onCloseModal: PropTypes.func,
+  onConfirm: PropTypes.func,
+  onCancel: PropTypes.func,
+  hasCancelButton: PropTypes.bool,
+  hasConfirmButton: PropTypes.bool,
 };
 
 export default connect(mapStateToProps)(InactivityModal);
