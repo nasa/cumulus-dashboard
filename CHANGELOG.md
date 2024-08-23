@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-This version of the dashboard requires Cumulus API >= v18.3.3
+This version of the dashboard requires Cumulus API >= v18.4.0
 
 ### Changed
 
@@ -37,7 +37,7 @@ This version of the dashboard requires Cumulus API >= v18.3.3
   - Allowlisted braces, ws, and fast-xml-parser
 - **UMULUS-3706**
   - Bumped node version from 16.19.0 to 20.12.2 to match Core
-  - Updated the dashboard to use `@cumulus/api@18.3.3` and `@cumulus/aws-client@18.3.3`.
+  - Updated the dashboard to use `@cumulus/api@18.4.0` and `@cumulus/aws-client@18.4.0`.
   - Upgraded postgres image to postgres:13.9-alpine
 
 ## [v12.1.0] - 2023-10-27
