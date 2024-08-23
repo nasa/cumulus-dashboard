@@ -16,7 +16,7 @@
   "homepage": "https://github.com/nasa/cumulus-dashboard",
   "private": true,
   "engines": {
-    "node": ">=16.19.0"
+    "node": ">=20.12.2"
   },
   "scripts": {
     "audit-ci": "audit-ci --config $(pwd)/audit-ci.json",
