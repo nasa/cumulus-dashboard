@@ -35,7 +35,7 @@ This version of the dashboard requires Cumulus API >= v18.4.0
 - **CUMULUS-2356**
   - Removed gitc localization
   - Allowlisted braces, ws, and fast-xml-parser
-- **UMULUS-3706**
+- **CUMULUS-3706**
   - Bumped node version from 16.19.0 to 20.12.2 to match Core
   - Updated the dashboard to use `@cumulus/api@18.4.0` and `@cumulus/aws-client@18.4.0`.
   - Upgraded postgres image to postgres:13.9-alpine
