@@ -36,6 +36,7 @@ const InactivityModal = ({
   }, [dispatch]);
 
   function closeModal() { // the X botton
+    setLastKeyPress(Date.now());
     if (hasModal) {
       setHasModal(false); // hide modal if user resumes activity
     }
