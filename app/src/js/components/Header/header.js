@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useRef } from 'react';
 import c from 'classnames';
 import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
@@ -36,6 +36,8 @@ const Header = ({
   minimal,
   locationQueryParams,
 }) => {
+  const mounted = useRef(true);
+
   const handleLogout = useCallback(() => {
     dispatch(logout()).then(() => {
       if (get(window, 'location.reload')) {
@@ -45,11 +47,14 @@ const Header = ({
   }, [dispatch]);
 
   useEffect(() => {
-    if (api.authenticated) {
+    if (api.authenticated && mounted.current) {
       dispatch(getApiVersion());
       dispatch(getCMRInfo());
       dispatch(getCumulusInstanceMetadata());
     }
+    return () => {
+      mounted.current = false;
+    };
   }, [api.authenticated, dispatch]);
 
   const className = (path) => {
