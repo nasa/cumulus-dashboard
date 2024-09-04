@@ -40,6 +40,11 @@ This version of the dashboard requires Cumulus API >= v18.4.0
   - Updated the dashboard to use `@cumulus/api@18.4.0` and `@cumulus/aws-client@18.4.0`.
   - Upgraded postgres image to postgres:13.9-alpine
 
+### Fixed
+
+- **CUMULUS-3855**
+  - Fixed to show API indicator and tooltip details
+
 ## [v12.1.0] - 2023-10-27
 
 ### Breaking Changes
