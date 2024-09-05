@@ -10,9 +10,9 @@ import { getPersistentQueryParams } from '../url-helper';
 export const tableColumns = [
   {
     Header: 'Updated',
-    accessor: 'timestamp',
+    accessor: 'updatedAt',
     Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
-    id: 'timestamp'
+    id: 'updatedAt'
   },
   {
     Header: 'Name',
@@ -53,9 +53,9 @@ export const tableColumns = [
 export const errorTableColumns = [
   {
     Header: 'Updated',
-    accessor: 'timestamp',
+    accessor: 'updatedAt',
     Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
-    id: 'timestamp'
+    id: 'updatedAt'
   },
   {
     Header: 'Name',
@@ -121,9 +121,9 @@ export const granuleTableColumns = [
   },
   {
     Header: 'Updated',
-    accessor: 'timestamp',
+    accessor: 'updatedAt',
     Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
-    id: 'timestamp'
+    id: 'updatedAt'
   }
 ];
 

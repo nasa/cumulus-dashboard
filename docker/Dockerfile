@@ -1,4 +1,4 @@
-FROM node:14.19.1 as build
+FROM node:20.12.2 as build
 WORKDIR /cumulus-dashboard
 COPY package.json package-lock.json ./
 RUN npm install --no-optional

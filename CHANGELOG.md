@@ -7,6 +7,46 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v12.2.0] - 2024-09-04
+
+This version of the dashboard requires Cumulus API >= v18.4.0
+
+### Changed
+
+- **CUMULUS-3805**
+  - Updated collections to sort by timestamp instead of duration
+  - Changed the initialSortField of tables using createdAt to updatedAt
+  - Removed the duration column from the Collections table
+- **CUMULUS-3619**
+  - Added Accessibility link to footer
+  - Modified unit tests to accomodate new changes.
+- **CUMULUS-3502**
+  - Upgraded localstack to v3.0.0
+  - Bumped node version from 14.19.1 to 16.19.0 to match Core
+  - Upgrade postgres image to 11.13-alpine
+  - Updated the dashboard to use alpha version `@cumulus/api@18.2.0-alpha.0` and
+    `@cumulus/aws-client@18.2.0-alpha.0` to work with localstack v3.0.0
+- **Snyk Security Fix**
+  - Upgraded axios from 1.6.0 to 1.6.8
+- **CUMULUS-3810**
+  - converted the following files from class to functional components: home.js, 
+  header.js, index.js, oauth.js, app.js, and 404.js
+- **CUMULUS-2668**
+  - Refactored DeleteCollectionModal and BatchAsyncCommands from class to function components.
+  - Modified unit tests to accomodate new changes.
+- **CUMULUS-2356**
+  - Removed gitc localization
+  - Allowlisted braces, ws, and fast-xml-parser
+- **CUMULUS-3706**
+  - Bumped node version from 16.19.0 to 20.12.2 to match Core
+  - Updated the dashboard to use `@cumulus/api@18.4.0` and `@cumulus/aws-client@18.4.0`.
+  - Upgraded postgres image to postgres:13.9-alpine
+
+### Fixed
+
+- **CUMULUS-3855**
+  - Fixed to show API indicator and tooltip details
+
 ## [v12.1.0] - 2023-10-27
 
 ### Breaking Changes
@@ -27,6 +67,17 @@ This version of the dashboard requires Cumulus API >= v18.1.0
   - Fixed bulk granule operation modal to correctly pass selected granules into bulk operation
 - **CUMULUS-3434**
   - Fixed `getGranuleRecoveryStatus` action to take granuleId and collectionId.
+
+## [v12.0.2] - 2023-12-13
+
+### Note
+
+This version of the dashboard requires Cumulus API v2 (Core version v16.x.x and v17.x.x)
+
+### Fixed
+
+- **CUMULUS-3265**
+  - Fixed bulk granule operation modal to correctly pass selected granules into bulk operation
 
 ## [v12.0.1] - 2023-05-25
 
@@ -1349,8 +1400,10 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
-  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v12.1.0...HEAD
-  [v12.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.1...v12.1.0
+  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v12.2.0...HEAD
+  [v12.2.0]: https://github.com/nasa/cumulus-dashboard/compare/v12.1.0...v12.2.0
+  [v12.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.2...v12.1.0
+  [v12.0.2]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.1...v12.0.2
   [v12.0.1]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.0...v12.0.1
   [v12.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v11.0.0...v12.0.0
   [v11.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v10.0.0...v11.0.0

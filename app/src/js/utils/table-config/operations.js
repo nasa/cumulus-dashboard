@@ -20,10 +20,10 @@ export const tableColumns = [
     accessor: 'operationType'
   },
   {
-    Header: 'Created',
-    accessor: 'createdAt',
+    Header: 'Updated',
+    accessor: 'updatedAt',
     Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
-    id: 'createdAt'
+    id: 'updatedAt'
   }
 ];
 
