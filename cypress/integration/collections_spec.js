@@ -631,7 +631,7 @@ describe('Dashboard Collections Page', () => {
 
       cy.get('.search').as('search');
       cy.get('@search').click().type('Test').type('{enter}');
-
+      cy.wait(1000);
       cy.get('span > a').click();
 
       // Breakcrumb <Link> contain correct query params
