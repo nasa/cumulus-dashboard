@@ -15,6 +15,7 @@ import { window } from '../../utils/browser';
 import { strings } from '../locale';
 import linkToKibana from '../../utils/kibana';
 import { getPersistentQueryParams } from '../../utils/url-helper';
+import InactivityModal from '../Modal/InactivityModal';
 
 const paths = [
   [strings.collections, '/collections/all'],
@@ -121,6 +122,7 @@ const Header = ({
               <li>&nbsp;</li>
                 )}
           </nav>
+          <div className='inactivity'><InactivityModal /></div>
         </div>
       </div>
   );

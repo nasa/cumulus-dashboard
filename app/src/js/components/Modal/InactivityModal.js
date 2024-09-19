@@ -1,26 +1,18 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-// import { IDLE_TIMER_TOGGLE_MODAL, IDLE_TIMER_LAST_KEY_PRESS, IDLE_TIMER_LOGOUT_TIMER } from '../../actions/types';
-// import { idleTimerShowModal, idleTimerLastKeypress } from '../../actions/index';
 import get from 'lodash/get';
 import DefaultModal from './modal';
-// import OAuth from '../oauth';
 import { logout } from '../../actions';
 
 const InactivityModal = ({
-  text = 'Session Timeout Warning',
+  title = 'Session Timeout Warning',
   children = `We have noticed that you have been inactive for a while.
   We will close this session in 5 minutes. If you want to stay signed in, select ‘Continue Session’.`,
-  showModal,
-  onConfirm,
-  onCloseModal,
-  onCancel,
   dispatch
 }) => {
   const [lastKeyPress, setLastKeyPress] = useState(Date.now());
-  const [hasModal, setHasModal] = useState(true);
-  // const isLoggedIn = () => store.getState().api.authenticated;
+  const [hasModal, setHasModal] = useState(false);
 
   function handleConfirm() {
     setLastKeyPress(Date.now());
@@ -72,15 +64,16 @@ const InactivityModal = ({
   return (
     <div>
       <DefaultModal
-      title = {text}
+      title = {title}
       className='IAModal'
       onCancel={handleLogout}
       onCloseModal={closeModal}
       onConfirm={handleConfirm}
       showModal={hasModal}
-      hasConfirmButton={hasModal}
-      cancelButtonText='Cancel'
-      confirmButtonText='Continue'
+      hasConfirmButton={true}
+      hasCancelButton={true}
+      cancelButtonText='Close Session'
+      confirmButtonText='Continue Session'
       children = {children}
       />
     </div>
@@ -98,7 +91,6 @@ InactivityModal.propTypes = {
   lastKeyPress: PropTypes.string,
   logoutTimer: PropTypes.object,
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  text: PropTypes.string,
   children: PropTypes.string,
   className: PropTypes.string,
   cancelButtonText: PropTypes.string,
