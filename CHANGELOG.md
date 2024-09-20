@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- **CUMULUS-3624**
+  - Added Inactivity Modal component
+  - Added unit test for component
+
 ## [v12.2.0] - 2024-09-04
 
 This version of the dashboard requires Cumulus API >= v18.4.0
