@@ -83,13 +83,13 @@ const InactivityModal = ({
 const mapStateToProps = (state) => ({
   hasModal: state.hasModal,
   lastKeyPress: state.lastKeyPress,
-  logoutTimer: state.logoutTimer
+  // logoutTimer: state.logoutTimer
 });
 
 InactivityModal.propTypes = {
   hasModal: PropTypes.bool,
   lastKeyPress: PropTypes.string,
-  logoutTimer: PropTypes.object,
+  // logoutTimer: PropTypes.object,
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   children: PropTypes.string,
   className: PropTypes.string,
@@ -103,5 +103,7 @@ InactivityModal.propTypes = {
   hasConfirmButton: PropTypes.bool,
   dispatch: PropTypes.func,
 };
+
+export { InactivityModal };
 
 export default connect(mapStateToProps)(InactivityModal);
