@@ -50,6 +50,7 @@ const MainRoutes = () => (
 const App = () => {
   const [store] = useState(ourConfigureStore({}));
   const isLoggedIn = () => store.getState().api.authenticated;
+  console.log('app authenticated ', store);
 
   return (
       // <ErrorBoundary> // Add after troublshooting other errors

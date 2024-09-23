@@ -57,7 +57,7 @@ export const reducers = {
   reconciliationReports,
   recoveryStatus,
   sorts,
-  locationQueryParams,
+  locationQueryParams
 };
 
 export const createRootReducer = (history) => combineReducers({

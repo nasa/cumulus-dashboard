@@ -159,7 +159,6 @@ export const searchCollections = (infix) => ({ type: types.SEARCH_COLLECTIONS, i
 export const clearCollectionsSearch = () => ({ type: types.CLEAR_COLLECTIONS_SEARCH });
 export const filterCollections = (param) => ({ type: types.FILTER_COLLECTIONS, param });
 export const clearCollectionsFilter = (paramKey) => ({ type: types.CLEAR_COLLECTIONS_FILTER, paramKey });
-
 export const getCumulusInstanceMetadata = () => ({
   [CALL_API]: {
     type: types.ADD_INSTANCE_META,

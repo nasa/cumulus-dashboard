@@ -24,6 +24,7 @@ const OAuth = ({
   queryParams,
 }) => {
   const [token, setToken] = useState(null);
+  console.log('oauth authenticated: ', api);
 
   useEffect(() => {
     if (api.authenticated) {

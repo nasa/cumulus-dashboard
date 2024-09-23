@@ -132,7 +132,6 @@ const Home = ({
             <h1 className='heading--xlarge'>{strings.dashboard}</h1>
           </div>
         </div>
-
         <div className='page__content page__content--nosidebar'>
           {pageSection(
             <>Select date and time to refine your results. <em>Time is UTC.</em></>,
@@ -180,7 +179,8 @@ Home.propTypes = {
   rules: PropTypes.object,
   stats: PropTypes.object,
   dispatch: PropTypes.func,
-  location: PropTypes.object
+  location: PropTypes.object,
+  inactivityModal: PropTypes.object
 };
 
 export { Home };
