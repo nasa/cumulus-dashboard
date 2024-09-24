@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- **CUMULUS-3870**
+  - Remove launchpad security key information from cypress fixture for valid-execution.json
+
 ## [v12.2.0] - 2024-09-04
 
 This version of the dashboard requires Cumulus API >= v18.4.0
