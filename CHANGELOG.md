@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- **CUMULUS-3862**
+  - Upgraded React Router to v6.26.2
+
 ## [v12.2.0] - 2024-09-04
 
 This version of the dashboard requires Cumulus API >= v18.4.0
