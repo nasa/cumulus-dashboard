@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import { strings } from '../locale';
@@ -29,94 +29,102 @@ const Collections = ({ dispatch, location, logs, queryParams }) => {
   }
 
   return (
-    <div className="page__collections">
+    <div className='page__collections'>
       <DatePickerHeader onChange={query} heading={strings.collections} />
-      <div className="page__content">
+      <div className='page__content'>
         <Helmet>
           <title> Cumulus Collections </title>
         </Helmet>
-        <div className="wrapper__sidebar">
-          <Route path="/collections/all" component={Sidebar} />
-          <Route path="/collections/edit/:name/:version" component={Sidebar} />
+        <div className='wrapper__sidebar'>
+          <Route path='/collections/all' element={<Sidebar />} />
+          <Route path='/collections/edit/:name/:version' element={<Sidebar />} />
           <Route
-            path="/collections/collection/:name/:version"
-            component={Sidebar}
+            path='/collections/collection/:name/:version'
+            element={<Sidebar />}
           />
           <div
             className={
               existingCollection ? 'page__content--shortened' : 'page__content'
             }
           >
-            <Switch>
-              <Redirect
-                exact
-                from="/collections"
-                to={{
-                  pathname: '/collections/all',
-                  search: location.search,
-                }}
-              />
+            <Routes>
               <Route
-                path="/collections/all"
+                exact
+                path='/collections'
+                render={() => (
+                  <Navigate
+                    to={{
+                      pathname: '/collections/all',
+                      search: location.search,
+                    }}
+                  />
+                )}
+              ></Route>
+              <Route
+                path='/collections/all'
                 render={(props) => (
                   <CollectionList
                     queryParams={filteredQueryParams}
                     {...props}
                   />
                 )}
-              />
-              <Route path="/collections/add" component={AddCollection} />
+              ></Route>
+              <Route path='/collections/add' element={<AddCollection />}></Route>
               <Route
                 exact
-                path="/collections/edit/:name/:version"
-                component={EditCollection}
-              />
+                path='/collections/edit/:name/:version'
+                element={<EditCollection />}
+              ></Route>
               <Route
                 exact
-                path="/collections/collection/:name/:version"
+                path='/collections/collection/:name/:version'
                 render={(props) => (
                   <CollectionOverview
                     queryParams={filteredQueryParams}
                     {...props}
                   />
                 )}
-              />
+              ></Route>
               <Route
                 exact
-                path="/collections/collection/:name/:version/granules"
+                path='/collections/collection/:name/:version/granules'
                 render={(props) => (
                   <CollectionGranules
                     queryParams={filteredQueryParams}
                     {...props}
                   />
                 )}
-              />
+              ></Route>
               <Route
                 exact
-                path="/collections/collection/:name/:version/granules/:status"
+                path='/collections/collection/:name/:version/granules/:status'
                 render={(props) => (
                   <CollectionGranules
                     queryParams={filteredQueryParams}
                     {...props}
                   />
                 )}
-              />
-              <Redirect
-                exact
-                from="/collections/collection/:name/:version/granules/running"
-                to="/collections/collection/:name/:version/granules/processing"
-              />
+              ></Route>
               <Route
                 exact
-                path="/collections/collection/:name/:version/definition"
-                component={CollectionIngest}
-              />
-              {!metricsNotConfigured && <Route
+                path='/collections/collection/:name/:version/granules/running'
+                render={() => (
+                  <Navigate to='/collections/collection/:name/:version/granules/processing' />
+                )}
+              ></Route>
+              <Route
                 exact
-                path="/collections/collection/:name/:version/logs"
-                component={CollectionLogs}
-              />}
-            </Switch>
+                path='/collections/collection/:name/:version/definition'
+                element={<CollectionIngest />}
+              />
+              {!metricsNotConfigured && (
+                <Route
+                  exact
+                  path='/collections/collection/:name/:version/logs'
+                  element={<CollectionLogs />}
+                ></Route>
+              )}
+            </Routes>
           </div>
         </div>
       </div>
@@ -133,4 +141,6 @@ Collections.propTypes = {
   queryParams: PropTypes.object,
 };
 
-export default withRouter(withQueryParams()(connect((state) => ({ logs: state.logs }))(Collections)));
+export default withRouter(
+  withQueryParams()(connect((state) => ({ logs: state.logs }))(Collections))
+);

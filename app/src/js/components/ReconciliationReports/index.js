@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import { strings } from '../locale';
@@ -49,12 +49,12 @@ const ReconciliationReports = ({
               showSidebar ? 'page__content--shortened' : 'page__content'
             }
           >
-            <Switch>
-              <Route exact path='/reconciliation-reports' render={(props) => <ReconciliationReportList queryParams={filteredQueryParams} {...props} />} />
-              <Route path="/reconciliation-reports/create" component={CreateReconciliationReport} />
-              <Route path='/reconciliation-reports/report/:reconciliationReportName/details' component={BackupReportGranuleDetails} />
-              <Route path='/reconciliation-reports/report/:reconciliationReportName' component={ReconciliationReport} />
-            </Switch>
+            <Routes>
+              <Route exact path='/reconciliation-reports' render={(props) => <ReconciliationReportList queryParams={filteredQueryParams} {...props} />}></Route>
+              <Route path="/reconciliation-reports/create" element={<CreateReconciliationReport />}></Route>
+              <Route path='/reconciliation-reports/report/:reconciliationReportName/details' element={<BackupReportGranuleDetails />}></Route>
+              <Route path='/reconciliation-reports/report/:reconciliationReportName' element={<ReconciliationReport />}></Route>
+            </Routes>
           </div>
         </div>
       </div>

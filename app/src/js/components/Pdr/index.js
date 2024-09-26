@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { connect } from 'react-redux';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import { getCount, listPdrs } from '../../actions';
@@ -44,27 +44,27 @@ const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
         <div className="wrapper__sidebar">
           <Sidebar currentPath={pathname} params={params} count={count} />
           <div className="page__content--shortened">
-            <Switch>
+            <Routes>
               <Route
                 exact
                 path="/pdrs"
                 render={(props) => (
                   <PdrOverview queryParams={filteredQueryParams} {...props} />
                 )}
-              />
+              ></Route>
               <Route
                 path="/pdrs/pdr/:pdrName"
                 render={(props) => (
                   <Pdr queryParams={filteredQueryParams} {...props} />
                 )}
-              />
+              ></Route>
               <Route
                 path="/pdrs/:status"
                 render={(props) => (
                   <PdrList queryParams={filteredQueryParams} {...props} />
                 )}
-              />
-            </Switch>
+              ></Route>
+            </Routes>
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import WorkflowsOverview from './overview';
@@ -29,19 +29,19 @@ const Workflows = ({
         <div className="wrapper__sidebar">
           <Sidebar currentPath={location.pathname} params={params} />
           <div className="page__content--shortened">
-            <Switch>
+            <Routes>
               <Route
                 exact
                 path="/workflows"
                 render={(props) => (
                   <WorkflowsOverview {...props} queryParams={filteredQueryParams} />
                 )}
-              />
+              ></Route>
               <Route
                 path="/workflows/workflow/:workflowName"
-                component={Workflow}
-              />
-            </Switch>
+                element={<Workflow />}
+              ></Route>
+            </Routes>
           </div>
         </div>
       </div>

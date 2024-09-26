@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import RulesOverview from './overview';
@@ -38,12 +38,12 @@ const Rules = ({
             />
           )}
           <div className={showSidebar ? 'page__content--shortened' : 'page__content'}>
-            <Switch>
-              <Route exact path='/rules' render={(props) => <RulesOverview {...props} queryParams={filteredQueryParams} />} />
-              <Route path='/rules/rule/:ruleName' component={Rule} />
-              <Route path='/rules/edit/:ruleName' component={EditRule} />
-              <Route path='/rules/add' component={AddRule} />
-            </Switch>
+            <Routes>
+              <Route exact path='/rules' render={(props) => <RulesOverview {...props} queryParams={filteredQueryParams} />}></Route>
+              <Route path='/rules/rule/:ruleName' element={<Rule />}></Route>
+              <Route path='/rules/edit/:ruleName' element={<EditRule />}></Route>
+              <Route path='/rules/add' element={<AddRule />}></Route>
+            </Routes>
           </div>
         </div>
       </div>

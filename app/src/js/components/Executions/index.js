@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { connect } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
 import PropTypes from 'prop-types';
@@ -49,17 +49,17 @@ const Executions = ({
       }
       <div className='page__content'>
         <div className='wrapper__sidebar'>
-          <Route path='/executions/execution/:executionArn' component={Sidebar} />
-          <Route path='/executions/executions-list/:granule' component={Sidebar} />
-          <Route exact path='/executions' component={Sidebar} />
+          <Route path='/executions/execution/:executionArn' element={<Sidebar />}></Route>
+          <Route path='/executions/executions-list/:granule' element={<Sidebar />}></Route>
+          <Route exact path='/executions' element={<Sidebar />}></Route>
           <div className='page__content--shortened'>
-            <Switch>
-              <Route exact path='/executions' render={(props) => <ExecutionOverview queryParams={filteredQueryParams} {...props} />} />
-              <Route exact path='/executions/execution/:executionArn/logs' component={ExecutionLogs} />
-              <Route exact path='/executions/execution/:executionArn/events' component={ExecutionEvents} />
-              <Route exact path='/executions/execution/:executionArn' component={ExecutionStatus} />
-              <Route exact path='/executions/executions-list/:collectionId/:granuleId' component={ExecutionsList} />
-            </Switch>
+            <Routes>
+              <Route exact path='/executions' render={(props) => <ExecutionOverview queryParams={filteredQueryParams} {...props} />}></Route>
+              <Route exact path='/executions/execution/:executionArn/logs' element={<ExecutionLogs />}></Route>
+              <Route exact path='/executions/execution/:executionArn/events' element={<ExecutionEvents/>}></Route>
+              <Route exact path='/executions/execution/:executionArn' element={<ExecutionStatus />}></Route>
+              <Route exact path='/executions/executions-list/:collectionId/:granuleId' element ={<ExecutionsList />}></Route>
+            </Routes>
           </div>
         </div>
       </div>

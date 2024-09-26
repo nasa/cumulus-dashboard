@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { get } from 'object-path';
 import { connect } from 'react-redux';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import { getCount, listGranules } from '../../actions';
 import { strings } from '../locale';
@@ -21,7 +21,8 @@ const Sidebar = lazy(() => import('../Sidebar/sidebar'));
 const Granules = ({ dispatch, location, queryParams, stats }) => {
   const { pathname } = location;
   const granulesCount = get(stats, 'count.sidebar.granules.count') || [];
-  const reportCount = get(stats, 'count.sidebar.reconciliationReports.count') || [];
+  const reportCount =
+    get(stats, 'count.sidebar.reconciliationReports.count') || [];
   const count = [...granulesCount, ...reportCount];
   const filteredQueryParams = filterQueryParams(queryParams);
 
@@ -34,7 +35,7 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
       getCount({
         type: 'granules',
         field: 'status',
-        sidebarCount: true
+        sidebarCount: true,
       })
     );
   }, [dispatch]);
@@ -44,56 +45,59 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
       getCount({
         type: 'reconciliationReports',
         field: 'type',
-        sidebarCount: true
+        sidebarCount: true,
       })
     );
   }, [dispatch]);
 
   return (
-    <div className="page__granules">
+    <div className='page__granules'>
       <Helmet>
         <title> Granules </title>
       </Helmet>
       <DatePickerHeader onChange={query} heading={strings.granules} />
-      <div className="page__content">
-        <div className="wrapper__sidebar">
-          <Suspense fallback={<Loading/>}>
+      <div className='page__content'>
+        <div className='wrapper__sidebar'>
+          <Suspense fallback={<Loading />}>
             <Sidebar currentPath={pathname} count={count} location={location} />
           </Suspense>
-          <div className="page__content--shortened">
-            <Switch>
+          <div className='page__content--shortened'>
+            <Routes>
               <Route
                 exact
-                path="/granules"
+                path='/granules'
                 render={(props) => (
                   <GranulesOverview
                     queryParams={filteredQueryParams}
                     {...props}
                   />
                 )}
-              />
+              ></Route>
               <Route
-                path="/granules/granule/:granuleId"
-                component={GranuleOverview}
-              />
+                path='/granules/granule/:granuleId'
+                element={<GranuleOverview />}
+              ></Route>
               <Route
-                path="/granules/lists"
+                path='/granules/lists'
                 render={(props) => (
-                  <ReconciliationReportList queryParams={filteredQueryParams} {...props} />
+                  <ReconciliationReportList
+                    queryParams={filteredQueryParams}
+                    {...props}
+                  />
                 )}
-              />
+              ></Route>
               <Route
-                path="/granules/:status"
+                path='/granules/:status'
                 render={(props) => (
                   <AllGranules queryParams={filteredQueryParams} {...props} />
                 )}
-              />
-              <Redirect
+              ></Route>
+              <Route
                 exact
-                from="/granules/running"
-                to="/granules/processing"
-              />
-            </Switch>
+                path='/granules/running'
+                render={() => <Navigate to='/granules/processing' />}
+              ></Route>
+            </Routes>
           </div>
         </div>
       </div>

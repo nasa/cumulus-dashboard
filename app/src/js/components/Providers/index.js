@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
@@ -37,7 +37,7 @@ const Providers = ({
               showSidebar ? 'page__content--shortened' : 'page__content'
             }
           >
-            <Switch>
+            <Routes>
               <Route
                 exact
                 path="/providers"
@@ -45,16 +45,16 @@ const Providers = ({
                   <ProvidersOverview {...props} queryParams={filteredQueryParams} />
                 )}
               />
-              <Route path="/providers/add" component={AddProvider} />
+              <Route path="/providers/add" element={<AddProvider />} />
               <Route
                 path="/providers/edit/:providerId"
-                component={EditProvider}
+                element={<EditProvider />}
               />
               <Route
                 path="/providers/provider/:providerId"
-                component={ProviderOverview}
+                element={<ProviderOverview />}
               />
-            </Switch>
+            </Routes>
           </div>
         </div>
       </div>
