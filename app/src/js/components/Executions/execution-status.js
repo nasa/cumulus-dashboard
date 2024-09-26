@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import get from 'lodash/get';
 import { getExecutionStatus, getCumulusInstanceMetadata } from '../../actions';
 import {
@@ -18,6 +18,7 @@ import Metadata from '../Table/Metadata';
 import Loading from '../LoadingIndicator/loading-indicator';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import { handleDownloadUrlClick } from '../../utils/download-file';
+import withRouter from '../../withRouter';
 
 const breadcrumbConfig = [
   {

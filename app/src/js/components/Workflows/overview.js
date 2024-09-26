@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { tally } from '../../utils/format';
 import {
@@ -12,6 +12,7 @@ import List from '../Table/Table';
 import ListFilters from '../ListActions/ListFilters';
 import Search from '../Search/search';
 import { tableColumns } from '../../utils/table-config/workflows';
+import withRouter from '../../withRouter';
 
 const WorkflowOverview = ({ dispatch, queryParams, workflows }) => {
   const { list, searchString } = workflows;

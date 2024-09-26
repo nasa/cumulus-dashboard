@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   searchReconciliationReports,
   clearReconciliationReportSearch,
@@ -24,6 +24,7 @@ import Search from '../Search/search';
 import List from '../Table/Table';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import withRouter from '../../withRouter';
 
 const breadcrumbConfig = [
   {

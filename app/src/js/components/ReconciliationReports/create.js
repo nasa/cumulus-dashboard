@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import { Form, Field } from 'react-final-form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
@@ -21,6 +21,7 @@ import Tooltip from '../Tooltip/tooltip';
 import Datepicker from '../Datepicker/Datepicker';
 import TextForm from '../TextAreaForm/text';
 import { displayCase, getCollectionId } from '../../utils/format';
+import withRouter from '../../withRouter';
 
 const baseRoute = '/reconciliation-reports';
 const defaultReportType = 'Inventory';

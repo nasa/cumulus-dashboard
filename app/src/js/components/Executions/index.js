@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { withRouter, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
 import PropTypes from 'prop-types';
@@ -14,6 +14,7 @@ import ExecutionsList from './executions-list';
 import { getCount, listExecutions } from '../../actions';
 import { strings } from '../locale';
 import { filterQueryParams } from '../../utils/url-helper';
+import withRouter from '../../withRouter';
 
 const Executions = ({
   dispatch,

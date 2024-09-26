@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { withRouter, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
@@ -9,6 +9,7 @@ import EditProvider from './edit';
 import ProvidersOverview from './overview';
 import ProviderOverview from './provider';
 import { filterQueryParams } from '../../utils/url-helper';
+import withRouter from '../../withRouter';
 
 const Providers = ({
   location,

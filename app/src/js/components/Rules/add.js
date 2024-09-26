@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import {
   createRule,
   listWorkflows,
@@ -11,6 +11,7 @@ import {
 } from '../../actions';
 import AddRecord from '../Add/add';
 import { getCollectionId, nullValue, collectionNameVersion } from '../../utils/format';
+import withRouter from '../../withRouter';
 
 /**
  * Converts the Collection ID string associated with the `collection` property

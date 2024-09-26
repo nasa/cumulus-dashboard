@@ -1,10 +1,11 @@
 import React, { useState, useEffect, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { renderTypeaheadInput, renderTypeaheadMenu } from '../../utils/typeahead-helpers';
+import withRouter from '../../withRouter';
 
 const Dropdown = ({
   action,

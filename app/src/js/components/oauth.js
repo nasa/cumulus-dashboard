@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 import get from 'lodash/get';
@@ -13,6 +13,7 @@ import _config from '../config';
 import ErrorReport from './Errors/report';
 import Header from './Header/header';
 import { historyPushWithQueryParams } from '../utils/url-helper';
+import withRouter from '../withRouter';
 
 const { updateDelay, apiRoot, oauthMethod } = _config;
 

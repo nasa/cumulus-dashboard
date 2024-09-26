@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { withRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { get } from 'object-path';
 import {
   displayCase,
@@ -28,6 +28,7 @@ import DropdownAsync from '../DropDown/dropdown-async-command';
 import ErrorReport from '../Errors/report';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
+import withRouter from '../../withRouter';
 
 const breadcrumbConfig = [
   {

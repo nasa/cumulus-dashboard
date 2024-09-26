@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-import { withRouter, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import WorkflowsOverview from './overview';
 import Workflow from './workflow';
 import { filterQueryParams } from '../../utils/url-helper';
+import withRouter from '../../withRouter';
 
 const Workflows = ({
   location,

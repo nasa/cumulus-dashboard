@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import queryString from 'query-string';
@@ -8,6 +8,7 @@ import { createReconciliationReport } from '../../actions';
 import { historyPushWithQueryParams } from '../../utils/url-helper';
 import DefaultModal from '../Modal/modal';
 import TextForm from '../TextAreaForm/text';
+import withRouter from '../../withRouter';
 
 const GranuleInventory = ({
   history,

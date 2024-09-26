@@ -3,7 +3,7 @@
 import path from 'path';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 import isEqual from 'lodash/isEqual';
@@ -44,6 +44,7 @@ import { defaultWorkflowMeta, executeDialog } from '../../utils/table-config/gra
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import { historyPushWithQueryParams } from '../../utils/url-helper';
 import { getGranuleRecoveryJobStatusFromRecord } from '../../utils/recovery-status';
+import withRouter from '../../withRouter';
 
 const link = 'Link';
 

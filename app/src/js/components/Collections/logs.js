@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import LogViewer from '../Logs/viewer';
 import { strings } from '../locale';
 import CollectionHeader from './collection-header';
+import withRouter from '../../withRouter';
 
 const breadcrumbConfig = [
   {

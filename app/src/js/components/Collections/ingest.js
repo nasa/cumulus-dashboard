@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import Ace from 'react-ace';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -9,6 +9,7 @@ import { getCollectionId, nullValue } from '../../utils/format';
 import config from '../../config';
 import Loading from '../LoadingIndicator/loading-indicator';
 import CollectionHeader from './collection-header';
+import withRouter from '../../withRouter';
 
 const breadcrumbConfig = [
   {

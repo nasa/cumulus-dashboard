@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   clearGranulesFilter,
   clearGranulesSearch,
@@ -49,6 +49,7 @@ import Overview from '../Overview/overview';
 import Search from '../Search/search';
 import List from '../Table/Table';
 import { workflowOptionNames } from '../../selectors';
+import withRouter from '../../withRouter';
 
 const breadcrumbConfig = [
   {

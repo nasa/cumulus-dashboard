@@ -2,7 +2,7 @@ import React, { useEffect, useCallback } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import { get } from 'object-path';
 import {
@@ -25,6 +25,7 @@ import linkToKibana from '../utils/kibana';
 import DatepickerRange from './Datepicker/DatepickerRange';
 import { strings } from './locale';
 import { getPersistentQueryParams } from '../utils/url-helper';
+import withRouter from '../withRouter';
 
 const Home = ({
   stats,

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 
@@ -15,6 +15,7 @@ import {
 import BulkGranuleModal from './bulk-granule-modal';
 import { historyPushWithQueryParams } from '../../utils/url-helper';
 import DefaultModal from '../Modal/modal';
+import withRouter from '../../withRouter';
 
 const generateAsyncRequestId = () => Math.random().toString(36).substring(2, 15) +
   Math.random().toString(36).substring(2, 15);

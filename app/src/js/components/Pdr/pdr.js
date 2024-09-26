@@ -2,7 +2,7 @@ import path from 'path';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { withRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 import {
@@ -40,6 +40,7 @@ import GranulesProgress from '../Granules/progress';
 import { strings } from '../locale';
 import ListFilters from '../ListActions/ListFilters';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
+import withRouter from '../../withRouter';
 
 const metaAccessors = [
   {

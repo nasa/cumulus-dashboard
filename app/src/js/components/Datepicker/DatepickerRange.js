@@ -4,7 +4,7 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import noop from 'lodash/noop';
 import {
@@ -23,6 +23,7 @@ import {
 } from '../../utils/datepicker';
 import SimpleDropdown from '../DropDown/simple-dropdown';
 import Datepicker from './Datepicker';
+import withRouter from '../../withRouter';
 
 /*
  * If this is a shared URL, grab the date and time and update the datepicker

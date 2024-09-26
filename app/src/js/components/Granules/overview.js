@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
 import { get } from 'object-path';
@@ -39,6 +39,7 @@ import Search from '../Search/search';
 import Overview from '../Overview/overview';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import withRouter from '../../withRouter';
 
 const breadcrumbConfig = [
   {

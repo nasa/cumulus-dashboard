@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { withRouter, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import RulesOverview from './overview';
@@ -9,6 +9,7 @@ import Rule from './rule';
 import EditRule from './edit';
 import AddRule from './add';
 import { filterQueryParams } from '../../utils/url-helper';
+import withRouter from '../../withRouter';
 
 const Rules = ({
   location,

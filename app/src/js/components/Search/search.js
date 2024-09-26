@@ -2,7 +2,7 @@ import React, { createRef, useCallback, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import withQueryParams from 'react-router-query-params';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { get } from 'object-path';
 import { getInitialValueFromLocation } from '../../utils/url-helper';
@@ -10,6 +10,7 @@ import {
   renderSearchInput,
   renderSearchMenu,
 } from '../../utils/typeahead-helpers';
+import withRouter from '../../withRouter';
 
 /**
  * Search

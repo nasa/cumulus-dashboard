@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { get } from 'object-path';
 import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import { getProvider, deleteProvider, listCollections } from '../../actions';
@@ -15,6 +15,7 @@ import {
   historyPushWithQueryParams,
 } from '../../utils/url-helper';
 import { metaAccessors } from '../../utils/table-config/providers';
+import withRouter from '../../withRouter';
 
 const ProviderOverview = ({ dispatch, match, providers }) => {
   const { providerId } = match.params;

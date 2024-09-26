@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkSquareAlt } from '@fortawesome/free-solid-svg-icons';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import get from 'lodash/get';
 import {
   getExecutionStatus,
@@ -22,6 +22,7 @@ import SortableTable from '../SortableTable/SortableTable';
 import ListFilters from '../ListActions/ListFilters';
 import { formatEvents } from '../../utils/table-config/executions';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import withRouter from '../../withRouter';
 
 const breadcrumbConfig = [
   {

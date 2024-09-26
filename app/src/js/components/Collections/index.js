@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import { strings } from '../locale';
@@ -16,6 +16,7 @@ import CollectionLogs from './logs';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import { listCollections } from '../../actions';
 import { filterQueryParams } from '../../utils/url-helper';
+import withRouter from '../../withRouter';
 
 const Collections = ({ dispatch, location, logs, queryParams }) => {
   const { pathname } = location;

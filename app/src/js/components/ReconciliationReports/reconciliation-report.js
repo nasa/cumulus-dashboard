@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import get from 'lodash/get';
 import {
   getReconciliationReport,
@@ -12,6 +12,7 @@ import InventoryReport from './inventory-report';
 import GnfReport from './gnf-report';
 import Legend from './legend';
 import BackupReport from './backup-report';
+import withRouter from '../../withRouter';
 
 const ReconciliationReport = ({
   dispatch = {},

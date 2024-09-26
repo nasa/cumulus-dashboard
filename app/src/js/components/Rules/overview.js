@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
   listRules,
@@ -16,6 +16,7 @@ import List from '../Table/Table';
 import Search from '../Search/search';
 import { tableColumns, bulkActions } from '../../utils/table-config/rules';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import withRouter from '../../withRouter';
 
 const breadcrumbConfig = [
   {

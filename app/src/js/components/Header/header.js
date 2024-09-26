@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback, useRef } from 'react';
 import c from 'classnames';
 import PropTypes from 'prop-types';
-import { withRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import get from 'lodash/get';
 import {
@@ -15,6 +15,7 @@ import { window } from '../../utils/browser';
 import { strings } from '../locale';
 import linkToKibana from '../../utils/kibana';
 import { getPersistentQueryParams } from '../../utils/url-helper';
+import withRouter from '../../withRouter';
 
 const paths = [
   [strings.collections, '/collections/all'],

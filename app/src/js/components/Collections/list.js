@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import {
   applyRecoveryWorkflowToCollection,
   clearCollectionsSearch,
@@ -27,6 +27,7 @@ import List from '../Table/Table';
 import { strings } from '../locale';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ListFilters from '../ListActions/ListFilters';
+import withRouter from '../../withRouter';
 
 const breadcrumbConfig = [
   {

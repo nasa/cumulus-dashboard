@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 import {
@@ -33,6 +33,7 @@ import { granuleStatus as statusOptions } from '../../utils/status';
 import { workflowOptionNames } from '../../selectors';
 import ListFilters from '../ListActions/ListFilters';
 import CollectionHeader from './collection-header';
+import withRouter from '../../withRouter';
 
 const CollectionGranules = ({
   dispatch,

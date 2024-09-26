@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import { get } from 'object-path';
 import {
   searchGranules,
@@ -33,6 +33,7 @@ import Search from '../Search/search';
 import { workflowOptionNames } from '../../selectors';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ListFilters from '../ListActions/ListFilters';
+import withRouter from '../../withRouter';
 
 const generateBreadcrumbConfig = (view) => [
   {

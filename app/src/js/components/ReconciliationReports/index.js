@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import { strings } from '../locale';
@@ -13,6 +13,7 @@ import ReconciliationReport from './reconciliation-report';
 import BackupReportGranuleDetails from './backup-report-granule-details';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import { filterQueryParams } from '../../utils/url-helper';
+import withRouter from '../../withRouter';
 
 const ReconciliationReports = ({
   dispatch,

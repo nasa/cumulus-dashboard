@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { withRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { listPdrs, getCount, clearPdrsFilter, filterPdrs, refreshCumulusDbConnection } from '../../actions';
 import { lastUpdated, tally } from '../../utils/format';
@@ -14,6 +14,7 @@ import statusOptions from '../../utils/status';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import { getPersistentQueryParams } from '../../utils/url-helper';
+import withRouter from '../../withRouter';
 
 const breadcrumbConfig = [
   {

@@ -2,12 +2,13 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import { getExecutionLogs } from '../../actions';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 
 import ErrorReport from '../Errors/report';
 import { historyPushWithQueryParams } from '../../utils/url-helper';
+import withRouter from '../../withRouter';
 
 class ExecutionLogs extends React.Component {
   constructor(props) {

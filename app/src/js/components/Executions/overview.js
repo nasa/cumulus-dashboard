@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { get } from 'object-path';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import {
   clearExecutionsFilter,
   filterExecutions,
@@ -23,6 +23,7 @@ import Search from '../Search/search';
 import Overview from '../Overview/overview';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import withRouter from '../../withRouter';
 
 const breadcrumbConfig = [
   {

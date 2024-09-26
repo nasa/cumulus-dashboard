@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import { createCollection, getSchema } from '../../actions';
 import { getCollectionId, collectionHrefFromId } from '../../utils/format';
 import { removeReadOnly } from '../FormSchema/schema';
 import AddRaw from '../AddRaw/add-raw';
+import withRouter from '../../withRouter';
 
 const AddCollection = ({ location = {}, collections, dispatch, schema }) => {
   const [defaultValue, setDefaultValue] = useState({});

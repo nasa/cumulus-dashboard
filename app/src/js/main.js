@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import isEqual from 'lodash/isEqual';
 import _config from './config';
@@ -10,6 +10,7 @@ import Footer from './components/Footer/footer';
 import TopButton from './components/TopButton/TopButton';
 import { getLogs } from './actions';
 import { initialState as logsInitialState } from './reducers/logs';
+import withRouter from './withRouter';
 
 const { target, environment } = _config;
 

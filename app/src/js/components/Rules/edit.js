@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import {
   getRule,
   updateRule,
@@ -10,6 +10,7 @@ import {
 } from '../../actions';
 
 import EditRaw from '../EditRaw/edit-raw';
+import withRouter from '../../withRouter';
 
 const SCHEMA_KEY = 'rule';
 

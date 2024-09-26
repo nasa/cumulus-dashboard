@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { get } from 'object-path';
 import { connect } from 'react-redux';
-import { withRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import { getCount, listGranules } from '../../actions';
 import { strings } from '../locale';
@@ -14,6 +14,7 @@ import ReconciliationReportList from '../ReconciliationReports/list';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import { filterQueryParams } from '../../utils/url-helper';
 import Loading from '../LoadingIndicator/loading-indicator';
+import withRouter from '../../withRouter';
 
 const Sidebar = lazy(() => import('../Sidebar/sidebar'));
 
