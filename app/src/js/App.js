@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Provider } from 'react-redux';
-import { Route, Redirect, Switch } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
 
 import ourConfigureStore, { history } from './store/configureStore';
@@ -29,21 +29,23 @@ console.log('Environment', config.environment);
 
 // Wrapper for Main component to include routing
 const MainRoutes = () => (
-  <Main path='/'>
-    <Switch>
-      <Route exact path='/' component={Home} />
-      <Route path='/404' component={NotFound} />
-      <Route path='/collections' component={Collections} />
-      <Route path='/granules' component={Granules} />
-      <Route path='/pdrs' component={Pdrs} />
-      <Route path='/providers' component={Providers} />
-      <Route path='/workflows' component={Workflows} />
-      <Route path='/executions' component={Executions} />
-      <Route path='/operations' component={Operations} />
-      <Route path='/rules' component={Rules} />
-      <Route path='/reconciliation-reports' component={ReconciliationReports} />
-    </Switch>
-  </Main>
+  <BrowserRouter>
+    <Routes>
+      <Main path={'/'}>
+        <Route exact path={'/'} element={<Home />}></Route>
+        <Route path={'/404'} element={<NotFound />}></Route>
+        <Route path={'/collections'} element={<Collections />}></Route>
+        <Route path={'/granules'} element={<Granules />}></Route>
+        <Route path={'/pdrs'} element={<Pdrs />}></Route>
+        <Route path={'/providers'} element={<Providers />}></Route>
+        <Route path={'/workflows'} element={<Workflows />}></Route>
+        <Route path={'/executions'} element={<Executions />}></Route>
+        <Route path={'/operations'} element={<Operations />}></Route>
+        <Route path={'/rules'} element={<Rules />}></Route>
+        <Route path={'/reconciliation-reports'} element={<ReconciliationReports />}></Route>
+      </Main>
+    </Routes>
+  </BrowserRouter>
 );
 
 // generate the root App Component
@@ -57,11 +59,11 @@ const App = () => {
       <div className="routes">
         <Provider store={store}>
           <ConnectedRouter history={history}>
-            <Switch>
-              <Redirect exact from='/login' to='/auth' />
-              <Route path='/auth' render={() => (isLoggedIn() ? <Redirect to='/' /> : <OAuth />)} />
-              <Route path='/' render={() => (isLoggedIn() ? <MainRoutes /> : <Redirect to='/auth' />)} />
-            </Switch>
+            <Routes>
+              <Navigate exact from='/login' to='/auth' />
+              <Route path='/auth' render={() => (isLoggedIn() ? <Navigate to='/' /> : <OAuth />)} />
+              <Route path='/' render={() => (isLoggedIn() ? <MainRoutes /> : <Navigate to='/auth' />)} />
+            </Routes>
           </ConnectedRouter>
         </Provider>
       </div>
