@@ -14,4 +14,4 @@ import App from './js/App';
     });
 } */
 
-ReactDOM.render(<App />, document.getElementById('site-canvas'));
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
