@@ -6,6 +6,32 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+
+- **CUMULUS-3870**
+  - Updated React and dependencies
+  - react 17.0.2 ⇒ 18.3.1
+  - react-ace 9.5.0 ⇒ 9.5.0
+  - react bootstrap 1.6.4 ⇒ 1.6.8
+  - react-circular-progressbar 2.1.0 ⇒ 2.1.0
+  - react-collapsible 2.8.1 ⇒ 2.10.0
+  - react-datetime-picker 3.4.3 ⇒ 3.5.0
+  - react-final-form 6.5.7 ⇒ 6.5.9
+  - react-helmet 6.1.0 ⇒ 6.1.0
+  - react-select 5.2.1 ⇒ 5.8.1
+  - react-table 7.6.1 ⇒ 7.6.1
+  - react-test-renderer 18.3.1 ⇒ 18.3.1
+
+### Changed
+
+- **CUMULUS-3870**
+  - Remove launchpad security key information from cypress fixture for `valid-execution.json`
+  - Add placeholders for security information with `fakePassword` and `userName`
+
+### Fixed
+
+- **CUMULUS-3905**
+  - Fixed npm audit issues with `body-parser` and `path-to-regexp`
 
 ### Changed
 - **CUMULUS-3860**
