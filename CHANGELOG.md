@@ -7,9 +7,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-This version of the dashboard requires Cumulus API >= v18.2.0
+### Changed
+
+- **CUMULUS-3870**
+  - Remove launchpad security key information from cypress fixture for `valid-execution.json`
+  - Add placeholders for security information with `fakePassword` and `userName`
+
+### Fixed
+
+- **CUMULUS-3905**
+  - Fixed npm audit issues with `body-parser` and `path-to-regexp`
+
+## [v12.2.0] - 2024-09-04
+
+This version of the dashboard requires Cumulus API >= v18.4.0
 
 ### Changed
+
 - **CUMULUS-3805**
   - Updated collections to sort by timestamp instead of duration
   - Changed the initialSortField of tables using createdAt to updatedAt
@@ -34,6 +48,15 @@ This version of the dashboard requires Cumulus API >= v18.2.0
 - **CUMULUS-2356**
   - Removed gitc localization
   - Allowlisted braces, ws, and fast-xml-parser
+- **CUMULUS-3706**
+  - Bumped node version from 16.19.0 to 20.12.2 to match Core
+  - Updated the dashboard to use `@cumulus/api@18.4.0` and `@cumulus/aws-client@18.4.0`.
+  - Upgraded postgres image to postgres:13.9-alpine
+
+### Fixed
+
+- **CUMULUS-3855**
+  - Fixed to show API indicator and tooltip details
 
 ## [v12.1.0] - 2023-10-27
 
@@ -1388,7 +1411,8 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
-  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v12.1.0...HEAD
+  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v12.2.0...HEAD
+  [v12.2.0]: https://github.com/nasa/cumulus-dashboard/compare/v12.1.0...v12.2.0
   [v12.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.2...v12.1.0
   [v12.0.2]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.1...v12.0.2
   [v12.0.1]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.0...v12.0.1

@@ -36,7 +36,7 @@ const Header = ({
   minimal,
   locationQueryParams,
 }) => {
-  const mounted = useRef(false);
+  const mounted = useRef(true);
 
   const handleLogout = useCallback(() => {
     dispatch(logout()).then(() => {
