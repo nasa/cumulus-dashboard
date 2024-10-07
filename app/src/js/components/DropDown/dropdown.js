@@ -1,8 +1,8 @@
 import React, { useState, useEffect, createRef } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 // import { withRouter } from 'react-router-dom';
-import withQueryParams from 'react-router-query-params';
+// import withQueryParams from 'react-router-query-params';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { renderTypeaheadInput, renderTypeaheadMenu } from '../../utils/typeahead-helpers';
 import withRouter from '../../withRouter';
@@ -27,6 +27,12 @@ const Dropdown = ({
   const [initialQueryParams] = useState(queryParams);
   const [selected, setSelected] = useState(selectedValues);
   const allowNew = paramKey === 'limit' || paramKey === 'page';
+
+  const selectors = useSelector((state) => ({
+    dispatch: state.dispatch,
+    selected: state.selected,
+    queryParams: state.queryParams
+  }));
 
   function getOptionFromParam(paramOptions, paramValue) {
     return paramOptions.filter((item) => item.id === paramValue);
@@ -118,6 +124,11 @@ const Dropdown = ({
     }
   }
 
+  useEffect(() => {
+    dispatch()
+      .then(() => selectors());
+  }, [dispatch, selectors]);
+
   return (
     <div className={`list__filters--item form-group__element filter-${paramKey.includes('.') ? paramKey.split('.')[0] : paramKey}`}>
       {label && <label htmlFor={paramKey}>{label}</label>}
@@ -156,4 +167,4 @@ Dropdown.propTypes = {
   clearOnClick: PropTypes.bool,
 };
 
-export default withRouter(withQueryParams()(connect()(Dropdown)));
+export default withRouter(Dropdown);

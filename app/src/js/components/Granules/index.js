@@ -2,9 +2,9 @@ import React, { useEffect, lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { get } from 'object-path';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import withQueryParams from 'react-router-query-params';
+// import withQueryParams from 'react-router-query-params';
 import { getCount, listGranules } from '../../actions';
 import { strings } from '../locale';
 import AllGranules from './list';
@@ -12,9 +12,10 @@ import GranuleOverview from './granule';
 import GranulesOverview from './overview';
 import ReconciliationReportList from '../ReconciliationReports/list';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
-import { filterQueryParams } from '../../utils/url-helper';
+// import { filterQueryParams } from '../../utils/url-helper';
 import Loading from '../LoadingIndicator/loading-indicator';
 import withRouter from '../../withRouter';
+import useQueryParams from '../../useQueryParams';
 
 const Sidebar = lazy(() => import('../Sidebar/sidebar'));
 
@@ -24,11 +25,13 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
   const reportCount =
     get(stats, 'count.sidebar.reconciliationReports.count') || [];
   const count = [...granulesCount, ...reportCount];
-  const filteredQueryParams = filterQueryParams(queryParams);
+  const filteredQueryParams = useQueryParams(queryParams);
 
   function query() {
     dispatch(listGranules(filteredQueryParams));
   }
+
+  const selectors = useSelector((state) => ({ stats: state.stats })); // sidebar routing state for granule count
 
   useEffect(() => {
     dispatch(
@@ -38,7 +41,7 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
         sidebarCount: true,
       })
     );
-  }, [dispatch]);
+  }, [dispatch, selectors]);
 
   useEffect(() => {
     dispatch(
@@ -112,10 +115,4 @@ Granules.propTypes = {
   stats: PropTypes.object,
 };
 
-export default withRouter(
-  withQueryParams()(
-    connect((state) => ({
-      stats: state.stats,
-    }))(Granules)
-  )
-);
+export default withRouter(Granules);

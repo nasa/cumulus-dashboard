@@ -1,7 +1,7 @@
 import React, { createRef, useCallback, useEffect, useRef } from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import withQueryParams from 'react-router-query-params';
+// import withQueryParams from 'react-router-query-params';
 // import { withRouter } from 'react-router-dom';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { get } from 'object-path';
@@ -41,13 +41,25 @@ const Search = ({
 }) => {
   const searchRef = createRef();
   const formID = `form-${label}-${paramKey}`;
-  const initialValueRef = useRef(getInitialValueFromLocation({
-    location,
-    paramKey,
-    queryParams,
-  }));
+  const initialValueRef = useRef(
+    getInitialValueFromLocation({
+      location,
+      paramKey,
+      queryParams,
+    })
+  );
   const searchList = get(rest[searchKey], 'list');
   const { data: searchOptions, inflight = false } = searchList || {};
+
+  const selectors = useSelector((state) => ({
+    location: state.location,
+    paramKey: state.paramKey,
+    queryParams: state.queryParams,
+  }));
+
+  useEffect(() => {
+    dispatch(selectors);
+  }, [dispatch, selectors]);
 
   useEffect(() => {
     dispatch(clear(paramKey));
@@ -59,10 +71,13 @@ const Search = ({
     }
   }, [action, dispatch]);
 
-  const handleSearch = useCallback((query) => {
-    if (query) dispatch(action(query));
-    else dispatch(clear);
-  }, [action, clear, dispatch]);
+  const handleSearch = useCallback(
+    (query) => {
+      if (query) dispatch(action(query));
+      else dispatch(clear);
+    },
+    [action, clear, dispatch]
+  );
 
   function handleChange(selections) {
     if (selections && selections.length > 0) {
@@ -96,17 +111,17 @@ const Search = ({
   }
 
   return (
-    <div className="search__box">
+    <div className='search__box'>
       {label && (
-        <label htmlFor="search" form={formID}>
+        <label htmlFor='search' form={formID}>
           {label}
         </label>
       )}
-      <form className="search__wrapper form-group__element">
+      <form className='search__wrapper form-group__element'>
         <AsyncTypeahead
           defaultInputValue={initialValueRef.current}
           highlightOnlyResult={true}
-          id="search"
+          id='search'
           inputProps={{ id: 'search', ...inputProps }}
           isLoading={inflight}
           labelKey={labelKey}
@@ -119,7 +134,8 @@ const Search = ({
           placeholder={placeholder}
           ref={searchRef}
           renderInput={renderSearchInput}
-          renderMenu={(results, menuProps) => renderSearchMenu(results, menuProps, labelKey)}
+          renderMenu={(results, menuProps) => renderSearchMenu(results, menuProps, labelKey)
+          }
         />
       </form>
     </div>
@@ -143,4 +159,4 @@ Search.propTypes = {
   placeholder: PropTypes.string,
 };
 
-export default withRouter(withQueryParams()(connect((state) => state)(Search)));
+export default withRouter(Search);

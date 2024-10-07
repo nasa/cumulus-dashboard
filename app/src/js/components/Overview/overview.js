@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import withQueryParams from 'react-router-query-params';
-import { connect } from 'react-redux';
+// import withQueryParams from 'react-router-query-params';
+import { useSelector } from 'react-redux';
 import { get } from 'object-path';
 import Loading from '../LoadingIndicator/loading-indicator';
 import { displayCase, numLargeTooltip } from '../../utils/format';
@@ -16,6 +16,13 @@ const Overview = ({
   type
 }) => {
   const statsCount = get(stats, `count.data.${type}.count`, []);
+
+  const selectors = useSelector((state) => ({ stats: state.stats }));
+
+  useEffect(() => {
+    dispatch()
+      .then(() => selectors());
+  }, [dispatch, selectors]);
 
   useEffect(() => {
     if (!inflight) {
@@ -56,4 +63,4 @@ Overview.propTypes = {
   type: PropTypes.string,
 };
 
-export default withQueryParams()(connect((state) => ({ stats: state.stats }))(Overview));
+export default Overview;

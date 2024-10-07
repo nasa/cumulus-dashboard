@@ -1,7 +1,7 @@
 import React, { useState, useEffect, lazy, Suspense, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import withQueryParams from 'react-router-query-params';
+import { useSelector } from 'react-redux';
+// import withQueryParams from 'react-router-query-params';
 import isNil from 'lodash/isNil';
 import isEqual from 'lodash/isEqual';
 import omitBy from 'lodash/omitBy';
@@ -87,6 +87,13 @@ const List = ({
   } = queryParams;
 
   const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
+
+  const selectors = useSelector((state) => ({ sorts: state.sorts }));
+
+  useEffect(() => {
+    dispatch()
+      .then(() => selectors());
+  }, [dispatch, selectors]);
 
   useEffect(() => {
     setQueryConfig((prevQueryConfig) => ({
@@ -305,6 +312,4 @@ List.propTypes = {
 
 export { List };
 
-export default withQueryParams()(
-  connect((state) => ({ sorts: state.sorts }))(List)
-);
+export default List;

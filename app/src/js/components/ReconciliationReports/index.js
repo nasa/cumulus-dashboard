@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
-import withQueryParams from 'react-router-query-params';
+// import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import { strings } from '../locale';
 import { getCount, listReconciliationReports } from '../../actions';
@@ -12,8 +12,9 @@ import ReconciliationReportList from './list';
 import ReconciliationReport from './reconciliation-report';
 import BackupReportGranuleDetails from './backup-report-granule-details';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
-import { filterQueryParams } from '../../utils/url-helper';
+// import { filterQueryParams } from '../../utils/url-helper';
 import withRouter from '../../withRouter';
+import useQueryParams from '../../useQueryParams';
 
 const ReconciliationReports = ({
   dispatch,
@@ -23,7 +24,7 @@ const ReconciliationReports = ({
 }) => {
   const { pathname } = location;
   const showSidebar = pathname !== '/reconciliation-reports/create';
-  const filteredQueryParams = filterQueryParams(queryParams);
+  const filteredQueryParams = useQueryParams(queryParams);
 
   function query() {
     dispatch(listReconciliationReports(filteredQueryParams));
@@ -71,4 +72,4 @@ ReconciliationReports.propTypes = {
 
 ReconciliationReports.displayName = 'Reconciliation Reports';
 
-export default withRouter(withQueryParams()(connect()(ReconciliationReports)));
+export default withRouter(connect()(ReconciliationReports));

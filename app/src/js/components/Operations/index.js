@@ -2,37 +2,38 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
-import withQueryParams from 'react-router-query-params';
+// import withQueryParams from 'react-router-query-params';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import OperationOverview from './overview';
 import { listOperations } from '../../actions';
 import { strings } from '../locale';
-import { filterQueryParams } from '../../utils/url-helper';
+// import { filterQueryParams } from '../../utils/url-helper';
 import withRouter from '../../withRouter';
+import useQueryParams from '../../useQueryParams';
 
 const Operations = ({ dispatch, location, params, queryParams }) => {
   const { pathname } = location;
-  const filteredQueryParams = filterQueryParams(queryParams);
+  const filteredQueryParams = useQueryParams(queryParams);
 
   function query() {
     dispatch(listOperations(filteredQueryParams));
   }
 
   return (
-    <div className="page__workflows">
+    <div className='page__workflows'>
       <Helmet>
         <title> Cumulus Operations </title>
       </Helmet>
       <DatePickerHeader onChange={query} heading={strings.operations} />
-      <div className="page__content">
-        <div className="wrapper__sidebar">
+      <div className='page__content'>
+        <div className='wrapper__sidebar'>
           <Sidebar currentPath={pathname} params={params} />
-          <div className="page__content--shortened">
+          <div className='page__content--shortened'>
             <Route
               exact
-              path="/operations"
+              path='/operations'
               render={(props) => (
                 <OperationOverview
                   {...props}
@@ -54,4 +55,4 @@ Operations.propTypes = {
   queryParams: PropTypes.object,
 };
 
-export default withRouter(withQueryParams()(connect()(Operations)));
+export default withRouter((connect()(Operations)));

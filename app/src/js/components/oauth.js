@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import withQueryParams from 'react-router-query-params';
+import { useSelector } from 'react-redux';
+// import withQueryParams from 'react-router-query-params';
 // import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
@@ -25,6 +25,7 @@ const OAuth = ({
   queryParams,
 }) => {
   const [token, setToken] = useState(null);
+  const selectors = useSelector((state) => state.token);
 
   useEffect(() => {
     if (api.authenticated) {
@@ -36,7 +37,7 @@ const OAuth = ({
         setTimeout(() => historyPushWithQueryParams('/'), updateDelay); // react isn't seeing this a function
       }
     }
-  }, [api.authenticated, dispatch, location, token]);
+  }, [api.authenticated, dispatch, location, token, selectors]);
 
   useEffect(() => {
     const { token: queryToken } = queryParams;
@@ -44,7 +45,7 @@ const OAuth = ({
       setToken(queryToken);
       dispatch(login(queryToken));
     }
-  }, [queryParams, dispatch]);
+  }, [queryParams, dispatch, selectors]);
 
   let button;
   if (!api.authenticated && !api.inflight) {
@@ -98,4 +99,4 @@ OAuth.propTypes = {
 
 export { OAuth };
 
-export default withRouter(withQueryParams()(connect((state) => state)(OAuth)));
+export default withRouter(OAuth);

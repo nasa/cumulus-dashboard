@@ -1,9 +1,10 @@
+// Class Component
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 // import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import withQueryParams from 'react-router-query-params';
+// import withQueryParams from 'react-router-query-params';
 import { get } from 'object-path';
 import isEqual from 'lodash/isEqual';
 import {
@@ -147,7 +148,8 @@ class GranulesOverview extends React.Component {
   updateSelection(selectedIds, currentSelectedRows) {
     const allSelectedRows = this.state.selected.concat(currentSelectedRows);
     const selected = selectedIds
-      .map((id) => allSelectedRows.find((g) => id === g.granuleId)).filter(Boolean);
+      .map((id) => allSelectedRows.find((g) => id === g.granuleId))
+      .filter(Boolean);
     this.setState({ selected });
   }
 
@@ -159,27 +161,27 @@ class GranulesOverview extends React.Component {
     const { count, queriedAt } = list.meta;
 
     return (
-      <div className="page__component">
+      <div className='page__component'>
         <Helmet>
           <title> Granules Overview </title>
         </Helmet>
-        <section className="page__section page__section__controls">
+        <section className='page__section page__section__controls'>
           <Breadcrumbs config={breadcrumbConfig} />
         </section>
-        <section className="page__section page__section__header-wrapper">
-          <div className="page__section__header">
-            <h1 className="heading--large heading--shared-content with-description ">
+        <section className='page__section page__section__header-wrapper'>
+          <div className='page__section__header'>
+            <h1 className='heading--large heading--shared-content with-description '>
               Granule Overview
             </h1>
             {lastUpdated(queriedAt)}
-            <Overview type="granules" inflight={granules.list.inflight} />
+            <Overview type='granules' inflight={granules.list.inflight} />
           </div>
         </section>
-        <section className="page__section">
-          <div className="heading__wrapper--border">
-            <h2 className="heading--medium heading--shared-content with-description">
+        <section className='page__section'>
+          <div className='heading__wrapper--border'>
+            <h2 className='heading--medium heading--shared-content with-description'>
               {strings.granules}{' '}
-              <span className="num-title">
+              <span className='num-title'>
                 {count ? ` ${tally(count)}` : 0}
               </span>
             </h2>
@@ -191,30 +193,30 @@ class GranulesOverview extends React.Component {
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             groupAction={groupAction}
-            rowId="granuleId"
+            rowId='granuleId'
             initialHiddenColumns={defaultHiddenColumns}
-            initialSortId="updatedAt"
+            initialSortId='updatedAt'
             filterAction={filterGranules}
             filterClear={clearGranulesFilter}
             onSelect={this.updateSelection}
             toggleColumnOptionsAction={toggleGranulesTableColumns}
-            tableId="granules-overview"
+            tableId='granules-overview'
           >
             <Search
               action={searchGranules}
               clear={clearGranulesSearch}
-              label="Search"
-              labelKey="granuleId"
-              placeholder="Granule ID"
-              searchKey="granules"
+              label='Search'
+              labelKey='granuleId'
+              placeholder='Granule ID'
+              searchKey='granules'
             />
             <ListFilters>
               <Dropdown
                 options={statusOptions}
                 action={filterGranules}
                 clear={clearGranulesFilter}
-                paramKey="status"
-                label="Status"
+                paramKey='status'
+                label='Status'
                 inputProps={{
                   placeholder: 'All',
                 }}
@@ -224,7 +226,7 @@ class GranulesOverview extends React.Component {
                 options={get(dropdowns, ['collectionName', 'options'])}
                 action={filterGranules}
                 clear={clearGranulesFilter}
-                paramKey="collectionId"
+                paramKey='collectionId'
                 label={strings.collection}
                 inputProps={{
                   placeholder: 'All',
@@ -236,8 +238,8 @@ class GranulesOverview extends React.Component {
                 options={get(providerDropdowns, ['provider', 'options'])}
                 action={filterGranules}
                 clear={clearGranulesFilter}
-                paramKey="provider"
-                label="Provider"
+                paramKey='provider'
+                label='Provider'
                 inputProps={{
                   placeholder: 'All',
                   className: 'dropdown--medium',
@@ -264,13 +266,11 @@ GranulesOverview.propTypes = {
 export { GranulesOverview };
 
 export default withRouter(
-  withQueryParams()(
-    connect((state) => ({
-      collections: state.collections,
-      config: state.config,
-      granules: state.granules,
-      workflowOptions: workflowOptionNames(state),
-      providers: state.providers,
-    }))(GranulesOverview)
-  )
+  connect((state) => ({
+    collections: state.collections,
+    config: state.config,
+    granules: state.granules,
+    workflowOptions: workflowOptionNames(state),
+    providers: state.providers,
+  }(GranulesOverview)))
 );

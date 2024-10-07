@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import withQueryParams from 'react-router-query-params';
+// import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import { strings } from '../locale';
 import CollectionList from './list';
@@ -15,18 +15,26 @@ import CollectionIngest from './ingest';
 import CollectionLogs from './logs';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import { listCollections } from '../../actions';
-import { filterQueryParams } from '../../utils/url-helper';
+// import { filterQueryParams } from '../../utils/url-helper';
 import withRouter from '../../withRouter';
+import useQueryParams from '../../useQueryParams';
 
 const Collections = ({ dispatch, location, logs, queryParams }) => {
   const { pathname } = location;
   const existingCollection = pathname !== '/collections/add';
-  const filteredQueryParams = filterQueryParams(queryParams);
+  const filteredQueryParams = useQueryParams(queryParams);
   const { metricsNotConfigured } = logs;
 
   function query() {
     dispatch(listCollections(filteredQueryParams));
   }
+
+  const selectors = useSelector((state) => ({ logs: state.logs }));
+
+  useEffect(() => {
+    dispatch()
+      .then(() => selectors());
+  }, [dispatch, selectors]);
 
   return (
     <div className='page__collections'>
@@ -141,6 +149,4 @@ Collections.propTypes = {
   queryParams: PropTypes.object,
 };
 
-export default withRouter(
-  withQueryParams()(connect((state) => ({ logs: state.logs }))(Collections))
-);
+export default withRouter(Collections);

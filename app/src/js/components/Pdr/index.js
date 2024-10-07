@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
-import withQueryParams from 'react-router-query-params';
+// import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import { getCount, listPdrs } from '../../actions';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
@@ -12,13 +12,16 @@ import Pdr from './pdr';
 import PdrOverview from './overview';
 import PdrList from './list';
 import { strings } from '../locale';
-import { filterQueryParams } from '../../utils/url-helper';
+// import { filterQueryParams } from '../../utils/url-helper';
 import withRouter from '../../withRouter';
+import useQueryParams from '../../useQueryParams';
 
 const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
   const { pathname } = location;
   const count = get(stats, 'count.sidebar.pdrs.count');
-  const filteredQueryParams = filterQueryParams(queryParams);
+  const filteredQueryParams = useQueryParams(queryParams);
+
+  const selectors = useSelector((state) => ({ stats: state.stats }));
 
   function query() {
     dispatch(listPdrs(filteredQueryParams));
@@ -32,7 +35,7 @@ const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
         sidebarCount: true
       })
     );
-  }, [dispatch]);
+  }, [dispatch, selectors]);
 
   return (
     <div className="page__pdrs">
@@ -80,10 +83,4 @@ Pdrs.propTypes = {
   stats: PropTypes.object,
 };
 
-export default withRouter(
-  withQueryParams()(
-    connect((state) => ({
-      stats: state.stats,
-    }))(Pdrs)
-  )
-);
+export default withRouter(Pdrs);

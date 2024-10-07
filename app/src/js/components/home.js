@@ -1,9 +1,9 @@
 import React, { useEffect, useCallback } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import withQueryParams from 'react-router-query-params';
+// import withQueryParams from 'react-router-query-params';
 import { get } from 'object-path';
 import {
   getCount,
@@ -40,6 +40,22 @@ const Home = ({
     status: 'failed',
     limit: 20
   });
+
+  const selectors = useSelector((state) => ({
+    cumulusInstance: state.cumulusInstance,
+    datepicker: state.datepicker,
+    dist: state.dist,
+    executions: state.executions,
+    granules: state.granules,
+    rules: state.rules,
+    stats: state.stats,
+    pdrs: state.pdrs
+  }));
+
+  useEffect(() => {
+    dispatch()
+      .then(() => selectors());
+  }, [dispatch, selectors]);
 
   const query = useCallback(() => {
     dispatch(getStats());
@@ -186,13 +202,4 @@ Home.propTypes = {
 
 export { Home };
 
-export default withRouter(withQueryParams()(connect((state) => ({
-  cumulusInstance: state.cumulusInstance,
-  datepicker: state.datepicker,
-  dist: state.dist,
-  executions: state.executions,
-  granules: state.granules,
-  rules: state.rules,
-  stats: state.stats,
-  pdrs: state.pdrs
-}))(Home)));
+export default withRouter(Home);

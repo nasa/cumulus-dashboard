@@ -2,19 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { Route, Routes } from 'react-router-dom';
-import withQueryParams from 'react-router-query-params';
+// import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import WorkflowsOverview from './overview';
 import Workflow from './workflow';
-import { filterQueryParams } from '../../utils/url-helper';
+// import { filterQueryParams } from '../../utils/url-helper';
 import withRouter from '../../withRouter';
+import useQueryParams from '../../useQueryParams';
 
 const Workflows = ({
   location,
   params,
   queryParams,
 }) => {
-  const filteredQueryParams = filterQueryParams(queryParams);
+  const filteredQueryParams = useQueryParams(queryParams);
   return (
     <div className="page__workflows">
       <Helmet>
@@ -55,4 +56,4 @@ Workflows.propTypes = {
   queryParams: PropTypes.object,
 };
 
-export default withRouter(withQueryParams()(Workflows));
+export default withRouter(Workflows);

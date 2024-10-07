@@ -1,3 +1,4 @@
+// Class Component
 import isEmpty from 'lodash/isEmpty';
 import isNil from 'lodash/isNil';
 import moment from 'moment';
@@ -5,7 +6,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 // import { withRouter } from 'react-router-dom';
-import withQueryParams from 'react-router-query-params';
+// import withQueryParams from 'react-router-query-params';
 import noop from 'lodash/noop';
 import {
   DATEPICKER_DATECHANGE,
@@ -246,6 +247,4 @@ DatepickerRange.propTypes = {
   hideWrapper: PropTypes.bool,
 };
 
-export default withRouter(
-  withQueryParams()(connect((state) => state.datepicker)(DatepickerRange))
-);
+export default withRouter((connect((state) => state.datepicker)(DatepickerRange)));

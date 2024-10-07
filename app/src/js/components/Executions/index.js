@@ -1,8 +1,8 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Route, Routes } from 'react-router-dom';
-import { connect } from 'react-redux';
-import withQueryParams from 'react-router-query-params';
+// import { useSelector } from 'react-redux';
+// import withQueryParams from 'react-router-query-params';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
@@ -13,8 +13,9 @@ import ExecutionEvents from './execution-events';
 import ExecutionsList from './executions-list';
 import { getCount, listExecutions } from '../../actions';
 import { strings } from '../locale';
-import { filterQueryParams } from '../../utils/url-helper';
+// import { filterQueryParams } from '../../utils/url-helper';
 import withRouter from '../../withRouter';
+import useQueryParams from '../../useQueryParams';
 
 const Executions = ({
   dispatch,
@@ -23,7 +24,7 @@ const Executions = ({
 }) => {
   const { pathname } = location;
   const showDatePicker = pathname === '/executions';
-  const filteredQueryParams = filterQueryParams(queryParams);
+  const filteredQueryParams = useQueryParams(queryParams);
 
   function query () {
     dispatch(getCount({
@@ -73,4 +74,4 @@ Executions.propTypes = {
   queryParams: PropTypes.object
 };
 
-export default withRouter(withQueryParams()(connect()(Executions)));
+export default withRouter(Executions);

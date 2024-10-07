@@ -2,14 +2,15 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { Route, Routes } from 'react-router-dom';
-import withQueryParams from 'react-router-query-params';
+// import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import RulesOverview from './overview';
 import Rule from './rule';
 import EditRule from './edit';
 import AddRule from './add';
-import { filterQueryParams } from '../../utils/url-helper';
+// import { filterQueryParams } from '../../utils/url-helper';
 import withRouter from '../../withRouter';
+import useQueryParams from '../../useQueryParams';
 
 const Rules = ({
   location,
@@ -18,7 +19,7 @@ const Rules = ({
 }) => {
   const { pathname } = location;
   const showSidebar = pathname !== '/rules/add';
-  const filteredQueryParams = filterQueryParams(queryParams);
+  const filteredQueryParams = useQueryParams(queryParams);
   return (
     <div className='page__rules'>
       <Helmet>
@@ -57,4 +58,4 @@ Rules.propTypes = {
   queryParams: PropTypes.object,
 };
 
-export default withRouter(withQueryParams()(Rules));
+export default withRouter(Rules);
