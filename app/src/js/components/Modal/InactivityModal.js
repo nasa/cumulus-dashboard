@@ -14,6 +14,10 @@ const InactivityModal = ({
   const [lastKeyPress, setLastKeyPress] = useState(Date.now());
   const [hasModal, setHasModal] = useState(false);
 
+  const inactivityTimeInterval = 1800000; // 1800000 ms = 30 min
+  const timeToCheckInterval = 60000; // Check every minute, 60000 ms = 1 min
+  // const timeToLogout = 300000; // force logout after interval, 300000 ms = 5 min
+
   function handleConfirm() {
     setLastKeyPress(Date.now());
     closeModal();
@@ -50,13 +54,13 @@ const InactivityModal = ({
     };
   }, [hasModal]);
 
-  // Effect to handle showing the modal after 30 minutes of inactivity
+  // Effect to handle showing the modal after <inactivityTimeInterval> of inactivity
   useEffect(() => {
     const checkInactivity = setInterval(() => {
-      if (Date.now() - lastKeyPress > 1800000 && !hasModal) { // 1800000 ms = 30 minutes
+      if (Date.now() - lastKeyPress > inactivityTimeInterval && !hasModal) {
         setHasModal(true);
       }
-    }, 60000); // Check every minute (60000 ms)
+    }, timeToCheckInterval);
 
     return () => clearInterval(checkInactivity);
   }, [hasModal, lastKeyPress]);
@@ -83,13 +87,11 @@ const InactivityModal = ({
 const mapStateToProps = (state) => ({
   hasModal: state.hasModal,
   lastKeyPress: state.lastKeyPress,
-  // logoutTimer: state.logoutTimer
 });
 
 InactivityModal.propTypes = {
   hasModal: PropTypes.bool,
   lastKeyPress: PropTypes.string,
-  // logoutTimer: PropTypes.object,
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   children: PropTypes.string,
   className: PropTypes.string,
