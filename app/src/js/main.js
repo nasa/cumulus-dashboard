@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-// import { withRouter } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
 import isEqual from 'lodash/isEqual';
 import _config from './config';
@@ -18,12 +18,12 @@ const Main = ({
   api,
   apiVersion,
   cmrInfo,
-  children,
+  // children,
   cumulusInstance,
   dispatch,
-  location,
   logs,
 }) => {
+  const location = useLocation();
   useEffect(() => {
     // kick off an initial logs request to check if metrics is configured
     if (isEqual(logs, logsInitialState)) {
@@ -45,7 +45,7 @@ const Main = ({
         cumulusInstance={cumulusInstance}
       />
       <main className='main' role='main'>
-        {children}
+        <Outlet />
       </main>
       <section className='page__section--top'>
         <TopButton />
@@ -56,7 +56,7 @@ const Main = ({
 };
 
 Main.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.array, PropTypes.node]),
+  // children: PropTypes.oneOfType([PropTypes.array, PropTypes.node]),
   dispatch: PropTypes.func,
   location: PropTypes.object,
   api: PropTypes.object,

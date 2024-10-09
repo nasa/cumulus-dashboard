@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { ConnectedRouter } from 'connected-react-router';
-
-import ourConfigureStore, { history } from './store/configureStore';
+import { Routes, Route, Navigate, BrowserRouter } from 'react-router-dom';
+import ourConfigureStore from './store/configureStore';
 
 // Authorization & Error Handling
 // import ErrorBoundary from './components/Errors/ErrorBoundary';
@@ -27,44 +25,37 @@ import config from './config';
 
 console.log('Environment', config.environment);
 
-// Wrapper for Main component to include routing
-const MainRoutes = () => (
-  <BrowserRouter>
-    <Routes>
-      <Main path={'/'}>
-        <Route exact path={'/'} element={<Home />}></Route>
-        <Route path={'/404'} element={<NotFound />}></Route>
-        <Route path={'/collections'} element={<Collections />}></Route>
-        <Route path={'/granules'} element={<Granules />}></Route>
-        <Route path={'/pdrs'} element={<Pdrs />}></Route>
-        <Route path={'/providers'} element={<Providers />}></Route>
-        <Route path={'/workflows'} element={<Workflows />}></Route>
-        <Route path={'/executions'} element={<Executions />}></Route>
-        <Route path={'/operations'} element={<Operations />}></Route>
-        <Route path={'/rules'} element={<Rules />}></Route>
-        <Route path={'/reconciliation-reports'} element={<ReconciliationReports />}></Route>
-      </Main>
-    </Routes>
-  </BrowserRouter>
-);
-
-// generate the root App Component
+// Routes for the Cumulus Dashboard app
 const App = () => {
   const [store] = useState(ourConfigureStore({}));
-  const isLoggedIn = () => store.getState().api.authenticated;
+  const isLoggedIn = () => {
+    const state = store.getState();
+    return state.api && state.api.authenticated;
+  };
 
   return (
-      // <ErrorBoundary> // Add after troublshooting other errors
-      // Routes
-      <div className="routes">
+      // Router with Store
+      <div className='routes'>
         <Provider store={store}>
-          <ConnectedRouter history={history}>
+          <BrowserRouter>
             <Routes>
-              <Navigate exact from='/login' to='/auth' />
-              <Route path='/auth' render={() => (isLoggedIn() ? <Navigate to='/' /> : <OAuth />)} />
-              <Route path='/' render={() => (isLoggedIn() ? <MainRoutes /> : <Navigate to='/auth' />)} />
+              <Route path={'/login'} element={<Navigate to='/auth' replace />}/>
+              <Route path={'/auth'} element={<OAuth />}/>
+              <Route path={'/'} element={isLoggedIn() ? <Main /> : <Navigate to='/auth' replace/>}>
+                <Route index element={<Home />}/>
+                <Route path={'/404'} element={<NotFound />}/>
+                <Route path={'/collections'} element={<Collections />}/>
+                <Route path={'/granules'} element={<Granules />}/>
+                <Route path={'/pdrs'} element={<Pdrs />}/>
+                <Route path={'/providers'} element={<Providers />}/>
+                <Route path={'/workflows'} element={<Workflows />}/>
+                <Route path={'/executions'} element={<Executions />}/>
+                <Route path={'/operations'} element={<Operations />}/>
+                <Route path={'/rules'} element={<Rules />}/>
+                <Route path={'/reconciliation-reports'} element={<ReconciliationReports />}/>
+              </Route>
             </Routes>
-          </ConnectedRouter>
+          </BrowserRouter>
         </Provider>
       </div>
   );
