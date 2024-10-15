@@ -8,7 +8,6 @@ import {
   clearReconciliationReportsFilter,
   listReconciliationReports,
   filterReconciliationReports,
-  refreshCumulusDbConnection,
 } from '../../actions';
 import { lastUpdated } from '../../utils/format';
 import { reconciliationReportStatus as statusOptions } from '../../utils/status';
@@ -63,10 +62,6 @@ const ReconciliationReportList = ({
   const { queriedAt, count } = list.meta;
   const query = generateQuery();
   const tableColumnsArray = tableColumns({ dispatch, isGranules, query });
-
-  useEffect(() => {
-    dispatch(refreshCumulusDbConnection());
-  }, [dispatch]);
 
   function generateQuery() {
     return {

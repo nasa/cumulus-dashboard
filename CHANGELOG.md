@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Changed
-
+- **CUMULUS-3821**
+  - Removed fake-granuleid-refresh-connection/refreshCumulusDbConnection
 - **CUMULUS-3870**
   - Remove launchpad security key information from cypress fixture for `valid-execution.json`
   - Add placeholders for security information with `fakePassword` and `userName`
