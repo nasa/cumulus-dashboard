@@ -38,16 +38,6 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
     );
   }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(
-      getCount({
-        type: 'reconciliationReports',
-        field: 'type',
-        sidebarCount: true
-      })
-    );
-  }, [dispatch]);
-
   return (
     <div className="page__granules">
       <Helmet>
