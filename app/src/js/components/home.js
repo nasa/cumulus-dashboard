@@ -43,9 +43,15 @@ const Home = ({
   const query = useCallback(() => {
     dispatch(getStats());
     dispatch(getCount({ type: 'granules', field: 'status' }));
-    dispatch(listExecutions({}));
+    dispatch(listExecutions({
+      timestamp__from: Date.now() - (24 * 60 * 60 * 1000),
+      timestamp__to: Date.now()
+    }));
     dispatch(listGranules(generateQuery()));
-    dispatch(listRules({}));
+    dispatch(listRules({
+      timestamp__from: Date.now() - (24 * 60 * 60 * 1000),
+      timestamp__to: Date.now()
+    }));
   }, [dispatch]);
 
   useEffect(() => {
@@ -142,7 +148,7 @@ const Home = ({
             </div>
           )}
 
-          {sectionHeader('Metrics Overview', 'metricsOverview')}
+          {sectionHeader('Metrics Overview (from the past 24 hours)', 'metricsOverview')}
           {buttonListSection(overview, 'Updates')}
 
           {sectionHeader(
