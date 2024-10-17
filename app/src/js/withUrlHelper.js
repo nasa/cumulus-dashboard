@@ -1,6 +1,6 @@
 // HOC wrapper to replace url-helper.js with React Router v6 query changes
 import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom'; // these hooks are used for queries
+import { useNavigate, useLocation, useParams } from 'react-router-dom'; // these hooks are used for queries
 import queryString from 'query-string';
 
 // Utility functions
@@ -62,7 +62,7 @@ export function withUrlHelper(Component) {
   function ComponentWithUrlHelper(props) {
     const navigate = useNavigate();
     const location = useLocation();
-
+    const params = useParams();
     /**
      * Calls history while preserving the queryParams that should persist across pages
      *
@@ -77,11 +77,13 @@ export function withUrlHelper(Component) {
     const urlHelper = {
       location,
       navigate,
+      params,
       historyPushWithQueryParams,
       getPersistentQueryParams: () => getPersistentQueryParams(location),
       getInitialValueFromLocation: (paramKey) => getInitialValueFromLocation(location, paramKey),
       initialValuesFromLocation: (paramKeys) => initialValuesFromLocation(location, paramKeys),
       filterQueryParams,
+      queryParams: queryString.parse(location.search),
     };
 
     return <Component {...props} urlHelper={urlHelper} />;
