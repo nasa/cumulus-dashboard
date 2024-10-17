@@ -1,8 +1,8 @@
 import React, { useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 // import withQueryParams from 'react-router-query-params';
 import { get } from 'object-path';
 import {
@@ -24,38 +24,38 @@ import { errorTableColumns } from '../utils/table-config/granules';
 import linkToKibana from '../utils/kibana';
 import DatepickerRange from './Datepicker/DatepickerRange';
 import { strings } from './locale';
-import { getPersistentQueryParams } from '../utils/url-helper';
-import withRouter from '../withRouter';
+// import { getPersistentQueryParams } from '../utils/url-helper';
+// import withRouter from '../withRouter';
+import { withUrlHelper } from '../withUrlHelper';
 
-const Home = ({
-  stats,
-  executions,
-  granules,
-  rules,
-  dispatch,
-  location,
-}) => {
+const Home = ({ urlHelper }) => {
+  const dispatch = useDispatch();
+  const { location, getPersistentQueryParams } = urlHelper;
+  const {
+    // cumulusInstance,
+    // datepicker,
+    // dist,
+    executions,
+    granules,
+    rules,
+    stats,
+    // pdrs,
+  } = useSelector((state) => ({
+    // cumulusInstance: state.cumulusInstance,
+    // datepicker: state.datepicker,
+    // dist: state.dist,
+    executions: state.executions,
+    granules: state.granules,
+    rules: state.rules,
+    stats: state.stats,
+    // pdrs: state.pdrs
+  }));
+
   const generateQuery = () => ({
     error__exists: true,
     status: 'failed',
     limit: 20
   });
-
-  const selectors = useSelector((state) => ({
-    cumulusInstance: state.cumulusInstance,
-    datepicker: state.datepicker,
-    dist: state.dist,
-    executions: state.executions,
-    granules: state.granules,
-    rules: state.rules,
-    stats: state.stats,
-    pdrs: state.pdrs
-  }));
-
-  useEffect(() => {
-    dispatch()
-      .then(() => selectors());
-  }, [dispatch, selectors]);
 
   const query = useCallback(() => {
     dispatch(getStats());
@@ -189,17 +189,12 @@ const Home = ({
 };
 
 Home.propTypes = {
-  cumulusInstance: PropTypes.object,
-  datepicker: PropTypes.object,
-  dist: PropTypes.object,
-  executions: PropTypes.object,
-  granules: PropTypes.object,
-  rules: PropTypes.object,
-  stats: PropTypes.object,
-  dispatch: PropTypes.func,
-  location: PropTypes.object
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    getPersistentQueryParams: PropTypes.func,
+  }),
 };
 
 export { Home };
 
-export default withRouter(Home);
+export default withUrlHelper(Home);

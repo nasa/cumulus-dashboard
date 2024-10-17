@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// import withQueryParams from 'react-router-query-params';
-import PropTypes from 'prop-types';
-import Modal from 'react-bootstrap/Modal';
-import get from 'lodash/get';
 import { Helmet } from 'react-helmet';
+import Modal from 'react-bootstrap/Modal';
+import PropTypes from 'prop-types';
+// import get from 'lodash/get';
 import { login, setTokenState } from '../actions';
 import { window } from '../utils/browser';
 import { buildRedirectUrl } from '../utils/format';
@@ -12,46 +11,58 @@ import _config from '../config';
 import ErrorReport from './Errors/report';
 import Header from './Header/header';
 // import { historyPushWithQueryParams } from '../utils/url-helper';
-import withRouter from '../withRouter';
+import { withUrlHelper } from '../withUrlHelper';
+// import withRouter from '../withRouter';
 
 const { updateDelay, apiRoot, oauthMethod } = _config;
 
-const OAuth = ({
-  router
-}) => {
+const OAuth = ({ urlHelper }) => {
   const [token, setToken] = useState(null);
-  const dispatch = useDispatch();
-  const { location, navigate } = router; // using props in withRouter wrapper
+
+  const dispatch = useDispatch(); // using dispatch hook to call from redux store actions
+  const { location, historyPushWithQueryParams } = urlHelper; // using props in withUrlHelper wrapper
+
+  const authenticated = useSelector((state) => state.api.authenicated);
   const api = useSelector((state) => state.api);
   const apiVersion = useSelector((state) => state.apiVersion);
-  const authenticated = useSelector((state) => state.api.authenicated);
 
-  console.log('location:', location);
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const queryToken = params.get('token');
+    const stateParam = params.get('state');
+
+    if (queryToken) {
+      setToken(queryToken);
+
+      let state = {};
+      try {
+        state = JSON.parse(decodeURIComponent(stateParam));
+        console.log('Parsed state:', state);
+      } catch (error) {
+        console.error('Error parsing state:', error);
+      }
+
+      dispatch(login(queryToken));
+      dispatch(setTokenState(queryToken));
+    }
+  }, [dispatch, location]);
 
   useEffect(() => {
     if (authenticated) {
       dispatch(setTokenState(token));
       const { pathname } = location;
-      if (pathname !== '/auth' && get(window, 'location.reload')) {
+      if (pathname !== '/auth') {
         setTimeout(() => window.location.reload(), updateDelay);
-      } else if (pathname === '/auth') {
-        setTimeout(() => navigate('/'), updateDelay); // react isn't seeing this a function
+      } else {
+        setTimeout(() => historyPushWithQueryParams('/'), updateDelay);
       }
     }
-  }, [authenticated, dispatch, location, token, navigate]);
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const queryToken = params.get('token');
-    if (queryToken) {
-      setToken(queryToken);
-      dispatch(login(queryToken));
-    }
-  }, [dispatch, location]);
+  }, [authenticated, location, dispatch, token, historyPushWithQueryParams]);
 
   let button;
-  if (!authenticated && !(api && api.inflight)) {
+  if (!authenticated && !api.inflight) {
     const redirect = buildRedirectUrl(window.location);
+    console.log('Redirect URL:', redirect);
     if (oauthMethod === 'launchpad') {
       button = <div style={{ textAlign: 'center' }}><a className="button button--oauth" href={new URL(`saml/login?RelayState=${redirect}`, apiRoot).href}>Login with Launchpad</a></div>;
     } else {
@@ -78,8 +89,8 @@ const OAuth = ({
             <Modal.Header className="oauth-modal__header"></Modal.Header>
             <h1><Modal.Title id="modal__oauth-modal" className="oauth-modal__title">Welcome To Cumulus Dashboard</Modal.Title></h1>
             <Modal.Body>
-              { api && api.inflight ? <h2 className='heading--medium'>Authenticating ... </h2> : null }
-              { api && api.error ? <ErrorReport report={api.error} /> : null }
+              { api.inflight ? <h2 className='heading--medium'>Authenticating ... </h2> : null }
+              { api.error ? <ErrorReport report={api.error} /> : null }
             </Modal.Body>
             <Modal.Footer>
               { button }
@@ -92,13 +103,12 @@ const OAuth = ({
 };
 
 OAuth.propTypes = {
-  router: PropTypes.shape({
+  urlHelper: PropTypes.shape({
     location: PropTypes.object,
-    navigate: PropTypes.func,
-    params: PropTypes.object
-  })
+    historyPushWithQueryParams: PropTypes.func,
+  }),
 };
 
 export { OAuth };
 
-export default withRouter(OAuth);
+export default withUrlHelper(OAuth);

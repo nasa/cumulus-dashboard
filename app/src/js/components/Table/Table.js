@@ -1,6 +1,6 @@
-import React, { useState, useEffect, lazy, Suspense, useCallback, useRef } from 'react';
+import React, { useState, useEffect, lazy, Suspense, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 // import withQueryParams from 'react-router-query-params';
 import isNil from 'lodash/isNil';
 import isEqual from 'lodash/isEqual';
@@ -15,6 +15,8 @@ import TableHeader from '../TableHeader/table-header';
 import ListFilters from '../ListActions/ListFilters';
 import TableFilters from './TableFilters';
 
+import { withUrlHelper } from '../../withUrlHelper';
+
 const SortableTable = lazy(() => import('../SortableTable/SortableTable'));
 
 function buildSortKey(sortProps) {
@@ -28,7 +30,6 @@ const List = ({
   bulkActions,
   children,
   data,
-  dispatch,
   filterAction,
   filterClear,
   groupAction,
@@ -39,15 +40,17 @@ const List = ({
   list = {},
   onSelect,
   query = {},
-  queryParams,
+  // queryParams,
   renderRowSubComponent,
   rowId,
-  sorts,
   tableColumns,
   tableId,
   toggleColumnOptionsAction,
   useSimplePagination = false,
+  urlHelper,
 }) => {
+  const dispatch = useDispatch();
+  const sorts = useSelector((state) => state.sorts);
   const {
     data: listData,
     error: listError,
@@ -61,39 +64,63 @@ const List = ({
   const [clearSelected, setClearSelected] = useState(false);
   const [page, setPage] = useState(1);
   const sortBy = tableId ? sorts[tableId] : null;
-  const initialInfix = useRef(queryParams.search);
+  const [bulkActionMeta, setBulkActionMeta] = useState({
+    completedBulkActions: 0,
+    bulkActionError: null,
+  });
+  // const [params, setParams] = useState({});
+  const [toggleColumnOptions, setToggleColumnOptions] = useState({
+    hiddenColumns: initialHiddenColumns,
+    setHiddenColumns: noop,
+  });
+  // const searchParams = new URLSearchParams(location.search); // Using location to query params for search
+  // const initialInfix = useRef(queryParams.search);
+
+  const queryFilters = omitBy(query, isNil);
 
   const [queryConfig, setQueryConfig] = useState({
+    page: 1,
+    sort_key: buildSortKey(sortBy || [{ id: initialSortId, desc: true }]),
+    ...query,
+  });
+
+  const getQueryConfig = useCallback(() => ({
+    ...queryConfig,
+    ...queryFilters,
+    page,
+    sort_key: sortBy ? buildSortKey(sortBy) : queryConfig.sort_key,
+  }), [queryConfig, queryFilters, sortBy, page]);
+
+  useEffect(() => {
+    setQueryConfig((prevConfig) => ({
+      ...prevConfig,
+      ...query,
+    }));
+  }, [query]);
+
+  useEffect(() => {
+    if (typeof toggleColumnOptionsAction === 'function') { // replaces noop with modern JS
+      const allColumns = tableColumns.map(
+        (column) => column.id || column.accessor
+      );
+      dispatch(
+        toggleColumnOptionsAction(initialHiddenColumns, allColumns)
+      );
+    }
+  }, [dispatch, toggleColumnOptionsAction, initialHiddenColumns, tableColumns]);
+  /*  const [queryConfig, setQueryConfig] = useState({
     page: 1,
     sort_key: buildSortKey(sortBy || [{ id: initialSortId, desc: true }]),
     ...initialInfix.current ? { infix: initialInfix.current } : {},
     ...query,
   });
-  const [params, setParams] = useState({});
-  const [bulkActionMeta, setBulkActionMeta] = useState({
-    completedBulkActions: 0,
-    bulkActionError: null,
-  });
-  const [toggleColumnOptions, setToggleColumnOptions] = useState({
-    hiddenColumns: initialHiddenColumns,
-    setHiddenColumns: noop,
-  });
-  const { bulkActionError, completedBulkActions } = bulkActionMeta;
+
   const {
     limit: limitQueryParam,
     page: pageQueryParam,
     search: searchQueryParam,
     ...queryFilters
   } = queryParams;
-
-  const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
-
-  const selectors = useSelector((state) => ({ sorts: state.sorts }));
-
-  useEffect(() => {
-    dispatch()
-      .then(() => selectors());
-  }, [dispatch, selectors]);
 
   useEffect(() => {
     setQueryConfig((prevQueryConfig) => ({
@@ -136,10 +163,23 @@ const List = ({
     tableColumns,
     toggleColumnOptions.hiddenColumns,
     toggleColumnOptionsAction,
-  ]);
+  ]); */
 
   function queryNewPage(newPage) {
     setPage(newPage);
+
+    // Update URL with new page number
+    if (urlHelper && urlHelper.historyPushWithQueryParams) {
+      const currentPath = urlHelper.location.pathname;
+      const currentSearch = new URLSearchParams(urlHelper.location.search);
+      currentSearch.set('page', newPage.toString());
+      urlHelper.historyPushWithQueryParams(`${currentPath}?${currentSearch.toString()}`);
+    }
+
+    // Dispatch action to fetch new page data
+    const newQueryConfig = getQueryConfig();
+    newQueryConfig.page = newPage;
+    dispatch(action(newQueryConfig));
   }
 
   function queryNewSort(sortProps) {
@@ -162,7 +202,19 @@ const List = ({
     }
   }
 
-  function onBulkActionSuccess(results, error) {
+  const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
+
+  const { completedBulkActions } = bulkActionMeta;
+
+  function onBulkActionSuccess(results) {
+    setBulkActionMeta((prevState) => ({
+      ...prevState,
+      completedBulkActions: prevState.completedBulkActions + 1,
+      bulkActionsError: null,
+    }));
+    setClearSelected(true);
+  }
+  /*   function onBulkActionSuccess(results, error) {
     // not-elegant way to trigger a re-fresh in the timer
     setBulkActionMeta((prevBulkActionMeta) => {
       const {
@@ -175,7 +227,7 @@ const List = ({
       };
     });
     setClearSelected(true);
-  }
+  } */
 
   function onBulkActionError(error) {
     const newBulkActionError =
@@ -183,14 +235,20 @@ const List = ({
         ? `Could not process ${error.id}, ${error.error}`
         : error;
 
-    setBulkActionMeta((prevBulkActionMeta) => ({
-      ...prevBulkActionMeta,
+    setBulkActionMeta((prevState) => ({
+      ...prevState,
       bulkActionError: newBulkActionError,
     }));
     setClearSelected(true);
+
+  /*    setBulkActionMeta((prevBulkActionMeta) => ({
+      ...prevBulkActionMeta,
+      bulkActionError: newBulkActionError,
+    }));
+    setClearSelected(true); */
   }
 
-  function getQueryConfig(config = {}) {
+  /*   function getQueryConfig(config = {}) {
     // Remove empty keys so as not to mess up the query
     return omitBy(
       {
@@ -202,7 +260,7 @@ const List = ({
       },
       isNil
     );
-  }
+  } */
 
   const getToggleColumnOptions = useCallback((newOptions) => {
     setToggleColumnOptions(newOptions);
@@ -234,7 +292,7 @@ const List = ({
       <div className="list-view">
         {listInflight && <Loading />}
         {listError && <ErrorReport report={listError} truncate={true} />}
-        {bulkActionError && <ErrorReport report={bulkActionError} />}
+        {bulkActionMeta.bulkActionError && <ErrorReport report={bulkActionMeta.bulkActionError} />}
         <div className="list__wrapper">
           {filterAction && (
             <TableHeader
@@ -303,13 +361,17 @@ List.propTypes = {
   toggleColumnOptionsAction: PropTypes.func,
   tableColumns: PropTypes.array,
   onSelect: PropTypes.func,
-  queryParams: PropTypes.object,
+  // queryParams: PropTypes.object,
   renderRowSubComponent: PropTypes.func,
   tableId: PropTypes.string,
   sorts: PropTypes.object,
   useSimplePagination: PropTypes.bool,
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    historyPushWithQueryParams: PropTypes.func,
+  }),
 };
 
 export { List };
 
-export default List;
+export default withUrlHelper(List);
