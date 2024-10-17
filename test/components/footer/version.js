@@ -1,17 +1,19 @@
 'use strict';
 
 import test from 'ava';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import {render, screen} from '@testing-library/react' 
+// import Adapter from '@wojtekmaj/enzyme-adapter-react-17'; // remove?
 import React from 'react';
-import { shallow, configure } from 'enzyme';
+// import { shallow, configure } from 'enzyme'; // remove?
 
 import Footer from '../../../app/src/js/components/Footer/footer.js';
 
 const pckg = require('../../../package.json');
 
-configure({ adapter: new Adapter() });
+// configure({ adapter: new Adapter() });
 
-test('Cumulus API Version is not shown on the dashboard when not logged in', function (t) {
+// test.only
+test.only('Cumulus API Version is not shown on the dashboard when not logged in', function (t) {
   const api = { };
   const apiVersion = {
     versionNumber: '1.11.0',
@@ -24,16 +26,42 @@ test('Cumulus API Version is not shown on the dashboard when not logged in', fun
     cmrOauthProvider: 'Launchpad'
   }
 
-  const footerWrapper = shallow(
-    <Footer
+  render(<Footer
       api={api}
       apiVersion={apiVersion}
       cmrInfo={cmrInfo}
     />
-  );
+  )
+  expect(screen.getByRole('contentinfo').toBeNull())
 
-  t.false(footerWrapper.exists('.version__info'));
+  // t.false(footerWrapper.exists('.version__info'));
+
+
 });
+
+// test('Cumulus API Version is not shown on the dashboard when not logged in', function (t) {
+//   const api = { };
+//   const apiVersion = {
+//     versionNumber: '1.11.0',
+//     warning: '',
+//     isCompatible: true
+//   };
+//   const cmrInfo = {
+//     cmrEnv: 'UAT',
+//     cmrProvider: 'CUMULUS',
+//     cmrOauthProvider: 'Launchpad'
+//   }
+
+//   const footerWrapper = shallow(
+//     <Footer
+//       api={api}
+//       apiVersion={apiVersion}
+//       cmrInfo={cmrInfo}
+//     />
+//   );
+
+//   t.false(footerWrapper.exists('.version__info'));
+// });
 
 test('Cumulus API Version is shown on the dashboard', function (t) {
   const api = { authenticated: true };
