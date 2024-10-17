@@ -1,7 +1,8 @@
-/* eslint-disable import/no-cycle */
 import get from 'lodash/get';
 import queryString from 'query-string';
-import { history } from '../store/configureStore';
+import { createBrowserHistory } from 'history'; // history is temporary to convert to React Router v6
+
+const history = createBrowserHistory();
 
 /**
  * Retrieve initial value for component based on react-router's location.
