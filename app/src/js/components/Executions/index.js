@@ -1,7 +1,7 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
 import { Route, Routes } from 'react-router-dom';
-// import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { Helmet } from 'react-helmet';
 // import withQueryParams from 'react-router-query-params';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
@@ -14,17 +14,14 @@ import ExecutionsList from './executions-list';
 import { getCount, listExecutions } from '../../actions';
 import { strings } from '../locale';
 // import { filterQueryParams } from '../../utils/url-helper';
-import withRouter from '../../withRouter';
-import useQueryParams from '../../useQueryParams';
+import { withUrlHelper } from '../../withUrlHelper';
 
-const Executions = ({
-  dispatch,
-  location,
-  queryParams
-}) => {
+const Executions = ({ urlHelper }) => {
+  const dispatch = useDispatch();
+  const { queryParams, filterQueryParams, location } = urlHelper;
+  const filteredQueryParams = filterQueryParams(queryParams);
   const { pathname } = location;
   const showDatePicker = pathname === '/executions';
-  const filteredQueryParams = useQueryParams(queryParams);
 
   function query () {
     dispatch(getCount({
@@ -50,9 +47,11 @@ const Executions = ({
       }
       <div className='page__content'>
         <div className='wrapper__sidebar'>
-          <Route path='/executions/execution/:executionArn' element={<Sidebar />}></Route>
-          <Route path='/executions/executions-list/:granule' element={<Sidebar />}></Route>
-          <Route exact path='/executions' element={<Sidebar />}></Route>
+          <Routes>
+            <Route path='/executions/execution/:executionArn' element={<Sidebar />}></Route>
+            <Route path='/executions/executions-list/:granule' element={<Sidebar />}></Route>
+            <Route exact path='/executions' element={<Sidebar />}></Route>
+          </Routes>
           <div className='page__content--shortened'>
             <Routes>
               <Route exact path='/executions' render={(props) => <ExecutionOverview queryParams={filteredQueryParams} {...props} />}></Route>
@@ -69,9 +68,11 @@ const Executions = ({
 };
 
 Executions.propTypes = {
-  dispatch: PropTypes.func,
-  location: PropTypes.object,
-  queryParams: PropTypes.object
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    filterQueryParams: PropTypes.func,
+    queryParams: PropTypes.object
+  }),
 };
 
-export default withRouter(Executions);
+export default withUrlHelper(Executions);

@@ -1,8 +1,8 @@
 import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Route, Routes } from 'react-router-dom';
 // import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import { strings } from '../locale';
@@ -13,18 +13,14 @@ import ReconciliationReport from './reconciliation-report';
 import BackupReportGranuleDetails from './backup-report-granule-details';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 // import { filterQueryParams } from '../../utils/url-helper';
-import withRouter from '../../withRouter';
-import useQueryParams from '../../useQueryParams';
+import { withUrlHelper } from '../../withUrlHelper';
 
-const ReconciliationReports = ({
-  dispatch,
-  location,
-  params,
-  queryParams,
-}) => {
+const ReconciliationReports = ({ urlHelper }) => {
+  const dispatch = useDispatch();
+  const { queryParams, filterQueryParams, location, params } = urlHelper;
+  const filteredQueryParams = filterQueryParams(queryParams);
   const { pathname } = location;
   const showSidebar = pathname !== '/reconciliation-reports/create';
-  const filteredQueryParams = useQueryParams(queryParams);
 
   function query() {
     dispatch(listReconciliationReports(filteredQueryParams));
@@ -64,12 +60,14 @@ const ReconciliationReports = ({
 };
 
 ReconciliationReports.propTypes = {
-  dispatch: PropTypes.func,
-  location: PropTypes.object,
-  params: PropTypes.object,
-  queryParams: PropTypes.object,
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    filterQueryParams: PropTypes.func,
+    params: PropTypes.object,
+    queryParams: PropTypes.object
+  }),
 };
 
 ReconciliationReports.displayName = 'Reconciliation Reports';
 
-export default withRouter(connect()(ReconciliationReports));
+export default withUrlHelper(ReconciliationReports);

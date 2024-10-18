@@ -1,6 +1,6 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
 import { Route, Routes } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 // import withQueryParams from 'react-router-query-params';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
@@ -9,17 +9,14 @@ import EditProvider from './edit';
 import ProvidersOverview from './overview';
 import ProviderOverview from './provider';
 // import { filterQueryParams } from '../../utils/url-helper';
-import withRouter from '../../withRouter';
-import useQueryParams from '../../useQueryParams';
+import { withUrlHelper } from '../../withUrlHelper';
 
-const Providers = ({
-  location,
-  params,
-  queryParams,
-}) => {
+const Providers = ({ urlHelper }) => {
+  const { queryParams, filterQueryParams, location, params } = urlHelper;
   const { pathname } = location;
   const showSidebar = pathname !== '/providers/add';
-  const filteredQueryParams = useQueryParams(queryParams);
+  const filteredQueryParams = filterQueryParams(queryParams);
+
   return (
     <div className="page__providers">
       <Helmet>
@@ -64,9 +61,12 @@ const Providers = ({
 };
 
 Providers.propTypes = {
-  location: PropTypes.object,
-  params: PropTypes.object,
-  queryParams: PropTypes.object,
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    filterQueryParams: PropTypes.func,
+    params: PropTypes.object,
+    queryParams: PropTypes.object
+  }),
 };
 
-export default withRouter(Providers);
+export default withUrlHelper(Providers);

@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
-import { useSelector } from 'react-redux';
-import { Route, Routes } from 'react-router-dom';
 // import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import { getCount, listPdrs } from '../../actions';
@@ -13,15 +13,16 @@ import PdrOverview from './overview';
 import PdrList from './list';
 import { strings } from '../locale';
 // import { filterQueryParams } from '../../utils/url-helper';
-import withRouter from '../../withRouter';
-import useQueryParams from '../../useQueryParams';
+import { withUrlHelper } from '../../withUrlHelper';
 
-const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
+const Pdrs = ({ urlHelper }) => {
+  const dispatch = useDispatch();
+  const { queryParams, filterQueryParams, location, params } = urlHelper;
+  const filteredQueryParams = filterQueryParams(queryParams);
   const { pathname } = location;
-  const count = get(stats, 'count.sidebar.pdrs.count');
-  const filteredQueryParams = useQueryParams(queryParams);
 
-  const selectors = useSelector((state) => ({ stats: state.stats }));
+  const stats = useSelector((state) => ({ stats: state.stats }));
+  const count = get(stats, 'count.sidebar.pdrs.count');
 
   function query() {
     dispatch(listPdrs(filteredQueryParams));
@@ -35,7 +36,7 @@ const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
         sidebarCount: true
       })
     );
-  }, [dispatch, selectors]);
+  }, [dispatch]);
 
   return (
     <div className="page__pdrs">
@@ -76,11 +77,12 @@ const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
 };
 
 Pdrs.propTypes = {
-  dispatch: PropTypes.func,
-  location: PropTypes.object,
-  params: PropTypes.object,
-  queryParams: PropTypes.object,
-  stats: PropTypes.object,
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    filterQueryParams: PropTypes.func,
+    params: PropTypes.object,
+    queryParams: PropTypes.object
+  }),
 };
 
-export default withRouter(Pdrs);
+export default withUrlHelper(Pdrs);

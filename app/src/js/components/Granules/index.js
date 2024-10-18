@@ -1,9 +1,9 @@
 import React, { useEffect, lazy, Suspense } from 'react';
-import PropTypes from 'prop-types';
-import { Helmet } from 'react-helmet';
-import { get } from 'object-path';
-import { useSelector } from 'react-redux';
 import { Navigate, Route, Routes } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Helmet } from 'react-helmet';
+import PropTypes from 'prop-types';
+import { get } from 'object-path';
 // import withQueryParams from 'react-router-query-params';
 import { getCount, listGranules } from '../../actions';
 import { strings } from '../locale';
@@ -14,24 +14,26 @@ import ReconciliationReportList from '../ReconciliationReports/list';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 // import { filterQueryParams } from '../../utils/url-helper';
 import Loading from '../LoadingIndicator/loading-indicator';
-import withRouter from '../../withRouter';
-import useQueryParams from '../../useQueryParams';
+import { withUrlHelper } from '../../withUrlHelper';
 
 const Sidebar = lazy(() => import('../Sidebar/sidebar'));
 
-const Granules = ({ dispatch, location, queryParams, stats }) => {
+const Granules = ({ urlHelper }) => {
+  const dispatch = useDispatch();
+  const { queryParams, filterQueryParams, location } = urlHelper;
+  const filteredQueryParams = filterQueryParams(queryParams);
   const { pathname } = location;
+
+  const stats = useSelector((state) => ({ stats: state.stats })); // sidebar routing state for granule count
+
   const granulesCount = get(stats, 'count.sidebar.granules.count') || [];
   const reportCount =
     get(stats, 'count.sidebar.reconciliationReports.count') || [];
   const count = [...granulesCount, ...reportCount];
-  const filteredQueryParams = useQueryParams(queryParams);
 
   function query() {
     dispatch(listGranules(filteredQueryParams));
   }
-
-  const selectors = useSelector((state) => ({ stats: state.stats })); // sidebar routing state for granule count
 
   useEffect(() => {
     dispatch(
@@ -41,7 +43,7 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
         sidebarCount: true,
       })
     );
-  }, [dispatch, selectors]);
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(
@@ -109,10 +111,11 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
 };
 
 Granules.propTypes = {
-  location: PropTypes.object,
-  dispatch: PropTypes.func,
-  queryParams: PropTypes.object,
-  stats: PropTypes.object,
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    filterQueryParams: PropTypes.func,
+    queryParams: PropTypes.object
+  }),
 };
 
-export default withRouter(Granules);
+export default withUrlHelper(Granules);

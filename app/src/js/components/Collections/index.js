@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
-import { Navigate, Route, Routes } from 'react-router-dom';
 // import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import { strings } from '../locale';
@@ -16,25 +16,25 @@ import CollectionLogs from './logs';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import { listCollections } from '../../actions';
 // import { filterQueryParams } from '../../utils/url-helper';
-import withRouter from '../../withRouter';
-import useQueryParams from '../../useQueryParams';
+import { withUrlHelper } from '../../withUrlHelper';
 
-const Collections = ({ dispatch, location, logs, queryParams }) => {
+const Collections = ({ urlHelper }) => {
+  const dispatch = useDispatch();
+  const { queryParams, filterQueryParams, location } = urlHelper;
+  const filteredQueryParams = filterQueryParams(queryParams);
   const { pathname } = location;
   const existingCollection = pathname !== '/collections/add';
-  const filteredQueryParams = useQueryParams(queryParams);
+
+  const logs = useSelector((state) => ({ logs: state.logs }));
   const { metricsNotConfigured } = logs;
 
   function query() {
     dispatch(listCollections(filteredQueryParams));
   }
 
-  const selectors = useSelector((state) => ({ logs: state.logs }));
-
   useEffect(() => {
-    dispatch()
-      .then(() => selectors());
-  }, [dispatch, selectors]);
+    dispatch(listCollections(filteredQueryParams));
+  }, [dispatch, filteredQueryParams]);
 
   return (
     <div className='page__collections'>
@@ -143,10 +143,11 @@ const Collections = ({ dispatch, location, logs, queryParams }) => {
 Collections.displayName = strings.collection;
 
 Collections.propTypes = {
-  dispatch: PropTypes.func,
-  location: PropTypes.object,
-  logs: PropTypes.object,
-  queryParams: PropTypes.object,
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    filterQueryParams: PropTypes.func,
+    queryParams: PropTypes.object
+  }),
 };
 
-export default withRouter(Collections);
+export default withUrlHelper(Collections);

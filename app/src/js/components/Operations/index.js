@@ -1,7 +1,7 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import { connect } from 'react-redux';
 // import withQueryParams from 'react-router-query-params';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
@@ -10,12 +10,13 @@ import OperationOverview from './overview';
 import { listOperations } from '../../actions';
 import { strings } from '../locale';
 // import { filterQueryParams } from '../../utils/url-helper';
-import withRouter from '../../withRouter';
-import useQueryParams from '../../useQueryParams';
+import { withUrlHelper } from '../../withUrlHelper';
 
-const Operations = ({ dispatch, location, params, queryParams }) => {
+const Operations = ({ urlHelper }) => {
+  const dispatch = useDispatch();
+  const { queryParams, filterQueryParams, location, params } = urlHelper;
+  const filteredQueryParams = filterQueryParams(queryParams);
   const { pathname } = location;
-  const filteredQueryParams = useQueryParams(queryParams);
 
   function query() {
     dispatch(listOperations(filteredQueryParams));
@@ -31,16 +32,18 @@ const Operations = ({ dispatch, location, params, queryParams }) => {
         <div className='wrapper__sidebar'>
           <Sidebar currentPath={pathname} params={params} />
           <div className='page__content--shortened'>
-            <Route
-              exact
-              path='/operations'
-              render={(props) => (
-                <OperationOverview
-                  {...props}
-                  queryParams={filteredQueryParams}
-                />
-              )}
-            />
+            <Routes>
+              <Route
+                exact
+                path='/operations'
+                render={(props) => (
+                  <OperationOverview
+                    {...props}
+                    queryParams={filteredQueryParams}
+                  />
+                )}
+              />
+            </Routes>
           </div>
         </div>
       </div>
@@ -49,10 +52,12 @@ const Operations = ({ dispatch, location, params, queryParams }) => {
 };
 
 Operations.propTypes = {
-  dispatch: PropTypes.func,
-  location: PropTypes.object,
-  params: PropTypes.object,
-  queryParams: PropTypes.object,
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    filterQueryParams: PropTypes.func,
+    params: PropTypes.object,
+    queryParams: PropTypes.object
+  }),
 };
 
-export default withRouter((connect()(Operations)));
+export default withUrlHelper(Operations);

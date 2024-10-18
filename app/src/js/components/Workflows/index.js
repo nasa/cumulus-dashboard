@@ -1,21 +1,20 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Helmet } from 'react-helmet';
 import { Route, Routes } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
+import PropTypes from 'prop-types';
 // import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import WorkflowsOverview from './overview';
 import Workflow from './workflow';
+import { withUrlHelper } from '../../withUrlHelper';
 // import { filterQueryParams } from '../../utils/url-helper';
-import withRouter from '../../withRouter';
-import useQueryParams from '../../useQueryParams';
+// import withRouter from '../../withRouter';
+// import useQueryParams from '../../useQueryParams';
 
-const Workflows = ({
-  location,
-  params,
-  queryParams,
-}) => {
-  const filteredQueryParams = useQueryParams(queryParams);
+const Workflows = ({ urlHelper }) => {
+  const { queryParams, filterQueryParams, location, params } = urlHelper;
+  const filteredQueryParams = filterQueryParams(queryParams);
+
   return (
     <div className="page__workflows">
       <Helmet>
@@ -51,9 +50,12 @@ const Workflows = ({
 };
 
 Workflows.propTypes = {
-  location: PropTypes.object,
-  params: PropTypes.object,
-  queryParams: PropTypes.object,
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    filterQueryParams: PropTypes.func,
+    params: PropTypes.object,
+    queryParams: PropTypes.object
+  }),
 };
 
-export default withRouter(Workflows);
+export default withUrlHelper(Workflows);
