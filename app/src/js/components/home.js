@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import { get } from 'object-path';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import {
   getCount,
   getCumulusInstanceMetadata,
@@ -22,6 +24,7 @@ import { pageSection, sectionHeader } from './Section/section';
 import List from './Table/Table';
 import { errorTableColumns } from '../utils/table-config/granules';
 import linkToKibana from '../utils/kibana';
+import Tooltip from './Tooltip/tooltip';
 import DatepickerRange from './Datepicker/DatepickerRange';
 import { strings } from './locale';
 import { getPersistentQueryParams } from '../utils/url-helper';
@@ -41,17 +44,16 @@ const Home = ({
   });
 
   const query = useCallback(() => {
+    const defaultTimeRange = {
+      timestamp__from: Date.now() - (24 * 60 * 60 * 1000),
+      timestamp__to: Date.now()
+    };
+
     dispatch(getStats());
     dispatch(getCount({ type: 'granules', field: 'status' }));
-    dispatch(listExecutions({
-      timestamp__from: Date.now() - (24 * 60 * 60 * 1000),
-      timestamp__to: Date.now()
-    }));
+    dispatch(listExecutions(defaultTimeRange));
     dispatch(listGranules(generateQuery()));
-    dispatch(listRules({
-      timestamp__from: Date.now() - (24 * 60 * 60 * 1000),
-      timestamp__to: Date.now()
-    }));
+    dispatch(listRules(defaultTimeRange));
   }, [dispatch]);
 
   useEffect(() => {
@@ -148,7 +150,27 @@ const Home = ({
             </div>
           )}
 
-          {sectionHeader('Metrics Overview (from the past 24 hours)', 'metricsOverview')}
+          <section className='page__section' id={'metricsOverview'}>
+          <div className="row">
+          <div className={'heading__wrapper--border'}>
+          <h2 style={{ display: 'inline-block', marginRight: '10px' }} className={'heading--large'}>
+            {'Metrics Overview (from the past 24 hours)'}
+          </h2>
+          <Tooltip
+                className="tooltip--light"
+                id="overview-default-tooltip"
+                placement={'right'}
+                target={
+                  <FontAwesomeIcon
+                    className="button__icon--animation"
+                    icon={faInfoCircle}
+                  />
+                }
+                tip="The Default Range for the overview is the last 24 hours"
+              />
+          </div>
+          </div>
+          </section>
           {buttonListSection(overview, 'Updates')}
 
           {sectionHeader(
