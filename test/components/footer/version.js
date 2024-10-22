@@ -1,16 +1,12 @@
 'use strict';
 
-
 import test from 'ava';
 import {render} from '@testing-library/react'
 import React from 'react';
 
-
 import Footer from '../../../app/src/js/components/Footer/footer.js';
 
-
 const pckg = require('../../../package.json');
-
 
 test('Cumulus API Version is not shown on the dashboard when not logged in', function (t) {
  const api = { };
@@ -25,14 +21,12 @@ test('Cumulus API Version is not shown on the dashboard when not logged in', fun
    cmrOauthProvider: 'Launchpad'
  }
 
-
  const { container } = render(<Footer
      api={api}
      apiVersion={apiVersion}
      cmrInfo={cmrInfo}
    />
  )
-
 
  const versionInfo = container.querySelector('.version__info');
  t.falsy(versionInfo);
@@ -52,7 +46,6 @@ test('Cumulus API Version is shown on the dashboard', function (t) {
     cmrOauthProvider: 'Launchpad'
   }
 
-
   const { container } = render(
     <Footer
       api={api}
@@ -61,9 +54,7 @@ test('Cumulus API Version is shown on the dashboard', function (t) {
     />
   );
 
-
   const apiVersionNumber = container.querySelector('.api__version').textContent;
-
 
   t.is(`API v${apiVersion.versionNumber}`, apiVersionNumber);
   const hasApiWarning = container.querySelector('.api__warning');
@@ -84,7 +75,6 @@ test('Warning is shown when Cumulus API Version is not compatible with dashboard
     cmrOauthProvider: 'Launchpad'
   }
 
-
   const { container } = render(
     <Footer
       api={api}
@@ -93,13 +83,11 @@ test('Warning is shown when Cumulus API Version is not compatible with dashboard
     />
   );
 
-
   const apiWarning = container.querySelector('.api__warning');
   const hasApiWarning = apiWarning.classList.contains('api__warning');
   t.true(hasApiWarning);
   t.is(`Warning: ${apiVersion.warning}`, apiWarning.textContent);
 });
-
 
 test('Dashboard Version is shown in the footer', function (t) {
   const api = { authenticated: true };
@@ -113,7 +101,6 @@ test('Dashboard Version is shown in the footer', function (t) {
   }
   const dashboardVersion = pckg.version;
 
-
   const { container } = render(
     <Footer
       api={api}
@@ -122,11 +109,9 @@ test('Dashboard Version is shown in the footer', function (t) {
     />
   );
 
-
   const dashboardVersionNumber = container.querySelector('.dashboard__version');
   t.is(`Dashboard v${dashboardVersion}`, dashboardVersionNumber.textContent);
 });
-
 
 test('FOIA, Privacy, and Feedback links shown in the footer', function (t) {
  const api = { authenticated: true };
@@ -139,7 +124,6 @@ test('FOIA, Privacy, and Feedback links shown in the footer', function (t) {
    cmrOauthProvider: 'Launchpad'
  }
 
-
  const { container } = render(
    <Footer
      api={api}
@@ -148,13 +132,10 @@ test('FOIA, Privacy, and Feedback links shown in the footer', function (t) {
    />
  );
 
-
  // const footerLeftSideLinks = footerWrapper.find('[className="footer__links"] div');
  const footerLeftSideLinks = container.querySelector('.footer__links');
 
-
  t.truthy(footerLeftSideLinks); // footer links on left exist
-
 
  t.is(footerLeftSideLinks.querySelectorAll('div').length, 5); // five divs
  t.is(footerLeftSideLinks.querySelectorAll('div')[0].textContent, 'NASA'); // NASA text
@@ -169,7 +150,6 @@ test('FOIA, Privacy, and Feedback links shown in the footer', function (t) {
  t.is(footerLeftSideLinks.querySelectorAll('a')[3].getAttribute('href'), 'https://www.nasa.gov/accessibility/'); // fourth link href
 });
 
-
 test('Open Cumulus GitHub Docs link shown in the footer', function (t) {
   const api = { authenticated: true };
   const apiVersion = {
@@ -181,7 +161,6 @@ test('Open Cumulus GitHub Docs link shown in the footer', function (t) {
     cmrOauthProvider: 'Launchpad'
   }
 
-
   const { container } = render(
     <Footer
       api={api}
@@ -190,10 +169,8 @@ test('Open Cumulus GitHub Docs link shown in the footer', function (t) {
     />
   );
 
-
   //const footerLeftSideLinks = footerWrapper.find('[className="footer__opensource"] div');
   const footerLeftSideLinks = container.querySelector('.footer__opensource');
-
 
   t.truthy(container.querySelectorAll('.footer__opensource')); // footer links on left exist
   t.is(footerLeftSideLinks.querySelectorAll('div').length, 1); // 1 divs
