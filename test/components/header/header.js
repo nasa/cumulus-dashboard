@@ -22,7 +22,7 @@ test('Header contains correct number of nav items and excludes PDRs and Logs', f
     search: {}
   };
 
-  const header = render(
+  const { header } = render(
     <Header
       dispatch={dispatch}
       api={api}
@@ -37,32 +37,6 @@ test('Header contains correct number of nav items and excludes PDRs and Logs', f
   t.is(navigation.contains('Logs'), false);
 });
 
-// test('Cumulus API Version is not shown on the dashboard when not logged in', function (t) {
-//   const api = { };
-//   const apiVersion = {
-//     versionNumber: '1.11.0',
-//     warning: '',
-//     isCompatible: true
-//   };
-//   const cmrInfo = {
-//     cmrEnv: 'UAT',
-//     cmrProvider: 'CUMULUS',
-//     cmrOauthProvider: 'Launchpad'
-//   }
- 
- 
-//   const { container } = render(<Footer
-//       api={api}
-//       apiVersion={apiVersion}
-//       cmrInfo={cmrInfo}
-//     />
-//   )
- 
- 
-//   const versionInfo = container.querySelector('.version__info');
-//   t.falsy(versionInfo);
-//  });
-
 test('Logo path is "/cumulus-logo.png" when BUCKET is not specified', function (t) {
   const dispatch = () => {};
   const api = {
@@ -75,7 +49,7 @@ test('Logo path is "/cumulus-logo.png" when BUCKET is not specified', function (
     search: {}
   };
 
-  const header = render(
+  const { header } = render(
     <Header
       dispatch={dispatch}
       api={api}
