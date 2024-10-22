@@ -1,83 +1,39 @@
 import React, { useState, useEffect, createRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
-// import { withRouter } from 'react-router-dom';
 // import withQueryParams from 'react-router-query-params';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { renderTypeaheadInput, renderTypeaheadMenu } from '../../utils/typeahead-helpers';
-import withRouter from '../../withRouter';
 
 const Dropdown = ({
   action,
   clear,
   clearButton = true,
-  dispatch,
   getOptions,
   inputProps,
   label,
   onChange,
   options = [],
   paramKey,
-  queryParams,
+  // queryParams,
   selectedValues = [],
-  setQueryParams,
+  // setQueryParams,
   clearOnClick,
 }) => {
+  const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
   const typeaheadRef = createRef();
-  const [initialQueryParams] = useState(queryParams);
+  // const [initialQueryParams] = useState(queryParams);
   const [selected, setSelected] = useState(selectedValues);
   const allowNew = paramKey === 'limit' || paramKey === 'page';
 
-  const selectors = useSelector((state) => ({
-    dispatch: state.dispatch,
-    selected: state.selected,
-    queryParams: state.queryParams
-  }));
-
-  function getOptionFromParam(paramOptions, paramValue) {
-    return paramOptions.filter((item) => item.id === paramValue);
-  }
-
-  function updateSelection(selections, value) {
-    dispatch(action({ key: paramKey, value }));
-    setSelected(selections);
-    setQueryParams({ [paramKey]: value });
-  }
-
-  function handleChange(selections) {
-    const item = selections[0];
-    const { customOption, id, label: selectedLabel } = item || {};
-    const value = customOption ? selectedLabel : id;
-    const updateSelectionCallback = () => updateSelection(selections, value);
-    if (typeof onChange === 'function') {
-      onChange({ selections, updateSelection: updateSelectionCallback });
-    } else {
-      updateSelectionCallback();
-    }
-  }
-
-  function handleKeyDown(e) {
-    if (!allowNew) return;
-    if (e.keyCode === 13) {
-      const { value } = e.target;
-      const selectedValue = [
-        {
-          id: value,
-          label: value,
-        },
-      ];
-      const updateSelectionCallback = () => updateSelection(selectedValue, value);
-      if (typeof onChange === 'function') {
-        onChange({ selections: selectedValue, updateSelection: updateSelectionCallback, value });
-      } else {
-        updateSelectionCallback();
-      }
-      typeaheadRef.current.hideMenu();
-    }
-  }
+  useEffect(() => {
+    if (getOptions) dispatch(getOptions());
+  }, [dispatch, getOptions]);
 
   useEffect(() => {
-    const paramValue = initialQueryParams[paramKey];
+    const paramValue = searchParams.get(paramKey);
     if (paramValue) {
       let selectedValue = getOptionFromParam(options, paramValue);
       if (allowNew && selectedValue.length === 0) {
@@ -102,32 +58,72 @@ const Dropdown = ({
       if (typeof clear === 'function') dispatch(clear(paramKey));
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [action, allowNew, clear, dispatch, JSON.stringify(options), paramKey, JSON.stringify(initialQueryParams)]);
+  }, [action, allowNew, clear, dispatch, JSON.stringify(options), paramKey, JSON.stringify(searchParams)]);
 
   useEffect(() => {
     if (selectedValues.length > 0) {
       const { id: value } = selectedValues[0];
       dispatch(action({ key: paramKey, value }));
       setSelected(selectedValues);
-      setQueryParams({ [paramKey]: value });
+      setSearchParams((params) => {
+        params.set(paramKey, value);
+        return params;
+      });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [action, dispatch, paramKey, JSON.stringify(selectedValues), setQueryParams]);
+  }, [action, dispatch, paramKey, JSON.stringify(selectedValues), setSearchParams]);
 
-  useEffect(() => {
-    if (getOptions) dispatch(getOptions());
-  }, [dispatch, getOptions]);
+  function getOptionFromParam(paramOptions, paramValue) {
+    return paramOptions.filter((item) => item.id === paramValue);
+  }
+
+  function updateSelection(selections, value) {
+    dispatch(action({ key: paramKey, value }));
+    setSelected(selections);
+    setSearchParams((params) => {
+      params.set(paramKey, value);
+      return params;
+    });
+  }
+
+  function handleChange(selections) {
+    const item = selections[0];
+    const { customOption, id, label: selectedLabel } = item || {};
+    const value = customOption ? selectedLabel : id;
+    const updateSelectionCallback = () => updateSelection(selections, value);
+    if (typeof onChange === 'function') {
+      onChange({ selections, updateSelection: updateSelectionCallback });
+    } else {
+      updateSelectionCallback();
+    }
+  }
+
+  // Keyboard and mouse interactions
+  function handleKeyDown(e) {
+    if (!allowNew) return;
+    if (e.keyCode === 13) {
+      const { value } = e.target;
+      const selectedValue = [
+        {
+          id: value,
+          label: value,
+        },
+      ];
+      const updateSelectionCallback = () => updateSelection(selectedValue, value);
+      if (typeof onChange === 'function') {
+        onChange({ selections: selectedValue, updateSelection: updateSelectionCallback, value });
+      } else {
+        updateSelectionCallback();
+      }
+      typeaheadRef.current.hideMenu();
+    }
+  }
 
   function handleFocus(e) {
     if (clearOnClick) {
       setSelected([]);
     }
   }
-
-  useEffect(() => {
-    dispatch()
-      .then(() => selectors());
-  }, [dispatch, selectors]);
 
   return (
     <div className={`list__filters--item form-group__element filter-${paramKey.includes('.') ? paramKey.split('.')[0] : paramKey}`}>
@@ -154,17 +150,17 @@ Dropdown.propTypes = {
   action: PropTypes.func,
   clear: PropTypes.func,
   clearButton: PropTypes.bool,
-  dispatch: PropTypes.func,
+  // dispatch: PropTypes.func,
   getOptions: PropTypes.func,
   inputProps: PropTypes.object,
   label: PropTypes.any,
   onChange: PropTypes.func,
   options: PropTypes.array,
   paramKey: PropTypes.string,
-  queryParams: PropTypes.object,
+  // queryParams: PropTypes.object,
   selectedValues: PropTypes.array,
-  setQueryParams: PropTypes.func,
+  // setQueryParams: PropTypes.func,
   clearOnClick: PropTypes.bool,
 };
 
-export default withRouter(Dropdown);
+export default Dropdown;

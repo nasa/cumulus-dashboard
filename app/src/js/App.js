@@ -15,7 +15,7 @@ import OAuth from './components/oauth';
 
 // Components
 import Home from './components/home';
-import Main from './main'; // Outlet calls to Main component
+import Main from './main';
 import Collections from './components/Collections';
 import Granules from './components/Granules';
 import Pdrs from './components/Pdr';
@@ -58,13 +58,13 @@ const App = () => {
               <Route element={<AuthenicatedRoute />}>
                 <Route path={'/'} index element={<Home />} />
                 <Route path={'/collections/*'} element={<Collections />} />
-                <Route path={'/granules/*'} element={<Granules />} />
-                <Route path={'/pdrs/*'} element={<Pdrs />} />
                 <Route path={'/providers/*'} element={<Providers />} />
+                <Route path={'/granules/*'} element={<Granules />} />
                 <Route path={'/workflows/*'} element={<Workflows />} />
                 <Route path={'/executions/*'} element={<Executions />} />
                 <Route path={'/operations/*'} element={<Operations />} />
                 <Route path={'/rules/*'} element={<Rules />} />
+                <Route path={'/pdrs/*'} element={<Pdrs />} />
                 <Route path={'/reconciliation-reports/*'} element={<ReconciliationReports />}/>
               </Route>
               <Route path={'/404'} element={<NotFound />} />

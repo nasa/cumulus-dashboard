@@ -25,7 +25,8 @@ const Collections = ({ urlHelper }) => {
   const { pathname } = location;
   const existingCollection = pathname !== '/collections/add';
 
-  const logs = useSelector((state) => ({ logs: state.logs }));
+  // const collections = useSelector((state) => state.collections);
+  const logs = useSelector((state) => state.logs);
   const { metricsNotConfigured } = logs;
 
   function query() {
@@ -44,93 +45,73 @@ const Collections = ({ urlHelper }) => {
           <title> Cumulus Collections </title>
         </Helmet>
         <div className='wrapper__sidebar'>
-          <Route path='/collections/all' element={<Sidebar />} />
-          <Route path='/collections/edit/:name/:version' element={<Sidebar />} />
-          <Route
-            path='/collections/collection/:name/:version'
-            element={<Sidebar />}
-          />
+          <Routes>
+            <Route path='/collections/all' element={<Sidebar />} />
+            <Route path='/collections/edit/:name/:version' element={<Sidebar />} />
+            <Route
+              path='/collections/collection/:name/:version'
+              element={<Sidebar />}
+            />
+          </Routes>
           <div
             className={
               existingCollection ? 'page__content--shortened' : 'page__content'
             }
           >
             <Routes>
+              <Route index element={<Navigate to='all' replace />} />
               <Route
-                exact
-                path='/collections'
-                render={() => (
-                  <Navigate
-                    to={{
-                      pathname: '/collections/all',
-                      search: location.search,
-                    }}
-                  />
-                )}
-              ></Route>
-              <Route
-                path='/collections/all'
-                render={(props) => (
+                path='all'
+                element={
                   <CollectionList
                     queryParams={filteredQueryParams}
-                    {...props}
                   />
-                )}
-              ></Route>
-              <Route path='/collections/add' element={<AddCollection />}></Route>
+                }
+              />
+              <Route path='add' element={<AddCollection />} />
               <Route
-                exact
-                path='/collections/edit/:name/:version'
+                path='edit/:name/:version'
                 element={<EditCollection />}
-              ></Route>
+              />
               <Route
-                exact
-                path='/collections/collection/:name/:version'
-                render={(props) => (
+                path='collection/:name/:version/*'
+                element={
                   <CollectionOverview
                     queryParams={filteredQueryParams}
-                    {...props}
                   />
-                )}
-              ></Route>
+                }
+              />
               <Route
-                exact
-                path='/collections/collection/:name/:version/granules'
-                render={(props) => (
+                path='collection/:name/:version/granules'
+                element={
                   <CollectionGranules
                     queryParams={filteredQueryParams}
-                    {...props}
                   />
-                )}
-              ></Route>
+                }
+              />
               <Route
-                exact
-                path='/collections/collection/:name/:version/granules/:status'
-                render={(props) => (
+                path='collection/:name/:version/granules/:status'
+                element={
                   <CollectionGranules
                     queryParams={filteredQueryParams}
-                    {...props}
                   />
-                )}
-              ></Route>
+                }
+              />
               <Route
-                exact
-                path='/collections/collection/:name/:version/granules/running'
-                render={() => (
-                  <Navigate to='/collections/collection/:name/:version/granules/processing' />
-                )}
-              ></Route>
+                path='collection/:name/:version/granules/running'
+                element={
+                  <Navigate to='collection/:name/:version/granules/processing' />
+                }
+              />
               <Route
-                exact
-                path='/collections/collection/:name/:version/definition'
+                path='collection/:name/:version/definition'
                 element={<CollectionIngest />}
               />
               {!metricsNotConfigured && (
                 <Route
-                  exact
-                  path='/collections/collection/:name/:version/logs'
+                  path='collection/:name/:version/logs'
                   element={<CollectionLogs />}
-                ></Route>
+                />
               )}
             </Routes>
           </div>

@@ -1,16 +1,16 @@
-import React, { createRef, useCallback, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useCallback, useEffect, useRef } from 'react';
+// import { withRouter } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 // import withQueryParams from 'react-router-query-params';
-// import { withRouter } from 'react-router-dom';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { get } from 'object-path';
-import { getInitialValueFromLocation } from '../../utils/url-helper';
+// import { getInitialValueFromLocation } from '../../utils/url-helper';
 import {
   renderSearchInput,
   renderSearchMenu,
 } from '../../utils/typeahead-helpers';
-import withRouter from '../../withRouter';
+import { withUrlHelper } from '../../withUrlHelper';
 
 /**
  * Search
@@ -24,42 +24,34 @@ import withRouter from '../../withRouter';
 const Search = ({
   action,
   clear,
-  dispatch,
+  // dispatch,
   inputProps = {
     className: 'search',
   },
   label,
   labelKey,
-  location,
+  // location,
   options,
   paramKey = 'search',
   placeholder,
-  queryParams,
+  // queryParams,
   searchKey = '',
-  setQueryParams,
+  urlHelper,
+  // setQueryParams,
   ...rest
 }) => {
-  const searchRef = createRef();
+  const dispatch = useDispatch();
+  const searchRef = useRef();
+  const {
+    // location,
+    // queryParams,
+    getInitialValueFromLocation,
+    historyPushWithQueryParams,
+  } = urlHelper;
   const formID = `form-${label}-${paramKey}`;
-  const initialValueRef = useRef(
-    getInitialValueFromLocation({
-      location,
-      paramKey,
-      queryParams,
-    })
-  );
-  const searchList = get(rest[searchKey], 'list');
+  const initialValueRef = getInitialValueFromLocation(paramKey);
+  const searchList = useSelector((state) => get(state, `${searchKey}.list`));
   const { data: searchOptions, inflight = false } = searchList || {};
-
-  const selectors = useSelector((state) => ({
-    location: state.location,
-    paramKey: state.paramKey,
-    queryParams: state.queryParams,
-  }));
-
-  useEffect(() => {
-    dispatch(selectors);
-  }, [dispatch, selectors]);
 
   useEffect(() => {
     dispatch(clear(paramKey));
@@ -69,7 +61,7 @@ const Search = ({
     if (initialValueRef.current) {
       dispatch(action(initialValueRef.current));
     }
-  }, [action, dispatch]);
+  }, [action, dispatch, initialValueRef]);
 
   const handleSearch = useCallback(
     (query) => {
@@ -83,19 +75,19 @@ const Search = ({
     if (selections && selections.length > 0) {
       const query = selections[0][labelKey];
       dispatch(action(query));
-      setQueryParams({ [paramKey]: query });
+      historyPushWithQueryParams({ [paramKey]: query });
     } else {
       dispatch(clear());
-      setQueryParams({ [paramKey]: undefined });
+      historyPushWithQueryParams({ [paramKey]: undefined });
     }
   }
 
   function handleInputChange(text) {
     if (text) {
-      setQueryParams({ [paramKey]: text });
+      historyPushWithQueryParams({ [paramKey]: text });
     } else {
       dispatch(clear());
-      setQueryParams({ [paramKey]: undefined });
+      historyPushWithQueryParams({ [paramKey]: undefined });
     }
   }
 
@@ -143,20 +135,26 @@ const Search = ({
 };
 
 Search.propTypes = {
-  dispatch: PropTypes.func,
+  // dispatch: PropTypes.func,
   action: PropTypes.func,
   clear: PropTypes.func,
   inputProps: PropTypes.object,
   paramKey: PropTypes.string,
   label: PropTypes.any,
   labelKey: PropTypes.string,
-  location: PropTypes.object,
+  // location: PropTypes.object,
   options: PropTypes.array,
   query: PropTypes.object,
-  queryParams: PropTypes.object,
+  // queryParams: PropTypes.object,
   searchKey: PropTypes.string,
-  setQueryParams: PropTypes.func,
+  // setQueryParams: PropTypes.func,
   placeholder: PropTypes.string,
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    queryParams: PropTypes.object,
+    getInitialValueFromLocation: PropTypes.func,
+    historyPushWithQueryParams: PropTypes.func,
+  }),
 };
 
-export default withRouter(Search);
+export default withUrlHelper(Search);
