@@ -2,6 +2,7 @@
 
 import test from 'ava';
 // import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import { render, screen } from '@testing-library/react'
 import React from 'react';
 // import { shallow, configure } from 'enzyme';
 
@@ -21,7 +22,7 @@ test('Header contains correct number of nav items and excludes PDRs and Logs', f
     search: {}
   };
 
-  const header = shallow(
+  const header = render(
     <Header
       dispatch={dispatch}
       api={api}
@@ -74,7 +75,7 @@ test('Logo path is "/cumulus-logo.png" when BUCKET is not specified', function (
     search: {}
   };
 
-  const header = shallow(
+  const header = render(
     <Header
       dispatch={dispatch}
       api={api}
