@@ -154,8 +154,9 @@ const Home = ({
           <div className="row">
           <div className={'heading__wrapper--border'}>
           <h2 style={{ display: 'inline-block', marginRight: '10px' }} className={'heading--large'}>
-            {'Metrics Overview (from the past 24 hours)'}
+            {'Metrics Overview'}
           </h2>
+          <span>
           <Tooltip
                 className="tooltip--light"
                 id="overview-default-tooltip"
@@ -166,8 +167,9 @@ const Home = ({
                     icon={faInfoCircle}
                   />
                 }
-                tip="The Default Range for the overview is the last 24 hours"
+                tip="The default range for this overview is within the last 24 hours."
               />
+          </span>
           </div>
           </div>
           </section>
