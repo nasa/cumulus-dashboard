@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- **CUMULUS-3748**
+  - Removed reconciliationReports aggregate stats call from Granules Page
 - **CUMULUS-3821**
   - Removed fake-granuleid-refresh-connection/refreshCumulusDbConnection
 - **CUMULUS-3870**
