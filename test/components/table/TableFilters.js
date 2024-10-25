@@ -32,7 +32,6 @@ test('Renders table filters', t => {
   );
 
   const filters = container.querySelectorAll('.table__filters--filter');
-  console.log(filters);
 
   t.is(filters.length, 4);
 

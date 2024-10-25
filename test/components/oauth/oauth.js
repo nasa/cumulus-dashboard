@@ -34,7 +34,7 @@ test('OAuth has link to Earthdata by default', function (t) {
   }
 
   const someStore = mockStore(initialState);
-  const { container } = render(
+  render(
     <Provider store={someStore} >
     <MemoryRouter>
     <OAuth
@@ -47,9 +47,9 @@ test('OAuth has link to Earthdata by default', function (t) {
     </Provider>
   );
 
-  // not completed yet
-  const appTarget = container.querySelectorAll('a');
+  const appTarget = screen.getAllByRole('link');
   t.is(appTarget.length, 1);
-  t.regex(appTarget[0].href, /token\?state/);
+
+  t.regex(appTarget[0].getAttribute('href'), /token\?state/);
   t.regex(appTarget[0].textContent, /Earthdata/);
 });
