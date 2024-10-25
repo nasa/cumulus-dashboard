@@ -13,7 +13,6 @@ import { requestMiddleware } from '../../../app/src/js/middleware/request';
 
 const middlewares = [requestMiddleware, thunk];
 const mockStore = configureMockStore(middlewares);
-const dispatch = () => {};
 const initialState = {
   api: { authenticated: true },
   locationQueryParams: { search: {} },
@@ -30,6 +29,7 @@ const initialState = {
 };
 
 test('Header contains correct number of nav items and excludes PDRs and Logs', function (t) {
+  const dispatch = () => {};
   const api = {
     authenticated: true
   }
@@ -54,6 +54,8 @@ test('Header contains correct number of nav items and excludes PDRs and Logs', f
     </Provider>
   );
 
+  screen.debug();
+  console.log(container.innerHTML);
   const navigation = header.find('nav li');
   t.is(navigation.length, 9);
   t.is(navigation.contains('PDRs'), false);
@@ -73,15 +75,22 @@ test('Logo path is "/cumulus-logo.png" when BUCKET is not specified', function (
     search: {}
   };
 
-  const { header } = render(
+  const someStore = mockStore(initialState);
+  const { container } = render(
+    <Provider store={someStore} >
+    <MemoryRouter>
     <Header
       dispatch={dispatch}
       api={api}
       location={location}
       locationQueryParams={locationQueryParams}
     />
+    </MemoryRouter>
+    </Provider>
   );
 
+  screen.debug();
+  console.log(container.innerHTML);
   const logo = header.find('img[alt="Logo"]');
   t.is(logo.props().src, "/cumulus-logo.png");
 });

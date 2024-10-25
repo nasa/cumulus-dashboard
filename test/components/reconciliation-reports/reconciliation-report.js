@@ -253,7 +253,6 @@ test('report with error triggers error message', function (t) {
   t.is(ReportHeading.length, 1);
 
   const ErrorReport = container.querySelector('.error__report');
-  console.log(container.innerHTML);
   t.true(ErrorReport.textContent.includes(reconciliationReports.map.exampleReportWithError.data.error)); //this is odd, need to revisit
   t.is(ErrorReport.querySelector('p').textContent, reconciliationReports.map.exampleReportWithError.data.error);
 });
