@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
@@ -49,25 +49,19 @@ const Pdrs = ({ urlHelper }) => {
           <Sidebar currentPath={pathname} params={params} count={count} />
           <div className="page__content--shortened">
             <Routes>
+              <Route index element={<Navigate to="all" replace />} />
               <Route
-                exact
-                path="/pdrs"
-                render={(props) => (
-                  <PdrOverview queryParams={filteredQueryParams} {...props} />
-                )}
-              ></Route>
+                path="all"
+                element={<PdrOverview queryParams={filteredQueryParams} />}
+              />
               <Route
-                path="/pdrs/pdr/:pdrName"
-                render={(props) => (
-                  <Pdr queryParams={filteredQueryParams} {...props} />
-                )}
-              ></Route>
+                path="/pdr/:pdrName"
+                element={<Pdr queryParams={filteredQueryParams} />}
+              />
               <Route
-                path="/pdrs/:status"
-                render={(props) => (
-                  <PdrList queryParams={filteredQueryParams} {...props} />
-                )}
-              ></Route>
+                path="/:status"
+                element={<PdrList queryParams={filteredQueryParams} />}
+              />
             </Routes>
           </div>
         </div>

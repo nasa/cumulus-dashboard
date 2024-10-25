@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 // import withQueryParams from 'react-router-query-params';
@@ -33,15 +33,11 @@ const Operations = ({ urlHelper }) => {
           <Sidebar currentPath={pathname} params={params} />
           <div className='page__content--shortened'>
             <Routes>
+              <Route index element={<Navigate to="all" replace />} />
               <Route
-                exact
-                path='/operations'
-                render={(props) => (
-                  <OperationOverview
-                    {...props}
-                    queryParams={filteredQueryParams}
-                  />
-                )}
+                path='all'
+                element={
+                  <OperationOverview queryParams={filteredQueryParams} />}
               />
             </Routes>
           </div>

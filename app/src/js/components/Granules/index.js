@@ -68,40 +68,28 @@ const Granules = ({ urlHelper }) => {
           </Suspense>
           <div className='page__content--shortened'>
             <Routes>
+            <Route index element={<Navigate to="all" replace />} />
               <Route
-                exact
-                path='/granules'
-                render={(props) => (
-                  <GranulesOverview
-                    queryParams={filteredQueryParams}
-                    {...props}
-                  />
-                )}
-              ></Route>
+                path='all'
+                element=
+                  {<GranulesOverview queryParams={filteredQueryParams} />}
+              />
               <Route
-                path='/granules/granule/:granuleId'
+                path='/granule/:granuleId'
                 element={<GranuleOverview />}
-              ></Route>
+              />
               <Route
-                path='/granules/lists'
-                render={(props) => (
-                  <ReconciliationReportList
-                    queryParams={filteredQueryParams}
-                    {...props}
-                  />
-                )}
-              ></Route>
+                path='/lists'
+                element={<ReconciliationReportList queryParams={filteredQueryParams} />}
+              />
               <Route
-                path='/granules/:status'
-                render={(props) => (
-                  <AllGranules queryParams={filteredQueryParams} {...props} />
-                )}
-              ></Route>
+                path='/:status'
+                element={<AllGranules queryParams={filteredQueryParams} />}
+              />
               <Route
-                exact
-                path='/granules/running'
-                render={() => <Navigate to='/granules/processing' />}
-              ></Route>
+                path='/running'
+                element={<Navigate to='/granules/processing' />}
+              />
             </Routes>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import {
   searchReconciliationReports,
   clearReconciliationReportSearch,
@@ -13,7 +13,7 @@ import {
 import { lastUpdated } from '../../utils/format';
 import { reconciliationReportStatus as statusOptions } from '../../utils/status';
 import { reconciliationReportTypes as reportTypeOptions } from '../../utils/type';
-import { getPersistentQueryParams } from '../../utils/url-helper';
+// import { getPersistentQueryParams } from '../../utils/url-helper';
 import {
   tableColumns,
   bulkActions,
@@ -24,7 +24,8 @@ import Search from '../Search/search';
 import List from '../Table/Table';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import withRouter from '../../withRouter';
+// import withRouter from '../../withRouter';
+import { withUrlHelper } from '../../withUrlHelper';
 
 const breadcrumbConfig = [
   {
@@ -52,14 +53,12 @@ const granuleBreadcrumbConfig = [
   },
 ];
 
-const ReconciliationReportList = ({
-  dispatch,
-  location,
-  queryParams,
-  reconciliationReports,
-}) => {
+const ReconciliationReportList = ({ urlHelper }) => {
+  const dispatch = useDispatch();
+  const { getPersistentQueryParams, location, queryParams } = urlHelper;
   const { pathname } = location;
   const isGranules = pathname.includes('granules');
+  const reconciliationReports = useSelector((state) => state.reconciliationReports);
   const { list } = reconciliationReports;
   const { queriedAt, count } = list.meta;
   const query = generateQuery();
@@ -172,14 +171,11 @@ const ReconciliationReportList = ({
 };
 
 ReconciliationReportList.propTypes = {
-  dispatch: PropTypes.func,
-  location: PropTypes.object,
-  queryParams: PropTypes.object,
-  reconciliationReports: PropTypes.object,
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    getPersistentQueryParams: PropTypes.func,
+    queryParams: PropTypes.object
+  }),
 };
 
-export default withRouter(
-  connect((state) => ({
-    reconciliationReports: state.reconciliationReports,
-  }))(ReconciliationReportList)
-);
+export default withUrlHelper(ReconciliationReportList);

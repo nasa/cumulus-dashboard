@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { get } from 'object-path';
 import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import { getProvider, deleteProvider, listCollections } from '../../actions';
@@ -10,15 +10,19 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import LogViewer from '../Logs/viewer';
 import ErrorReport from '../Errors/report';
 import Metadata from '../Table/Metadata';
-import {
-  getPersistentQueryParams,
-  historyPushWithQueryParams,
-} from '../../utils/url-helper';
+// import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 import { metaAccessors } from '../../utils/table-config/providers';
-import withRouter from '../../withRouter';
+import { withUrlHelper } from '../../withUrlHelper';
+// import withRouter from '../../withRouter';
 
-const ProviderOverview = ({ dispatch, match, providers }) => {
-  const { providerId } = match.params;
+const ProviderOverview = ({ urlHelper }) => {
+  const dispatch = useDispatch();
+  const { providerId } = useParams();
+  const { location, getPersistentQueryParams, historyPushWithQueryParams } = urlHelper;
+
+  const providers = useSelector((state) => state.providers);
+  // const logs = useSelector((state) => state.logs);
+
   const record = providers.map[providerId];
 
   useEffect(() => {
@@ -111,10 +115,10 @@ const ProviderOverview = ({ dispatch, match, providers }) => {
         </div>
         <Link
           className="button button--small button--green button--edit form-group__element--right"
-          to={(location) => ({
+          to={{
             pathname: `/providers/edit/${providerId}`,
             search: getPersistentQueryParams(location),
-          })}
+          }}
         >
           Edit
         </Link>
@@ -145,15 +149,13 @@ const ProviderOverview = ({ dispatch, match, providers }) => {
 };
 
 ProviderOverview.propTypes = {
-  match: PropTypes.object,
-  dispatch: PropTypes.func,
   providers: PropTypes.object,
-  logs: PropTypes.object,
+  // logs: PropTypes.object,
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    historyPushWithQueryParams: PropTypes.func,
+    getPersistentQueryParams: PropTypes.object
+  }),
 };
 
-export default withRouter(
-  connect((state) => ({
-    providers: state.providers,
-    logs: state.logs,
-  }))(ProviderOverview)
-);
+export default withUrlHelper(ProviderOverview);

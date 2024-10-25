@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 // import withQueryParams from 'react-router-query-params';
 import PropTypes from 'prop-types';
@@ -36,20 +36,18 @@ const Providers = ({ urlHelper }) => {
             }
           >
             <Routes>
+            <Route index element={<Navigate to="all" replace />} />
               <Route
-                exact
-                path="/providers"
-                render={(props) => (
-                  <ProvidersOverview {...props} queryParams={filteredQueryParams} />
-                )}
+                path="all"
+                element={<ProvidersOverview queryParams={filteredQueryParams} />}
               />
-              <Route path="/providers/add" element={<AddProvider />} />
+              <Route path="add" element={<AddProvider />} />
               <Route
-                path="/providers/edit/:providerId"
+                path="edit/:providerId"
                 element={<EditProvider />}
               />
               <Route
-                path="/providers/provider/:providerId"
+                path="provider/:providerId"
                 element={<ProviderOverview />}
               />
             </Routes>

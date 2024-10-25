@@ -1,15 +1,13 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 // import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import WorkflowsOverview from './overview';
 import Workflow from './workflow';
-import { withUrlHelper } from '../../withUrlHelper';
 // import { filterQueryParams } from '../../utils/url-helper';
-// import withRouter from '../../withRouter';
-// import useQueryParams from '../../useQueryParams';
+import { withUrlHelper } from '../../withUrlHelper';
 
 const Workflows = ({ urlHelper }) => {
   const { queryParams, filterQueryParams, location, params } = urlHelper;
@@ -30,17 +28,16 @@ const Workflows = ({ urlHelper }) => {
           <Sidebar currentPath={location.pathname} params={params} />
           <div className="page__content--shortened">
             <Routes>
+            <Route index element={<Navigate to="all" replace />} />
               <Route
                 exact
-                path="/workflows"
-                render={(props) => (
-                  <WorkflowsOverview {...props} queryParams={filteredQueryParams} />
-                )}
-              ></Route>
+                path="all"
+                element={<WorkflowsOverview queryParams={filteredQueryParams} />}
+              />
               <Route
-                path="/workflows/workflow/:workflowName"
+                path="/workflow/:workflowName"
                 element={<Workflow />}
-              ></Route>
+              />
             </Routes>
           </div>
         </div>

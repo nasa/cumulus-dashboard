@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 // import withQueryParams from 'react-router-query-params';
@@ -21,6 +21,7 @@ const Executions = ({ urlHelper }) => {
   const { queryParams, filterQueryParams, location } = urlHelper;
   const filteredQueryParams = filterQueryParams(queryParams);
   const { pathname } = location;
+  const showSidebar = pathname !== '/executions/add';
   const showDatePicker = pathname === '/executions';
 
   function query () {
@@ -47,18 +48,15 @@ const Executions = ({ urlHelper }) => {
       }
       <div className='page__content'>
         <div className='wrapper__sidebar'>
-          <Routes>
-            <Route path='/executions/execution/:executionArn' element={<Sidebar />}></Route>
-            <Route path='/executions/executions-list/:granule' element={<Sidebar />}></Route>
-            <Route exact path='/executions' element={<Sidebar />}></Route>
-          </Routes>
+          { showSidebar && <Sidebar currentPath={pathname} location={location} /> }
           <div className='page__content--shortened'>
             <Routes>
-              <Route exact path='/executions' render={(props) => <ExecutionOverview queryParams={filteredQueryParams} {...props} />}></Route>
-              <Route exact path='/executions/execution/:executionArn/logs' element={<ExecutionLogs />}></Route>
-              <Route exact path='/executions/execution/:executionArn/events' element={<ExecutionEvents/>}></Route>
-              <Route exact path='/executions/execution/:executionArn' element={<ExecutionStatus />}></Route>
-              <Route exact path='/executions/executions-list/:collectionId/:granuleId' element ={<ExecutionsList />}></Route>
+              <Route index element={<Navigate to="all" replace />} />
+              <Route path='all' element={<ExecutionOverview queryParams={filteredQueryParams} />} />
+              <Route path='/execution/:executionArn/logs' element={<ExecutionLogs />} />
+              <Route path='/execution/:executionArn/events' element={<ExecutionEvents/>} />
+              <Route path='/execution/:executionArn' element={<ExecutionStatus />} />
+              <Route path='/executions-list/:collectionId/:granuleId' element ={<ExecutionsList />} />
             </Routes>
           </div>
         </div>

@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-import { connect } from 'react-redux';
-// import { withRouter } from 'react-router-dom';
 import { createCollection, getSchema } from '../../actions';
 import { getCollectionId, collectionHrefFromId } from '../../utils/format';
 import { removeReadOnly } from '../FormSchema/schema';
 import AddRaw from '../AddRaw/add-raw';
-import withRouter from '../../withRouter';
+// import withRouter from '../../withRouter';
 
-const AddCollection = ({ location = {}, collections, dispatch, schema }) => {
+const AddCollection = () => {
+  const dispatch = useDispatch();
+  const location = useLocation();
+
+  const collections = useSelector((state) => state.collections);
+  const schema = useSelector((state) => state.schema);
+
   const [defaultValue, setDefaultValue] = useState({});
   const { state: locationState } = location;
   const { name, version } = locationState || {};
@@ -53,15 +59,8 @@ const AddCollection = ({ location = {}, collections, dispatch, schema }) => {
 };
 
 AddCollection.propTypes = {
-  location: PropTypes.object,
   collections: PropTypes.object,
-  dispatch: PropTypes.func,
   schema: PropTypes.object,
 };
 
-export default withRouter(
-  connect((state) => ({
-    collections: state.collections,
-    schema: state.schema,
-  }))(AddCollection)
-);
+export default AddCollection;

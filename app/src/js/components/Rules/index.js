@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 // import withQueryParams from 'react-router-query-params';
@@ -37,10 +37,11 @@ const Rules = ({ urlHelper }) => {
           )}
           <div className={showSidebar ? 'page__content--shortened' : 'page__content'}>
             <Routes>
-              <Route exact path='/rules' render={(props) => <RulesOverview {...props} queryParams={filteredQueryParams} />}></Route>
-              <Route path='/rules/rule/:ruleName' element={<Rule />}></Route>
-              <Route path='/rules/edit/:ruleName' element={<EditRule />}></Route>
-              <Route path='/rules/add' element={<AddRule />}></Route>
+              <Route index element={<Navigate to="all" replace />} />
+              <Route path='all' element={<RulesOverview queryParams={filteredQueryParams} />} />
+              <Route path='/rule/:ruleName' element={<Rule />} />
+              <Route path='/edit/:ruleName' element={<EditRule />} />
+              <Route path='/add' element={<AddRule />} />
             </Routes>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
@@ -47,10 +47,11 @@ const ReconciliationReports = ({ urlHelper }) => {
             }
           >
             <Routes>
-              <Route exact path='/reconciliation-reports' render={(props) => <ReconciliationReportList queryParams={filteredQueryParams} {...props} />}></Route>
-              <Route path="/reconciliation-reports/create" element={<CreateReconciliationReport />}></Route>
-              <Route path='/reconciliation-reports/report/:reconciliationReportName/details' element={<BackupReportGranuleDetails />}></Route>
-              <Route path='/reconciliation-reports/report/:reconciliationReportName' element={<ReconciliationReport />}></Route>
+              <Route index element={<Navigate to="all" replace />} />
+              <Route path='all' element={<ReconciliationReportList queryParams={filteredQueryParams} />} />
+              <Route path="/create" element={<CreateReconciliationReport />} />
+              <Route path='/report/:reconciliationReportName/details' element={<BackupReportGranuleDetails />} />
+              <Route path='/report/:reconciliationReportName' element={<ReconciliationReport />} />
             </Routes>
           </div>
         </div>
