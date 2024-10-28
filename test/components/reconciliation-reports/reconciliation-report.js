@@ -141,7 +141,7 @@ test('shows an individual inventory report', function (t) {
   const InventoryReport = container.querySelectorAll('.page__section__header');
   t.is(InventoryReport.length, 1);
 
-  const ReportHeading = container.querySelectorAll('.heading--large');
+  const ReportHeading = container.querySelectorAll('.heading--shared-content.with-description.with-bottom-border.width--full');
   t.is(ReportHeading.length, 1);
 
   const TableCards = container.querySelectorAll('.table-card');
@@ -174,7 +174,7 @@ test('shows an individual Granule Not Found report', function (t) {
   const GnfReport = container.querySelectorAll('.page__section__header');
   t.is(GnfReport.length, 1);
 
-  const ReportHeading = container.querySelectorAll('.heading--large');
+  const ReportHeading = container.querySelectorAll('.heading--shared-content.with-description.with-bottom-border.width--full');
   t.is(ReportHeading.length, 1);
 
   const Table = container.querySelectorAll('.list__wrapper');
@@ -201,12 +201,12 @@ test('correctly renders the heading', function (t) {
   const GnfReport = container.querySelectorAll('.page__section__header');
   t.is(GnfReport.length, 1);
 
-  const ReportHeading = container.querySelectorAll('.heading--large');
+  const ReportHeading = container.querySelectorAll('.heading--shared-content.with-description.with-bottom-border.width--full');
   t.is(ReportHeading.length, 1);
 
   /*
+  STILL TO DO:
 
-    REMAINING STUFF IN THIS FILE THAT NEEDS CHANGING:
 
   const { downloadOptions, ...headingProps } = ReportHeading.props();
 
@@ -225,7 +225,8 @@ test('correctly renders the heading', function (t) {
   const reportHeadingWrapper = ReportHeading.dive();
 
   const downloadItems = reportHeadingWrapper.find('DropdownItem');
-  t.is(downloadItems.length, 2);*/
+  t.is(downloadItems.length, 2);
+  */
 });
 
 test('report with error triggers error message', function (t) {
@@ -249,7 +250,7 @@ test('report with error triggers error message', function (t) {
   const InventoryReport = container.querySelectorAll('.page__section__header');
   t.is(InventoryReport.length, 1);
 
-  const ReportHeading = container.querySelectorAll('.heading--large');
+  const ReportHeading = container.querySelectorAll('.heading--shared-content.with-description.with-bottom-border.width--full');
   t.is(ReportHeading.length, 1);
 
   const ErrorReport = container.querySelector('.error__report');
@@ -278,7 +279,7 @@ test('report which exceeds maximum allowed payload size triggers error message',
   const InventoryReport = container.querySelectorAll('.page__section__header');
   t.is(InventoryReport.length, 1);
 
-  const ReportHeading = container.querySelectorAll('.heading--large');
+  const ReportHeading = container.querySelectorAll('.heading--shared-content.with-description.with-bottom-border.width--full');
   t.is(ReportHeading.length, 1);
 
   const ErrorReport = container.querySelector('.error__report');

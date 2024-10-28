@@ -1,14 +1,15 @@
 'use strict';
 
 import test from 'ava';
-import { get } from 'object-path';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { shallow, configure } from 'enzyme';
 import { GranulesOverview } from '../../../app/src/js/components/Granules/overview';
-
-configure({ adapter: new Adapter() });
+import { render } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom';
+import { requestMiddleware } from '../../../app/src/js/middleware/request';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import { initialState } from '../../../app/src/js/reducers/datepicker';
 
 const granules = {
   list: {
@@ -33,26 +34,47 @@ const granules = {
         ]
       }
     }
+  },
+  bulk: {
+    bulkOpRequestId: 'my-bulk-op-request-request',
   }
 };
 
-const dispatch = () => {};
 const workflowOptions = [];
 const collections = {};
 const providers = {};
 const stats = { count: 0, stats: {} };
 const location = { pathname: 'granules' };
-const config = { enableRecovery: false };
-const store = {
-  subscribe: () => {},
-  dispatch: dispatch,
-  getState: () => {}
+const dispatch = () => {};
+const locationQueryParams = {
+  search: {}
 };
+const granulesExecutions = {
+  workflows: {
+    data: ['fakeworkflow1', 'fakeworkflow2']
+  }
+};
+const middlewares = [requestMiddleware, thunk];
+const mockStore = configureMockStore(middlewares);
 
 test('GranulesOverview generates bulkAction for recovery button', function (t) {
   const configWithRecovery = { enableRecovery: true };
-  const providerWrapper = shallow(
-    <Provider store={store}>
+  const someStore = mockStore({
+    sorts: {},
+    timer: { running: false, seconds: -1 },
+    datepicker: initialState(),
+    locationQueryParams,
+    subscribe: () => {},
+    dispatch: dispatch,
+    getState: () => {},
+    granules,
+    config: configWithRecovery,
+    granulesExecutions,
+  });
+
+  const { container } = render(
+    <Provider store={someStore}>
+      <MemoryRouter>
       <GranulesOverview
         granules = {granules}
         stats = {stats}
@@ -62,21 +84,35 @@ test('GranulesOverview generates bulkAction for recovery button', function (t) {
         location = {location}
         config={configWithRecovery}
         providers={providers}/>
+      </MemoryRouter>
     </Provider>);
 
-  const overviewWrapper = providerWrapper.find('GranulesOverview').dive();
-  const listWrapper = overviewWrapper.find('withRouter(withQueryParams(Connect(List)))');
-  const listBulkActions = listWrapper.prop('bulkActions');
+  const listBulkActions = container.querySelectorAll('button');
 
-  const recoverFilter = (object) => object.text === 'Recover Granule';
-  const recoverActionList = listBulkActions.filter(recoverFilter);
+  const recoverFilter = (object) => object.textContent === 'Recover Granule';
+  const recoverActionList = Array.from(listBulkActions).filter(recoverFilter);
   t.is(recoverActionList.length, 1);
 });
 
+
 test('GranulesOverview does not generate bulkAction for recovery button', function (t) {
   const config = { enableRecovery: false };
-  const providerWrapper = shallow(
-    <Provider store={store}>
+  const someStore = mockStore({
+    sorts: {},
+    timer: { running: false, seconds: -1 },
+    datepicker: initialState(),
+    locationQueryParams,
+    subscribe: () => {},
+    dispatch: dispatch,
+    getState: () => {},
+    granules,
+    config,
+    granulesExecutions,
+  });
+
+  const { container } = render(
+    <Provider store={someStore}>
+      <MemoryRouter>
       <GranulesOverview
         granules = {granules}
         stats = {stats}
@@ -86,35 +122,48 @@ test('GranulesOverview does not generate bulkAction for recovery button', functi
         location = {location}
         config={config}
         providers={providers}/>
+      </MemoryRouter>
     </Provider>);
 
-  const overviewWrapper = providerWrapper.find('GranulesOverview').dive();
-  const listWrapper = overviewWrapper.find('withRouter(withQueryParams(Connect(List)))');
-  const listBulkActions = listWrapper.prop('bulkActions');
+  const listBulkActions = container.querySelectorAll('button');
 
-  const recoverFilter = (object) => object.text === 'Recover Granule';
-  const recoverActionList = listBulkActions.filter(recoverFilter);
+  const recoverFilter = (object) => object.textContent === 'Recover Granule';
+  const recoverActionList = Array.from(listBulkActions).filter(recoverFilter);
   t.is(recoverActionList.length, 0);
 });
 
 test('GranulesOverview generates Granule Inventory List button', function (t) {
-  const providerWrapper = shallow(
-    <Provider store={store}>
+  const someStore = mockStore({
+    sorts: {},
+    timer: { running: false, seconds: -1 },
+    datepicker: initialState(),
+    locationQueryParams,
+    subscribe: () => {},
+    dispatch: dispatch,
+    getState: () => {},
+    granules,
+    config: { enableRecovery: true },
+    granulesExecutions,
+  });
+
+  const { container } = render(
+    <Provider store={someStore}>
+      <MemoryRouter>
       <GranulesOverview
         granules = {granules}
+        stats = {stats}
         dispatch = {dispatch}
-        location = {location}
         workflowOptions = {workflowOptions}
         collections = {collections}
-        config={config}
+        location = {location}
+        config={{ enableRecovery: true }}
         providers={providers}/>
+      </MemoryRouter>
     </Provider>);
 
-  const overviewWrapper = providerWrapper.find('GranulesOverview').dive();
+  const listBulkActions = container.querySelectorAll('button');
 
-  const listWrapper = overviewWrapper.find('withRouter(withQueryParams(Connect(List)))');
-  const listBulkActions = listWrapper.prop('bulkActions');
-  const filter = (object) => get(object, 'Component.props.className', '').includes('csv__download');
-  const granuleInventoryActionList = listBulkActions.filter(filter);
+  const recoverFilter = (object) => object.className.includes('csv__download');
+  const granuleInventoryActionList = Array.from(listBulkActions).filter(recoverFilter);
   t.is(granuleInventoryActionList.length, 1);
 });
