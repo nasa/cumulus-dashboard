@@ -1,7 +1,7 @@
 'use strict';
 
 import test from 'ava';
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import React from 'react';
 import { BulkGranule } from '../../../app/src/js/components/Granules/bulk.js';
 import { MemoryRouter } from 'react-router-dom';
@@ -19,22 +19,25 @@ const locationQueryParams = {
 
 const middlewares = [requestMiddleware, thunk];
 const mockStore = configureMockStore(middlewares);
-const someStore = mockStore({
-  getState: () => {},
-  subscribe: () => {},
-  dispatch,
-  timer: { running: false, seconds: -1 },
-  datepicker: initialState(),
-  locationQueryParams,
-  granulesExecutions : {
-    workflows: {
-      data: ['fakeworkflow1', 'fakeworkflow2']
-    }
-  }
-});
 
 test('BulkGranule does not generate button for bulk recovery when recovery is not enabled', function (t) {
   const configWithRecovery = { enableRecovery: false };
+
+  const someStore = mockStore({
+    getState: () => {},
+    subscribe: () => {},
+    dispatch,
+    timer: { running: false, seconds: -1 },
+    datepicker: initialState(),
+    locationQueryParams,
+    granulesExecutions : {
+      workflows: {
+        data: ['fakeworkflow1', 'fakeworkflow2']
+      }
+    },
+    config: configWithRecovery
+  });
+
   const { container } = render(
     <Provider store={someStore}>
     <MemoryRouter>
@@ -48,18 +51,28 @@ test('BulkGranule does not generate button for bulk recovery when recovery is no
     />
     </MemoryRouter>
     </Provider>);
-
-  console.log(container.innerHTML);
-  screen.debug();
-  console.log("\n");
-  const buttons = container.querySelectorAll('.button');
-  const recoverFilter = (object) => object.textContext === 'Run Bulk Recovery';
-  const recoveryButtonsProps = Array.from(buttons).filter(recoverFilter);
-  t.is(recoveryButtonsProps.length, 0);
+  fireEvent.click(container.querySelector('.button'));
+  t.throws(() => screen.getByText('Run Bulk Recovery'));
 });
 
 test('BulkGranule generates button for bulk recovery when recovery is enabled', function (t) {
   const configWithRecovery = { enableRecovery: true };
+
+  const someStore = mockStore({
+    getState: () => {},
+    subscribe: () => {},
+    dispatch,
+    timer: { running: false, seconds: -1 },
+    datepicker: initialState(),
+    locationQueryParams,
+    granulesExecutions : {
+      workflows: {
+        data: ['fakeworkflow1', 'fakeworkflow2']
+      }
+    },
+    config: configWithRecovery
+  });
+
   const { container } = render(
     <Provider store={someStore}>
     <MemoryRouter>
@@ -74,10 +87,6 @@ test('BulkGranule generates button for bulk recovery when recovery is enabled', 
     </MemoryRouter>
     </Provider>);
 
-  console.log(container.innerHTML);
-  screen.debug();
-  const buttons = container.querySelectorAll('.button');
-  const recoverFilter = (object) => object.textContext === 'Run Bulk Recovery';
-  const recoveryButtonsProps = Array.from(buttons).filter(recoverFilter);
-  t.is(recoveryButtonsProps.length, 1); // not working properly, other button just appears as: Run Bulk Granules, not: Run Bulk Recovery
+  fireEvent.click(container.querySelector('.button'));
+  t.truthy(screen.getByText('Run Bulk Recovery'));
 });
