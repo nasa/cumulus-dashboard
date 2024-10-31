@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
+// import { withRouter } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Helmet } from 'react-helmet';
+import { Form, Field } from 'react-final-form';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Helmet } from 'react-helmet';
-import { connect } from 'react-redux';
-// import { withRouter } from 'react-router-dom';
-import { Form, Field } from 'react-final-form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -13,7 +13,7 @@ import {
   listProviders,
   listGranules,
 } from '../../actions';
-import { historyPushWithQueryParams } from '../../utils/url-helper';
+// import { historyPushWithQueryParams } from '../../utils/url-helper';
 import { reconciliationReportTypes } from '../../utils/type';
 import { dateTimeFormat } from '../../utils/datepicker';
 import SimpleDropdown from '../DropDown/simple-dropdown';
@@ -21,7 +21,8 @@ import Tooltip from '../Tooltip/tooltip';
 import Datepicker from '../Datepicker/Datepicker';
 import TextForm from '../TextAreaForm/text';
 import { displayCase, getCollectionId } from '../../utils/format';
-import withRouter from '../../withRouter';
+// import withRouter from '../../withRouter';
+import { withUrlHelper } from '../../withUrlHelper';
 
 const baseRoute = '/reconciliation-reports';
 const defaultReportType = 'Inventory';
@@ -66,11 +67,19 @@ function getTooltipInfoFromType(reportType) {
 }
 
 const CreateReconciliationReport = ({
-  collections,
-  dispatch,
-  granules,
-  providers,
+  // collections,
+  // dispatch,
+  // granules,
+  // providers,
+  urlHelper
 }) => {
+  const dispatch = useDispatch();
+  const { historyPushWithQueryParams } = urlHelper;
+
+  const collections = useSelector((state) => state.collections);
+  const granules = useSelector((state) => state.granules);
+  const providers = useSelector((state) => state.providers);
+
   const {
     list: { data: collectionData },
   } = collections;
@@ -354,16 +363,15 @@ const CreateReconciliationReport = ({
 };
 
 CreateReconciliationReport.propTypes = {
-  collections: PropTypes.object,
-  dispatch: PropTypes.func,
-  granules: PropTypes.object,
-  providers: PropTypes.object,
+  // collections: PropTypes.object,
+  //  dispatch: PropTypes.func,
+  // granules: PropTypes.object,
+  // providers: PropTypes.object,
+  urlHelper: PropTypes.shape({
+    // location: PropTypes.object,
+    historyPushWithQueryParams: PropTypes.func
+    // queryParams: PropTypes.object
+  }),
 };
 
-export default withRouter(
-  connect((state) => ({
-    collections: state.collections,
-    granules: state.granules,
-    providers: state.providers,
-  }))(CreateReconciliationReport)
-);
+export default withUrlHelper(CreateReconciliationReport);

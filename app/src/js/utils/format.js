@@ -8,9 +8,9 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import { Alert } from 'react-bootstrap';
-import { getPersistentQueryParams } from './url-helper';
 import Tooltip from '../components/Tooltip/tooltip';
 import Popover from '../components/Popover/popover';
+import { getPersistentQueryParams } from '../withUrlHelper';
 
 export const nullValue = '--';
 

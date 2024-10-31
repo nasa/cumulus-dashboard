@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 // import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import {
   getReconciliationReport,
@@ -12,7 +12,7 @@ import InventoryReport from './inventory-report';
 import GnfReport from './gnf-report';
 import Legend from './legend';
 import BackupReport from './backup-report';
-import withRouter from '../../withRouter';
+// import withRouter from '../../withRouter';
 
 const ReconciliationReport = ({
   dispatch = {},
@@ -90,9 +90,10 @@ ReconciliationReport.propTypes = {
   reconciliationReports: PropTypes.object,
 };
 
+const mapStatetoProps = (state) => ({
+  reconciliationReports: state.reconciliationReports,
+});
+
 export { ReconciliationReport };
-export default withRouter(
-  connect((state) => ({
-    reconciliationReports: state.reconciliationReports,
-  }))(ReconciliationReport)
-);
+
+export default connect(mapStatetoProps)(ReconciliationReport);

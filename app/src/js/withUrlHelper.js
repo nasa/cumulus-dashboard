@@ -57,28 +57,29 @@ export function getPersistentQueryParams(location) {
   return queryString.stringify({ startDateTime, endDateTime });
 }
 
+/**
+ * Calls history while preserving the queryParams that should persist across pages
+ *
+ * @param {string} path the path to be passed to history
+ */
+export function historyPushWithQueryParams(navigate, location, path) {
+  const persistentParams = getPersistentQueryParams(location);
+  const newPath = persistentParams ? `${path}?${persistentParams}` : path;
+  navigate(newPath);
+}
+
 // Higher-Order Component (HOC) for Wrapper
 export function withUrlHelper(Component) {
   function ComponentWithUrlHelper(props) {
     const navigate = useNavigate();
     const location = useLocation();
     const params = useParams();
-    /**
-     * Calls history while preserving the queryParams that should persist across pages
-     *
-     * @param {string} path the path to be passed to history
-     */
-    const historyPushWithQueryParams = (path) => {
-      const persistentParams = getPersistentQueryParams(location);
-      const newPath = persistentParams ? `${path}?${persistentParams}` : path;
-      navigate(newPath);
-    };
 
     const urlHelper = {
       location,
       navigate,
       params,
-      historyPushWithQueryParams,
+      historyPushWithQueryParams: (path) => historyPushWithQueryParams(navigate, location, path),
       getPersistentQueryParams: () => getPersistentQueryParams(location),
       getInitialValueFromLocation: (paramKey) => getInitialValueFromLocation(location, paramKey),
       initialValuesFromLocation: (paramKeys) => initialValuesFromLocation(location, paramKeys),

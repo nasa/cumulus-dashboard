@@ -1,5 +1,6 @@
-import React, { useState, useEffect, lazy, Suspense, useCallback } from 'react';
+import React, { useState, useEffect, lazy, Suspense, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
+// import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 // import withQueryParams from 'react-router-query-params';
 import isNil from 'lodash/isNil';
@@ -50,6 +51,8 @@ const List = ({
   urlHelper,
 }) => {
   const dispatch = useDispatch();
+  // const navigate = useNavigate();
+  const { historyPushWithQueryParams, location, queryParams } = urlHelper;
   const sorts = useSelector((state) => state.sorts);
   const {
     data: listData,
@@ -68,22 +71,31 @@ const List = ({
     completedBulkActions: 0,
     bulkActionError: null,
   });
-  // const [params, setParams] = useState({});
+  const [params, setParams] = useState({});
   const [toggleColumnOptions, setToggleColumnOptions] = useState({
     hiddenColumns: initialHiddenColumns,
     setHiddenColumns: noop,
   });
   // const searchParams = new URLSearchParams(location.search); // Using location to query params for search
-  // const initialInfix = useRef(queryParams.search);
+  const initialInfix = useRef(queryParams.search);
 
-  const queryFilters = omitBy(query, isNil);
+  // const queryFilters = omitBy(query, isNil);
 
   const [queryConfig, setQueryConfig] = useState({
     page: 1,
     sort_key: buildSortKey(sortBy || [{ id: initialSortId, desc: true }]),
+    ...initialInfix.current ? { infix: initialInfix.current } : {},
     ...query,
   });
 
+  const {
+    limit: limitQueryParam,
+    page: pageQueryParam,
+    search: searchQueryParam,
+    ...queryFilters
+  } = queryParams;
+
+  // Remove empty keys so as not to mess up the query
   const getQueryConfig = useCallback(() => ({
     ...queryConfig,
     ...queryFilters,
@@ -91,12 +103,45 @@ const List = ({
     sort_key: sortBy ? buildSortKey(sortBy) : queryConfig.sort_key,
   }), [queryConfig, queryFilters, sortBy, page]);
 
+  /* function getQueryConfig(config = {}) {
+    // Remove empty keys so as not to mess up the query
+    return omitBy(
+      {
+        page,
+        sort_key: queryConfig.sort_key,
+        ...params,
+        ...config,
+        ...query,
+      },
+      isNil
+    );
+  } */
+
   useEffect(() => {
     setQueryConfig((prevConfig) => ({
       ...prevConfig,
       ...query,
     }));
   }, [query]);
+
+  useEffect(() => {
+    // Remove parameters with null or undefined values
+    const newParams = omitBy(list.params, isNil);
+
+    if (!isEqual(newParams, params)) {
+      setParams(newParams);
+      setQueryConfig((prevQueryConfig) => ({
+        ...prevQueryConfig,
+        ...getQueryConfig({}),
+      }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(list.params), JSON.stringify(params)]);
+
+  useEffect(() => {
+    setClearSelected(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(queryFilters)]);
 
   useEffect(() => {
     if (typeof toggleColumnOptionsAction === 'function') { // replaces noop with modern JS
@@ -169,11 +214,11 @@ const List = ({
     setPage(newPage);
 
     // Update URL with new page number
-    if (urlHelper && urlHelper.historyPushWithQueryParams) {
-      const currentPath = urlHelper.location.pathname;
-      const currentSearch = new URLSearchParams(urlHelper.location.search);
+    if (historyPushWithQueryParams) {
+      const currentPath = location.pathname;
+      const currentSearch = new URLSearchParams(location.search);
       currentSearch.set('page', newPage.toString());
-      urlHelper.historyPushWithQueryParams(`${currentPath}?${currentSearch.toString()}`);
+      historyPushWithQueryParams(`${currentPath}?${currentSearch.toString()}`);
     }
 
     // Dispatch action to fetch new page data
@@ -240,27 +285,7 @@ const List = ({
       bulkActionError: newBulkActionError,
     }));
     setClearSelected(true);
-
-  /*    setBulkActionMeta((prevBulkActionMeta) => ({
-      ...prevBulkActionMeta,
-      bulkActionError: newBulkActionError,
-    }));
-    setClearSelected(true); */
   }
-
-  /*   function getQueryConfig(config = {}) {
-    // Remove empty keys so as not to mess up the query
-    return omitBy(
-      {
-        page,
-        sort_key: queryConfig.sort_key,
-        ...params,
-        ...config,
-        ...query,
-      },
-      isNil
-    );
-  } */
 
   const getToggleColumnOptions = useCallback((newOptions) => {
     setToggleColumnOptions(newOptions);
@@ -317,7 +342,7 @@ const List = ({
               initialHiddenColumns={initialHiddenColumns}
               initialSortId={initialSortId}
               // if there's an initialSortId, it means the first fetch request for the list should be sorted
-              // according to that id, and therefore we are using sever-side/manual sorting
+              // according to that id, and therefore we are using server-side/manual sorting
               shouldManualSort={!!initialSortId}
               getToggleColumnOptions={getToggleColumnOptions}
               renderRowSubComponent={renderRowSubComponent}
@@ -369,6 +394,7 @@ List.propTypes = {
   urlHelper: PropTypes.shape({
     location: PropTypes.object,
     historyPushWithQueryParams: PropTypes.func,
+    queryParams: PropTypes.object,
   }),
 };
 

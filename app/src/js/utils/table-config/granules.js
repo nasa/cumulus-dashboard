@@ -1,9 +1,9 @@
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import Collapsible from 'react-collapsible';
 import path from 'path';
 import pick from 'lodash/pick';
-import React from 'react';
 import { get } from 'object-path';
-import Collapsible from 'react-collapsible';
-import { Link } from 'react-router-dom';
 import noop from 'lodash/noop';
 import {
   seconds,
@@ -37,8 +37,9 @@ import BulkGranule from '../../components/Granules/bulk';
 import BatchReingestConfirmContent from '../../components/ReingestGranules/BatchReingestConfirmContent';
 import BatchReingestCompleteContent from '../../components/ReingestGranules/BatchReingestCompleteContent';
 import TextArea from '../../components/TextAreaForm/text-area';
-import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
+// import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
 import GranuleInventory from '../../components/Granules/granule-inventory';
+import { historyPushWithQueryParams } from '../../withUrlHelper';
 
 export const groupAction = {
   title: 'Granule Actions',
@@ -50,14 +51,28 @@ export const tableColumns = [
     Header: 'Status',
     accessor: 'status',
     width: 110,
-    Cell: ({ cell: { value } }) => <Link to={(location) => ({ pathname: `/granules/${value}`, search: getPersistentQueryParams(location) })} className={`granule__status granule__status--${value}`}>{displayCase(value)}</Link> // eslint-disable-line react/prop-types
+    isLiink: true,
+    linkTo: (row) => `/granules/${row.status}`,
+    Cell: ({ cell: { value } }) => (<span className={`granule__status granule__status--${value}`}>{displayCase(value)}</span>) // eslint-disable-line react/prop-types
   },
   {
     Header: 'Name',
     accessor: 'granuleId',
+    width: 225,
+    isLink: true,
     // eslint-disable-next-line react/prop-types
-    Cell: ({ cell: { value } }) => <CopyCellPopover cellContent={granuleLink(value)} id={`granuleId-${value}-popover`} popoverContent={granuleLink(value)} value={value} />,
-    width: 225
+    Cell: ({ value }) => {
+      const location = useLocation();
+      const href = `/granules/granule/${value}`; // eslint-disable-line react/prop-types
+      const popUrl = `${window.location.origin}${href}${location.search}`;
+      console.log('popUrl:', popUrl);
+      const content = granuleLink(value);
+      return (<CopyCellPopover cellContent={content} id={`granuleId-${value}-popover`} popoverContent={popUrl} value={value} />);
+    },
+    linkTo: (row) => {
+      console.log('linkTo row:', row);
+      return `/granules/granule/${row.granuleId || row.values?.granuleId || row.original?.granuleId}`;
+    }
   },
   {
     Header: 'Published',

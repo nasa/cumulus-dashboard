@@ -29,7 +29,7 @@ import { strings } from '../locale';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ListFilters from '../ListActions/ListFilters';
 // import withRouter from '../../withRouter';
-// import { withUrlHelper } from '../../withUrlHelper';
+import { withUrlHelper } from '../../withUrlHelper';
 
 const breadcrumbConfig = [
   {
@@ -42,9 +42,9 @@ const breadcrumbConfig = [
   },
 ];
 
-const CollectionList = ({ queryParams }) => {
+const CollectionList = ({ urlHelper }) => {
   const dispatch = useDispatch();
-  // const { queryParams } = urlHelper;
+  const { queryParams } = urlHelper;
 
   const collections = useSelector((state) => state.collections);
   const config = useSelector((state) => state.config);
@@ -151,9 +151,12 @@ CollectionList.propTypes = {
   datepicker: PropTypes.object,
   // dispatch: PropTypes.func,
   providers: PropTypes.object,
-  queryParams: PropTypes.object,
+  // queryParams: PropTypes.object,
+  urlHelper: PropTypes.shape({
+    queryParams: PropTypes.object
+  }),
 };
 
 export { CollectionList };
 
-export default CollectionList;
+export default withUrlHelper(CollectionList);

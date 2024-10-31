@@ -66,10 +66,11 @@ const breadcrumbConfig = [
   },
 ];
 
-const CollectionOverview = ({ queryParams, urlHelper }) => {
+const CollectionOverview = ({ urlHelper }) => {
   const dispatch = useDispatch();
   const {
     location,
+    queryParams,
     params,
     getPersistentQueryParams,
     historyPushWithQueryParams
@@ -245,7 +246,7 @@ const CollectionOverview = ({ queryParams, urlHelper }) => {
               <Link
                 className="button button--copy button--small button--green"
                 to={{
-                  pathname: '/collections/add',
+                  pathname: '/add',
                   search: getPersistentQueryParams(location),
                   state: {
                     name: collectionName,
@@ -260,7 +261,7 @@ const CollectionOverview = ({ queryParams, urlHelper }) => {
               <Link
                 className="button button--edit button--small button--green"
                 to={({
-                  pathname: `/collections/edit/${collectionName}/${collectionVersion}`,
+                  pathname: `/edit/${collectionName}/${collectionVersion}`,
                   search: getPersistentQueryParams(location),
                 })}
               >
@@ -367,11 +368,11 @@ CollectionOverview.propTypes = {
   collections: PropTypes.object,
   datepicker: PropTypes.object,
   granules: PropTypes.object,
-  queryParams: PropTypes.object,
   providers: PropTypes.object,
   workflowOptions: PropTypes.array,
   urlHelper: PropTypes.shape({
     location: PropTypes.object,
+    queryParams: PropTypes.object,
     params: PropTypes.object,
     getPersistentQueryParams: PropTypes.func,
     historyPushWithQueryParams: PropTypes.func

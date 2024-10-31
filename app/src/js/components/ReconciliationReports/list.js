@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
@@ -18,7 +18,7 @@ import {
   tableColumns,
   bulkActions,
 } from '../../utils/table-config/reconciliation-reports';
-import LoadingEllipsis from '../LoadingEllipsis/loading-ellipsis';
+// import LoadingEllipsis from '../LoadingEllipsis/loading-ellipsis';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import List from '../Table/Table';
@@ -26,6 +26,7 @@ import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 // import withRouter from '../../withRouter';
 import { withUrlHelper } from '../../withUrlHelper';
+import CreateNewReportButton from './CreateNewReportButton';
 
 const breadcrumbConfig = [
   {
@@ -63,6 +64,7 @@ const ReconciliationReportList = ({ urlHelper }) => {
   const { queriedAt, count } = list.meta;
   const query = generateQuery();
   const tableColumnsArray = tableColumns({ dispatch, isGranules, query });
+  const { createReportInflight } = reconciliationReports;
 
   useEffect(() => {
     dispatch(refreshCumulusDbConnection());
@@ -92,21 +94,10 @@ const ReconciliationReportList = ({ urlHelper }) => {
             {isGranules ? 'Lists' : 'Reconciliation Reports Overview'}
           </h1>
           {!isGranules && (
-            <Link
-              className="button button--green button--file button--small form-group__element--right"
-              to={(routerLocation) => ({
-                pathname: '/reconciliation-reports/create',
-                search: getPersistentQueryParams(routerLocation),
-              })}
-            >
-              {reconciliationReports.createReportInflight
-                ? (
-                <LoadingEllipsis />
-                  )
-                : (
-                    'Create New Report'
-                  )}
-            </Link>
+            <CreateNewReportButton
+              createReportInflight={createReportInflight}
+              getPersistentQueryParams={getPersistentQueryParams}
+            />
           )}
           {lastUpdated(queriedAt)}
         </div>

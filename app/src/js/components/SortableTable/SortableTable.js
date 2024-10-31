@@ -6,16 +6,18 @@ import React, {
   useState,
   createRef
 } from 'react';
+import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination, useExpanded } from 'react-table';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
-import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination, useExpanded } from 'react-table';
-import { useDispatch } from 'react-redux';
 import TableHeader from '../TableHeader/table-header';
 import SimplePagination from '../Pagination/simple-pagination';
 import TableFilters from '../Table/TableFilters';
 import ListFilters from '../ListActions/ListFilters';
 import { sortPersist } from '../../actions/index';
+// import { getPersistentQueryParams } from '../../withUrlHelper';
 
 const getColumnWidth = (rows, accessor, headerText, originalWidth) => {
   const maxWidth = 400;
@@ -464,12 +466,23 @@ const SortableTable = ({
                         onMouseEnter={(e) => handleTableColumnMouseEnter(e)}
                         onMouseLeave={(e) => handleTableColumnMouseLeave(e)}
                       >
-                        {cell.render('Cell')}
+                        {(() => {
+                          if (cell.column.isLink) {
+                            // Use default link rendering for columns with isLink: true but no custom Cell function
+                            return (
+                              <Link to={cell.column.linkTo(row.original)}>
+                                {cell.render('Cell')}
+                              </Link>
+                            );
+                          }
+                          // For columns with custom Cell functions or columns without isLink: true,
+                          // just render the cell as is
+                          return cell.render('Cell');
+                        })()}
                       </div>
                     );
                   })}
                 </div>
-
                 {renderRowSubComponent &&
                   <>{renderRowSubComponent(row)}</>
                 }

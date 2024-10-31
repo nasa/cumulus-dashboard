@@ -1,25 +1,29 @@
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { get } from 'object-path';
-import { Link } from 'react-router-dom';
 import { tally, collectionNameVersion, fromNowWithTooltip, CopyCellPopover, collectionHrefFromNameVersion, recoverCollectionText } from '../format';
 import { deleteCollection } from '../../actions';
 import { strings } from '../../components/locale';
 import BatchDeleteConfirmContent from '../../components/DeleteCollection/BatchDeleteConfirmContent';
 import BatchDeleteCompleteContent from '../../components/DeleteCollection/BatchDeleteCompleteContent';
 import BatchDeleteWithGranulesContent from '../../components/DeleteCollection/BatchDeleteWithGranulesContent';
-import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
+// import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../../withUrlHelper';
 
 export const tableColumns = [
   {
     Header: 'Name',
     accessor: 'name',
-    Cell: ({ cell: { value, row } }) => { // eslint-disable-line react/prop-types
-      const { values } = row; // eslint-disable-line react/prop-types
-      const content = <Link to={(location) => ({
-        // eslint-disable-next-line react/prop-types
-        pathname: collectionHrefFromNameVersion({ name: value, version: values.version }),
-        search: getPersistentQueryParams(location)
-      })}>{value}</Link>;
+    isLink: true,
+    Cell: ({ value, row }) => { // eslint-disable-line react/prop-types
+      const { name, version } = row.original; // eslint-disable-line react/prop-types
+      const location = useLocation();
+      const href = collectionHrefFromNameVersion({ name, version });
+      const popUrl = `${window.location.origin}${href}${location.search}`;
+      const content = <Link to={{
+        pathname: href,
+        search: popUrl
+      }}>{value}</Link>;
       return (
         <CopyCellPopover
           cellContent={content}
@@ -28,6 +32,13 @@ export const tableColumns = [
           value={value}
         />
       );
+    },
+    linkTo: (row) => {
+      console.log('linkTo row:', row);
+      return {
+        pathname: collectionHrefFromNameVersion({ name: row.name, version: row.version }),
+        search: window.location.search
+      };
     },
     width: 175
   },
