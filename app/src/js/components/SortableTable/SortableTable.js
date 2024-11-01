@@ -17,7 +17,8 @@ import SimplePagination from '../Pagination/simple-pagination';
 import TableFilters from '../Table/TableFilters';
 import ListFilters from '../ListActions/ListFilters';
 import { sortPersist } from '../../actions/index';
-// import { getPersistentQueryParams } from '../../withUrlHelper';
+import { withUrlHelper } from '../../withUrlHelper';
+import { CopyCellPopover } from '../../utils/format';
 
 const getColumnWidth = (rows, accessor, headerText, originalWidth) => {
   const maxWidth = 400;
@@ -75,6 +76,7 @@ const SortableTable = ({
   renderRowSubComponent,
   tableId,
   initialSortBy = [],
+  urlHelper,
 }) => {
   const defaultColumn = useMemo(
     () => ({
@@ -120,7 +122,7 @@ const SortableTable = ({
     gotoPage,
     nextPage,
     previousPage,
-    setHiddenColumns
+    setHiddenColumns,
   } = useTable(
     {
       data,
@@ -163,6 +165,7 @@ const SortableTable = ({
     }
   );
   const dispatch = useDispatch();
+  const { getPersistentQueryParams } = urlHelper;
   const tableRows = page || rows;
   // We only include filters if not wrapped in list component and hideFilter is false
   const wrappedInList = typeof getToggleColumnOptions === 'function';
@@ -467,17 +470,61 @@ const SortableTable = ({
                         onMouseLeave={(e) => handleTableColumnMouseLeave(e)}
                       >
                         {(() => {
+                          // Check for custom Cell renderer first
+                          if (typeof cell.column === 'function') {
+                            return cell.column({ cell, row: cell.row, value: cell.value });
+                          }
+
+                          // Then check for isLink
                           if (cell.column.isLink) {
                             // Use default link rendering for columns with isLink: true but no custom Cell function
-                            return (
-                              <Link to={cell.column.linkTo(row.original)}>
-                                {cell.render('Cell')}
+                            let linkTo;
+                            if (typeof cell.column.linkTo === 'function') {
+                              linkTo = cell.column.linkTo(cell.row.original);
+                            } else if (typeof cell.column.linkTo === 'string') {
+                              linkTo = cell.column.linkTo;
+                            } else {
+                              return cell.value;
+                            }
+
+                            const pathname = linkTo;
+                            const search = getPersistentQueryParams() || '';
+
+                            const content = (
+                              <Link to={{ pathname, search }}>
+                                {cell.value}
                               </Link>
                             );
+
+                            // Check if the column uses CopyCellPopover
+                            if (cell.column.useCopyCellPopover) {
+                              return (
+                                <CopyCellPopover
+                                  cellContent={content}
+                                  id={`${cell.column.id || cell.column.accessor}-${cell.value}-popover`}
+                                  popoverContent={cell.value}
+                                  value={cell.value}
+                                />
+                              );
+                            }
+
+                            return content;
                           }
-                          // For columns with custom Cell functions or columns without isLink: true,
-                          // just render the cell as is
-                          return cell.render('Cell');
+
+                          // Check for non-link cells that use CopyCellPopover
+                          if (cell.column.useCopyCellPopover) {
+                            return (
+                              <CopyCellPopover
+                                cellContent={cell.value}
+                                id={`${cell.column.id || cell.column.accessor}-${cell.value}-popover`}
+                                popoverContent={cell.value}
+                                value={cell.value}
+                              />
+                            );
+                          }
+
+                          // Default cell rendering
+                          return cell.value;
                         })()}
                       </div>
                     );
@@ -557,6 +604,9 @@ SortableTable.propTypes = {
   renderRowSubComponent: PropTypes.func,
   tableId: PropTypes.string,
   initialSortBy: PropTypes.array,
+  urlHelper: PropTypes.shape({
+    getPersistentQueryParams: PropTypes.func
+  })
 };
 
-export default SortableTable;
+export default withUrlHelper(SortableTable);

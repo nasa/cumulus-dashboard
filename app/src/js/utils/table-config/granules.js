@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Collapsible from 'react-collapsible';
 import path from 'path';
 import pick from 'lodash/pick';
@@ -51,7 +51,7 @@ export const tableColumns = [
     Header: 'Status',
     accessor: 'status',
     width: 110,
-    isLiink: true,
+    isLink: true,
     linkTo: (row) => `/granules/${row.status}`,
     Cell: ({ cell: { value } }) => (<span className={`granule__status granule__status--${value}`}>{displayCase(value)}</span>) // eslint-disable-line react/prop-types
   },
@@ -60,23 +60,13 @@ export const tableColumns = [
     accessor: 'granuleId',
     width: 225,
     isLink: true,
-    // eslint-disable-next-line react/prop-types
-    Cell: ({ value }) => {
-      const location = useLocation();
-      const href = `/granules/granule/${value}`; // eslint-disable-line react/prop-types
-      const popUrl = `${window.location.origin}${href}${location.search}`;
-      console.log('popUrl:', popUrl);
-      const content = granuleLink(value);
-      return (<CopyCellPopover cellContent={content} id={`granuleId-${value}-popover`} popoverContent={popUrl} value={value} />);
-    },
-    linkTo: (row) => {
-      console.log('linkTo row:', row);
-      return `/granules/granule/${row.granuleId || row.values?.granuleId || row.original?.granuleId}`;
-    }
+    useCopyCellPopover: true,
+    linkTo: (row) => `/granules/granule/${row.granuleId || row.values?.granuleId || row.original?.granuleId}`
   },
   {
     Header: 'Published',
     accessor: 'published',
+    isLink: true,
     Cell: ({ row: { original: { cmrLink, published } } }) => (// eslint-disable-line react/prop-types
       cmrLink && bool(published) ? <a href={cmrLink} target='_blank'>{bool(published)}</a> : bool(published)
     )
@@ -84,12 +74,14 @@ export const tableColumns = [
   {
     Header: strings.collection_id,
     accessor: 'collectionId',
+    isLink: true,
     // eslint-disable-next-line react/prop-types
     Cell: ({ cell: { value } }) => <CopyCellPopover cellContent={collectionLink(value)} id={`collectionId-${value}-popover`} popoverContent={collectionLink(value)} value={value} />,
   },
   {
     Header: 'Executions List',
     accessor: 'granuleId',
+    isLink: true,
     Cell: ({ row: { original: { collectionId, granuleId } } }) => (// eslint-disable-line react/prop-types
       <Link to={(location) => ({ pathname: `/executions/executions-list/${encodeURIComponent(collectionId)}/${encodeURIComponent(path.basename(granuleId))}` })}>link</Link>
     ),
@@ -100,6 +92,7 @@ export const tableColumns = [
   {
     Header: 'Provider',
     accessor: 'provider',
+    isLink: true,
     Cell: ({ cell: { value } }) => providerLink(value)
   },
   {
@@ -144,6 +137,7 @@ export const errorTableColumns = [
   {
     Header: 'Granule',
     accessor: 'granuleId',
+    isLink: true,
     Cell: ({ cell: { value } }) => granuleLink(value),
     width: 200
   },
