@@ -1,21 +1,46 @@
 'use strict';
 
 import test from 'ava';
-import { get } from 'object-path';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import { render, screen, fireEvent } from '@testing-library/react'
 import React from 'react';
-import { shallow, configure } from 'enzyme';
 import { BulkGranule } from '../../../app/src/js/components/Granules/bulk.js';
-import { constructCollectionId } from '../../../app/src/js/utils/format.js';
-
-configure({ adapter: new Adapter() });
+import { MemoryRouter } from 'react-router-dom';
+import { requestMiddleware } from '../../../app/src/js/middleware/request';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import { initialState } from '../../../app/src/js/reducers/datepicker';
+import { Provider } from 'react-redux';
 
 const granules = {};
 const dispatch = () => { };
+const locationQueryParams = {
+  search: {}
+};
+
+const middlewares = [requestMiddleware, thunk];
+const mockStore = configureMockStore(middlewares);
 
 test('BulkGranule does not generate button for bulk recovery when recovery is not enabled', function (t) {
   const configWithRecovery = { enableRecovery: false };
-  const bulkGranuleWrapper = shallow(
+
+  const someStore = mockStore({
+    getState: () => {},
+    subscribe: () => {},
+    dispatch,
+    timer: { running: false, seconds: -1 },
+    datepicker: initialState(),
+    locationQueryParams,
+    granulesExecutions : {
+      workflows: {
+        data: ['fakeworkflow1', 'fakeworkflow2']
+      }
+    },
+    config: configWithRecovery
+  });
+
+  const { container } = render(
+    <Provider store={someStore}>
+    <MemoryRouter>
     <BulkGranule
       dispatch={dispatch}
       config={configWithRecovery}
@@ -23,18 +48,34 @@ test('BulkGranule does not generate button for bulk recovery when recovery is no
       element='button'
       className='button button__bulkgranules'
       granules={granules}
-    />);
-
-  const buttons = bulkGranuleWrapper.find('button');
-  const buttonsProps = buttons.map((button) => button.props())
-  const recoverFilter = (object) => object.children === 'Run Bulk Recovery';
-  const recoveryButtonsProps = buttonsProps.filter(recoverFilter);
-  t.is(recoveryButtonsProps.length, 0);
+    />
+    </MemoryRouter>
+    </Provider>);
+  fireEvent.click(container.querySelector('.button'));
+  t.throws(() => screen.getByText('Run Bulk Recovery'));
 });
 
 test('BulkGranule generates button for bulk recovery when recovery is enabled', function (t) {
   const configWithRecovery = { enableRecovery: true };
-  const bulkGranuleWrapper = shallow(
+
+  const someStore = mockStore({
+    getState: () => {},
+    subscribe: () => {},
+    dispatch,
+    timer: { running: false, seconds: -1 },
+    datepicker: initialState(),
+    locationQueryParams,
+    granulesExecutions : {
+      workflows: {
+        data: ['fakeworkflow1', 'fakeworkflow2']
+      }
+    },
+    config: configWithRecovery
+  });
+
+  const { container } = render(
+    <Provider store={someStore}>
+    <MemoryRouter>
     <BulkGranule
       dispatch={dispatch}
       config={configWithRecovery}
@@ -42,11 +83,10 @@ test('BulkGranule generates button for bulk recovery when recovery is enabled', 
       element='button'
       className='button button__bulkgranules'
       granules={granules}
-    />);
+    />
+    </MemoryRouter>
+    </Provider>);
 
-  const buttons = bulkGranuleWrapper.find('button');
-  const buttonsProps = buttons.map((button) => button.props())
-  const recoverFilter = (object) => object.children === 'Run Bulk Recovery';
-  const recoveryButtonsProps = buttonsProps.filter(recoverFilter);
-  t.is(recoveryButtonsProps.length, 1);
+  fireEvent.click(container.querySelector('.button'));
+  t.truthy(screen.getByText('Run Bulk Recovery'));
 });

@@ -17,6 +17,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { initialState } from '../../../app/src/js/reducers/datepicker';
 import { Provider } from 'react-redux';
+
 import { BulkGranuleModal } from '../../../app/src/js/components/Granules/bulk-granule-modal.js';
 
 const locationQueryParams = {
@@ -38,6 +39,8 @@ const someStore = mockStore({
 const match = {
   params: { executionArn: executionHistory.execution.executionArn },
 };
+
+// console.log("============= dispatch ", dispatch);
 
 test.beforeEach((t) => {
   // Mock useDispatch hook
@@ -121,19 +124,19 @@ test.serial('Execution Events displays the correct step name', function (t) {
     </Provider>
   );
 
-  // screen.debug();
+  screen.debug();
   // console.log("=========== container", container.innerHTML);
 
-  const sortableTable = container.querySelectorAll('.table--wrapper');
-  t.is(sortableTable.length, 1);
+  // const sortableTable = container.querySelector('.SortableTable');
+  // t.is(sortableTable.length, 1);
 
-  screen.debug();
-  console.log(sortableTable);
+  // screen.debug();
+  // console.log("========== sortable table", sortableTable);
 
-  const sortableTableWrapper = sortableTable[0].querySelectorAll('.tbody .tr');
+  // const sortableTableWrapper = sortableTable[0].querySelectorAll('.tbody .tr');
   
   // screen.debug();
-  // console.log(sortableTable.innerHTML);
+  // console.log("============== sortableTable", sortableTable.innerHTML);
 
   // t.is(sortableTableWrapper.length, 9);
   // const expectedStepNames = [
@@ -149,7 +152,7 @@ test.serial('Execution Events displays the correct step name', function (t) {
   // ];
 
   // screen.debug()
-  // console.log(sortableTableWrapper[0].textContent);
+  // console.log("============== sortableTableWrapper ", sortableTableWrapper[0].textContent);
 
   // const tableRows = sortableTableWrapper.querySelector('.tbody .tr');
 

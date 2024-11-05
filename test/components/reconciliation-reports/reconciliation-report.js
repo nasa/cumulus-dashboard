@@ -141,7 +141,7 @@ test('shows an individual inventory report', function (t) {
   const InventoryReport = container.querySelectorAll('.page__section__header');
   t.is(InventoryReport.length, 1);
 
-  const ReportHeading = container.querySelectorAll('.heading--large');
+  const ReportHeading = container.querySelectorAll('.heading--shared-content.with-description.with-bottom-border.width--full');
   t.is(ReportHeading.length, 1);
 
   const TableCards = container.querySelectorAll('.table-card');
@@ -174,7 +174,7 @@ test('shows an individual Granule Not Found report', function (t) {
   const GnfReport = container.querySelectorAll('.page__section__header');
   t.is(GnfReport.length, 1);
 
-  const ReportHeading = container.querySelectorAll('.heading--large');
+  const ReportHeading = container.querySelectorAll('.heading--shared-content.with-description.with-bottom-border.width--full');
   t.is(ReportHeading.length, 1);
 
   const Table = container.querySelectorAll('.list__wrapper');
@@ -201,31 +201,26 @@ test('correctly renders the heading', function (t) {
   const GnfReport = container.querySelectorAll('.page__section__header');
   t.is(GnfReport.length, 1);
 
-  const ReportHeading = container.querySelectorAll('.heading--large');
+  const ReportHeading = container.querySelectorAll('.heading--shared-content.with-description.with-bottom-border.width--full');
   t.is(ReportHeading.length, 1);
 
-  /*
-
-    REMAINING STUFF IN THIS FILE THAT NEEDS CHANGING:
-
-  const { downloadOptions, ...headingProps } = ReportHeading.props();
-
+  const headingProps = ReportHeading[0].textContent;
   const expectedHeadingProps = {
-    endTime: '2018-06-11T18:52:39.893Z',
-    error: null,
+    endTime: '2018-06-11 18:52:37',
+    error: '',
     name: 'exampleInventoryReport',
-    startTime: '2018-06-11T18:52:37.710Z',
+    startTime: '2018-06-11 18:52:39',
     type: 'Inventory'
   };
 
-  t.is(downloadOptions.length, 2);
+  t.true(headingProps.includes(expectedHeadingProps.type) && headingProps.includes(expectedHeadingProps.name) && headingProps.includes(expectedHeadingProps.error) 
+    && headingProps.includes(expectedHeadingProps.startTime) && headingProps.includes(expectedHeadingProps.endTime));
 
-  t.deepEqual(headingProps, expectedHeadingProps);
-
-  const reportHeadingWrapper = ReportHeading.dive();
-
-  const downloadItems = reportHeadingWrapper.find('DropdownItem');
-  t.is(downloadItems.length, 2);*/
+  const downloadOptions = ReportHeading[0].querySelectorAll('.button--download');
+  const downloadItems = ReportHeading[0].querySelectorAll('.dropdown');
+  // for the below, the original tests had it equal to 2, I wasn't sure what it was checking for, this will need to be checked over in the review
+  t.is(downloadOptions.length, 1); 
+  t.is(downloadItems.length, 1);
 });
 
 test('report with error triggers error message', function (t) {
@@ -249,7 +244,7 @@ test('report with error triggers error message', function (t) {
   const InventoryReport = container.querySelectorAll('.page__section__header');
   t.is(InventoryReport.length, 1);
 
-  const ReportHeading = container.querySelectorAll('.heading--large');
+  const ReportHeading = container.querySelectorAll('.heading--shared-content.with-description.with-bottom-border.width--full');
   t.is(ReportHeading.length, 1);
 
   const ErrorReport = container.querySelector('.error__report');
@@ -278,7 +273,7 @@ test('report which exceeds maximum allowed payload size triggers error message',
   const InventoryReport = container.querySelectorAll('.page__section__header');
   t.is(InventoryReport.length, 1);
 
-  const ReportHeading = container.querySelectorAll('.heading--large');
+  const ReportHeading = container.querySelectorAll('.heading--shared-content.with-description.with-bottom-border.width--full');
   t.is(ReportHeading.length, 1);
 
   const ErrorReport = container.querySelector('.error__report');

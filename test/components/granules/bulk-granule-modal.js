@@ -1,10 +1,28 @@
 'use strict';
 
 import test from 'ava';
-import { render, screen } from '@testing-library/react';
 // import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
 // import { shallow, configure } from 'enzyme';
+
+import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import { requestMiddleware } from '../../../app/src/js/middleware/request';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import { initialState } from '../../../app/src/js/reducers/datepicker';
+import { Provider } from 'react-redux';
+
+const middlewares = [requestMiddleware, thunk];
+const mockStore = configureMockStore(middlewares);
+const someStore = mockStore({
+  getState: () => {},
+  subscribe: () => {},
+  timer: { running: false, seconds: -1 },
+  datepicker: initialState(),
+  // locationQueryParams,
+  // dispatch
+});
 
 import { BulkGranuleModal } from '../../../app/src/js/components/Granules/bulk-granule-modal.js';
 
@@ -15,12 +33,16 @@ test('bulk granule modal shows success message', function (t) {
   const successMessage = 'Success 1234';
 
   const { container } = render(
+    <Provider store={someStore}>
+    <MemoryRouter>
     <BulkGranuleModal
       asyncOpId={asyncOpId}
       inflight={false}
       success={true}
       successMessage={successMessage}
     />
+    </MemoryRouter>
+    </Provider>
   );
 
   screen.debug();

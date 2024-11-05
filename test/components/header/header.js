@@ -64,7 +64,6 @@ test('Header contains correct number of nav items and excludes PDRs and Logs', f
   t.is(logsList.length, 0);
 });
 
-
 test('Logo path is "/cumulus-logo.png" when BUCKET is not specified', function (t) {
   const dispatch = () => {};
   const api = {
