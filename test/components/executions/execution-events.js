@@ -10,7 +10,7 @@ import sinon from 'sinon';
 import { ExecutionEvents } from '../../../app/src/js/components/Executions/execution-events';
 import executionHistory from '../../../test/fixtures/execution-history-all';
 
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { requestMiddleware } from '../../../app/src/js/middleware/request';
 import configureMockStore from 'redux-mock-store';
@@ -124,19 +124,49 @@ test.serial('Execution Events displays the correct step name', function (t) {
     </Provider>
   );
 
-  screen.debug();
+  // screen.debug();
   // console.log("=========== container", container.innerHTML);
 
-  // const sortableTable = container.querySelector('.SortableTable');
+  // const sortableTable = container.querySelectorAll('.table--wrapper');
   // t.is(sortableTable.length, 1);
 
   // screen.debug();
   // console.log("========== sortable table", sortableTable);
 
-  // const sortableTableWrapper = sortableTable[0].querySelectorAll('.tbody .tr');
+  // const sortableTableWrapper = container.querySelectorAll('.table .tr');
   
   // screen.debug();
-  // console.log("============== sortableTable", sortableTable.innerHTML);
+  // console.log("============== sortableTableWrapper", sortableTableWrapper.innerHTML);
+
+  const sortableTable = container.querySelectorAll('.table--wrapper');
+  t.is(sortableTable.length, 1);
+
+  const sortableTableRows = screen.getByRole('table');
+  const tableRows = sortableTableRows.querySelectorAll('.tbody .tr');
+  t.is(tableRows.length, 9);
+ 
+  // screen.debug();
+  // console.log("============== sortableTableRows", sortableTableRows.innerHTML);
+
+  const expectedStepNames = [
+     'N/A',
+     'SyncGranule',
+     'SyncGranule',
+     'SyncGranule',
+     'SyncGranule',
+     'SyncGranule',
+     'ChooseProcess',
+     'ChooseProcess',
+     'N/A',
+   ];
+
+   const rows = screen.getAllByRole('row');
+   rows.slice(1).forEach((row, index) => {
+   const cells = within(row).getAllByRole('cell');
+   t.is(cells.length, 3);
+   const stepName = cells[1].textContent;
+   t.assert(stepName.includes(expectedStepNames[index]));
+  });
 
   // t.is(sortableTableWrapper.length, 9);
   // const expectedStepNames = [
