@@ -11,6 +11,7 @@ import { ExecutionEvents } from '../../../app/src/js/components/Executions/execu
 import executionHistory from '../../../test/fixtures/execution-history-all';
 
 import { render, screen, within } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { requestMiddleware } from '../../../app/src/js/middleware/request';
 import configureMockStore from 'redux-mock-store';
@@ -130,23 +131,12 @@ test.serial('Execution Events displays the correct step name', function (t) {
   // const sortableTable = container.querySelectorAll('.table--wrapper');
   // t.is(sortableTable.length, 1);
 
-  // screen.debug();
-  // console.log("========== sortable table", sortableTable);
-
-  // const sortableTableWrapper = container.querySelectorAll('.table .tr');
-  
-  // screen.debug();
-  // console.log("============== sortableTableWrapper", sortableTableWrapper.innerHTML);
-
-  const sortableTable = container.querySelectorAll('.table--wrapper');
-  t.is(sortableTable.length, 1);
-
   const sortableTableRows = screen.getByRole('table');
   const tableRows = sortableTableRows.querySelectorAll('.tbody .tr');
   t.is(tableRows.length, 9);
  
-  // screen.debug();
-  // console.log("============== sortableTableRows", sortableTableRows.innerHTML);
+  screen.debug();
+  console.log("============== sortableTableRows", sortableTableRows.innerHTML);
 
   const expectedStepNames = [
      'N/A',
@@ -168,23 +158,10 @@ test.serial('Execution Events displays the correct step name', function (t) {
    t.assert(stepName.includes(expectedStepNames[index]));
   });
 
-  // t.is(sortableTableWrapper.length, 9);
-  // const expectedStepNames = [
-  //   'N/A',
-  //   'SyncGranule',
-  //   'SyncGranule',
-  //   'SyncGranule',
-  //   'SyncGranule',
-  //   'SyncGranule',
-  //   'ChooseProcess',
-  //   'ChooseProcess',
-  //   'N/A',
-  // ];
+   //screen.debug()
+   //console.log("============== sortableTableWrapper ", sortableTableRows[0].textContent);
 
-  // screen.debug()
-  // console.log("============== sortableTableWrapper ", sortableTableWrapper[0].textContent);
-
-  // const tableRows = sortableTableWrapper.querySelector('.tbody .tr');
+  //const tableRows = sortableTableWrapper.querySelectorAll('.tbody .tr');
 
   // console.log(sortableTableWrapper.innerHTML);
 
@@ -199,12 +176,12 @@ test.serial('Execution Events displays the correct step name', function (t) {
   // =============================================  
 
 
-  // tableRows.forEach((row, index) => {
-  //   const columns = row.find('Cell');
-  //   t.is(columns.length, 3);
-  //   const stepName = columns.at(1).shallow().text();
-  //   t.assert(stepName.includes(expectedStepNames[index]));
-  // });
+  //  tableRows.forEach((row, index) => {
+  //    const columns = row.find('Cell');
+  //    t.is(columns.length, 3);
+  //    const stepName = columns.at(1).shallow().text();
+  //    t.assert(stepName.includes(expectedStepNames[index]));
+  //  });
 });
 
 // test.serial('Execution Events shows event history', function (t) {
