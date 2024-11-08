@@ -124,8 +124,8 @@ test.serial('Execution Events displays the correct step name', function (t) {
     </Provider>
   );
 
-  screen.debug();
-    console.log("=========== container", container.innerHTML);
+  //screen.debug();
+  //console.log("=========== container", container.innerHTML);
 
   const sortableTable = container.querySelectorAll('.table--wrapper');
   t.is(sortableTable.length, 1);
@@ -134,8 +134,8 @@ test.serial('Execution Events displays the correct step name', function (t) {
   const tableRows = sortableTableRows.querySelectorAll('.tbody .tr');
   t.is(tableRows.length, 9);
  
-  screen.debug();
-  console.log("============== sortableTableRows", sortableTableRows.innerHTML);
+  //screen.debug();
+  //console.log("============== sortableTableRows", sortableTableRows.innerHTML);
 
   const expectedStepNames = [
      'N/A',
@@ -183,74 +183,86 @@ test.serial('Execution Events displays the correct step name', function (t) {
   //  });
 });
 
-// test.serial('Execution Events shows event history', function (t) {
-//   const executionStatus = {
-//     data: {
-//       presignedS3Url: 'http://example.com/presignedS3Url',
-//       data: {
-//         execution: executionHistory.execution,
-//         executionHistory: executionHistory.executionHistory,
-//         stateMachine: executionHistory.execution,
-//       }
-//     },
-//     inflight: true,
-//     error: false,
-//     meta: {},
-//   };
-//   let testedExpectedAssertion = false;
+test.serial('Execution Events shows event history', function (t) {
+  const executionStatus = {
+    data: {
+      presignedS3Url: 'http://example.com/presignedS3Url',
+      data: {
+        execution: executionHistory.execution,
+        executionHistory: executionHistory.executionHistory,
+        stateMachine: executionHistory.execution,
+      }
+    },
+    inflight: true,
+    error: false,
+    meta: {},
+  };
+  let testedExpectedAssertion = false;
 
-//   const executionEvents = shallow(
-//     <ExecutionEvents
-//       dispatch={dispatch}
-//       location={{}}
-//       match={match}
-//       executionStatus={executionStatus}
-//     />
-//   );
-//   const sortableTable = executionEvents.find('SortableTable');
-//   t.is(sortableTable.length, 1);
+  const { container } = render(
+    <Provider store={someStore}>
+      <MemoryRouter>
+      <ExecutionEvents
+        dispatch={dispatch}
+        location={{}}
+        match={match}
+        executionStatus={executionStatus}
+      />
+      </MemoryRouter>
+      </Provider>
+    );
 
-//   const sortableTableWrapper = sortableTable.dive();
-//   const tableRows = sortableTableWrapper.find('.tbody .tr');
-//   t.is(tableRows.length, 19);
+  const sortableTable = container.querySelectorAll('.table--wrapper');
+  t.is(sortableTable.length, 1);
 
-//   const expectedWorkflowTasksData = {
-//     0: {
-//       version: '$LATEST',
-//       name: 'test-SfSnsReport',
-//       arn: 'arn:aws:lambda:us-east-1:000000000000:function:test-SfSnsReport',
-//     },
-//     1: {
-//       version: '$LATEST',
-//       name: 'test-DiscoverGranules',
-//       arn: 'arn:aws:lambda:us-east-1:000000000000:function:test-DiscoverGranules',
-//     },
-//     2: {
-//       version: '$LATEST',
-//       name: 'test-SfSnsReport',
-//       arn: 'arn:aws:lambda:us-east-1:000000000000:function:test-SfSnsReport',
-//     },
-//   };
+  const sortableTableRows = container.querySelectorAll('.tbody .tr');
+  t.is(sortableTableRows.length, 19);
 
-//   tableRows.forEach((row) => {
-//     const columns = row.find('Cell');
-//     t.is(columns.length, 3);
-//     const moreDetails = JSON.parse(
-//       columns.at(1).dive().find('pre').render().html()
-//     );
-//     if (
-//       moreDetails.output &&
-//       moreDetails.output.meta &&
-//       moreDetails.output.meta.workflow_tasks &&
-//       Object.keys(moreDetails.output.meta.workflow_tasks).length === 3
-//     ) {
-//       testedExpectedAssertion = true;
-//       t.deepEqual(
-//         moreDetails.output.meta.workflow_tasks,
-//         expectedWorkflowTasksData
-//       );
-//     }
-//   });
+  //screen.debug()
+  //console.log("============== Test2_sortableTableWrapper ", sortableTableRows[0].textContent);
 
-//   t.true(testedExpectedAssertion);
-// });
+  const expectedWorkflowTasksData = {
+    0: {
+      version: '$LATEST',
+      name: 'test-SfSnsReport',
+      arn: 'arn:aws:lambda:us-east-1:000000000000:function:test-SfSnsReport',
+    },
+    1: {
+      version: '$LATEST',
+      name: 'test-DiscoverGranules',
+      arn: 'arn:aws:lambda:us-east-1:000000000000:function:test-DiscoverGranules',
+    },
+    2: {
+      version: '$LATEST',
+      name: 'test-SfSnsReport',
+      arn: 'arn:aws:lambda:us-east-1:000000000000:function:test-SfSnsReport',
+    },
+  };
+
+  const tableRows = screen.getAllByRole('row');
+  tableRows.slice(1).forEach((row) => {
+  const columns = within(row).getAllByRole('cell');
+  t.is(columns.length, 3);
+
+  //console.log("============== Test2_data", sortableTable);
+  screen.debug()
+ console.log("============== Test2_data", columns);
+  
+  const preElement = columns[1].querySelector('pre');
+  const moreDetails = JSON.parse(preElement.textContent);
+    if (
+      moreDetails.output &&
+      moreDetails.output.meta &&
+      moreDetails.output.meta.workflow_tasks &&
+      Object.keys(moreDetails.output.meta.workflow_tasks).length === 3
+    ) {
+      testedExpectedAssertion = true;
+      t.deepEqual(
+        moreDetails.output.meta.workflow_tasks,
+        expectedWorkflowTasksData
+      );
+    }
+  });
+
+  t.true(testedExpectedAssertion);
+});
