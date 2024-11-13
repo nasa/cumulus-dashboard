@@ -245,11 +245,14 @@ test.serial('Execution Events shows event history', function (t) {
   t.is(columns.length, 3);
 
   //console.log("============== Test2_data", sortableTable);
-  screen.debug()
- console.log("============== Test2_data", columns);
+  //screen.debug()
+ //console.log("============== Test2_data", columns.slice(1));
   
-  const preElement = columns[1].querySelector('pre');
-  const moreDetails = JSON.parse(preElement.textContent);
+  //const preElement = columns[1].querySelector('pre');
+  //const moreDetails = JSON.parse(preElement.textContent);
+  columns.slice(1).forEach((row) => {
+    const cells = row.querySelectorAll('td');
+    const moreDetails = JSON.parse(cells[1].querySelector('pre')?.textContent || '{}');
     if (
       moreDetails.output &&
       moreDetails.output.meta &&
@@ -265,4 +268,5 @@ test.serial('Execution Events shows event history', function (t) {
   });
 
   t.true(testedExpectedAssertion);
+});
 });
