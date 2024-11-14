@@ -4,7 +4,6 @@ const fs = require('fs');
 const path = require('path');
 const CSV = require('csv-string');
 const serveUtils = require('@cumulus/api/bin/serveUtils');
-const { eraseDataStack } = require('@cumulus/api/bin/serve');
 const {
   localUserName,
   localStackName,
@@ -27,7 +26,6 @@ function resetIt() {
   process.env.ReconciliationReportsTable = `${localStackName}-ReconciliationReportsTable`;
 
   return Promise.all([
-    eraseDataStack(),
     testUtils.setAuthorizedOAuthUsers([localUserName]),
     serveUtils.resetPostgresDb(),
   ]);
