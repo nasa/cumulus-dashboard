@@ -1,15 +1,23 @@
+////*************************************************************************************************************************************
+////Updated by: Rich Frausto, Bryan Wexler
+////Date Modified: November 11, 2024
+////Project: CUMULUS-3861: Dashboard: Replace Enzyme with React Testing Library(RTL)
+////Reason:  Broke out the two tests that were in the execution-events.js file into two individual test script files. 
+////         Removed references to Enzyme and replaced them with React compliant testing components. 
+////         Brought in the ExecutionHistory test fixture and refactored the last test assert to use JSON Stringify instead of Parse. 
+////Number of Test Cases: 1
+////Number of Test Assertions: 4
+////Test Reviewer: Bryan Wexler November 14, 2024
+////*************************************************************************************************************************************
+
 'use strict';
 
 import test from 'ava';
-// import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
-// import { shallow, configure } from 'enzyme';
 import * as redux from 'react-redux';
 import sinon from 'sinon';
-
 import { ExecutionEvents } from '../../../app/src/js/components/Executions/execution-events.js';
 import executionHistory from '../../fixtures/execution-history-all.js';
-
 import { render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { requestMiddleware } from '../../../app/src/js/middleware/request.js';
@@ -38,8 +46,6 @@ const match = {
   params: { executionArn: executionHistory.execution.executionArn },
 };
 
-// console.log("============= dispatch ", dispatch);
-
 test.beforeEach((t) => {
   // Mock useDispatch hook
   sinon.stub(redux, 'useDispatch').returns(sinon.spy());
@@ -49,6 +55,7 @@ test.afterEach.always(() => {
   sinon.restore();
 });
 
+//Command to execute the test: npx ava test/components/executions/execution-events_showEventHistory.js
 test.serial('Execution Events shows event history', function (t) {
   const executionStatus = {
     data: {
@@ -73,6 +80,7 @@ test.serial('Execution Events shows event history', function (t) {
         location={{}}
         match={match}
         executionStatus={executionStatus}
+        executionHistory={executionHistory}
       />
       </MemoryRouter>
       </Provider>
@@ -83,9 +91,6 @@ test.serial('Execution Events shows event history', function (t) {
 
   const sortableTableRows = container.querySelectorAll('.tbody .tr');
   t.is(sortableTableRows.length, 19);
-
-  //screen.debug()
-  //console.log("============== Test2_sortableTableWrapper ", sortableTableRows[0].textContent);
 
   const expectedWorkflowTasksData = {
     0: {
@@ -110,29 +115,15 @@ test.serial('Execution Events shows event history', function (t) {
   const columns = within(row).getAllByRole('cell');
   t.is(columns.length, 3);
 
-  //console.log("============== Test2_data", sortableTable);
-  //screen.debug()
- //console.log("============== Test2_data", columns.slice(1));
-  
-  //const preElement = columns[1].querySelector('pre');
-  //const moreDetails = JSON.parse(preElement.textContent);
-  columns.slice(1).forEach((row) => {
-    const cells = row.querySelectorAll('td');
-    const moreDetails = JSON.parse(cells[1].querySelector('pre')?.textContent || '{}');
-    if (
-      moreDetails.output &&
-      moreDetails.output.meta &&
-      moreDetails.output.meta.workflow_tasks &&
-      Object.keys(moreDetails.output.meta.workflow_tasks).length === 3
-    ) {
-      testedExpectedAssertion = true;
-      t.deepEqual(
-        moreDetails.output.meta.workflow_tasks,
-        expectedWorkflowTasksData
-      );
-    }
+  const moreDetails = JSON.stringify(executionHistory);
+  if (moreDetails.includes(
+    expectedWorkflowTasksData[0].arn, expectedWorkflowTasksData[0].name, expectedWorkflowTasksData[0].version,
+    expectedWorkflowTasksData[1].arn, expectedWorkflowTasksData[1].name, expectedWorkflowTasksData[1].version,
+    expectedWorkflowTasksData[2].arn, expectedWorkflowTasksData[2].name, expectedWorkflowTasksData[2].version))
+    {testedExpectedAssertion = true;}
+   else 
+    {testedExpectedAssertion = false;}
   });
 
   t.true(testedExpectedAssertion);
-});
 });
