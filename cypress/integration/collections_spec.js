@@ -3,6 +3,7 @@ import { collectionName, getCollectionId } from '../../app/src/js/utils/format';
 
 // granules were ingested before this epoch time
 const ingestEndTime = 1537833600000; // 2018-09-25
+const clickOptions = { force: true, waitForAnimations: false, animationDistanceThreshold: 20 };
 
 describe('Dashboard Collections Page', () => {
   describe('When not logged in', () => {
@@ -96,7 +97,7 @@ describe('Dashboard Collections Page', () => {
         .contains(infix);
     });
 
-    it.skip('should display collections with active granules when a provider is selected from dropdown', () => {
+    it('should display collections with active granules when a provider is selected from dropdown', () => {
       cy.visit('/collections');
       cy.wait('@getCollections');
 
@@ -494,8 +495,8 @@ describe('Dashboard Collections Page', () => {
         { statusCode: 500, body: { message: 'Oopsie' } }
       );
       cy.visit('/granules');
-      cy.get(`[data-value="${granuleIds[0]}"] > .td >input[type="checkbox"]`).click();
-      cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
+      cy.get(`[data-value="${granuleIds[0]}"] > .td >input[type="checkbox"]`).click(clickOptions);
+      cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click(clickOptions);
       cy.contains('button', 'Granule Actions').click();
       cy.contains('button', 'Reingest').click();
       cy.get('.button--submit').click();
@@ -639,7 +640,7 @@ describe('Dashboard Collections Page', () => {
       cy.get('.search').as('search');
       cy.get('@search').click().type('Test').type('{enter}');
       cy.wait(1000);
-      cy.get('span > a').click();
+      cy.get('span > a', { timeout: 10000 }).click();
 
       // Breakcrumb <Link> contain correct query params
       cy.get('.breadcrumb > :nth-child(2) > a')

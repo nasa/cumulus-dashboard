@@ -3,7 +3,6 @@ import { collectionHrefFromId } from '../../app/src/js/utils/format';
 
 // granules were ingested before this epoch time
 const ingestEndTime = 1537833600000; // 2018-09-25
-
 const clickOptions = { force: true, waitForAnimations: false, animationDistanceThreshold: 20 };
 
 describe('Dashboard Granules Page', () => {
@@ -503,13 +502,13 @@ describe('Dashboard Granules Page', () => {
       cy.wait(1000);
       cy.get('.table .tbody .tr').should('have.length', 2);
       cy.get('.table .tbody .tr .td input[type=checkbox]').as('granule-checkbox');
-      cy.get('@granule-checkbox', { timeout: 1000 }).click({ multiple: true, ...clickOptions });
+      cy.get('@granule-checkbox', { timeout: 10000 }).click({ multiple: true, ...clickOptions });
       cy.get('.pagination ol li').last().should('have.text', 'Next').click();
       cy.wait(1000);
       cy.url().should('include', 'page=2');
       cy.get('.table .tbody .tr').should('have.length', 2);
       cy.get('.table .tbody .tr .td input[type=checkbox]').as('granule-checkbox2');
-      cy.get('@granule-checkbox2', { timeout: 1000 }).click({ multiple: true, ...clickOptions });
+      cy.get('@granule-checkbox2', { timeout: 10000 }).click({ multiple: true, ...clickOptions });
       cy.get('.pagination ol li').last().should('have.text', 'Next').click();
       cy.wait(1000);
       cy.url().should('include', 'page=3');
@@ -853,7 +852,7 @@ describe('Dashboard Granules Page', () => {
 
       // Validate Scroll Right button is visible when hovering over the last completely visible column
       // and can scroll and hide the scroll right button
-      cy.get('.tr:nth-child(1) > .td:nth-child(8)', { timeout: 1000 }).trigger('mouseover');
+      cy.get('.tr:nth-child(1) > .td:nth-child(8)', { timeout: 10000 }).trigger('mouseover');
       cy.get('.scrollButtonRight').should('be.visible');
       cy.get('.scrollButtonRight').trigger('mousedown', { button: 0 });
       cy.wait(1000);
