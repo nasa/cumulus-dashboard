@@ -1,23 +1,57 @@
+////*************************************************************************************************************************************
+////Updated by: Rich Frausto, Bryan Wexler
+////Date Modified: November 14, 2024
+////Project: CUMULUS-3861: Dashboard: Replace Enzyme with React Testing Library(RTL)
+////Reason:  Broke out the two tests that were in the execution-events.js file into two individual test script files. 
+////         Removed references to Enzyme and replaced them with React compliant testing components. 
+////Number of Test Cases: 1
+////Number of Test Assertions: 5
+////Test Reviewer: Bryan Wexler November 14, 2024
+////*************************************************************************************************************************************
 'use strict';
-
 import test from 'ava';
-// import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
-// import { shallow, configure } from 'enzyme';
-
+import * as redux from 'react-redux';
+import sinon from 'sinon';
 import { ExecutionStatus } from '../../../app/src/js/components/Executions/execution-status';
-import executionHistory from '../../../test/fixtures/execution-history-all';
-
-import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-import { requestMiddleware } from '../../../app/src/js/middleware/request';
+import executionHistory from '../../fixtures/execution-history-all';
+import metadata from '../../../app/src/js/components/Table/Metadata.js';
+import { render, screen, within } from '@testing-library/react';
+import { MemoryRouter} from 'react-router-dom';
+import { requestMiddleware } from '../../../app/src/js/middleware/request.js';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import { initialState } from '../../../app/src/js/reducers/datepicker';
 import { Provider } from 'react-redux';
+import Metadata from '../../../app/src/js/components/Table/Metadata.js';
+import { name } from 'file-loader';
 
-// configure({ adapter: new Adapter() });
+//configure({ adapter: new Adapter() });
 
+test.beforeEach((t) => {
+  // Mock useDispatch hook
+  sinon.stub(redux, 'useDispatch').returns(sinon.spy());
+});
+
+test.afterEach.always(() => {
+  sinon.restore();
+});
+
+const match = {params: { executionArn: executionHistory.execution.executionArn },};
+const locationQueryParams = { search: {} };
+const dispatch = () => {};
+
+const middlewares = [requestMiddleware, thunk];
+const mockStore = configureMockStore(middlewares);
+const someStore = mockStore({
+   getState: () => {},
+   subscribe: () => {},
+   timer: { running: false, seconds: -1 },
+   locationQueryParams,
+   dispatch
+  });
+
+
+//Command to execute the test: npx ava test/components/executions/execution-status.js
 test('Cumulus-690 Execution Status shows workflow task and version information', function (t) {
   const executionStatus = {
     data: {
@@ -33,52 +67,47 @@ test('Cumulus-690 Execution Status shows workflow task and version information',
     meta: {}
   };
 
-  const match = { params: { executionArn: executionHistory.execution.executionArn } };
-
-  const locationQueryParams = {
-    search: {}
-  };
-  const dispatch = () => {};
-
-  const middlewares = [requestMiddleware, thunk];
-  const mockStore = configureMockStore(middlewares);
-  const someStore = mockStore({
-    getState: () => {},
-    subscribe: () => {},
-    timer: { running: false, seconds: -1 },
-    datepicker: initialState(),
-    locationQueryParams,
-    dispatch
-  });
-
-  const { executionStatusRendered } = render(
+  const { container } = render(
     <Provider store={someStore}>
       <MemoryRouter>
-        <ExecutionStatus
-          dispatch={dispatch}
-          match={match}
-          logs={{}}
-          executionStatus={executionStatus}
-          skipReloadOnMount={true}
-          />
+      <metadata
+        dispatch={dispatch}
+        location={{}}
+        match={match}
+        logs={{}}
+        executionStatus={executionStatus}
+        executionHistory={executionHistory}
+        metadata={metadata}
+      />
       </MemoryRouter>
-    </Provider>
-  );
+      </Provider>
+    );
 
-  screen.debug();
 
-  const metadata = executionStatusRendered.querySelector('Metadata');
+  const metadata = container.querySelectorAll('metadata');
   t.is(metadata.length, 1);
 
-  const metadataWrapper = metadata.dive();
-  const metadataDetails = metadataWrapper.querySelector('dl');
-  t.is(metadataDetails.length, 1);
+  //const metadataWrapper = metadata.find();
+  //expect(screen.getByText('metadata')).toBeInTheDocument();
+  const metadataWrapper = container.querySelectorAll('Metadata');
+ 
+  //const metadataDetails = metadataWrapper.querySelectorAll('dl');
+ 
+ const metadataDetails = container.querySelectorAll('.metadata .dl');
+ t.is(metadataDetails.length, 1);
 
-  const metadataLabels = metadataDetails.querySelector('dt');
+ 
+  const metadataLabels = container.querySelectorAll('.metadata .dt');
   t.is(metadataLabels.length, 9);
-  const metadataValues = metadataDetails.querySelector('dd');
+
+  screen.debug();
+  console.log("============== testData", container);
+    
+
+  const metadataValues = metadataDetails.find('dd');
   t.is(metadataValues.length, 9);
 
-  const granulesTable = executionStatusRendered.querySelector('withRouter(withQueryParams(Connect(List)))');
+  const granulesTable = executionStatusRendered.find('withRouter(withQueryParams(Connect(List)))');
   t.is(granulesTable.length, 1);
+
 });
