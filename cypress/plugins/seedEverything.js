@@ -10,6 +10,7 @@ const {
   localSystemBucket,
 } = require('@cumulus/api/bin/local-test-defaults');
 
+const asyncOperations = require('../fixtures/seeds/asyncOperationsFixture.json');
 const collections = require('../fixtures/seeds/collectionsFixture.json');
 const executions = require('../fixtures/seeds/executionsFixture.json');
 const granules = require('../fixtures/seeds/granulesFixture.json');
@@ -29,6 +30,10 @@ function resetIt() {
     testUtils.setAuthorizedOAuthUsers([localUserName]),
     serveUtils.resetPostgresDb(),
   ]);
+}
+
+function seedAsyncOperations() {
+  return serveUtils.addAsyncOperations(asyncOperations.results);
 }
 
 function seedProviders() {
@@ -105,7 +110,8 @@ function seedEverything() {
       .then(seedGranules)
       .then(seedGranulesExecutions)
       .then(seedRules)
-      .then(seedReconciliationReports),
+      .then(seedReconciliationReports)
+      .then(seedAsyncOperations),
     uploadReconciliationReportFiles(),
   ]);
 }
