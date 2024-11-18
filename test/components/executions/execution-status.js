@@ -93,11 +93,21 @@ test('Cumulus-690 Execution Status shows workflow task and version information',
  
   //const metadataDetails = metadataWrapper.querySelectorAll('dl');
  
- const metadataDetails = container.querySelectorAll('.metadata .dl');
- t.is(metadataDetails.length, 1);
+  
+  const metadataDetails = JSON.stringify(screen).at('dl');
+  t.is(metadataDetails.length, 1);
+
+
+
+  //const metadataDetails = within(executionStatus).querySelectorAll('dl');
+  //t.is(metadataDetails.length, 1);
+
+  screen.debug();
+  console.log("============== testData", JSON.stringify(metadataDetails));
 
  
-  const metadataLabels = container.querySelectorAll('.metadata .dt');
+  //const metadataLabels = container.querySelectorAll('.metadata .dt');
+  const metadataLabels = JSON.stringify(executionStatus).at('dt');
   t.is(metadataLabels.length, 9);
 
   screen.debug();
