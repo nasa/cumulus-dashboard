@@ -1,3 +1,14 @@
+////*************************************************************************************************************************************
+////Updated by: Rich Frausto, Bryan Wexler
+////Date Modified: November 19, 2024
+////Project: CUMULUS-3861: Dashboard: Replace Enzyme with React Testing Library(RTL)
+////Reason:  Broke out the two tests that were in the execution-events.js file into two individual test script files. 
+////         Removed references to Enzyme and replaced them with React compliant testing components. 
+////Number of Test Cases: 3
+////Number of Test Assertions: 15
+////Test Reviewer: Bryan Wexler November , 2024
+////*************************************************************************************************************************************
+
 'use strict';
 
 import test from 'ava';
@@ -12,7 +23,11 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { initialState } from '../../../app/src/js/reducers/datepicker';
 import { Provider } from 'react-redux';
+import bulkGranuleModal, { BulkGranuleModal } from '../../../app/src/js/components/Granules/bulk-granule-modal.js';
 
+const match = {params: { BulkGranuleModal: BulkGranuleModal.propTypes },};
+const locationQueryParams = { search: {} };
+const dispatch = () => {};
 const middlewares = [requestMiddleware, thunk];
 const mockStore = configureMockStore(middlewares);
 const someStore = mockStore({
@@ -20,19 +35,24 @@ const someStore = mockStore({
   subscribe: () => {},
   timer: { running: false, seconds: -1 },
   datepicker: initialState(),
-  // locationQueryParams,
-  // dispatch
+  locationQueryParams,
+  dispatch,
+  BulkGranuleModal
 });
 
-import { BulkGranuleModal } from '../../../app/src/js/components/Granules/bulk-granule-modal.js';
 
 // configure({ adapter: new Adapter() });
 
+//Command to execute the test: npx ava test/components/granules/bulk-granule-modal.js
 test('bulk granule modal shows success message', function (t) {
   const asyncOpId = 'abcd1234';
   const successMessage = 'Success 1234';
 
-  const { container } = render(
+
+  screen.debug();
+  console.log('***************************** Debug -->', BulkGranuleModal, bulkGranuleModal, someStore, container);
+
+  const { container } = render.toString(
     <Provider store={someStore}>
     <MemoryRouter>
     <BulkGranuleModal
@@ -40,17 +60,27 @@ test('bulk granule modal shows success message', function (t) {
       inflight={false}
       success={true}
       successMessage={successMessage}
+      match={match}
     />
     </MemoryRouter>
     </Provider>
   );
 
   screen.debug();
-  console.log(container.innerHTML);
+  console.log(someStore);
 
-  const successMessageElement = container.querySelector('.message__success');
+
+  //const successMessageElement = container.querySelector('.message__success');
+  const successMessageElement = JSON.stringify(screen).at('.message__success');
   t.is(successMessageElement.length, 1);
-  const successMessageText = successMessageElement.querySelector('p').text();
+
+  //const successMessageText = successMessageElement.querySelector('p').text();
+  //const successMessageText = successMessageElement.querySelector('p');
+  const successMessageText = JSON.stringify(screen).at('propTypes');
+
+  screen.debug();
+  console.log(successMessageElement, successMessageText);
+
   t.true(successMessageText.includes(successMessage));
   t.true(successMessageText.includes(asyncOpId));
   t.false(container.exists('.form__bulkgranules'));

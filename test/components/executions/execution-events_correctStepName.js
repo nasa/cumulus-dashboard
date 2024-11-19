@@ -24,7 +24,6 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { initialState } from '../../../app/src/js/reducers/datepicker.js';
 import { Provider } from 'react-redux';
-import { BulkGranuleModal } from '../../../app/src/js/components/Granules/bulk-granule-modal.js';
 
 const locationQueryParams = {
   search: {}
