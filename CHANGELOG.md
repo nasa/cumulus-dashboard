@@ -7,17 +7,25 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+This version of the dashboard requires Cumulus API >= v19.2.0-alpha.1 (TBD API release)
+
 ### Changed
 
 - **CUMULUS-3748**
   - Removed reconciliationReports aggregate stats call from Granules Page
 - **CUMULUS-3821**
   - Removed fake-granuleid-refresh-connection/refreshCumulusDbConnection
+- **CUMULUS-3859**
+  - Removed ElasticSearch from localAPI docker-compose files
+  - Updated the dashboard to use alpha version `@cumulus/api@19.2.0-alpha.1` and
+    `@cumulus/aws-client@19.2.0-alpha.1`
+  - Updated the integration tests to work with updated API
 - **CUMULUS-3870**
   - Remove launchpad security key information from cypress fixture for `valid-execution.json`
   - Add placeholders for security information with `fakePassword` and `userName`
 - **CUMULUS-3892**
   - Updated Metrics Overview page executions and rules query to only get count from the past 24 hours
+
 ### Fixed
 
 - **CUMULUS-3905**
