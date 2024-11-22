@@ -37,7 +37,7 @@ const CommonConfig = {
       stream: require.resolve('stream-browserify'),
       crypto: require.resolve('crypto-browserify'),
       util: require.resolve('util'),
-      vm: require.resolve("vm-browserify"),
+      vm: require.resolve('vm-browserify'),
     },
   },
   module: {
