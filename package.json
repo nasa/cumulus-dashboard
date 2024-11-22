@@ -82,6 +82,7 @@
     "babelify": "^10.0.0",
     "browser-env": "^3.3.0",
     "cached-path-relative": "1.1.0",
+    "cheerio": "1.0.0-rc.12",
     "clean-webpack-plugin": "^4.0.0",
     "cls-bluebird": "^2.1.0",
     "copy-webpack-plugin": "^9.1.0",
