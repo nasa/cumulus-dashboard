@@ -82,8 +82,8 @@ const handleDeleteClick = (e, value, dispatch, query) => {
   });
 };
 
-// It can take an extra second or two to delete a report from
-// Elasticsearch. This function keeps checking the reports to make sure it was
+// It can take an extra second or two to delete a report.
+// This function keeps checking the reports to make sure it was
 // deleted before displaying the delete result.
 const refreshReports = (dispatch, value, query, retries) => {
   if (retries > 0) {

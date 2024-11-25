@@ -304,13 +304,13 @@
     {
       "arn": "arn:aws:states:us-east-1:123456789012:execution:test-source-integration-IngestAndPublishGranule:fd0bc7b5-56c3-4e37-b445-8a25f27c06b8",
       "status": "failed",
-      "timestamp": 1629488546679,
+      "timestamp": 1539488546679,
       "tasks": {},
-      "createdAt": 1629488527340,
+      "createdAt": 1539488527340,
       "cumulusVersion": "9.4.0",
       "name": "fd0bc7b5-56c3-4e37-b445-8a25f27c06b8",
       "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:test-source-integration-IngestAndPublishGranule:fd0bc7b5-56c3-4e37-b445-8a25f27c06b8",
-      "updatedAt": 1632110409176,
+      "updatedAt": 1542110409176,
       "collectionId": "MOD09GQ___006",
       "duration": 18.498,
       "error": {
@@ -323,7 +323,7 @@
     {
       "arn": "arn:aws:states:us-east-1:123456789012:execution:test-source-integration-HelloWorldWorkflow:79ba430a-0616-4458-ad5e-1bf2e979cfe4",
       "status": "completed",
-      "timestamp": 1580327992306,
+      "timestamp": 1540327992306,
       "tasks": {
         "0": {
           "name": "test-source-integration-HelloWorld",
@@ -331,10 +331,10 @@
           "version": "$LATEST"
         }
       },
-      "createdAt": 1580327980133,
+      "createdAt": 1540327980133,
       "name": "79ba430a-0616-4458-ad5e-1bf2e979cfe4",
       "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:test-source-integration-HelloWorldWorkflow:79ba430a-0616-4458-ad5e-1bf2e979cfe4",
-      "updatedAt": 1581220884436,
+      "updatedAt": 1541220884436,
       "duration": 11.821,
       "error": {
         "Error": "Unknown Error",
@@ -345,7 +345,7 @@
     {
       "arn": "arn:aws:states:us-east-1:596205514787:execution:test-source-integration-HelloWorldWorkflow:1a5aaf01-835b-431a-924f-96a7feb3a3fb",
       "status": "completed",
-      "timestamp": 1632351781244,
+      "timestamp": 1542351781244,
       "tasks": {
        "0": {
         "name": "test-source-integration-HelloWorld",
@@ -353,14 +353,14 @@
         "version": "$LATEST"
        }
       },
-      "createdAt": 1632351778964,
+      "createdAt": 1542351778964,
       "cumulusVersion": "9.5.0",
       "name": "1a5aaf01-835b-431a-924f-96a7feb3a3fb",
       "finalPayload": {
        "hello": "Hello World"
       },
       "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:596205514787:execution:test-source-integration-HelloWorldWorkflow:1a5aaf01-835b-431a-924f-96a7feb3a3fb",
-      "updatedAt": 1632351781244,
+      "updatedAt": 1542351781244,
       "collectionId": "MOD09GQ___006",
       "duration": 1.691,
       "error": {},

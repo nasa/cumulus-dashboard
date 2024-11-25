@@ -7,6 +7,9 @@ import {
 
 import { API_VERSION } from '../../app/src/js/actions/types';
 
+// granules and executions were updated before this epoch time
+const ingestEndTime = 1545091200000; // 2018-12-18
+
 describe('Dashboard Home Page', () => {
   it('When not logged in it should redirect to login page', () => {
     cy.visit('/');
@@ -170,6 +173,9 @@ describe('Dashboard Home Page', () => {
     it('modifies the UPDATES section and Granules Errors list as datepicker changes.', () => {
       cy.intercept('GET', '/stats?*timestamp__from=1233360000000*').as('stats');
 
+      cy.clock(ingestEndTime);
+      cy.setDatepickerDropdown('3 months');
+
       cy.get('#Errors').contains('2');
       cy.get('#Collections').contains('2');
       cy.get('#Granules').contains('12');
@@ -179,6 +185,8 @@ describe('Dashboard Home Page', () => {
       // Test there are values in Granule Error list
       cy.get('[data-value="0"]').contains('Error');
       cy.get('[data-value="1"]').contains('Error');
+
+      cy.clock().invoke('restore');
 
       cy.get('[data-cy=startDateTime]').within(() => {
         cy.get('input[name=month]').click().type(1);
@@ -191,7 +199,7 @@ describe('Dashboard Home Page', () => {
       cy.get('[data-cy=endDateTime]').within(() => {
         cy.get('input[name=month]').click().type(5);
         cy.get('input[name=day]').click().type(1);
-        cy.get('input[name=year]').click().type(2010);
+        cy.get('input[name=year]').click().type(2018);
         cy.get('input[name=hour12]').click().type(0);
         cy.get('input[name=minute]').click().type(0);
         cy.get('select[name=amPm]').select('AM');

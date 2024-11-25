@@ -4,13 +4,13 @@ const fs = require('fs');
 const path = require('path');
 const CSV = require('csv-string');
 const serveUtils = require('@cumulus/api/bin/serveUtils');
-const { eraseDataStack } = require('@cumulus/api/bin/serve');
 const {
   localUserName,
   localStackName,
   localSystemBucket,
 } = require('@cumulus/api/bin/local-test-defaults');
 
+const asyncOperations = require('../fixtures/seeds/asyncOperationsFixture.json');
 const collections = require('../fixtures/seeds/collectionsFixture.json');
 const executions = require('../fixtures/seeds/executionsFixture.json');
 const granules = require('../fixtures/seeds/granulesFixture.json');
@@ -27,10 +27,13 @@ function resetIt() {
   process.env.ReconciliationReportsTable = `${localStackName}-ReconciliationReportsTable`;
 
   return Promise.all([
-    eraseDataStack(),
     testUtils.setAuthorizedOAuthUsers([localUserName]),
     serveUtils.resetPostgresDb(),
   ]);
+}
+
+function seedAsyncOperations() {
+  return serveUtils.addAsyncOperations(asyncOperations.results);
 }
 
 function seedProviders() {
@@ -107,7 +110,8 @@ function seedEverything() {
       .then(seedGranules)
       .then(seedGranulesExecutions)
       .then(seedRules)
-      .then(seedReconciliationReports),
+      .then(seedReconciliationReports)
+      .then(seedAsyncOperations),
     uploadReconciliationReportFiles(),
   ]);
 }
