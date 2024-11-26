@@ -154,7 +154,7 @@ ProviderOverview.propTypes = {
   urlHelper: PropTypes.shape({
     location: PropTypes.object,
     historyPushWithQueryParams: PropTypes.func,
-    getPersistentQueryParams: PropTypes.object
+    getPersistentQueryParams: PropTypes.func
   }),
 };
 

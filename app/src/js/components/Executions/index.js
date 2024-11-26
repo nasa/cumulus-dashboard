@@ -48,7 +48,7 @@ const Executions = ({ urlHelper }) => {
       }
       <div className='page__content'>
         <div className='wrapper__sidebar'>
-          { showSidebar && <Sidebar currentPath={pathname} location={location} /> }
+          { showSidebar && <Sidebar currentPath={pathname} location={location}/> }
           <div className='page__content--shortened'>
             <Routes>
               <Route index element={<Navigate to="all" replace />} />

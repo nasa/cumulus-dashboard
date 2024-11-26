@@ -1,7 +1,8 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+
 // import { withRouter } from 'react-router-dom';
 import {
   getRule,
@@ -10,15 +11,15 @@ import {
 } from '../../actions';
 
 import EditRaw from '../EditRaw/edit-raw';
-import withRouter from '../../withRouter';
+import { withRouter } from '../../withRouter';
 
 const SCHEMA_KEY = 'rule';
 
 const EditRule = ({
-  match,
-  rules
+  router
 }) => {
-  const { params: { ruleName } } = match;
+  const { params: { ruleName } } = router;
+  const rules = useSelector((state) => state.rules);
 
   return (
     <div className = "edit_rules">
@@ -32,7 +33,7 @@ const EditRule = ({
         state={rules}
         getRecord={() => getRule(ruleName)}
         updateRecord={updateRule}
-        backRoute={`/rules/rule/${ruleName}`}
+        backRoute={`rule/${ruleName}`}
         clearRecordUpdate={clearUpdateRule}
         hasModal={true}
       />
@@ -42,9 +43,12 @@ const EditRule = ({
 
 EditRule.propTypes = {
   match: PropTypes.object,
-  rules: PropTypes.object
+  rules: PropTypes.object,
+  router: PropTypes.shape({
+    rules: PropTypes.object,
+    params: PropTypes.object,
+  }),
+
 };
 
-export default withRouter(connect((state) => ({
-  rules: state.rules
-}))(EditRule));
+export default withRouter(EditRule);

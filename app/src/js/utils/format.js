@@ -1,10 +1,10 @@
 /* eslint-disable import/no-cycle */
 
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import numeral from 'numeral';
-import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import { Alert } from 'react-bootstrap';
@@ -400,11 +400,12 @@ export const getEncodedCollectionId = (collection) => {
 
 export const collectionLink = (collectionId) => {
   if (!collectionId || collectionId === nullValue) return nullValue;
+  console.log('Generated href:', collectionHrefFromId(collectionId));
   return (
     <Link
       to={(location) => ({
         pathname: collectionHrefFromId(collectionId),
-        search: getPersistentQueryParams(location),
+        search: location ? getPersistentQueryParams(location) : ''
       })}
     >
       {collectionName(collectionId)}

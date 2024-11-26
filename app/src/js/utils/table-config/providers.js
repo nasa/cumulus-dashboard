@@ -1,13 +1,12 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { fromNow, fromNowWithTooltip, tally } from '../format';
-import { getPersistentQueryParams } from '../url-helper';
+import { fromNow, tally } from '../format';
 
 export const tableColumns = [
   {
     Header: 'Name',
     accessor: 'id',
-    Cell: ({ cell: { value } }) => <Link to={(location) => ({ pathname: `/providers/provider/${value}`, search: getPersistentQueryParams(location) })}>{value}</Link> // eslint-disable-line react/prop-types
+    isLink: true,
+    linkTo: (value) => `/providers/provider/${value}`,
+    Cell: ({ cell: { value } }) => (value)
   },
   {
     Header: 'Host',
@@ -28,7 +27,7 @@ export const tableColumns = [
   {
     Header: 'Updated',
     accessor: 'updatedAt',
-    Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
+    useTooltip: true,
     id: 'updatedAt'
   }
 ];

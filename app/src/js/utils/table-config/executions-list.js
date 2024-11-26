@@ -1,21 +1,27 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronCircleDown, faChevronCircleUp } from '@fortawesome/free-solid-svg-icons';
 import {
   displayCase,
   seconds,
-  fromNowWithTooltip
+  // fromNowWithTooltip
 } from '../format';
-import { getPersistentQueryParams } from '../url-helper';
+// import { getPersistentQueryParams } from '../url-helper';
+// import { getPersistentQueryParams } from '../../withUrlHelper';
 
 export const tableColumns = [
   {
     Header: 'Name',
     accessor: 'name',
     width: 150,
-    Cell: ({ row: { original: { arn, name } } }) => ( // eslint-disable-line react/prop-types
-      <Link to={(location) => ({ pathname: `/executions/execution/${arn}`, search: getPersistentQueryParams(location) })} title={name}>{name}</Link>)
+    isLink: true,
+    linkTo: (row) => {
+      const path = `/executions/execution/${row.arn}`;
+      console.log('linkTo for Name column:', { row, path });
+      return path;
+    },
+    Cell: ({ cell: { value } }) => value
   },
   {
     Header: 'Status',
@@ -30,7 +36,8 @@ export const tableColumns = [
   {
     Header: 'Updated',
     accessor: 'updatedAt',
-    Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
+    useTooltip: true,
+    // Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
     id: 'updatedAt'
   },
   {

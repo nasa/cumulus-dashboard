@@ -23,7 +23,7 @@ const CreateNewReportButton = ({ createReportInflight, getPersistentQueryParams 
 };
 
 CreateNewReportButton.propTypes = {
-  createReportInflight: PropTypes.string,
+  createReportInflight: PropTypes.bool,
   getPersistentQueryParams: PropTypes.func
 };
 

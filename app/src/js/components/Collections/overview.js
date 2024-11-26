@@ -246,7 +246,7 @@ const CollectionOverview = ({ urlHelper }) => {
               <Link
                 className="button button--copy button--small button--green"
                 to={{
-                  pathname: '/add',
+                  pathname: 'add',
                   search: getPersistentQueryParams(location),
                   state: {
                     name: collectionName,

@@ -39,9 +39,9 @@ const Rules = ({ urlHelper }) => {
             <Routes>
               <Route index element={<Navigate to="all" replace />} />
               <Route path='all' element={<RulesOverview queryParams={filteredQueryParams} />} />
-              <Route path='/rule/:ruleName' element={<Rule />} />
-              <Route path='/edit/:ruleName' element={<EditRule />} />
-              <Route path='/add' element={<AddRule />} />
+              <Route path='rule/:ruleName' element={<Rule />} />
+              <Route path='edit/:ruleName' element={<EditRule />} />
+              <Route path='add' element={<AddRule />} />
             </Routes>
           </div>
         </div>

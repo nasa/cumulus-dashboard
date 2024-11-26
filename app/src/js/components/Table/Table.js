@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useMemo, lazy, Suspense, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 // import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -116,18 +116,24 @@ const List = ({
       isNil
     );
   } */
+  const memoizedQuery = useMemo(() => query, [query]);
 
   useEffect(() => {
-    setQueryConfig((prevConfig) => ({
-      ...prevConfig,
-      ...query,
+    setQueryConfig((prevQueryConfig) => ({
+      ...prevQueryConfig,
+      ...getQueryConfig({}),
     }));
-  }, [query]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [memoizedQuery]);
+
+  const memoizedQueryFilters = useMemo(() => omitBy(queryFilters, isNil), [queryFilters]);
 
   useEffect(() => {
     // Remove parameters with null or undefined values
-    const newParams = omitBy(list.params, isNil);
-
+    const newParams = {
+      ...params,
+      ...memoizedQueryFilters,
+    };
     if (!isEqual(newParams, params)) {
       setParams(newParams);
       setQueryConfig((prevQueryConfig) => ({
@@ -136,7 +142,7 @@ const List = ({
       }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(list.params), JSON.stringify(params)]);
+  }, [params, memoizedQueryFilters]);
 
   useEffect(() => {
     setClearSelected(true);

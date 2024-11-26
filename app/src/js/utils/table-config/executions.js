@@ -1,21 +1,21 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import cloneDeep from 'lodash/cloneDeep';
-import get from 'lodash/get';
+// import get from 'lodash/get';
 import {
   displayCase,
   seconds,
-  fromNowWithTooltip,
   formatCollectionId,
   fullDate
 } from '../format';
 import { strings } from '../../components/locale';
-import { getPersistentQueryParams } from '../url-helper';
+// import { getPersistentQueryParams } from '../url-helper';
 import { getEventDetails } from '../../components/Executions/execution-graph-utils';
 import Tooltip from '../../components/Tooltip/tooltip';
 import { getExecutionStatus } from '../../actions';
+// import { getPersistentQueryParams } from '../../withUrlHelper';
 
 export const formatEvents = (events) => {
   const mutableEvents = cloneDeep(events);
@@ -77,8 +77,9 @@ export const tableColumns = ({ dispatch }) => ([
     Header: 'Name',
     accessor: 'name',
     width: 150,
-    Cell: ({ row: { original: { arn, name } } }) => ( // eslint-disable-line react/prop-types
-      <Link to={(location) => ({ pathname: `/executions/execution/${arn}`, search: getPersistentQueryParams(location) })} title={name}>{name}</Link>)
+    isLink: true,
+    linkTo: (row) => `/executions/execution/${row.arn}`,
+    Cell: ({ cell: { value } }) => value
   },
   {
     Header: 'Progress',
@@ -104,7 +105,7 @@ export const tableColumns = ({ dispatch }) => ([
   {
     Header: 'Updated',
     accessor: 'updatedAt',
-    Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
+    useTooltip: true,
     id: 'updatedAt'
   },
   {
@@ -122,24 +123,28 @@ export const tableColumns = ({ dispatch }) => ([
   {
     Header: 'Download Execution',
     id: 'download',
-    accessor: 'name',
-    Cell: ({ row: { original: { arn } } }) => (// eslint-disable-line react/prop-types
-      <button
-        aria-label="Download Execution"
-        className='button button__row button__row--download'
-        onClick={(e) => handleDownloadClick(e, arn, dispatch)}
-      />
-    ),
+    accessor: (row) => row,
+    // eslint-disable-next-line react/prop-types
+    Cell: ({ row }) => {
+      const handleDownloadClick = (e) => {
+        e.preventDefault();
+        // eslint-disable-next-line react/prop-types
+        dispatch(getExecutionStatus(row.original.arn)).then((response) => {
+          const url = response.data.presignedS3Url;
+          if (url && window && !window.Cypress) window.open(url);
+        });
+      };
+
+      return (
+        <button
+          aria-label={`Download Execution ${row.original.name}`} // eslint-disable-line react/prop-types
+          className='button button__row button__row--download'
+          onClick={handleDownloadClick}
+        />
+      );
+    },
     disableSortBy: true
   }
 ]);
-
-const handleDownloadClick = (e, executionArn, dispatch) => {
-  e.preventDefault();
-  dispatch(getExecutionStatus(executionArn)).then((response) => {
-    const url = get(response, 'data.presignedS3Url');
-    if (url && window && !window.Cypress) window.open(url);
-  });
-};
 
 export default tableColumns;

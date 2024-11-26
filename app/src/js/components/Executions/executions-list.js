@@ -1,14 +1,14 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { listExecutionsByGranule } from '../../actions';
 import { tableColumns } from '../../utils/table-config/executions-list';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import List from '../Table/Table';
 import ExecutionSnapshot from './execution-snapshot';
-import withRouter from '../../withRouter';
+import { withRouter } from '../../withRouter';
 
 const breadcrumbConfig = [
   {
@@ -25,12 +25,16 @@ const breadcrumbConfig = [
   }
 ];
 
-const ExecutionsList = ({
-  match,
-  executions
-}) => {
-  const { params } = match || {};
-  const { collectionId, granuleId } = params;
+const ExecutionsList = (executions, router) => {
+  const { params } = router;
+  const { collectionId, granuleId } = params || {};
+
+  console.log('Route params:', { collectionId, granuleId });
+
+  if (!granuleId || !collectionId) {
+    return <div>Error: Missing granuleId or collectionId</div>;
+  }
+
   const { map } = executions || {};
   const granuleExecutionslist = map[granuleId] || {};
   const { meta } = granuleExecutionslist;
@@ -90,7 +94,11 @@ const ExecutionsList = ({
 };
 
 ExecutionsList.propTypes = {
-  match: PropTypes.object,
+  router: PropTypes.shape({
+    location: PropTypes.object,
+    navigate: PropTypes.func,
+    params: PropTypes.object
+  }),
   executions: PropTypes.object
 };
 

@@ -18,7 +18,7 @@ import TableFilters from '../Table/TableFilters';
 import ListFilters from '../ListActions/ListFilters';
 import { sortPersist } from '../../actions/index';
 import { withUrlHelper } from '../../withUrlHelper';
-import { CopyCellPopover } from '../../utils/format';
+import { CopyCellPopover, fromNowWithTooltip } from '../../utils/format';
 
 const getColumnWidth = (rows, accessor, headerText, originalWidth) => {
   const maxWidth = 400;
@@ -87,6 +87,14 @@ const SortableTable = ({
     }),
     []
   );
+  const memoizedTableColumns = useMemo(() => (
+    Array.isArray(tableColumns)
+      ? tableColumns.map((column) => ({
+        ...defaultColumn,
+        ...column,
+      }))
+      : [defaultColumn] // Provide a default column if tableColumns is not an array
+  ), [tableColumns, defaultColumn]);
   const [fitColumn, setFitColumn] = useState({});
   const [leftScrollButtonVisibility, setLeftScrollButtonVisibility] = useState({ display: 'none', opacity: 0 });
   const [rightScrollButtonVisibility, setRightScrollButtonVisibility] = useState({ display: 'none', opacity: 0 });
@@ -126,7 +134,7 @@ const SortableTable = ({
   } = useTable(
     {
       data,
-      columns: tableColumns,
+      columns: memoizedTableColumns,
       defaultColumn,
       getRowId: (row, relativeIndex) => (typeof rowId === 'function' ? rowId(row) : row[rowId] || relativeIndex),
       autoResetSelectedRows: false,
@@ -511,6 +519,15 @@ const SortableTable = ({
                             return content;
                           }
 
+                          // Handle external links
+                          if (cell.column.openInNewTab && cell.value) {
+                            return (
+                              <a href={cell.value} target="_blank" rel="noopener noreferrer">
+                                {cell.value}
+                              </a>
+                            );
+                          }
+
                           // Check for non-link cells that use CopyCellPopover
                           if (cell.column.useCopyCellPopover) {
                             return (
@@ -523,8 +540,13 @@ const SortableTable = ({
                             );
                           }
 
+                          // Check for non-link cells that use Tooltip
+                          if (cell.column.useTooltip) {
+                            return fromNowWithTooltip(cell.value);
+                          }
+
                           // Default cell rendering
-                          return cell.value;
+                          return cell.render('Cell');
                         })()}
                       </div>
                     );
@@ -600,13 +622,18 @@ SortableTable.propTypes = {
   rowId: PropTypes.any,
   shouldManualSort: PropTypes.bool,
   shouldUsePagination: PropTypes.bool,
-  tableColumns: PropTypes.array,
+  tableColumns: PropTypes.arrayOf(PropTypes.object),
   renderRowSubComponent: PropTypes.func,
   tableId: PropTypes.string,
   initialSortBy: PropTypes.array,
   urlHelper: PropTypes.shape({
-    getPersistentQueryParams: PropTypes.func
+    getPersistentQueryParams: PropTypes.func,
+    // location: PropTypes.object
   })
+};
+
+SortableTable.defaultProps = {
+  tableColumns: [],
 };
 
 export default withUrlHelper(SortableTable);

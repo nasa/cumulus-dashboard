@@ -1,13 +1,14 @@
 /* eslint-disable react/prop-types */
-import path from 'path';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import path from 'path';
 import get from 'lodash/get';
 import { displayCase, fullDate, parseJson } from '../format';
-import { getPersistentQueryParams } from '../url-helper';
+// import { getPersistentQueryParams } from '../url-helper';
 import linkToKibana from '../kibana';
 import { window } from '../browser';
 import DefaultModal from '../../components/Modal/modal';
+import { getPersistentQueryParams } from '../../withUrlHelper';
 
 export const tableColumns = [
   {

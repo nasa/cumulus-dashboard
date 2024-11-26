@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Collapsible from 'react-collapsible';
 import path from 'path';
 import pick from 'lodash/pick';
@@ -10,11 +9,9 @@ import {
   bool,
   nullValue,
   displayCase,
-  collectionLink,
   granuleLink,
   providerLink,
   fromNowWithTooltip,
-  CopyCellPopover,
   recoverGranules,
   deleteGranules,
   removeGranulesFromCmr,
@@ -37,7 +34,6 @@ import BulkGranule from '../../components/Granules/bulk';
 import BatchReingestConfirmContent from '../../components/ReingestGranules/BatchReingestConfirmContent';
 import BatchReingestCompleteContent from '../../components/ReingestGranules/BatchReingestCompleteContent';
 import TextArea from '../../components/TextAreaForm/text-area';
-// import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
 import GranuleInventory from '../../components/Granules/granule-inventory';
 import { historyPushWithQueryParams } from '../../withUrlHelper';
 
@@ -75,17 +71,26 @@ export const tableColumns = [
     Header: strings.collection_id,
     accessor: 'collectionId',
     isLink: true,
-    // eslint-disable-next-line react/prop-types
-    Cell: ({ cell: { value } }) => <CopyCellPopover cellContent={collectionLink(value)} id={`collectionId-${value}-popover`} popoverContent={collectionLink(value)} value={value} />,
+    useCopyCellPopover: true,
+    linkTo: (row) => `/collections/collection/${encodeURIComponent(row.collectionId)}`,
   },
   {
     Header: 'Executions List',
     accessor: 'granuleId',
     isLink: true,
-    Cell: ({ row: { original: { collectionId, granuleId } } }) => (// eslint-disable-line react/prop-types
-      <Link to={(location) => ({ pathname: `/executions/executions-list/${encodeURIComponent(collectionId)}/${encodeURIComponent(path.basename(granuleId))}` })}>link</Link>
-    ),
+    // eslint-disable-line react/prop-types
+    linkTo: (row) => {
+      const collectionId = row.collectionId || row.original?.collectionId;
+      const granuleId = row.granuleId || row.original?.granuleId;
+
+      if (collectionId && granuleId) {
+        return `/executions/executions-list/${encodeURIComponent(collectionId)}/${encodeURIComponent(path.basename(granuleId))}`;
+      }
+      // Return a fallback path or null if data is missing
+      return null;
+    },
     disableSortBy: true,
+    Cell: () => 'link',
     width: 90,
     id: 'execution-list'
   },
@@ -93,6 +98,7 @@ export const tableColumns = [
     Header: 'Provider',
     accessor: 'provider',
     isLink: true,
+    linkTo: (row) => `/providers/provider/${encodeURIComponent(row.provider)}`,
     Cell: ({ cell: { value } }) => providerLink(value)
   },
   {

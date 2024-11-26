@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
+import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import { getExecutionStatus, getCumulusInstanceMetadata } from '../../actions';
 import {
@@ -40,7 +40,7 @@ const ExecutionStatus = ({
   dispatch,
   executionStatus,
   logs,
-  match,
+  router
 }) => {
   const [showInputModal, setShowInputModal] = useState(false);
   const [showOutputModal, setShowOutputModal] = useState(false);
@@ -57,16 +57,37 @@ const ExecutionStatus = ({
 
   const { execution, executionHistory, stateMachine } = recordData;
   const { executionArn } = execution || {};
-  const { executionArn: executionArnParam } = match.params;
+
+  const [isLoading, setIsLoading] = useState(true);
+  const { params } = router || {};
+  const { executionArn: executionArnParam } = params;
 
   useEffect(() => {
-    dispatch(getExecutionStatus(executionArnParam));
-    dispatch(getCumulusInstanceMetadata());
+    let isMounted = true;
+
+    const fetchData = async () => {
+      setIsLoading(true);
+      await dispatch(getExecutionStatus(executionArnParam));
+      await dispatch(getCumulusInstanceMetadata());
+      if (isMounted) {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      isMounted = false;
+    };
   }, [dispatch, executionArnParam]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   if (!execution) {
     return (
@@ -80,8 +101,6 @@ const ExecutionStatus = ({
         {error && <ErrorReport report={error} />}
       </section>);
   }
-
-  if (executionArn !== executionArnParam) return <Loading />;
 
   const { name } = execution;
   const { metricsNotConfigured } = logs;
@@ -144,7 +163,7 @@ const ExecutionStatus = ({
               <Link
                 className="button button--small button--events"
                 to={() => ({
-                  pathname: `/executions/execution/${executionArn}/events`,
+                  pathname: `/execution/${executionArn}/events`,
                 })}
               >
                 Events
@@ -184,7 +203,11 @@ ExecutionStatus.propTypes = {
   dispatch: PropTypes.func,
   executionStatus: PropTypes.object,
   logs: PropTypes.object,
-  match: PropTypes.object,
+  router: PropTypes.shape({
+    location: PropTypes.object,
+    navigate: PropTypes.func,
+    params: PropTypes.object
+  }),
 };
 
 export { ExecutionStatus };
