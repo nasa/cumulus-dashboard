@@ -5,7 +5,6 @@ services:
     network_mode: "service:shim"
     depends_on:
       - localstack
-      - elasticsearch
     command: [ "./localAPI/wait-for-stack.sh", "./node_modules/@cumulus/api/bin/cli.js", "serve", "--no-reseed" ]
     working_dir:
       /cumulus-dashboard
@@ -13,7 +12,6 @@ services:
       - ../:/cumulus-dashboard
     environment:
       - LOCALSTACK_HOST=localhost
-      - LOCAL_ES_HOST=localhost
       - NODE_ENV=test
       - cmr_provider=CUMULUS
       - FAKE_AUTH=true

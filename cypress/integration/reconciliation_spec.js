@@ -110,8 +110,8 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
     it('should have the create a report page', () => {
       const path = '/reconciliation-reports/create';
-      const reportType = 'Internal';
-      const reportName = 'InternalReport2020';
+      const reportType = 'Inventory';
+      const reportName = 'inventoryReport-2020/01/14T202529026';
       const startTime = new Date('2009-01-31T00:00:00.000');
       const startTimestamp = moment(moment.utc(startTime).format(dateTimeFormat)).valueOf();
       const endTime = new Date('2010-05-01T00:00:00.000');
@@ -127,7 +127,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.get('form .form__item .reportType').as('reportType');
       cy.get('@reportType').find('input[name="reportType"]').should('have.value', 'Inventory');
       cy.contains('.main-form--wrapper h2', 'Inventory');
-      cy.get('@reportType').click().type('inter{enter}');
+      cy.get('@reportType').click().type('inven{enter}');
       cy.get('@reportType').find('input[name="reportType"]').should('have.value', reportType);
       cy.contains('.main-form--wrapper h2', reportType);
 
@@ -518,7 +518,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
     it('should have the option to filter the report by S3 bucket', () => {
       cy.visit('/reconciliation-reports/report/inventoryReport-20200114T205238781');
 
-      cy.get('.filter-bucket .rbt-input-main').as('bucket-input');
+      cy.get('.filter-bucket .rbt-input-main', { timeout: 10000 }).as('bucket-input');
       cy.get('@bucket-input').should('be.visible').click().type('mhs3-pri{enter}');
 
       /** Table Cards **/
@@ -552,9 +552,9 @@ describe('Dashboard Reconciliation Reports Page', () => {
     });
 
     it('Should dynamically update menu, sidbar and breadcrumb /reconciliation-reports links with latest filter criteria', () => {
-      const type = 'Internal';
+      const type = 'Inventory';
       const status = 'Generated';
-      const search = 'InternalReport092020';
+      const search = 'inventoryReport-2020/01/14T202529026';
 
       cy.visit('/reconciliation-reports');
 
@@ -574,7 +574,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
         .should('have.attr', 'href')
         .and('include', `type=${type}`)
         .and('include', `status=${status}`)
-        .and('include', `search=${search}`);
+        .and('include', `search=${encodeURIComponent(search)}`);
     });
   });
 });

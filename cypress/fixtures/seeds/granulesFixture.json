@@ -205,8 +205,8 @@
       ],
       "collectionId": "MOD09GQ___006",
       "status": "completed",
-      "timestamp": 1596203544626,
-      "updatedAt": 1596203544157
+      "timestamp": 1537803544626,
+      "updatedAt": 1537803544626
     },
     {
       "granuleId": "MOD09GQ.A5456658.rso6Y4.006.4979096122140",
@@ -440,7 +440,7 @@
     {
       "beginningDateTime": "2017-10-24T00:00:00Z",
       "collectionId": "MOD09GQ___006",
-      "createdAt": 1576106363823,
+      "createdAt": 1537806363823,
       "duration": 7.546,
       "endingDateTime": "2017-11-08T23:59:59Z",
       "error": {
@@ -468,10 +468,10 @@
       "published": false,
       "cmrLink": null,
       "status": "completed",
-      "timestamp": 1576106371369,
+      "timestamp": 1537806371369,
       "timeToArchive": 0.01,
       "timeToPreprocess": 0.318,
-      "updatedAt": 1576106371468
+      "updatedAt": 1537806371468
     }
   ]
 }

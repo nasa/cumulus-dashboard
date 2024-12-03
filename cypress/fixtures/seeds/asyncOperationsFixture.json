@@ -1,0 +1,89 @@
+{
+    "meta": {
+        "name": "cumulus-api",
+        "stack": "test-source-integration",
+        "table": "asyncOperation",
+        "limit": 10,
+        "page": 1,
+        "count": 7
+    },
+    "results": [
+        {
+            "output": "{\"createdAt\":1600888528207,\"location\":\"s3://cumulus-test-sandbox-internal/test-source-integration/reconciliation-reports/InternalReportc89bf1d37c.json\",\"name\":\"InternalReportc89bf1d37c\",\"updatedAt\":1600888542261,\"type\":\"Internal\",\"status\":\"Generated\"}",
+            "createdAt": 1600888510551,
+            "taskArn": "arn:aws:ecs:us-east-1:123456789012:task/a5bea509-a6d4-4bba-b64a-01477b413c5f",
+            "description": "Create Reconciliation Report",
+            "operationType": "Reconciliation Report",
+            "id": "17907019-81fb-464a-bc76-0ad0490fdeec",
+            "status": "SUCCEEDED",
+            "updatedAt": 1600888542374,
+            "timestamp": 1600888542710
+        },
+        {
+            "output": "\"Processed 2 kinesis records from stream test-source-integration-KinesisReplayTest-1600888397315-ReplayTestStream\"",
+            "createdAt": 1600888447378,
+            "taskArn": "arn:aws:ecs:us-east-1:123456789012:task/a00c2955-8ba9-4603-b9b7-a6691f9bbd50",
+            "description": "Kinesis Replay",
+            "operationType": "Kinesis Replay",
+            "id": "fefa46dc-14e5-4dd8-b3de-bccd192da9c8",
+            "status": "SUCCEEDED",
+            "updatedAt": 1600888480998,
+            "timestamp": 1600888485639
+        },
+        {
+            "output": "{\"deletedGranules\":[\"granule-id-45cde3b57f\"]}",
+            "createdAt": 1600888430615,
+            "taskArn": "arn:aws:ecs:us-east-1:123456789012:task/2e71969d-41a9-453b-827f-1b3f42d8db47",
+            "description": "Bulk granule deletion",
+            "operationType": "Bulk Granule Delete",
+            "id": "452e8941-9d18-4c40-9962-2ff38c179a39",
+            "status": "SUCCEEDED",
+            "updatedAt": 1600888461269,
+            "timestamp": 1600888466116
+        },
+        {
+            "output": "{\"name\":\"AggregateError\",\"message\":\"\\n    DeletePublishedGranule: You cannot delete a granule that is published to CMR. Remove it from CMR first\\n        at Granule.delete (/home/task/lambda-function/webpack:/models/granules.js:542:13)\\n        at pMap (/home/task/lambda-function/webpack:/lambdas/bulk-operation.js:131:17)\",\"stack\":\"AggregateError: \\n    DeletePublishedGranule: You cannot delete a granule that is published to CMR. Remove it from CMR first\\n        at Granule.delete (/home/task/lambda-function/webpack:/models/granules.js:542:13)\\n        at pMap (/home/task/lambda-function/webpack:/lambdas/bulk-operation.js:131:17)\\n    at next (/home/task/lambda-function/webpack:/node_modules/p-map/index.js:43:1)\\n    at /home/task/lambda-function/webpack:/node_modules/p-map/index.js:67:1\\n    at process._tickCallback (internal/process/next_tick.js:68:7)\"}",
+            "createdAt": 1600888398792,
+            "taskArn": "arn:aws:ecs:us-east-1:123456789012:task/0c8dfd89-ac9a-422f-b7a7-d02607c368ce",
+            "description": "Bulk granule deletion",
+            "operationType": "Bulk Granule Delete",
+            "id": "c81fa7ad-d83b-4ed0-bfbf-fca16a329836",
+            "status": "TASK_FAILED",
+            "updatedAt": 1600888420958,
+            "timestamp": 1600888425708
+        },
+        {
+            "output": "[1,2,3]",
+            "createdAt": 1600888260818,
+            "taskArn": "f0f6f6dbc7984c4bd93f268816184406b6e118c1",
+            "description": "Some description",
+            "operationType": "ES Index",
+            "id": "76558240-5417-4bfd-9a12-b2ae439ff44f",
+            "status": "SUCCEEDED",
+            "updatedAt": 1600888277922,
+            "timestamp": 1600888282659
+        },
+        {
+            "output": "{\"name\":\"JSONParsingError\",\"message\":\"Unable to parse payload: Unexpected token i in JSON at position 0\",\"stack\":\"JSONParsingError: Unable to parse payload: Unexpected token i in JSON at position 0\\n    at fetchPayload (/home/task/index.js:53:22)\\n    at process._tickCallback (internal/process/next_tick.js:68:7)\"}",
+            "createdAt": 1600888235257,
+            "taskArn": "fca90ba101555599cf2444295283cb6bf7da79e4",
+            "description": "Some description",
+            "operationType": "ES Index",
+            "id": "296e94d3-466e-474e-85b1-a09bddd69331",
+            "status": "TASK_FAILED",
+            "updatedAt": 1600888248842,
+            "timestamp": 1600888253342
+        },
+        {
+            "output": "{\"name\":\"Error\",\"message\":\"Failed to fetch s3://cumulus-test-sandbox-internal/da741270286ef3b6fb76ca28f67605ad8d11602a: The specified key does not exist.\",\"stack\":\"Error: Failed to fetch s3://cumulus-test-sandbox-internal/da741270286ef3b6fb76ca28f67605ad8d11602a: The specified key does not exist.\\n    at fetchPayload (/home/task/index.js:45:11)\\n    at process._tickCallback (internal/process/next_tick.js:68:7)\"}",
+            "createdAt": 1600888215835,
+            "taskArn": "0fe3105514718109e629f788a6533b0c4c94eaf3",
+            "description": "Some description",
+            "operationType": "ES Index",
+            "id": "1783f739-742d-4095-9283-3f65f37b2a7e",
+            "status": "RUNNER_FAILED",
+            "updatedAt": 1600888228564,
+            "timestamp": 1600888233309
+        }
+    ]
+}
