@@ -47,9 +47,9 @@ const Collections = ({ urlHelper }) => {
         <div className='wrapper__sidebar'>
           <Routes>
             <Route path='all' element={<Sidebar />} />
-            <Route path='/edit/:name/:version' element={<Sidebar />} />
+            <Route path='edit/:name/:version' element={<Sidebar />} />
             <Route
-              path='/collection/:name/:version'
+              path='collection/:name/:version'
               element={<Sidebar />}
             />
           </Routes>
@@ -70,11 +70,11 @@ const Collections = ({ urlHelper }) => {
               />
               <Route path='add' element={<AddCollection />} />
               <Route
-                path='/edit/:name/:version'
+                path='/edit'
                 element={<EditCollection />}
               />
               <Route
-                path='/collection/:name/:version'
+                path='collection/:name/:version'
                 element={
                   <CollectionOverview
                     queryParams={filteredQueryParams}
@@ -82,7 +82,7 @@ const Collections = ({ urlHelper }) => {
                 }
               >
                 <Route
-                path='/collection/:name/:version/granules'
+                path='collection/:name/:version/granules'
                 element={
                   <CollectionGranules
                     queryParams={filteredQueryParams}
@@ -91,7 +91,7 @@ const Collections = ({ urlHelper }) => {
               />
               </Route>
               <Route
-                path='/collection/:name/:version/granules/:status'
+                path='collection/:name/:version/granules/:status'
                 element={
                   <CollectionGranules
                     queryParams={filteredQueryParams}
@@ -99,18 +99,18 @@ const Collections = ({ urlHelper }) => {
                 }
               />
               <Route
-                path='/collection/:name/:version/granules/running'
+                path='collection/:name/:version/granules/running'
                 element={
-                  <Navigate to='/collection/:name/:version/granules/processing' replace/>
+                  <Navigate to='collection/:name/:version/granules/processing' replace/>
                 }
               />
               <Route
-                path='/collection/:name/:version/definition'
+                path='collection/:name/:version/definition'
                 element={<CollectionIngest />}
               />
               {!metricsNotConfigured && (
                 <Route
-                  path='/collection/:name/:version/logs'
+                  path='collection/:name/:version/logs'
                   element={<CollectionLogs />}
                 />
               )}

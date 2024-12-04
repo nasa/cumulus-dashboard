@@ -1,11 +1,16 @@
 import { fromNow, tally } from '../format';
+import { getPersistentQueryParams } from '../../withUrlHelper';
 
 export const tableColumns = [
   {
     Header: 'Name',
     accessor: 'id',
     isLink: true,
-    linkTo: (value) => `/providers/provider/${value}`,
+    linkTo: (row) => {
+      const queryParams = getPersistentQueryParams(window.location);
+      const path = `/providers/provider/${row.id}`;
+      return queryParams ? `${path}?${queryParams}` : path;
+    },
     Cell: ({ cell: { value } }) => (value)
   },
   {

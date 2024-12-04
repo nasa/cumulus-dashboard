@@ -51,7 +51,7 @@ export function filterQueryParams(queryParams = {}) {
  *
  * @param {Object} location - react-router's location object
  */
-export function getPersistentQueryParams(location) {
+export function getPersistentQueryParams(location = {}) {
   const parsedQueryParams = queryString.parse(location.search);
   const { startDateTime, endDateTime } = parsedQueryParams;
   return queryString.stringify({ startDateTime, endDateTime });

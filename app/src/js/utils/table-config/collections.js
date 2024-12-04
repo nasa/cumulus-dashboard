@@ -127,10 +127,10 @@ export const bulkActions = (collections) => {
       Component: (
         <Link
           className="button button--green button--add button--small form-group__element"
-          to={(location) => ({
+          to={{
             pathname: '/collections/add',
-            search: getPersistentQueryParams(location),
-          })}
+            search: getPersistentQueryParams(),
+          }}
           role="button"
         >
           {strings.add_collection}

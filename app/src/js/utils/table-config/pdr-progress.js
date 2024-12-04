@@ -1,9 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { get } from 'object-path';
 import { tally, bool, nullValue, fromNowWithTooltip } from '../format';
 import ErrorReport from '../../components/Errors/report';
-import { getPersistentQueryParams } from '../url-helper';
+import { getPersistentQueryParams } from '../../withUrlHelper';
 
 function bar (completed, failed, text) {
   // show a sliver even if there's no progress
@@ -62,7 +61,13 @@ export const tableColumns = [
   {
     Header: 'Name',
     accessor: 'pdrName',
-    Cell: ({ cell: { value } }) => <Link to={(location) => ({ pathname: `/pdrs/pdr/${value}`, search: getPersistentQueryParams(location) })}>{value}</Link> // eslint-disable-line react/prop-types
+    isLink: true,
+    linkTo: (row) => {
+      const queryParams = getPersistentQueryParams(window.location);
+      const path = `/pdrs/pdr/${row.pdrName}`;
+      return queryParams ? `${path}?${queryParams}` : path;
+    },
+    Cell: ({ cell: { value } }) => (value)
   },
   {
     Header: 'Status',

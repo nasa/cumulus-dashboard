@@ -24,8 +24,6 @@ export const tableColumns = [
   {
     Header: strings.collection_id,
     accessor: 'collection',
-    // isLink: true,
-    // linkTo: (row) => `/collections/collection/${row.collection.name}/${row.collection.version}`,
     Cell: ({ cell: { value } }) => collectionLink(getFormattedCollectionId(value)),
     disableSortBy: true,
   },

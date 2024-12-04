@@ -7,7 +7,7 @@ import { createCollection, getSchema } from '../../actions';
 import { getCollectionId, collectionHrefFromId } from '../../utils/format';
 import { removeReadOnly } from '../FormSchema/schema';
 import AddRaw from '../AddRaw/add-raw';
-// import withRouter from '../../withRouter';
+import withRouter from '../../withRouter';
 
 const AddCollection = () => {
   const dispatch = useDispatch();
@@ -63,4 +63,4 @@ AddCollection.propTypes = {
   schema: PropTypes.object,
 };
 
-export default AddCollection;
+export default withRouter(AddCollection);

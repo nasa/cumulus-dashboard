@@ -163,7 +163,7 @@ const ExecutionStatus = ({
               <Link
                 className="button button--small button--events"
                 to={() => ({
-                  pathname: `/execution/${executionArn}/events`,
+                  pathname: `/executions/execution/${executionArn}/events`,
                 })}
               >
                 Events

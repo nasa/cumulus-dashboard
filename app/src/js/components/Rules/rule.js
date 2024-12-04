@@ -15,7 +15,7 @@ import {
   deleteText,
   rerunText,
   collectionLink,
-  getCollectionId
+  getCollectionId,
 } from '../../utils/format';
 import {
   getRule,
@@ -61,7 +61,7 @@ const Rule = ({ urlHelper }) => {
 
   useEffect(() => {
     load();
-  }, [ruleName, dispatch]);
+  }, [ruleName, dispatch, load]);
 
   const deletes = () => {
     dispatch(deleteRule(ruleName));
@@ -151,7 +151,7 @@ const Rule = ({ urlHelper }) => {
     { label: 'Provider', property: 'provider', accessor: providerLink },
     { label: 'Provider Path', property: 'provider_path' },
     { label: 'Rule Type', property: 'rule.type' },
-    { label: 'Collection', property: 'collection', accessor: (value) => collectionLink(getCollectionId(value)) },
+    { label: 'Collection', property: 'collection', accessor: (value) => collectionLink(getCollectionId(value)) }
   ];
 
   // const errors = errors();
