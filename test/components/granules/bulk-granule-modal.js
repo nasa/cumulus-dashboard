@@ -89,9 +89,9 @@ test('bulk granule modal shows submission form', function (t) {
 
   t.truthy(screen.findByText('.form__bulkgranules'));
   t.truthy(screen.findByText('#test5678') && screen.findByText('TEST'));
-  t.truthy(screen.findByText('cancelButtonText') && screen.findByText('cancelButtonText'));
-  t.truthy(screen.findByText('confirmButtonClass') && screen.findByText('confirmButtonClass'));
-  t.truthy(screen.findByText('confirmButtonText') && screen.findByText('confirmButtonText'));
+  t.truthy(screen.findByText('cancelButtonText') && screen.findByText(cancelButtonText));
+  t.truthy(screen.findByText('confirmButtonClass') && screen.findByText(confirmButtonClass));
+  t.truthy(screen.findByText('confirmButtonText') && screen.findByText(confirmButtonText));
 
 });
 
@@ -115,8 +115,8 @@ test('bulk granule modal shows inflight status', function (t) {
 
   t.truthy(screen.findByText('.form__bulkgranules'));
   t.truthy(screen.findByText('#test9102') && screen.findByText('TEST2'));
-  t.truthy(screen.findByText('cancelButtonText') && screen.findByText('cancelButtonText'));
-  t.truthy(screen.findByText('confirmButtonClass') && screen.findByText('confirmButtonClass'));
+  t.truthy(screen.findByText('cancelButtonText') && screen.findByText(cancelButtonText));
+  t.truthy(screen.findByText('confirmButtonClass') && screen.findByText(confirmButtonClass));
   t.truthy(screen.findByText('confirmButtonText') && screen.findByText('loading...'));
 
 });
