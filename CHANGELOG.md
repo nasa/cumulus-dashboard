@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Changed
 
+- **CUMULUS-3861**
+  - Updated Enzyme tests to React Testing Library
+
+### Changed
+
 - **CUMULUS-3870**
   - Updated React and dependencies
   - react 17.0.2 ⇒ 18.3.1
