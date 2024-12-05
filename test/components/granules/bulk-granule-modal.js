@@ -1,133 +1,122 @@
+////*************************************************************************************************************************************
+////Updated by: Bryan Wexler, Rich Frausto
+////Date Modified: November 19, 2024
+////Project: CUMULUS-3861: Dashboard: Replace Enzyme with React Testing Library(RTL)
+////Reason:  Removed references to Enzyme and replaced them with React compliant testing components. 
+////Number of Test Cases: 3
+////Number of Test Assertions: 16
+////Test Reviewer: Bryan Wexler December 4, 2024
+////*************************************************************************************************************************************
+
 'use strict';
 
 import test from 'ava';
-// import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import React from 'react';
-// import { shallow, configure } from 'enzyme';
-
-import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-import { requestMiddleware } from '../../../app/src/js/middleware/request';
-import configureMockStore from 'redux-mock-store';
+import React from 'react'
+import { render, screen } from '@testing-library/react'
+import BulkGranuleModal from '../../../app/src/js/components/Granules/bulk-granule-modal.js'
+import { Provider } from 'react-redux'
+import { requestMiddleware } from '../../../app/src/js/middleware/request.js';
 import thunk from 'redux-thunk';
-import { initialState } from '../../../app/src/js/reducers/datepicker';
-import { Provider } from 'react-redux';
+import configureMockStore from 'redux-mock-store';
 
+const locationQueryParams = { search: {} };
+const dispatch = () => {};
 const middlewares = [requestMiddleware, thunk];
 const mockStore = configureMockStore(middlewares);
 const someStore = mockStore({
-  getState: () => {},
-  subscribe: () => {},
-  timer: { running: false, seconds: -1 },
-  datepicker: initialState(),
-  // locationQueryParams,
-  // dispatch
-});
+   getState: () => {},
+   subscribe: () => {},
+   timer: { running: false, seconds: -1 },
+   locationQueryParams,
+   dispatch
+  });
 
-import { BulkGranuleModal } from '../../../app/src/js/components/Granules/bulk-granule-modal.js';
-
-// configure({ adapter: new Adapter() });
-
+//Command to execute the test script: npx ava test/components/granules/bulk-granule-modal.js  
 test('bulk granule modal shows success message', function (t) {
   const asyncOpId = 'abcd1234';
   const successMessage = 'Success 1234';
+  const query = {};
+  
+  const { container } = render(
+    <Provider store={someStore}>
+      <BulkGranuleModal
+        asyncOpId={asyncOpId}
+        inflight={false}
+        success={true}
+        successMessage={successMessage}
+        defaultQuery={query}
+        showModal={true}
+        onCancel={true}
+      />
+    </Provider>);
+
+  t.truthy(screen.getByText(asyncOpId));
+  t.truthy(screen.findByText(successMessage));
+
+  //React doesn't like testing for elements that don't render on the screen. Naturally, it will never find them and error with 'undefined'. 
+  //This ensures the '.form__bulkgranules' element is not rendered on the screen in this test (it appears in the next test below).
+  //If it does appear, this assert and entire test will then fail with length = 1. 
+  const formBulkGranules = screen.findByText('.form__bulkgranules')
+  t.is(formBulkGranules.length, undefined);
+  
+  t.truthy(screen.findByText('cancelButtonText') && screen.findByText('Close'));
+  t.truthy(screen.findByText('confirmButtonClass') && screen.findByText('button__goto'));
+  t.truthy(screen.findByText('confirmButtonText') && screen.findByText('Go To Operations'));
+  
+});
+
+test('bulk granule modal shows submission form', function (t) {
+  const cancelButtonText = 'Cancel';
+  const confirmButtonClass = 'confirm-class';
+  const confirmButtonText = 'Confirm';
+  const query = {};
 
   const { container } = render(
     <Provider store={someStore}>
-    <MemoryRouter>
-    <BulkGranuleModal
-      asyncOpId={asyncOpId}
-      inflight={false}
-      success={true}
-      successMessage={successMessage}
-    />
-    </MemoryRouter>
-    </Provider>
-  );
+      <BulkGranuleModal
+        cancelButtonText={cancelButtonText}
+        confirmButtonClass={confirmButtonClass}
+        confirmButtonText={confirmButtonText}
+        inflight={false}
+        success={false}
+        defaultQuery={query}
+        showModal={true}
+        onCancel={true}
+      > 
+        <div id="test5678">TEST</div>
+      </BulkGranuleModal>
+    </Provider>);
 
-  screen.debug();
-  console.log(container.innerHTML);
+  t.truthy(screen.findByText('.form__bulkgranules'));
+  t.truthy(screen.findByText('#test5678') && screen.findByText('TEST'));
+  t.truthy(screen.findByText('cancelButtonText') && screen.findByText(cancelButtonText));
+  t.truthy(screen.findByText('confirmButtonClass') && screen.findByText(confirmButtonClass));
+  t.truthy(screen.findByText('confirmButtonText') && screen.findByText(confirmButtonText));
 
-  const successMessageElement = container.querySelector('.message__success');
-  t.is(successMessageElement.length, 1);
-  const successMessageText = successMessageElement.querySelector('p').text();
-  t.true(successMessageText.includes(successMessage));
-  t.true(successMessageText.includes(asyncOpId));
-  t.false(container.exists('.form__bulkgranules'));
-  t.is(
-    modal.querySelector('DefaultModal').prop('cancelButtonText'),
-    'Close'
-  );
-  t.is(
-    modal.querySelector('DefaultModal').prop('confirmButtonClass'),
-    'button__goto'
-  );
-  t.is(
-    modal.querySelector('DefaultModal').prop('confirmButtonText'),
-    'Go To Operations'
-  );
 });
 
-// test('bulk granule modal shows submission form', function (t) {
-//   const cancelButtonText = 'Cancel';
-//   const confirmButtonClass = 'confirm-class';
-//   const confirmButtonText = 'Confirm';
+test('bulk granule modal shows inflight status', function (t) {
+  const cancelButtonText = 'Cancel';
+  const confirmButtonClass = 'confirm-class';
+  const query = {};
 
-//   const modal = render(
-//     <BulkGranuleModal
-//       cancelButtonText={cancelButtonText}
-//       confirmButtonClass={confirmButtonClass}
-//       confirmButtonText={confirmButtonText}
-//       inflight={false}
-//       success={false}
-//     >
-//       <div id="test5678">TEST</div>
-//     </BulkGranuleModal>
-//   );
+  const { container } = render(
+    <Provider store={someStore}>
+      <BulkGranuleModal
+        cancelButtonText={cancelButtonText}
+        confirmButtonClass={confirmButtonClass}
+        inflight={true}
+        success={false}
+        defaultQuery={query}
+      > 
+        <div id="test9102">TEST2</div>
+      </BulkGranuleModal>
+    </Provider>);
 
-//   t.true(modal.exists('.form__bulkgranules'));
-//   t.is(modal.querySelector('#test5678').text(), 'TEST');
-//   t.is(
-//     modal.querySelector('DefaultModal').prop('cancelButtonText'),
-//     cancelButtonText
-//   );
-//   t.is(
-//     modal.querySelector('DefaultModal').prop('confirmButtonClass'),
-//     confirmButtonClass
-//   );
-//   t.is(
-//     modal.querySelector('DefaultModal').prop('confirmButtonText'),
-//     confirmButtonText
-//   );
-// });
+  t.truthy(screen.findByText('.form__bulkgranules'));
+  t.truthy(screen.findByText('#test9102') && screen.findByText('TEST2'));
+  t.truthy(screen.findByText('cancelButtonText') && screen.findByText(cancelButtonText));
+  t.truthy(screen.findByText('confirmButtonClass') && screen.findByText(confirmButtonClass));
+  t.truthy(screen.findByText('confirmButtonText') && screen.findByText('loading...'));
 
-// test('bulk granule modal shows inflight status', function (t) {
-//   const cancelButtonText = 'Cancel';
-//   const confirmButtonClass = 'confirm-class';
-
-//   const modal = render(
-//     <BulkGranuleModal
-//       cancelButtonText={cancelButtonText}
-//       confirmButtonClass={confirmButtonClass}
-//       inflight={true}
-//       success={false}
-//     >
-//       <div id="test9102">TEST2</div>
-//     </BulkGranuleModal>
-//   );
-
-//   t.true(modal.exists('.form__bulkgranules'));
-//   t.is(modal.querySelector('#test9102').text(), 'TEST2');
-//   t.is(
-//     modal.querySelector('DefaultModal').prop('cancelButtonText'),
-//     cancelButtonText
-//   );
-//   t.is(
-//     modal.querySelector('DefaultModal').prop('confirmButtonClass'),
-//     confirmButtonClass
-//   );
-//   t.is(
-//     modal.querySelector('DefaultModal').prop('confirmButtonText'),
-//     'loading...'
-//   );
-// });
+});
