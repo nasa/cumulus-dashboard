@@ -132,7 +132,6 @@ test('FOIA, Privacy, and Feedback links shown in the footer', function (t) {
    />
  );
 
- // const footerLeftSideLinks = footerWrapper.find('[className="footer__links"] div');
  const footerLeftSideLinks = container.querySelector('.footer__links');
 
  t.truthy(footerLeftSideLinks); // footer links on left exist
