@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useMemo, lazy, Suspense, useCallback, useRef } from 'react';
-import PropTypes from 'prop-types';
-// import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-// import withQueryParams from 'react-router-query-params';
+import PropTypes from 'prop-types';
 import isNil from 'lodash/isNil';
 import isEqual from 'lodash/isEqual';
 import omitBy from 'lodash/omitBy';
@@ -51,9 +49,22 @@ const List = ({
   urlHelper,
 }) => {
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
-  const { historyPushWithQueryParams, location, queryParams } = urlHelper;
   const sorts = useSelector((state) => state.sorts);
+  const sortBy = tableId ? sorts[tableId] : null;
+  const initialInfix = useRef(null);
+  const { historyPushWithQueryParams, location, queryParams } = urlHelper;
+
+  // Extract query filters from query params
+  const queryFilters = useMemo(() => {
+    const {
+      limit: limitQueryParam,
+      page: pageQueryParam,
+      search: searchQueryParam,
+      ...filters
+    } = queryParams;
+    return filters;
+  }, [queryParams]);
+
   const {
     data: listData,
     error: listError,
@@ -63,10 +74,10 @@ const List = ({
   const { count, limit } = meta || {};
   const tableData = data || listData || [];
 
+  // State management
   const [selected, setSelected] = useState([]);
   const [clearSelected, setClearSelected] = useState(false);
   const [page, setPage] = useState(1);
-  const sortBy = tableId ? sorts[tableId] : null;
   const [bulkActionMeta, setBulkActionMeta] = useState({
     completedBulkActions: 0,
     bulkActionError: null,
@@ -76,11 +87,8 @@ const List = ({
     hiddenColumns: initialHiddenColumns,
     setHiddenColumns: noop,
   });
-  // const searchParams = new URLSearchParams(location.search); // Using location to query params for search
-  const initialInfix = useRef(queryParams.search);
 
-  // const queryFilters = omitBy(query, isNil);
-
+  // Initialize queryConfig with sortBy from Redux
   const [queryConfig, setQueryConfig] = useState({
     page: 1,
     sort_key: buildSortKey(sortBy || [{ id: initialSortId, desc: true }]),
@@ -88,45 +96,54 @@ const List = ({
     ...query,
   });
 
-  const {
-    limit: limitQueryParam,
-    page: pageQueryParam,
-    search: searchQueryParam,
-    ...queryFilters
-  } = queryParams;
+  // Memoized values
+  const memoizedQuery = useMemo(() => query, [query]);
 
-  // Remove empty keys so as not to mess up the query
-  const getQueryConfig = useCallback(() => ({
+  const memoizedQueryFilters = useMemo(() => omitBy(queryFilters, isNil), [queryFilters]);
+
+  // Get query configuration: Remove empty keys so as not to mess up the query
+  const getQueryConfig = useCallback((config = {}) => omitBy({
     ...queryConfig,
     ...queryFilters,
     page,
     sort_key: sortBy ? buildSortKey(sortBy) : queryConfig.sort_key,
-  }), [queryConfig, queryFilters, sortBy, page]);
+    ...config
+  }, isNil), [queryConfig, queryFilters, sortBy, page]);
 
-  /* function getQueryConfig(config = {}) {
-    // Remove empty keys so as not to mess up the query
-    return omitBy(
-      {
-        page,
-        sort_key: queryConfig.sort_key,
-        ...params,
-        ...config,
-        ...query,
-      },
-      isNil
-    );
-  } */
-  const memoizedQuery = useMemo(() => query, [query]);
+  // Memoize getQueryConfig result to prevent infinite loops
+  const currentQueryConfig = useMemo(
+    () => getQueryConfig({}),
+    [getQueryConfig]
+  );
 
+  // Effect for query changes
+  useEffect(() => {
+    const newQueryConfig = currentQueryConfig;
+    if (!isEqual(newQueryConfig, queryConfig)) {
+      setQueryConfig(newQueryConfig);
+    }
+  }, [currentQueryConfig, queryConfig]);
+
+  // Effect for params changes
+  useEffect(() => {
+    const newParams = omitBy({
+      ...params,
+      ...queryFilters,
+    }, isNil);
+
+    if (!isEqual(newParams, params)) {
+      setParams(newParams);
+      // Don't update queryConfig here as it will cause a loop
+    }
+  }, [queryFilters]);
+
+  // useEffects for query management
   useEffect(() => {
     setQueryConfig((prevQueryConfig) => ({
       ...prevQueryConfig,
       ...getQueryConfig({}),
     }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [memoizedQuery]);
-
-  const memoizedQueryFilters = useMemo(() => omitBy(queryFilters, isNil), [queryFilters]);
+  }, [memoizedQuery, getQueryConfig]);
 
   useEffect(() => {
     // Remove parameters with null or undefined values
@@ -141,13 +158,11 @@ const List = ({
         ...getQueryConfig({}),
       }));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params, memoizedQueryFilters]);
+  }, [params, memoizedQueryFilters, getQueryConfig]);
 
   useEffect(() => {
     setClearSelected(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(queryFilters)]);
+  }, [memoizedQueryFilters]);
 
   useEffect(() => {
     if (typeof toggleColumnOptionsAction === 'function') { // replaces noop with modern JS
@@ -159,66 +174,10 @@ const List = ({
       );
     }
   }, [dispatch, toggleColumnOptionsAction, initialHiddenColumns, tableColumns]);
-  /*  const [queryConfig, setQueryConfig] = useState({
-    page: 1,
-    sort_key: buildSortKey(sortBy || [{ id: initialSortId, desc: true }]),
-    ...initialInfix.current ? { infix: initialInfix.current } : {},
-    ...query,
-  });
 
-  const {
-    limit: limitQueryParam,
-    page: pageQueryParam,
-    search: searchQueryParam,
-    ...queryFilters
-  } = queryParams;
-
-  useEffect(() => {
-    setQueryConfig((prevQueryConfig) => ({
-      ...prevQueryConfig,
-      ...getQueryConfig({}),
-    }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(query)]);
-
-  useEffect(() => {
-    // Remove parameters with null or undefined values
-    const newParams = omitBy(list.params, isNil);
-
-    if (!isEqual(newParams, params)) {
-      setParams(newParams);
-      setQueryConfig((prevQueryConfig) => ({
-        ...prevQueryConfig,
-        ...getQueryConfig({}),
-      }));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(list.params), JSON.stringify(params)]);
-
-  useEffect(() => {
-    setClearSelected(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(queryFilters)]);
-
-  useEffect(() => {
-    if (typeof toggleColumnOptionsAction === 'function') {
-      const allColumns = tableColumns.map(
-        (column) => column.id || column.accessor
-      );
-      dispatch(
-        toggleColumnOptionsAction(toggleColumnOptions.hiddenColumns, allColumns)
-      );
-    }
-  }, [
-    dispatch,
-    tableColumns,
-    toggleColumnOptions.hiddenColumns,
-    toggleColumnOptionsAction,
-  ]); */
-
-  function queryNewPage(newPage) {
+  // Update page handling
+  const queryNewPage = useCallback((newPage) => {
     setPage(newPage);
-
     // Update URL with new page number
     if (historyPushWithQueryParams) {
       const currentPath = location.pathname;
@@ -226,23 +185,25 @@ const List = ({
       currentSearch.set('page', newPage.toString());
       historyPushWithQueryParams(`${currentPath}?${currentSearch.toString()}`);
     }
-
     // Dispatch action to fetch new page data
     const newQueryConfig = getQueryConfig();
     newQueryConfig.page = newPage;
     dispatch(action(newQueryConfig));
-  }
+  }, [getQueryConfig, historyPushWithQueryParams, location, dispatch, action]);
 
-  function queryNewSort(sortProps) {
+  // Update sort handling
+  const queryNewSort = useCallback((sortProps) => {
     const newQueryConfig = getQueryConfig({
       sort_key: buildSortKey(sortProps),
     });
     if (!isEqual(queryConfig, newQueryConfig)) {
       setQueryConfig(newQueryConfig);
+      dispatch(action(newQueryConfig));
     }
-  }
+  }, [getQueryConfig, queryConfig, dispatch, action]);
 
-  function updateSelection(selectedIds, currentSelectedRows) {
+  // Update selection handling if needed
+  const updateSelection = useCallback((selectedIds, currentSelectedRows) => {
     if (!isEqual(selected, selectedIds)) {
       setSelected(selectedIds);
       setClearSelected(false);
@@ -251,36 +212,26 @@ const List = ({
         onSelect(selectedIds, currentSelectedRows);
       }
     }
-  }
+  }, [selected, onSelect]);
 
-  const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
+  // Bulk Actions
+  const hasActions = useMemo(
+    () => Array.isArray(bulkActions) && bulkActions.length > 0,
+    [bulkActions]
+  );
 
   const { completedBulkActions } = bulkActionMeta;
 
-  function onBulkActionSuccess(results) {
+  const onBulkActionSuccess = useCallback((results) => {
     setBulkActionMeta((prevState) => ({
       ...prevState,
       completedBulkActions: prevState.completedBulkActions + 1,
       bulkActionsError: null,
     }));
     setClearSelected(true);
-  }
-  /*   function onBulkActionSuccess(results, error) {
-    // not-elegant way to trigger a re-fresh in the timer
-    setBulkActionMeta((prevBulkActionMeta) => {
-      const {
-        completedBulkActions: prevCompletedBulkActions,
-        bulkActionError: prevBulkActionError,
-      } = prevBulkActionMeta;
-      return {
-        completedBulkActions: prevCompletedBulkActions + 1,
-        bulkActionError: error ? prevBulkActionError : null,
-      };
-    });
-    setClearSelected(true);
-  } */
+  }, []);
 
-  function onBulkActionError(error) {
+  const onBulkActionError = useCallback((error) => {
     const newBulkActionError =
       error.id && error.error
         ? `Could not process ${error.id}, ${error.error}`
@@ -291,7 +242,7 @@ const List = ({
       bulkActionError: newBulkActionError,
     }));
     setClearSelected(true);
-  }
+  }, []);
 
   const getToggleColumnOptions = useCallback((newOptions) => {
     setToggleColumnOptions(newOptions);
@@ -392,7 +343,6 @@ List.propTypes = {
   toggleColumnOptionsAction: PropTypes.func,
   tableColumns: PropTypes.array,
   onSelect: PropTypes.func,
-  // queryParams: PropTypes.object,
   renderRowSubComponent: PropTypes.func,
   tableId: PropTypes.string,
   sorts: PropTypes.object,

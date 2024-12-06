@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
+import { connect, useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
@@ -18,7 +18,7 @@ import Metadata from '../Table/Metadata';
 import Loading from '../LoadingIndicator/loading-indicator';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import { handleDownloadUrlClick } from '../../utils/download-file';
-import withRouter from '../../withRouter';
+import { withUrlHelper } from '../../withUrlHelper';
 
 const breadcrumbConfig = [
   {
@@ -37,11 +37,14 @@ const breadcrumbConfig = [
 
 const ExecutionStatus = ({
   cumulusInstance,
-  dispatch,
+  // dispatch,
   executionStatus,
   logs,
-  router
+  urlHelper
 }) => {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const { getPersistentQueryParams } = urlHelper;
   const [showInputModal, setShowInputModal] = useState(false);
   const [showOutputModal, setShowOutputModal] = useState(false);
   let error = get(executionStatus, 'error');
@@ -59,7 +62,7 @@ const ExecutionStatus = ({
   const { executionArn } = execution || {};
 
   const [isLoading, setIsLoading] = useState(true);
-  const { params } = router || {};
+  const params = useParams();
   const { executionArn: executionArnParam } = params;
 
   useEffect(() => {
@@ -162,9 +165,10 @@ const ExecutionStatus = ({
             <span className="float-right">
               <Link
                 className="button button--small button--events"
-                to={() => ({
+                to={{
                   pathname: `/executions/execution/${executionArn}/events`,
-                })}
+                  search: getPersistentQueryParams(location)
+                }}
               >
                 Events
               </Link>
@@ -200,19 +204,17 @@ const ExecutionStatus = ({
 
 ExecutionStatus.propTypes = {
   cumulusInstance: PropTypes.object,
-  dispatch: PropTypes.func,
+  // dispatch: PropTypes.func,
   executionStatus: PropTypes.object,
   logs: PropTypes.object,
-  router: PropTypes.shape({
-    location: PropTypes.object,
-    navigate: PropTypes.func,
-    params: PropTypes.object
+  urlHelper: PropTypes.shape({
+    getPersistentQueryParams: PropTypes.func
   }),
 };
 
 export { ExecutionStatus };
 
-export default withRouter(
+export default withUrlHelper(
   connect((state) => ({
     cumulusInstance: state.cumulusInstance,
     executionStatus: state.executionStatus,

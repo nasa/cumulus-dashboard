@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-// import { withRouter } from 'react-router-dom';
+import { connect, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import {
@@ -15,11 +15,12 @@ import BackupReport from './backup-report';
 // import withRouter from '../../withRouter';
 
 const ReconciliationReport = ({
-  dispatch = {},
-  match,
+  // dispatch = {},
+  // match,
   reconciliationReports = [],
 }) => {
-  const { reconciliationReportName: encodedReportName } = match.params;
+  const dispatch = useDispatch();
+  const { reconciliationReportName: encodedReportName } = useParams();
   const reconciliationReportName = decodeURIComponent(encodedReportName);
   const { list, map, searchString: filterString } = reconciliationReports;
   const record = map[reconciliationReportName];
@@ -85,8 +86,8 @@ const ReconciliationReport = ({
 };
 
 ReconciliationReport.propTypes = {
-  dispatch: PropTypes.func,
-  match: PropTypes.object,
+  // dispatch: PropTypes.func,
+  // match: PropTypes.object,
   reconciliationReports: PropTypes.object,
 };
 

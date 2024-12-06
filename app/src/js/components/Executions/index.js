@@ -1,8 +1,7 @@
-import React from 'react';
-import { Route, Routes, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Route, Routes, Navigate, useParams, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
-// import withQueryParams from 'react-router-query-params';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
@@ -13,14 +12,34 @@ import ExecutionEvents from './execution-events';
 import ExecutionsList from './executions-list';
 import { getCount, listExecutions } from '../../actions';
 import { strings } from '../locale';
-// import { filterQueryParams } from '../../utils/url-helper';
 import { withUrlHelper } from '../../withUrlHelper';
+
+// Wrapper component to validate execution ARN
+const ExecutionRouteWrapper = ({ Component }) => {
+  const { executionArn } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!executionArn) {
+      console.warn('No execution ARN provided');
+      navigate('/executions/all');
+    }
+  }, [executionArn, navigate]);
+
+  if (!executionArn) {
+    return null;
+  }
+
+  return <Component executionArn={executionArn} />;
+};
 
 const Executions = ({ urlHelper }) => {
   const dispatch = useDispatch();
   const { queryParams, filterQueryParams, location } = urlHelper;
   const filteredQueryParams = filterQueryParams(queryParams);
   const { pathname } = location;
+  const { executionArn } = useParams();
+
   const showSidebar = pathname !== '/executions/add';
   const showDatePicker = pathname === '/executions';
 
@@ -48,21 +67,25 @@ const Executions = ({ urlHelper }) => {
       }
       <div className='page__content'>
         <div className='wrapper__sidebar'>
-          { showSidebar && <Sidebar currentPath={pathname} location={location}/> }
+          { showSidebar && <Sidebar currentPath={pathname} params={{ executionArn }}/> }
           <div className='page__content--shortened'>
             <Routes>
               <Route index element={<Navigate to="all" replace />} />
               <Route path='all' element={<ExecutionOverview queryParams={filteredQueryParams} />} />
-              <Route path='/execution/:executionArn/logs' element={<ExecutionLogs />} />
-              <Route path='/execution/:executionArn/events' element={<ExecutionEvents/>} />
-              <Route path='/execution/:executionArn' element={<ExecutionStatus />} />
-              <Route path='/executions-list/:collectionId/:granuleId' element ={<ExecutionsList />} />
+              <Route path='execution/:executionArn/logs' element={<ExecutionLogs />} />
+              <Route path='execution/:executionArn/events' element={<ExecutionEvents/>} />
+              <Route path='execution/:executionArn' element={<ExecutionStatus />} />
+              <Route path='executions-list/:collectionId/:granuleId' element ={<ExecutionsList />} />
             </Routes>
           </div>
         </div>
       </div>
     </div>
   );
+};
+
+ExecutionRouteWrapper.propTypes = {
+  Component: PropTypes.elementType.isRequired
 };
 
 Executions.propTypes = {

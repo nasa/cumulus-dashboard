@@ -14,7 +14,7 @@ const BackupReport = ({
   filterString,
   legend,
   onSelect,
-  recordData,
+  recordData = {},
   reportName,
   reportType,
   reportUrl
@@ -23,12 +23,14 @@ const BackupReport = ({
     reportStartTime = null,
     reportEndTime = null,
     error = null,
-    granules: {
-      withConflicts = [],
-      onlyInCumulus = [],
-      onlyInOrca = []
-    }
-  } = recordData || {};
+    granules = {}
+  } = recordData;
+
+  const {
+    withConflicts = [],
+    onlyInCumulus = [],
+    onlyInOrca = []
+  } = granules;
 
   let records = withConflicts.map((g) => ({ ...g, conflictType: 'withConflicts' })).concat(
     onlyInCumulus.map((g) => ({ ...g, conflictType: 'onlyInCumulus' })),

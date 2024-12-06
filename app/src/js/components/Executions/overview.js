@@ -38,9 +38,7 @@ const breadcrumbConfig = [
 
 const ExecutionOverview = ({
   collections,
-  // dispatch,
   executions,
-  // queryParams,
   workflowOptions,
   urlHelper
 }) => {
@@ -144,7 +142,6 @@ ExecutionOverview.propTypes = {
   executions: PropTypes.object,
   workflowOptions: PropTypes.array,
   urlHelper: PropTypes.shape({
-    location: PropTypes.object,
     queryParams: PropTypes.object
   }),
 };

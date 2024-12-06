@@ -4,21 +4,33 @@ import get from 'lodash/get';
 
 import { nullValue, dateOnly, IndicatorWithTooltip, collectionHrefFromId, providerLink } from '../format';
 import { getReconciliationReport, deleteReconciliationReport, listReconciliationReports } from '../../actions';
-import { getPersistentQueryParams } from '../url-helper';
+import { getPersistentQueryParams } from '../../withUrlHelper';
 
 export const tableColumns = ({ dispatch, isGranules, query }) => ([
   {
     Header: 'Name',
     accessor: 'name',
+    isLink: true,
+    linkTo: (row) => {
+      const value = row.name;
+      const pathname = `/reconciliation-reports/report/${encodeURIComponent(value)}`;
+      return pathname;
+    },
     Cell: ({ cell: { value }, row: { original: { type } } }) => { // eslint-disable-line react/prop-types
-      const link = (location) => ({ pathname: `/reconciliation-reports/report/${encodeURIComponent(value)}`, search: getPersistentQueryParams(location) });
-      switch (type) {
-        case 'Internal':
-        case 'Granule Inventory':
-          return <Link to={link} onClick={(e) => handleDownloadClick(e, value, dispatch)}>{value}</Link>;
-        default:
-          return <Link to={link} >{value}</Link>;
+      const pathname = `/reconciliation-reports/report/${encodeURIComponent(value)}`;
+      const search = getPersistentQueryParams();
+
+      if (type === 'Internal' || type === 'Granule Inventory') {
+        return (
+          <Link
+            to={{ pathname, search }}
+            onClick={(e) => handleDownloadClick(e, value, dispatch)}
+          >
+            {value}
+          </Link>
+        );
       }
+      return <Link to={{ pathname, search }}>{value}</Link>;
     }
   }, ...(!isGranules
     ? [{

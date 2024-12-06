@@ -59,6 +59,7 @@ const Rule = ({ urlHelper }) => {
     dispatch(getRule(ruleName));
   };
 
+  // Getting warning load function error and wrap load in useCallback() hook
   useEffect(() => {
     load();
   }, [ruleName, dispatch, load]);
