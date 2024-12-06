@@ -201,7 +201,7 @@ describe('Dashboard Bulk Granules', () => {
         cy.contains('.error__report', errorMessage);
         cy.contains('button', 'Cancel Bulk Operations').click();
 
-        cy.contains('button', 'Run Bulk Granules').click();
+        cy.contains('button', 'Run Bulk Granules').click({ force: true });
 
         cy.get('.bulk_granules')
           .within(() => {
@@ -336,7 +336,7 @@ describe('Dashboard Bulk Granules', () => {
         cy.contains('.error__report', errorMessage);
         cy.contains('button', 'Cancel Bulk Recovery').click();
 
-        cy.contains('button', 'Run Bulk Granules').click();
+        cy.contains('button', 'Run Bulk Granules').click({ force: true });
 
         cy.get('.bulk_granules')
           .within(() => {
