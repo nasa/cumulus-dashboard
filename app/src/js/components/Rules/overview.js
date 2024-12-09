@@ -12,7 +12,6 @@ import {
   clearRulesSearch,
   filterRules,
   clearRulesFilter,
-  refreshCumulusDbConnection,
 } from '../../actions';
 import {
   lastUpdated,
@@ -54,7 +53,6 @@ const RulesOverview = ({ urlHelper }) => {
 
   useEffect(() => {
     console.log('RulesOverview mounted, dispatching actions');
-    dispatch(refreshCumulusDbConnection());
     dispatch(listRules());
   }, [dispatch]);
 

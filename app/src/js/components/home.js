@@ -5,6 +5,8 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 // import withQueryParams from 'react-router-query-params';
 import { get } from 'object-path';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import {
   getCount,
   getCumulusInstanceMetadata,
@@ -22,6 +24,7 @@ import { pageSection, sectionHeader } from './Section/section';
 import List from './Table/Table';
 import { errorTableColumns } from '../utils/table-config/granules';
 import linkToKibana from '../utils/kibana';
+import Tooltip from './Tooltip/tooltip';
 import DatepickerRange from './Datepicker/DatepickerRange';
 import { strings } from './locale';
 // import { getPersistentQueryParams } from '../utils/url-helper';
@@ -58,11 +61,16 @@ const Home = ({ urlHelper }) => {
   });
 
   const query = useCallback(() => {
+    const defaultTimeRange = {
+      timestamp__from: Date.now() - (24 * 60 * 60 * 1000),
+      timestamp__to: Date.now()
+    };
+
     dispatch(getStats());
     dispatch(getCount({ type: 'granules', field: 'status' }));
-    dispatch(listExecutions({}));
+    dispatch(listExecutions(defaultTimeRange));
     dispatch(listGranules(generateQuery()));
-    dispatch(listRules({}));
+    dispatch(listRules(defaultTimeRange));
   }, [dispatch]);
 
   useEffect(() => {
@@ -159,7 +167,29 @@ const Home = ({ urlHelper }) => {
             </div>
           )}
 
-          {sectionHeader('Metrics Overview', 'metricsOverview')}
+          <section className='page__section' id={'metricsOverview'}>
+          <div className="row">
+          <div className={'heading__wrapper--border'}>
+          <h2 style={{ display: 'inline-block', marginRight: '10px' }} className={'heading--large'}>
+            {'Metrics Overview'}
+          </h2>
+          <span>
+          <Tooltip
+                className="tooltip--light"
+                id="overview-default-tooltip"
+                placement={'right'}
+                target={
+                  <FontAwesomeIcon
+                    className="button__icon--animation"
+                    icon={faInfoCircle}
+                  />
+                }
+                tip="The default range for this overview is within the last 24 hours."
+              />
+          </span>
+          </div>
+          </div>
+          </section>
           {buttonListSection(overview, 'Updates')}
 
           {sectionHeader(

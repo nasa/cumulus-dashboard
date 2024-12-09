@@ -1,10 +1,5 @@
 version: "3"
 services:
-  elasticsearch:
-    image: ${DOCKER_REPOSITORY}elasticsearch:5.3
-    network_mode: "service:shim"
-    environment:
-      ES_JAVA_OPTS: "-Xms750m -Xmx750m"
   localstack:
     image: ${DOCKER_REPOSITORY}localstack/localstack:3.0.0
     network_mode: "service:shim"

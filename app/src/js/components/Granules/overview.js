@@ -18,7 +18,6 @@ import {
   applyRecoveryWorkflowToGranule,
   getOptionsCollectionName,
   getOptionsProviderName,
-  // refreshCumulusDbConnection,
   toggleGranulesTableColumns,
 } from '../../actions';
 import { lastUpdated, tally } from '../../utils/format';
@@ -84,11 +83,7 @@ const GranulesOverview = (props) => {
     urlHelper,
   } = props;
 
-  /*   componentDidMount() {
-    this.props.dispatch(refreshCumulusDbConnection());
-    this.queryMeta();
-  }
-
+/*{
   componentDidUpdate(prevProps) {
     if (!isEqual(prevProps.workflowOptions, this.props.workflowOptions)) {
       this.setState({ workflow: this.props.workflowOptions[0] });
@@ -105,11 +100,6 @@ const GranulesOverview = (props) => {
   const { count, queriedAt } = list.meta;
   const { dropdowns } = collections;
   const { dropdowns: providerDropdowns } = providers;
-
-  /*   useEffect(() => {
-      dispatch(refreshCumulusDbConnection());
-      queryMeta();
-    }, [dispatch, location]); */
 
   useEffect(() => {
     if (!isEqual(props.workflowOptions, workflowOptions)) {

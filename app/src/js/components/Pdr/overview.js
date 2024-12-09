@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { listPdrs, getCount, clearPdrsFilter, filterPdrs, refreshCumulusDbConnection } from '../../actions';
+import { listPdrs, getCount, clearPdrsFilter, filterPdrs } from '../../actions';
 import { lastUpdated, tally } from '../../utils/format';
 import { bulkActions } from '../../utils/table-config/pdrs';
 import { tableColumns } from '../../utils/table-config/pdr-progress';
@@ -36,7 +36,6 @@ class PdrOverview extends React.Component {
   }
 
   componentDidMount() {
-    this.props.dispatch(refreshCumulusDbConnection());
     this.queryStats();
   }
 

@@ -8,7 +8,6 @@ import {
   clearReconciliationReportsFilter,
   listReconciliationReports,
   filterReconciliationReports,
-  refreshCumulusDbConnection,
 } from '../../actions';
 import { lastUpdated } from '../../utils/format';
 import { reconciliationReportStatus as statusOptions } from '../../utils/status';

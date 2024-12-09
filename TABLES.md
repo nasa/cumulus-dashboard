@@ -44,7 +44,7 @@ Wraps `sortable-table` and implements auto-update and smart sort. When a new sor
 
 ## Dumb vs smart sort
 
-Dumb sorting uses react-table's built in sort functionality to sort table data that has **already** been received from the API. Smart sorting initiates a new API request, passing the sort parameter to the server (elasticsearch) which returns a sorted response. The `manualSortBy` option passed to `useTable()` tells react-table whether we are doing server-side sorting (`true`) or letting react-table sort (`false`).
+Dumb sorting uses react-table's built in sort functionality to sort table data that has **already** been received from the API. Smart sorting initiates a new API request, passing the sort parameter to the server which returns a sorted response. The `manualSortBy` option passed to `useTable()` tells react-table whether we are doing server-side sorting (`true`) or letting react-table sort (`false`).
 
 When sorting on multiple columns, select the first column, hold down the shift key, and select another column.
 

@@ -40,17 +40,7 @@ const Granules = ({ urlHelper }) => {
       getCount({
         type: 'granules',
         field: 'status',
-        sidebarCount: true,
-      })
-    );
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(
-      getCount({
-        type: 'reconciliationReports',
-        field: 'type',
-        sidebarCount: true,
+        sidebarCount: true
       })
     );
   }, [dispatch]);

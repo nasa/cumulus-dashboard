@@ -207,7 +207,7 @@ If you're just testing dashboard code, you can generally run all of the above co
 ```bash
   $ npm run start-dashboard
 ```
-This brings up LocalStack, Elasticsearch, the Cumulus localAPI, and the dashboard.
+This brings up LocalStack, the Cumulus localAPI, and the dashboard.
 
 Run the test suite (yet another terminal window)
 ```bash
@@ -223,7 +223,7 @@ For **development** and **testing** purposes only, you can run a Cumulus API loc
 
 *Important Note: These `docker compose` commands do not build distributable containers, but are a provided as testing conveniences.  The docker-compose[-\*].yml files show that they work by linking your local directories into the container.*
 
-In order to run the Cumulus API locally you must first [build the dashboard](#build-the-dashboard) and then run the containers that provide LocalStack and Elasticsearch services.
+In order to run the Cumulus API locally you must first [build the dashboard](#build-the-dashboard) and then run the containers that provide LocalStack services.
 
 These are started and stopped with the commands:
 ```bash
@@ -253,7 +253,6 @@ The output looks like this:
 > docker compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml up -d
 
 Creating localapi_shim_1 ... done
-Creating localapi_elasticsearch_1 ... done
 Creating localapi_localstack_1    ... done
 Creating localapi_serve_api_1     ... done
 ```
@@ -277,7 +276,7 @@ Bring up and down the entire stack (the localAPI and the dashboard) with:
   $ npm run start-dashboard
   $ npm run stop-dashboard
 ```
-This runs everything, the backing Localstack and Elasticsearch containers, the local Cumulus API and dashboard.  Edits to your code will be reflected in the running dashboard.  You can run cypress tests still with `npm run cypress`.  As a warning, this command takes a very long time to start up because the containers come up in a specific order and generally this should be reserved for use by Earthdata Bamboo or some other continuous integration service.  But, if you are using it locally, **be sure to wait until all containers are fully up** before trying to visit the dashboard which is exposed at http://localhost:3000
+This runs everything, the backing Localstack container, the local Cumulus API and dashboard.  Edits to your code will be reflected in the running dashboard.  You can run cypress tests still with `npm run cypress`.  As a warning, this command takes a very long time to start up because the containers come up in a specific order and generally this should be reserved for use by Earthdata Bamboo or some other continuous integration service.  But, if you are using it locally, **be sure to wait until all containers are fully up** before trying to visit the dashboard which is exposed at http://localhost:3000
 The stack is ready when the `view-docker-logs` task shows:
 ```bash
 dashboard_1      | > NODE_ENV=production http-server dist -p 3000 --proxy http://localhost:3000?

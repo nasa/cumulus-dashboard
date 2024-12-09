@@ -10,7 +10,6 @@ import {
   getCount,
   filterProviders,
   clearProvidersFilter,
-  refreshCumulusDbConnection,
 } from '../../actions';
 import { lastUpdated } from '../../utils/format';
 import { tableColumns } from '../../utils/table-config/providers';
@@ -26,8 +25,12 @@ const ProvidersOverview = ({ urlHelper }) => {
   const providers = useSelector((state) => state.providers);
   const stats = useSelector((state) => state.stats);
 
+  // merged changes: have to change to useEffect
+  componentDidMount() {
+    this.queryStats();
+  }
+
   useEffect(() => {
-    dispatch(refreshCumulusDbConnection());
     dispatch(getCount({
       type: 'collections',
       field: 'providers',
