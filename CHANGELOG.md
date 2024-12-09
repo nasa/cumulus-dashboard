@@ -21,6 +21,11 @@ This version of the dashboard requires Cumulus API >= v19.2.0-alpha.1 (TBD API r
     `@cumulus/aws-client@19.2.0-alpha.1`
   - Updated the integration tests to work with updated API
   - Updated packages to address [CVE-2024-21538] (https://github.com/advisories/GHSA-3xgq-45jj-v275)
+- **CUMULUS-3862**
+  - Upgraded React Router to v6.26.2
+  - Updated routes for navigation for menus, pagination, sections, and parent-child pages
+  - Established new router with withRouter.js HOC
+  - Replaced URL params utility with withUrlHelper.js HOC
 - **CUMULUS-3870**
   - Remove launchpad security key information from cypress fixture for `valid-execution.json`
   - Add placeholders for security information with `fakePassword` and `userName`
