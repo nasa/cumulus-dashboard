@@ -148,6 +148,7 @@
     "browserify-sign": "^4.2.2",
     "classnames": "^2.2.6",
     "compare-versions": "^4.1.2",
+    "connected-react-router": "^6.9.3",
     "console-browserify": "^1.2.0",
     "core-js": "^3.20.1",
     "crypto-browserify": "^3.12.0",
