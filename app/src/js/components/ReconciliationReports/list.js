@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 // import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -64,10 +64,6 @@ const ReconciliationReportList = ({ urlHelper }) => {
   const query = generateQuery();
   const tableColumnsArray = tableColumns({ dispatch, isGranules, query });
   const { createReportInflight } = reconciliationReports;
-
-  useEffect(() => {
-    dispatch(refreshCumulusDbConnection());
-  }, [dispatch]);
 
   function generateQuery() {
     return {

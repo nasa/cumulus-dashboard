@@ -70,6 +70,12 @@ const GranulesOverview = (props) => {
       workflowMeta: defaultWorkflowMeta,
       selected: [],
     };
+
+    componentDidUpdate(prevProps) {
+    if (!isEqual(prevProps.workflowOptions, this.props.workflowOptions)) {
+      this.setState({ workflow: this.props.workflowOptions[0] });
+    }
+
   } */
 
   const {
@@ -82,13 +88,6 @@ const GranulesOverview = (props) => {
     providers,
     urlHelper,
   } = props;
-
-/*{
-  componentDidUpdate(prevProps) {
-    if (!isEqual(prevProps.workflowOptions, this.props.workflowOptions)) {
-      this.setState({ workflow: this.props.workflowOptions[0] });
-    }
-  } */
 
   const { location, queryParams } = urlHelper;
 
@@ -245,12 +244,6 @@ const GranulesOverview = (props) => {
       .filter(Boolean);
     this.setState({ selected });
   } */
-
-  /*    const { collections, granules, providers } = this.props;
-    const { list } = granules;
-    const { dropdowns } = collections;
-    const { dropdowns: providerDropdowns } = providers;
-    const { count, queriedAt } = list.meta; */
 
   return (
     <div className='page__component'>

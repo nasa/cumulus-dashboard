@@ -117,12 +117,16 @@ export const granuleTableColumns = [
   {
     Header: 'Name',
     accessor: 'granuleId',
+    isLink: true,
+    linkTo: (row) => `granules/granule/${encodeURIComponent(row.granuleId)}`,
     Cell: ({ cell: { value } }) => granuleLink(value),
     width: 200
   },
   {
     Header: strings.collection_id,
     accessor: 'collectionId',
+    isLink: true,
+    linkTo: (row) => `collections/collection/${encodeURIComponent(row.granuleId)}`,
     Cell: ({ cell: { value } }) => collectionLink(value)
   },
   {

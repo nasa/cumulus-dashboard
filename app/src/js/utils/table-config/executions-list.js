@@ -1,14 +1,11 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronCircleDown, faChevronCircleUp } from '@fortawesome/free-solid-svg-icons';
 import {
   displayCase,
   seconds,
-  // fromNowWithTooltip
+  fromNowWithTooltip
 } from '../format';
-// import { getPersistentQueryParams } from '../url-helper';
-// import { getPersistentQueryParams } from '../../withUrlHelper';
 
 export const tableColumns = [
   {
@@ -18,7 +15,6 @@ export const tableColumns = [
     isLink: true,
     linkTo: (row) => {
       const path = `/executions/execution/${row.arn}`;
-      console.log('linkTo for Name column:', { row, path });
       return path;
     },
     Cell: ({ cell: { value } }) => value
@@ -37,7 +33,7 @@ export const tableColumns = [
     Header: 'Updated',
     accessor: 'updatedAt',
     useTooltip: true,
-    // Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
+    Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
     id: 'updatedAt'
   },
   {

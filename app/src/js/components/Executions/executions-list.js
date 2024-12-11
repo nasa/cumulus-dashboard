@@ -1,14 +1,12 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import React, { useEffect, useCallback, useMemo } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import PropTypes from 'prop-types';
 import { listExecutionsByGranule } from '../../actions';
 import { tableColumns } from '../../utils/table-config/executions-list';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import List from '../Table/Table';
 import ExecutionSnapshot from './execution-snapshot';
-import { withRouter } from '../../withRouter';
 
 const breadcrumbConfig = [
   {
@@ -25,33 +23,39 @@ const breadcrumbConfig = [
   }
 ];
 
-const ExecutionsList = (executions, router) => {
-  const { params } = router;
-  const { collectionId, granuleId } = params || {};
+const ExecutionsList = () => {
+  const { collectionId, granuleId } = useParams();
+  const dispatch = useDispatch();
+  const executions = useSelector((state) => state.executions);
 
   console.log('Route params:', { collectionId, granuleId });
-
-  if (!granuleId || !collectionId) {
-    return <div>Error: Missing granuleId or collectionId</div>;
-  }
 
   const { map } = executions || {};
   const granuleExecutionslist = map[granuleId] || {};
   const { meta } = granuleExecutionslist;
 
-  const payload = {
+  const payload = useMemo(() => ({
     granules: [
       {
-        granuleId: decodeURIComponent(granuleId),
-        collectionId: decodeURIComponent(collectionId)
+        granuleId: granuleId ? decodeURIComponent(granuleId) : '',
+        collectionId: collectionId ? decodeURIComponent(collectionId) : ''
       }
     ],
-  };
+  }), [granuleId, collectionId]);
 
-  function renderRowSubComponent(row) {
-    return (
-      <ExecutionSnapshot row={row} />
-    );
+  // Initial data fetch
+  useEffect(() => {
+    if (granuleId && collectionId) {
+      dispatch(listExecutionsByGranule(granuleId, payload));
+    }
+  }, [dispatch, granuleId, collectionId, payload]);
+
+  const renderRowSubComponent = useCallback((row) => {
+    <ExecutionSnapshot row={row} />;
+  }, []);
+  // If there are no params, show error
+  if (!granuleId || !collectionId) {
+    return <div>Error: Missing granuleId or collectionId</div>;
   }
 
   return (
@@ -93,19 +97,6 @@ const ExecutionsList = (executions, router) => {
   );
 };
 
-ExecutionsList.propTypes = {
-  router: PropTypes.shape({
-    location: PropTypes.object,
-    navigate: PropTypes.func,
-    params: PropTypes.object
-  }),
-  executions: PropTypes.object
-};
-
 export { ExecutionsList };
 
-export default withRouter(
-  connect((state) => ({
-    executions: state.executions
-  }))(ExecutionsList)
-);
+export default ExecutionsList;

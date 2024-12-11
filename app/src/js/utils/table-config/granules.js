@@ -9,6 +9,7 @@ import {
   bool,
   nullValue,
   displayCase,
+  collectionLink,
   granuleLink,
   providerLink,
   fromNowWithTooltip,
@@ -73,6 +74,7 @@ export const tableColumns = [
     isLink: true,
     useCopyCellPopover: true,
     linkTo: (row) => `/collections/collection/${encodeURIComponent(row.collectionId)}`,
+    Cell: ({ cell: { value } }) => collectionLink(value)
   },
   {
     Header: 'Executions List',
@@ -124,6 +126,7 @@ export const tableColumns = [
 
 export const defaultHiddenColumns = ['recoveryStatus'];
 
+// Errors' Table on Home Overview Page
 export const errorTableColumns = [
   {
     Header: 'Error Type',
@@ -144,6 +147,7 @@ export const errorTableColumns = [
     Header: 'Granule',
     accessor: 'granuleId',
     isLink: true,
+    linkTo: (row) => `granules/granule/${encodeURIComponent(row.granuleId)}`,
     Cell: ({ cell: { value } }) => granuleLink(value),
     width: 200
   },

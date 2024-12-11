@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useCallback } from 'react';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -55,9 +55,9 @@ const Rule = ({ urlHelper }) => {
 
   const rules = useSelector((state) => state.rules);
 
-  const load = () => {
+  const load = useCallback(() => {
     dispatch(getRule(ruleName));
-  };
+  }, [dispatch, ruleName]);
 
   // Getting warning load function error and wrap load in useCallback() hook
   useEffect(() => {

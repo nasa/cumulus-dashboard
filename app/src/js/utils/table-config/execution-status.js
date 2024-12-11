@@ -266,11 +266,11 @@ export const associatedGranulesTableColumns = [
     accessor: 'granuleId',
     Cell: ({ cell: { value } }) => (
       <Link
-        to={() => ({
+        to={{
           pathname: `/granules/granule/${encodeURIComponent(
             path.basename(value)
           )}`,
-        })}
+        }}
       >
         {value}
       </Link>
@@ -281,11 +281,11 @@ export const associatedGranulesTableColumns = [
     id: 'associatedExecutions',
     Cell: ({ row: { original: { collectionId, granuleId } } }) => (
       <Link
-        to={() => ({
+        to={{
           pathname: `/executions/executions-list/${encodeURIComponent(
             collectionId
           )}/${encodeURIComponent(path.basename(granuleId))}`,
-        })}
+        }}
       >
         Link
       </Link>

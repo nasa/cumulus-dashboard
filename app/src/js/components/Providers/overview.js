@@ -14,8 +14,6 @@ import {
 import { lastUpdated } from '../../utils/format';
 import { tableColumns } from '../../utils/table-config/providers';
 import List from '../Table/Table';
-// import { getPersistentQueryParams } from '../../utils/url-helper';
-// import withRouter from '../../withRouter';
 import { withUrlHelper } from '../../withUrlHelper';
 
 const ProvidersOverview = ({ urlHelper }) => {
@@ -24,11 +22,6 @@ const ProvidersOverview = ({ urlHelper }) => {
 
   const providers = useSelector((state) => state.providers);
   const stats = useSelector((state) => state.stats);
-
-  // merged changes: have to change to useEffect
-  componentDidMount() {
-    this.queryStats();
-  }
 
   useEffect(() => {
     dispatch(getCount({

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-// import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
 import { get } from 'object-path';
 import {
   getCollectionId,
@@ -38,12 +37,13 @@ import withRouter from '../../withRouter';
 const CollectionGranules = ({
   dispatch,
   granules,
-  match,
+  // match,
   queryParams,
   workflowOptions,
   providers,
+  router
 }) => {
-  const { params } = match;
+  const { params } = router || {};
   const { name: collectionName, version: collectionVersion, status } = params;
   const granuleStatus = status === 'processing' ? 'running' : status;
   const { list } = granules;
@@ -214,16 +214,21 @@ const CollectionGranules = ({
 CollectionGranules.propTypes = {
   granules: PropTypes.object,
   dispatch: PropTypes.func,
-  match: PropTypes.object,
+  // match: PropTypes.object,
   queryParams: PropTypes.object,
   workflowOptions: PropTypes.array,
   providers: PropTypes.object,
+  router: PropTypes.shape({
+    location: PropTypes.object,
+    navigate: PropTypes.func,
+    params: PropTypes.object
+  }),
 };
 
-export default withRouter(
-  connect((state) => ({
-    granules: state.granules,
-    workflowOptions: workflowOptionNames(state),
-    providers: state.providers,
-  }))(CollectionGranules)
-);
+const mapStatetoProps = (state) => ({
+  granules: state.granules,
+  workflowOptions: workflowOptionNames(state),
+  providers: state.providers,
+});
+
+export default connect(mapStatetoProps)(withRouter(CollectionGranules));
