@@ -1,6 +1,7 @@
 'use strict';
 
 import test from 'ava';
+import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { Header } from '../../../app/src/js/components/Header/header';
 import { Provider } from 'react-redux'
