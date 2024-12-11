@@ -1,7 +1,10 @@
 'use strict';
 
 import test from 'ava';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+
+//BWexler 12/11/2024: commented out the line below as it was giving us a compilation error when running in Bamboo CI. 
+//Rich F. and I were unable to get this test script to run. We continually got 'no tests to run' error.
+//import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
 import { shallow, configure } from 'enzyme';
 
