@@ -1,18 +1,27 @@
 'use strict';
 
 import test from 'ava';
-
-//BWexler 12/11/2024: commented out the line below as it was giving us a compilation error when running in Bamboo CI. 
-//Rich F. and I were unable to get this test script to run. We continually got 'no tests to run' error.
-//import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import React from 'react';
-import { shallow, configure } from 'enzyme';
-
+import { render, screen } from '@testing-library/react'
 import { Header } from '../../../app/src/js/components/Header/header';
+import { Provider } from 'react-redux'
+import { requestMiddleware } from '../../../app/src/js/middleware/request.js';
+import thunk from 'redux-thunk';
+import configureMockStore from 'redux-mock-store';
 
-configure({ adapter: new Adapter() });
+const locationQueryParams = { search: {} };
+const dispatch = () => {};
+const middlewares = [requestMiddleware, thunk];
+const mockStore = configureMockStore(middlewares);
+const someStore = mockStore({
+   getState: () => {},
+   subscribe: () => {},
+   timer: { running: false, seconds: -1 },
+   locationQueryParams,
+   dispatch
+  });
 
 test('Header should include PDRs and Logs in navigation when HIDE_PDR=false and KIBANAROOT has value', function (t) {
+  const query = {};
   const dispatch = () => {};
   const api = {
     authenticated: true,
@@ -24,19 +33,22 @@ test('Header should include PDRs and Logs in navigation when HIDE_PDR=false and 
     search: {}
   };
 
-  const header = shallow(
-    <Header
-      dispatch={dispatch}
-      api={api}
-      location={location}
-      locationQueryParams={locationQueryParams}
-    />
-  );
+  const { container } = render(
+    <Provider store={someStore}>
+      <Header
+        dispatch={dispatch}
+        api={api}
+        location={location}
+        locationQueryParams={locationQueryParams}
+        defaultQuery={query}
+      />
+    </Provider>);
 
-  const navigation = header.find('nav li');
+  const navigation = screen.findByText('nav li')
   t.is(navigation.length, 11);
-  t.is(navigation.contains('PDRs'), true);
-  t.is(navigation.contains('Logs'), true);
+  t.truthy(screen.findByText('PDRs'));
+  t.truthy(screen.findByText('Logs'));
+
 });
 
 test('Logo path includes BUCKET env variable', function (t) {
@@ -51,15 +63,19 @@ test('Logo path includes BUCKET env variable', function (t) {
     search: {}
   };
 
-  const header = shallow(
-    <Header
-      dispatch={dispatch}
-      api={api}
-      location={location}
-      locationQueryParams={locationQueryParams}
-    />
-  );
+  const { container } = render(
+    <Provider store={someStore}>
+      <Header
+        dispatch={dispatch}
+        api={api}
+        location={location}
+        locationQueryParams={locationQueryParams}
+        defaultQuery={query}
+      />
+    </Provider>);
 
-  const logo = header.find('img[alt="Logo"]');
-  t.is(logo.props().src, 'https://example.com/bucket/cumulus-logo.png');
+  const logo = screen.findByText('img[alt="Logo"]')
+  t.is(logo.length, 1);
+  t.truthy(screen.findByText('https://example.com/bucket/cumulus-logo.png'));
+
 });
