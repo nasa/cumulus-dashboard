@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - **CUMULUS-3861**
+  - Updated React 17 to React 18
   - Updated Enzyme tests to React Testing Library
 
 ### Changed
