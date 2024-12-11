@@ -1,13 +1,3 @@
-////*************************************************************************************************************************************
-////Updated by: Bryan Wexler, Rich Frausto
-////Date Modified: November 19, 2024
-////Project: CUMULUS-3861: Dashboard: Replace Enzyme with React Testing Library(RTL)
-////Reason:  Removed references to Enzyme and replaced them with React compliant testing components. 
-////Number of Test Cases: 3
-////Number of Test Assertions: 16
-////Test Reviewer: Bryan Wexler December 4, 2024
-////*************************************************************************************************************************************
-
 'use strict';
 
 import test from 'ava';
@@ -31,7 +21,6 @@ const someStore = mockStore({
    dispatch
   });
 
-//Command to execute the test script: npx ava test/components/granules/bulk-granule-modal.js  
 test('bulk granule modal shows success message', function (t) {
   const asyncOpId = 'abcd1234';
   const successMessage = 'Success 1234';

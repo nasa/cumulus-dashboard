@@ -1,14 +1,3 @@
-////*************************************************************************************************************************************
-////Updated by: Rich Frausto, Bryan Wexler
-////Date Modified: November 11, 2024
-////Project: CUMULUS-3861: Dashboard: Replace Enzyme with React Testing Library(RTL)
-////Reason:  Broke out the two tests that were in the execution-events.js file into two individual test script files. 
-////         Removed references to Enzyme and replaced them with React compliant testing components.          
-////Number of Test Cases: 1
-////Number of Test Assertions: 4
-////Test Reviewer: Bryan Wexler November 14, 2024
-////*************************************************************************************************************************************
-
 'use strict';
 
 import test from 'ava';
@@ -54,7 +43,6 @@ test.afterEach.always(() => {
   sinon.restore();
 });
 
-//Command to execute the test: npx ava test/components/executions/execution-events_correctStepName.js
 test.serial('Execution Events displays the correct step name', function (t) {
   const plainEventsExecutionHistory = {
     events: [

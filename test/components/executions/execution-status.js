@@ -1,14 +1,3 @@
-////*************************************************************************************************************************************
-////Updated by: Rich Frausto, Bryan Wexler
-////Date Modified: November 14, 2024
-////Project: CUMULUS-3861: Dashboard: Replace Enzyme with React Testing Library(RTL)
-////Reason:  Broke out the two tests that were in the execution-events.js file into two individual test script files. 
-////         Removed references to Enzyme and replaced them with React compliant testing components. 
-////Number of Test Cases: 1
-////Number of Test Assertions: 5
-////Test Reviewer: Bryan Wexler November 14, 2024
-////*************************************************************************************************************************************
-
 'use strict';
 
 import test from 'ava';
@@ -46,8 +35,6 @@ const someStore = mockStore({
    dispatch
   });
 
-
-//Command to execute the test: npx ava test/components/executions/execution-status.js
 test('Cumulus-690 Execution Status shows workflow task and version information', function (t) {
   const executionStatus = {
     data: {

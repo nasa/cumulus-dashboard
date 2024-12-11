@@ -184,6 +184,12 @@ Otherwise, follow the instructions for building and deploying the dashboard for 
   $ npm run test
 ```
 
+Command to run a single test script locally using Ava:
+
+```bash
+  $ npx ava test/../../test-name.js
+```
+
 ### Integration & Validation Tests
 
 For the integration tests to work, you have to first run the localstack application, launch the localAPI and serve the dashboard first. Run the following commands in separate terminal sessions:
