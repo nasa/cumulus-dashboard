@@ -72,7 +72,9 @@ const List = ({
     meta,
   } = list;
   const { count, limit } = meta || {};
-  const tableData = data || listData || [];
+
+  // Memoize data
+  const tableData = useMemo(() => data || listData || [], [data, listData]);
 
   // State management
   const [selected, setSelected] = useState([]);
@@ -135,7 +137,7 @@ const List = ({
       setParams(newParams);
       // Don't update queryConfig here as it will cause a loop
     }
-  }, [queryFilters]);
+  }, [queryFilters, params]);
 
   // useEffects for query management
   useEffect(() => {
@@ -178,6 +180,7 @@ const List = ({
   // Update page handling
   const queryNewPage = useCallback((newPage) => {
     setPage(newPage);
+
     // Update URL with new page number
     if (historyPushWithQueryParams) {
       const currentPath = location.pathname;
@@ -185,11 +188,21 @@ const List = ({
       currentSearch.set('page', newPage.toString());
       historyPushWithQueryParams(`${currentPath}?${currentSearch.toString()}`);
     }
+
     // Dispatch action to fetch new page data
     const newQueryConfig = getQueryConfig();
     newQueryConfig.page = newPage;
     dispatch(action(newQueryConfig));
   }, [getQueryConfig, historyPushWithQueryParams, location, dispatch, action]);
+
+  useEffect(() => {
+    if (queryConfig.page !== page) {
+      setQueryConfig((prev) => ({
+        ...prev,
+        page
+      }));
+    }
+  }, [page, queryConfig.page]);
 
   // Update sort handling
   const queryNewSort = useCallback((sortProps) => {
@@ -214,6 +227,16 @@ const List = ({
     }
   }, [selected, onSelect]);
 
+  // Debug logging
+  /*   useEffect(() => {
+    console.log('Table render:', {
+      queryConfig,
+      page,
+      tableData,
+      meta
+    });
+  }, [queryConfig, page, tableData, meta]);
+ */
   // Bulk Actions
   const hasActions = useMemo(
     () => Array.isArray(bulkActions) && bulkActions.length > 0,

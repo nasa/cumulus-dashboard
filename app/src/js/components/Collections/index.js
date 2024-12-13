@@ -25,7 +25,7 @@ const Collections = ({ urlHelper }) => {
   const { pathname } = location;
   const existingCollection = pathname !== '/collections/add';
 
-  // const collections = useSelector((state) => state.collections);
+  const collections = useSelector((state) => state.collections);
   const logs = useSelector((state) => state.logs);
   const { metricsNotConfigured } = logs;
 
@@ -35,7 +35,7 @@ const Collections = ({ urlHelper }) => {
 
   useEffect(() => {
     dispatch(listCollections(filteredQueryParams));
-  }, [dispatch, filteredQueryParams]);
+  }, [dispatch, filteredQueryParams, collections]);
 
   return (
     <div className='page__collections'>
@@ -60,61 +60,18 @@ const Collections = ({ urlHelper }) => {
           >
             <Routes>
               <Route index element={<Navigate to='all' replace />} />
-              <Route
-                path='all'
-                element={
-                  <CollectionList
-                    queryParams={filteredQueryParams}
-                  />
-                }
-              />
+              <Route path='all' element={<CollectionList queryParams={filteredQueryParams} />} />
               <Route path='add' element={<AddCollection />} />
-              <Route
-                path='/edit'
-                element={<EditCollection />}
-              />
-              <Route
-                path='collection/:name/:version'
-                element={
-                  <CollectionOverview
-                    queryParams={filteredQueryParams}
-                  />
-                }
-              >
-                <Route
-                path='collection/:name/:version/granules'
-                element={
-                  <CollectionGranules
-                    queryParams={filteredQueryParams}
-                  />
-                }
-              />
-              </Route>
-              <Route
-                path='collection/:name/:version/granules/:status'
-                element={
-                  <CollectionGranules
-                    queryParams={filteredQueryParams}
-                  />
-                }
-              />
-              <Route
-                path='collection/:name/:version/granules/running'
-                element={
-                  <Navigate to='collection/:name/:version/granules/processing' replace/>
-                }
-              />
-              <Route
-                path='collection/:name/:version/definition'
-                element={<CollectionIngest />}
-              />
+              <Route path='edit' element={<EditCollection />} />
+              <Route path='collection/:name/:version' element={<CollectionOverview queryParams={filteredQueryParams} />} />
+              <Route path='collection/:name/:version/granules' element={<CollectionGranules queryParams={filteredQueryParams} />} />
+              <Route path='collection/:name/:version/granules/:status' element={<CollectionGranules queryParams={filteredQueryParams} />} />
+              <Route path='granules/running' element={<Navigate to='processing' replace/>} />
+              <Route path='collection/:name/:version/definition' element={<CollectionIngest />} />
               {!metricsNotConfigured && (
-                <Route
-                  path='collection/:name/:version/logs'
-                  element={<CollectionLogs />}
-                />
+                <Route path='collection/:name/:version/logs' element={<CollectionLogs />} />
               )}
-            </Routes>
+          </Routes>
           </div>
         </div>
       </div>

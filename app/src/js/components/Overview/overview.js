@@ -2,24 +2,22 @@ import React, { useEffect } from 'react';
 import { useParams, useLocation } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-// import withQueryParams from 'react-router-query-params';
 import { get } from 'object-path';
 import Loading from '../LoadingIndicator/loading-indicator';
 import { displayCase, numLargeTooltip } from '../../utils/format';
 import { getCount } from '../../actions';
 
 const Overview = ({
-  // dispatch,
   inflight,
   params = {},
   queryParams,
-  // stats,
   type
 }) => {
   const dispatch = useDispatch();
   const location = useLocation();
   const { status } = useParams();
-  const stats = useSelector((state) => ({ stats: state.stats }));
+
+  const stats = useSelector((state) => state.stats);
   const statsCount = get(stats, `count.data.${type}.count`, []);
 
   useEffect(() => {
@@ -27,17 +25,30 @@ const Overview = ({
       const searchParams = new URLSearchParams(location.search);
       const urlParams = Object.fromEntries(searchParams.entries());
 
-      dispatch(getCount({
+      const countParams = {
         type,
         field: 'status',
         ...params,
         ...queryParams,
         ...urlParams,
         status // include the status from URL params
-      }));
+      };
+      dispatch(getCount(countParams));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, JSON.stringify(params), JSON.stringify(queryParams), type, inflight, location, status]);
+
+  // Loading state check
+  if (inflight) {
+    return <Loading />;
+  }
+
+  // Check for empty statsCount
+  if (!statsCount || statsCount.length === 0) {
+    console.log('No stats data available');
+    return null;
+  }
+
   return (
     <div className="overview-num__wrapper" data-cy="overview-num">
       {inflight && <Loading />}
@@ -58,11 +69,11 @@ const Overview = ({
 };
 
 Overview.propTypes = {
-  // dispatch: PropTypes.func,
+  dispatch: PropTypes.func,
   inflight: PropTypes.bool,
   params: PropTypes.object,
   queryParams: PropTypes.object,
-  // stats: PropTypes.object,
+  stats: PropTypes.object,
   type: PropTypes.string,
 };
 

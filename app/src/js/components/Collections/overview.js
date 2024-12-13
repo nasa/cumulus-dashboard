@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
@@ -28,7 +28,6 @@ import {
   collectionHrefFromId,
 } from '../../utils/format';
 import { granuleStatus as statusOptions } from '../../utils/status';
-// import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 import {
   bulkActions,
   defaultHiddenColumns,
@@ -292,6 +291,7 @@ const CollectionOverview = ({ urlHelper }) => {
         {record && <Overview type='granules' params={{ collectionId }} inflight={record.inflight} />}
       </section>
       <section className="page__section">
+        <Outlet />
         <div className="heading__wrapper--border">
           <h2 className="heading--medium heading--shared-content with-description">
             {strings.total_granules}

@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-// import { withRouter } from 'react-router-dom';
 import {
   getCollection,
   updateCollection,
@@ -10,16 +9,23 @@ import {
 } from '../../actions';
 import { getCollectionId, collectionHrefFromNameVersion } from '../../utils/format';
 import EditRaw from '../EditRaw/edit-raw';
-import withRouter from '../../withRouter';
+import { withRouter } from '../../withRouter';
 
 const SCHEMA_KEY = 'collection';
 
-const EditCollection = ({ match, collections }) => {
+const EditCollection = ({ router, collections }) => {
   const {
     params: { name, version },
-  } = match;
+  } = router || {};
+
   const decodedVersion = decodeURIComponent(version);
   const collectionId = getCollectionId({ name, version: decodedVersion });
+
+  useEffect(() => {
+    if (name && version) {
+      getCollection(name, version);
+    }
+  }, [name, version]);
 
   return (
     <div className = "edit_collections">
@@ -42,12 +48,17 @@ const EditCollection = ({ match, collections }) => {
 };
 
 EditCollection.propTypes = {
-  match: PropTypes.object,
   collections: PropTypes.object,
+  router: PropTypes.shape({
+    params: PropTypes.object
+  }),
 };
 
-export default withRouter(
-  connect((state) => ({
-    collections: state.collections,
-  }))(EditCollection)
-);
+const mapStatetoProps = (state) => {
+  console.log('Redux State:', state);
+  return {
+    collections: state.collections
+  };
+};
+
+export default withRouter(connect(mapStatetoProps)(EditCollection));

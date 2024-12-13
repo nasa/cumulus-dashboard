@@ -1,10 +1,7 @@
-// Class Component
 import React, { useEffect, useState } from 'react';
-// import { useLocation } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-// import withQueryParams from 'react-router-query-params';
 import { get } from 'object-path';
 import isEqual from 'lodash/isEqual';
 import {
@@ -39,7 +36,6 @@ import Search from '../Search/search';
 import Overview from '../Overview/overview';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-// import withRouter from '../../withRouter';
 import { withUrlHelper } from '../../withUrlHelper';
 
 const breadcrumbConfig = [
@@ -53,43 +49,15 @@ const breadcrumbConfig = [
   },
 ];
 
-const GranulesOverview = (props) => {
-  /*   constructor(props) {
-    super(props);
-    this.generateQuery = this.generateQuery.bind(this);
-    this.generateBulkActions = this.generateBulkActions.bind(this);
-    this.queryMeta = this.queryMeta.bind(this);
-    this.selectWorkflow = this.selectWorkflow.bind(this);
-    this.applyWorkflow = this.applyWorkflow.bind(this);
-    this.getExecuteOptions = this.getExecuteOptions.bind(this);
-    this.setWorkflowMeta = this.setWorkflowMeta.bind(this);
-    this.applyRecoveryWorkflow = this.applyRecoveryWorkflow.bind(this);
-    this.updateSelection = this.updateSelection.bind(this);
-    this.state = {
-      workflow: this.props.workflowOptions[0],
-      workflowMeta: defaultWorkflowMeta,
-      selected: [],
-    };
+const GranulesOverview = ({ urlHelper }) => {
+  const dispatch = useDispatch();
+  const { queryParams } = urlHelper;
 
-    componentDidUpdate(prevProps) {
-    if (!isEqual(prevProps.workflowOptions, this.props.workflowOptions)) {
-      this.setState({ workflow: this.props.workflowOptions[0] });
-    }
-
-  } */
-
-  const {
-    collections,
-    config,
-    // dispatch,
-    granules,
-    // queryParams,
-    workflowOptions,
-    providers,
-    urlHelper,
-  } = props;
-
-  const { location, queryParams } = urlHelper;
+  const collections = useSelector((state) => state.collections);
+  const config = useSelector((state) => state.config);
+  const granules = useSelector((state) => state.granules);
+  const workflowOptions = useSelector((state) => workflowOptionNames(state));
+  const providers = useSelector((state) => state.providers);
 
   const [selected, setSelected] = useState([]);
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
@@ -99,22 +67,18 @@ const GranulesOverview = (props) => {
   const { count, queriedAt } = list.meta;
   const { dropdowns } = collections;
   const { dropdowns: providerDropdowns } = providers;
+  const query = generateQuery();
 
   useEffect(() => {
-    if (!isEqual(props.workflowOptions, workflowOptions)) {
-      setWorkflow(props.workflowOptions[0]);
+    if (!isEqual(workflowOptions[0], workflowOptions)) {
+      setWorkflow(workflowOptions[0]);
     }
-  }, [props.workflowOptions, workflowOptions]);
+  }, [workflowOptions, workflow]);
 
-  /*   const queryMeta = () => {
-      dispatch(listWorkflows());
-    };
-  */
   function generateQuery() {
-    const { search } = location;
-    const params = new URLSearchParams(search);
-    const urlParams = Object.fromEntries(params.entries());
-    return { ...urlParams, ...queryParams };
+    return {
+      ...queryParams,
+    };
   }
 
   function generateBulkActions() {
@@ -136,14 +100,14 @@ const GranulesOverview = (props) => {
     return actions;
   }
 
-  function selectWorkflow(_selector) {
-    setWorkflow(_selector);
+  function selectWorkflow(selectedWorkflow) {
+    setWorkflow(selectedWorkflow);
   }
 
   function applyWorkflow(granuleId) {
     const { meta } = JSON.parse(workflowMeta);
     isWorkflowMeta(defaultWorkflowMeta);
-    return applyWorkflowToGranule(granuleId, workflow, meta);
+    return dispatch(applyWorkflowToGranule(granuleId, workflow, meta));
   }
 
   function getExecuteOptions() {
@@ -164,7 +128,7 @@ const GranulesOverview = (props) => {
   }
 
   function applyRecoveryWorkflow(granuleId, workflowName) {
-    applyRecoveryWorkflowToGranule(granuleId, workflowName);
+    dispatch(applyRecoveryWorkflowToGranule(granuleId, workflowName));
   }
 
   function updateSelection(selectedIds) {
@@ -175,75 +139,11 @@ const GranulesOverview = (props) => {
     setSelected(updatedSelected);
   }
 
-  /*   queryMeta() {
-    const { dispatch } = this.props;
-    dispatch(listWorkflows());
-  }
-
-  generateQuery() {
-    const { queryParams } = this.props;
-    return { ...queryParams };
-  }
-
-  generateBulkActions() {
-    const actionConfig = {
-      execute: {
-        options: this.getExecuteOptions(),
-        action: this.applyWorkflow,
-      },
-      recover: {
-        options: this.getExecuteOptions(),
-        action: this.applyRecoveryWorkflow,
-      },
+  // Not sure what this is supposed to work with even in previous code
+  /*   const queryMeta = () => {
+      dispatch(listWorkflows());
     };
-    const { granules, config } = this.props;
-    const { selected } = this.state;
-    let actions = bulkActions(granules, actionConfig, selected);
-    if (config.enableRecovery) {
-      actions = actions.concat(recoverAction(granules, actionConfig));
-    }
-    return actions;
-  }
-
-  selectWorkflow(_selector, workflow) {
-    this.setState({ workflow });
-  }
-
-  setWorkflowMeta(workflowMeta) {
-    this.setState({ workflowMeta });
-  }
-
-  applyWorkflow(granuleId) {
-    const { workflow, workflowMeta } = this.state;
-    const { meta } = JSON.parse(workflowMeta);
-    this.setState({ workflowMeta: defaultWorkflowMeta });
-    return applyWorkflowToGranule(granuleId, workflow, meta);
-  }
-
-  applyRecoveryWorkflow(granuleId) {
-    return applyRecoveryWorkflowToGranule(granuleId);
-  }
-
-  getExecuteOptions() {
-    return [
-      executeDialog({
-        selectHandler: this.selectWorkflow,
-        label: 'workflow',
-        value: this.state.workflow,
-        options: this.props.workflowOptions,
-        initialMeta: this.state.workflowMeta,
-        metaHandler: this.setWorkflowMeta,
-      }),
-    ];
-  }
-
-  updateSelection(selectedIds, currentSelectedRows) {
-    const allSelectedRows = this.state.selected.concat(currentSelectedRows);
-    const selected = selectedIds
-      .map((id) => allSelectedRows.find((g) => id === g.granuleId))
-      .filter(Boolean);
-    this.setState({ selected });
-  } */
+  */
 
   return (
     <div className='page__component'>
@@ -273,7 +173,7 @@ const GranulesOverview = (props) => {
           list={list}
           action={listGranules}
           tableColumns={tableColumns}
-          query={generateQuery()}
+          query={query}
           bulkActions={generateBulkActions()}
           groupAction={groupAction}
           rowId='granuleId'
@@ -336,27 +236,13 @@ const GranulesOverview = (props) => {
 };
 
 GranulesOverview.propTypes = {
-  collections: PropTypes.object,
-  config: PropTypes.object,
-  // dispatch: PropTypes.func,
-  granules: PropTypes.object,
-  queryParams: PropTypes.object,
   workflowOptions: PropTypes.array,
-  providers: PropTypes.object,
   urlHelper: PropTypes.shape({
     location: PropTypes.object,
     queryParams: PropTypes.object
   }),
 };
 
-const mapStatetoProps = (state) => ({
-  collections: state.collections,
-  config: state.config,
-  granules: state.granules,
-  workflowOptions: workflowOptionNames(state),
-  providers: state.providers,
-});
-
 export { GranulesOverview };
 
-export default connect(mapStatetoProps)(withUrlHelper(GranulesOverview));
+export default withUrlHelper(GranulesOverview);

@@ -1,6 +1,5 @@
 // This is the main Collections Overview page
 import React, { useEffect } from 'react';
-// import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
@@ -28,7 +27,6 @@ import List from '../Table/Table';
 import { strings } from '../locale';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ListFilters from '../ListActions/ListFilters';
-// import withRouter from '../../withRouter';
 import { withUrlHelper } from '../../withUrlHelper';
 
 const breadcrumbConfig = [

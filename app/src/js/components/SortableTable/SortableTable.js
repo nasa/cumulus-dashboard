@@ -12,6 +12,7 @@ import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, use
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
+import isEqual from 'lodash/isEqual';
 import TableHeader from '../TableHeader/table-header';
 import SimplePagination from '../Pagination/simple-pagination';
 import TableFilters from '../Table/TableFilters';
@@ -78,6 +79,16 @@ const SortableTable = ({
   initialSortBy = [],
   urlHelper,
 }) => {
+  let rightScrollInterval;
+  let leftScrollInterval;
+  let sortByState;
+
+  // State
+  const [fitColumn, setFitColumn] = useState({});
+  const [leftScrollButtonVisibility, setLeftScrollButtonVisibility] = useState({ display: 'none', opacity: 0 });
+  const [rightScrollButtonVisibility, setRightScrollButtonVisibility] = useState({ display: 'none', opacity: 0 });
+
+  // Memoized functions
   const defaultColumn = useMemo(
     () => ({
       Cell: ({ value = '' }) => value,
@@ -87,6 +98,7 @@ const SortableTable = ({
     }),
     []
   );
+
   const memoizedTableColumns = useMemo(() => (
     Array.isArray(tableColumns)
       ? tableColumns.map((column) => ({
@@ -95,10 +107,10 @@ const SortableTable = ({
       }))
       : [defaultColumn] // Provide a default column if tableColumns is not an array
   ), [tableColumns, defaultColumn]);
-  const [fitColumn, setFitColumn] = useState({});
-  const [leftScrollButtonVisibility, setLeftScrollButtonVisibility] = useState({ display: 'none', opacity: 0 });
-  const [rightScrollButtonVisibility, setRightScrollButtonVisibility] = useState({ display: 'none', opacity: 0 });
-  let sortByState;
+
+  // Memoize data
+  const memoizedData = useMemo(() => data, [data]);
+
   if (initialSortBy?.length > 0) {
     sortByState = initialSortBy;
   } else if (initialSortId) {
@@ -106,8 +118,11 @@ const SortableTable = ({
   } else {
     sortByState = [];
   }
-  let rightScrollInterval;
-  let leftScrollInterval;
+
+  const initialState = useMemo(() => ({
+    hiddenColumns: initialHiddenColumns,
+    sortBy: sortByState,
+  }), [initialHiddenColumns, sortByState]);
 
   const {
     getTableProps,
@@ -133,7 +148,7 @@ const SortableTable = ({
     setHiddenColumns,
   } = useTable(
     {
-      data,
+      data: memoizedData,
       columns: memoizedTableColumns,
       defaultColumn,
       getRowId: (row, relativeIndex) => (typeof rowId === 'function' ? rowId(row) : row[rowId] || relativeIndex),
@@ -142,10 +157,7 @@ const SortableTable = ({
       manualSortBy: shouldManualSort,
       // if we want to use the pagination hook, then pagination should not be manual
       manualPagination: !shouldUsePagination,
-      initialState: {
-        hiddenColumns: initialHiddenColumns,
-        sortBy: sortByState,
-      },
+      initialState
     },
     useFlexLayout, // this allows table to have dynamic layouts outside of standard table markup
     useResizeColumns, // this allows for resizing columns
@@ -183,12 +195,14 @@ const SortableTable = ({
   const scrollLeftButton = createRef();
   const scrollRightButton = createRef();
 
+  // Reset selection
   useEffect(() => {
     if (canSelect && clearSelected) {
       toggleAllRowsSelected(false);
     }
   }, [canSelect, clearSelected, toggleAllRowsSelected]);
 
+  // Handle selection changes using react-table functionality
   useEffect(() => {
     const selectedIds = Object.keys(selectedRowIds).reduce((ids, key) => {
       if (selectedRowIds[key]) {
@@ -211,6 +225,7 @@ const SortableTable = ({
     }
   }, [dispatch, tableId, sortBy]);
 
+  // Handle sort changes
   useEffect(() => {
     if (typeof changeSortProps === 'function') {
       changeSortProps(sortBy);
@@ -636,4 +651,8 @@ SortableTable.defaultProps = {
   tableColumns: [],
 };
 
-export default withUrlHelper(SortableTable);
+export default withUrlHelper(
+  React.memo(SortableTable, (prevProps, nextProps) => {
+    isEqual(prevProps, nextProps);
+  })
+);
