@@ -3,7 +3,7 @@
 import test from 'ava';
 import React from 'react'
 import { render, screen } from '@testing-library/react'
-import { Header } from '../../../app/src/js/components/Header/header';
+import Header from '../../../app/src/js/components/Header/header';
 import { Provider } from 'react-redux'
 import { requestMiddleware } from '../../../app/src/js/middleware/request.js';
 import thunk from 'redux-thunk';
@@ -53,6 +53,7 @@ test('Header should include PDRs and Logs in navigation when HIDE_PDR=false and 
 });
 
 test('Logo path includes BUCKET env variable', function (t) {
+  const query = {};
   const dispatch = () => {};
   const api = {
     authenticated: true,
