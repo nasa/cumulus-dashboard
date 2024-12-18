@@ -13,11 +13,10 @@ import { withRouter } from '../../withRouter';
 
 const SCHEMA_KEY = 'collection';
 
-const EditCollection = ({ router, collections }) => {
+const EditCollection = ({ match, collections }) => {
   const {
     params: { name, version },
-  } = router || {};
-
+  } = match;
   const decodedVersion = decodeURIComponent(version);
   const collectionId = getCollectionId({ name, version: decodedVersion });
 
@@ -25,7 +24,7 @@ const EditCollection = ({ router, collections }) => {
     if (name && version) {
       getCollection(name, version);
     }
-  }, [name, version]);
+  }, [name, version, decodedVersion]);
 
   return (
     <div className = "edit_collections">
@@ -48,17 +47,12 @@ const EditCollection = ({ router, collections }) => {
 };
 
 EditCollection.propTypes = {
+  match: PropTypes.object,
   collections: PropTypes.object,
-  router: PropTypes.shape({
-    params: PropTypes.object
-  }),
 };
 
-const mapStatetoProps = (state) => {
-  console.log('Redux State:', state);
-  return {
+export default withRouter(
+  connect((state) => ({
     collections: state.collections
-  };
-};
-
-export default withRouter(connect(mapStatetoProps)(EditCollection));
+  }))(EditCollection)
+);

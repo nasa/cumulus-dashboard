@@ -48,10 +48,7 @@ const Collections = ({ urlHelper }) => {
           <Routes>
             <Route path='all' element={<Sidebar />} />
             <Route path='edit/:name/:version' element={<Sidebar />} />
-            <Route
-              path='collection/:name/:version'
-              element={<Sidebar />}
-            />
+            <Route path='collection/:name/:version/*' element={<Sidebar />} />
           </Routes>
           <div
             className={
@@ -62,7 +59,7 @@ const Collections = ({ urlHelper }) => {
               <Route index element={<Navigate to='all' replace />} />
               <Route path='all' element={<CollectionList queryParams={filteredQueryParams} />} />
               <Route path='add' element={<AddCollection />} />
-              <Route path='edit' element={<EditCollection />} />
+              <Route path='edit/:name/:version' element={<EditCollection />} />
               <Route path='collection/:name/:version' element={<CollectionOverview queryParams={filteredQueryParams} />} />
               <Route path='collection/:name/:version/granules' element={<CollectionGranules queryParams={filteredQueryParams} />} />
               <Route path='collection/:name/:version/granules/:status' element={<CollectionGranules queryParams={filteredQueryParams} />} />

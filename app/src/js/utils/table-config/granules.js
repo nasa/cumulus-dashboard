@@ -17,6 +17,7 @@ import {
   deleteGranules,
   removeGranulesFromCmr,
   removeFromCmrDelete,
+  deconstructCollectionId
 } from '../format';
 import {
   applyWorkflowToGranuleClearError,
@@ -73,7 +74,10 @@ export const tableColumns = [
     accessor: 'collectionId',
     isLink: true,
     useCopyCellPopover: true,
-    linkTo: (row) => `/collections/collection/${encodeURIComponent(row.collectionId)}`,
+    linkTo: (row) => {
+      const { name, version } = deconstructCollectionId(row.collectionId);
+      return `/collections/collection/${name}/${encodeURIComponent(version)}`;
+    },
     Cell: ({ cell: { value } }) => collectionLink(value)
   },
   {
