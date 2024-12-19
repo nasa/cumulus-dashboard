@@ -12,11 +12,8 @@ import InventoryReport from './inventory-report';
 import GnfReport from './gnf-report';
 import Legend from './legend';
 import BackupReport from './backup-report';
-// import withRouter from '../../withRouter';
 
 const ReconciliationReport = ({
-  // dispatch = {},
-  // match,
   reconciliationReports = [],
 }) => {
   const dispatch = useDispatch();
@@ -86,15 +83,13 @@ const ReconciliationReport = ({
 };
 
 ReconciliationReport.propTypes = {
-  // dispatch: PropTypes.func,
-  // match: PropTypes.object,
   reconciliationReports: PropTypes.object,
 };
 
-const mapStatetoProps = (state) => ({
+const mapStateToProps = (state) => ({
   reconciliationReports: state.reconciliationReports,
 });
 
 export { ReconciliationReport };
 
-export default connect(mapStatetoProps)(ReconciliationReport);
+export default connect(mapStateToProps)(ReconciliationReport);

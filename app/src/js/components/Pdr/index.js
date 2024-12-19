@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
-// import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import { getCount, listPdrs } from '../../actions';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
@@ -12,7 +11,6 @@ import Pdr from './pdr';
 import PdrOverview from './overview';
 import PdrList from './list';
 import { strings } from '../locale';
-// import { filterQueryParams } from '../../utils/url-helper';
 import { withUrlHelper } from '../../withUrlHelper';
 
 const Pdrs = ({ urlHelper }) => {

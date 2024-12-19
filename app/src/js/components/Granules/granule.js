@@ -45,7 +45,6 @@ import {
   executeDialog,
 } from '../../utils/table-config/granules';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-// import { historyPushWithQueryParams } from '../../utils/url-helper';
 import { getGranuleRecoveryJobStatusFromRecord } from '../../utils/recovery-status';
 import { withUrlHelper } from '../../withUrlHelper';
 
@@ -143,7 +142,6 @@ const GranuleOverview = ({ urlHelper }) => {
   const dispatch = useDispatch();
   const { historyPushWithQueryParams } = urlHelper;
 
-  // State hooks
   const granules = useSelector((state) => state.granules);
   const executions = useSelector((state) => state.executions);
   const logs = useSelector((state) => state.logs);
@@ -156,7 +154,6 @@ const GranuleOverview = ({ urlHelper }) => {
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
 
-  // Memoized values
   const errors = useMemo(() => [
     get(granules.map, [granuleId, 'error']),
     get(granules.reprocessed, [granuleId, 'error']),
@@ -167,7 +164,6 @@ const GranuleOverview = ({ urlHelper }) => {
     get(recoveryStatus.map, [granuleId, 'error']),
   ].filter(Boolean), [granules, recoveryStatus, granuleId]);
 
-  // Callback hooks
   const selectWorkflow = useCallback(() => {
     setWorkflow({ workflow });
   }, [workflow]);
@@ -215,7 +211,6 @@ const GranuleOverview = ({ urlHelper }) => {
 
   const getExecuteOptionsCallback = useCallback(() => getExecuteOptions, [getExecuteOptions]);
 
-  // Effect hooks
   useEffect(() => {
     loadGranule();
   }, [loadGranule]);
@@ -248,7 +243,6 @@ const GranuleOverview = ({ urlHelper }) => {
     return <Loading />;
   }
 
-  // Functions
   const reingest = () => {
     dispatch(
       reingestGranule(granuleId, { executionArn: reingestWorkflow.value })

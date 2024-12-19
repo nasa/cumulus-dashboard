@@ -10,7 +10,6 @@ import {
   filterGranules,
   clearGranulesFilter,
   listGranules,
-  // listWorkflows,
   applyWorkflowToGranule,
   applyRecoveryWorkflowToGranule,
   getOptionsCollectionName,
@@ -238,7 +237,6 @@ const GranulesOverview = ({ urlHelper }) => {
 GranulesOverview.propTypes = {
   workflowOptions: PropTypes.array,
   urlHelper: PropTypes.shape({
-    location: PropTypes.object,
     queryParams: PropTypes.object
   }),
 };

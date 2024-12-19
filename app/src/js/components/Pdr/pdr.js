@@ -39,75 +39,10 @@ import ErrorReport from '../Errors/report';
 import GranulesProgress from '../Granules/progress';
 import { strings } from '../locale';
 import ListFilters from '../ListActions/ListFilters';
-// import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 import { withUrlHelper } from '../../withUrlHelper';
 
-/* class PDR extends React.Component {
-  constructor() {
-    super();
-    this.deletePdr = this.deletePdr.bind(this);
-    this.generateQuery = this.generateQuery.bind(this);
-    this.navigateBack = this.navigateBack.bind(this);
-    this.generateBulkActions = this.generateBulkActions.bind(this);
-    this.renderProgress = this.renderProgress.bind(this);
-  }
-
-  componentDidMount() {
-    const { dispatch, match } = this.props;
-    const { pdrName } = match.params;
-    dispatch(getPdr(pdrName));
-  }
-
-  deletePdr() {
-    const { pdrName } = this.props.match.params;
-    this.props.dispatch(deletePdr(pdrName));
-  }
-
-  generateQuery() {
-    const { queryParams } = this.props;
-    const pdrName = get(this.props, ['match', 'params', 'pdrName']);
-    return {
-      ...queryParams,
-      pdrName,
-    };
-  }
-
-  navigateBack() {
-    historyPushWithQueryParams('/pdrs');
-  }
-
-  generateBulkActions() {
-    const { granules } = this.props;
-    return granuleBulkActions(granules);
-  }
-
-  renderProgress(record) {
-    return (
-      <div className="pdr__progress">
-        {renderProgress(get(record, 'data', {}))}
-      </div>
-    );
-  }
-
-  render() {
-    const { match, granules, collections, pdrs } = this.props;
-    const { pdrName } = match.params;
-    const record = pdrs.map[pdrName];
-    if (!record || (record.inflight && !record.data)) return <Loading />;
-    const { dropdowns } = collections;
-    const { list } = granules;
-    const { count, queriedAt } = list.meta;
-    const deleteStatus = get(pdrs.deleted, [pdrName, 'status']);
-    const { error } = record;
-
-    const granulesCount = get(record, 'data.stats', []);
-    const granuleStatus = Object.keys(granulesCount).map((key) => ({
-      count: granulesCount[key],
-      key: (key === 'processing') ? 'running' : key
-    })); */
 const PDR = ({
   collections,
-  // dispatch,
   granules,
   logs,
   pdrs,
@@ -325,11 +260,8 @@ const PDR = ({
 
 PDR.propTypes = {
   collections: PropTypes.object,
-  // dispatch: PropTypes.func,
   granules: PropTypes.object,
-  // history: PropTypes.object,
   logs: PropTypes.object,
-  // match: PropTypes.object,
   pdrs: PropTypes.object,
   queryParams: PropTypes.object,
   urlHelper: PropTypes.shape({

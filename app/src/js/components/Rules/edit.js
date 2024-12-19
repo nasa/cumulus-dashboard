@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 
-// import { withRouter } from 'react-router-dom';
 import {
   getRule,
   updateRule,
@@ -42,8 +41,6 @@ const EditRule = ({
 };
 
 EditRule.propTypes = {
-  match: PropTypes.object,
-  rules: PropTypes.object,
   router: PropTypes.shape({
     rules: PropTypes.object,
     params: PropTypes.object,

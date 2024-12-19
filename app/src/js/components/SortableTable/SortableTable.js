@@ -643,7 +643,6 @@ SortableTable.propTypes = {
   initialSortBy: PropTypes.array,
   urlHelper: PropTypes.shape({
     getPersistentQueryParams: PropTypes.func,
-    // location: PropTypes.object
   })
 };
 

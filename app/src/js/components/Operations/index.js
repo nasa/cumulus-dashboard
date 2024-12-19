@@ -2,14 +2,12 @@ import React from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
-// import withQueryParams from 'react-router-query-params';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import OperationOverview from './overview';
 import { listOperations } from '../../actions';
 import { strings } from '../locale';
-// import { filterQueryParams } from '../../utils/url-helper';
 import { withUrlHelper } from '../../withUrlHelper';
 
 const Operations = ({ urlHelper }) => {

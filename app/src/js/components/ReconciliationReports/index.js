@@ -3,7 +3,6 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-// import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import { strings } from '../locale';
 import { getCount, listReconciliationReports } from '../../actions';
@@ -12,7 +11,6 @@ import ReconciliationReportList from './list';
 import ReconciliationReport from './reconciliation-report';
 import BackupReportGranuleDetails from './backup-report-granule-details';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
-// import { filterQueryParams } from '../../utils/url-helper';
 import { withUrlHelper } from '../../withUrlHelper';
 
 const ReconciliationReports = ({ urlHelper }) => {

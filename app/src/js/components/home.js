@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-// import withQueryParams from 'react-router-query-params';
 import { get } from 'object-path';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
@@ -27,31 +26,25 @@ import linkToKibana from '../utils/kibana';
 import Tooltip from './Tooltip/tooltip';
 import DatepickerRange from './Datepicker/DatepickerRange';
 import { strings } from './locale';
-// import { getPersistentQueryParams } from '../utils/url-helper';
-// import withRouter from '../withRouter';
 import { withUrlHelper } from '../withUrlHelper';
 
 const Home = ({ urlHelper }) => {
   const dispatch = useDispatch();
   const { location, getPersistentQueryParams } = urlHelper;
   const {
-    // cumulusInstance,
-    // datepicker,
-    // dist,
     executions,
     granules,
     rules,
     stats,
-    // pdrs,
   } = useSelector((state) => ({
-    // cumulusInstance: state.cumulusInstance,
-    // datepicker: state.datepicker,
-    // dist: state.dist,
+    cumulusInstance: state.cumulusInstance,
+    datepicker: state.datepicker,
+    dist: state.dist,
     executions: state.executions,
     granules: state.granules,
     rules: state.rules,
     stats: state.stats,
-    // pdrs: state.pdrs
+    pdrs: state.pdrs
   }));
 
   const generateQuery = () => ({
@@ -219,6 +212,14 @@ const Home = ({ urlHelper }) => {
 };
 
 Home.propTypes = {
+  cumulusInstance: PropTypes.object,
+  datepicker: PropTypes.object,
+  dist: PropTypes.object,
+  executions: PropTypes.object,
+  granules: PropTypes.object,
+  rules: PropTypes.object,
+  stats: PropTypes.object,
+  dispatch: PropTypes.func,
   urlHelper: PropTypes.shape({
     location: PropTypes.object,
     getPersistentQueryParams: PropTypes.func,

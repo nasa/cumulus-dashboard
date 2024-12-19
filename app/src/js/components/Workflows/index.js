@@ -2,11 +2,9 @@ import React from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-// import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import WorkflowsOverview from './overview';
 import Workflow from './workflow';
-// import { filterQueryParams } from '../../utils/url-helper';
 import { withUrlHelper } from '../../withUrlHelper';
 
 const Workflows = ({ urlHelper }) => {

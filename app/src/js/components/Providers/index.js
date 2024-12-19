@@ -1,14 +1,12 @@
 import React from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-// import withQueryParams from 'react-router-query-params';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
 import AddProvider from './add';
 import EditProvider from './edit';
 import ProvidersOverview from './overview';
 import ProviderOverview from './provider';
-// import { filterQueryParams } from '../../utils/url-helper';
 import { withUrlHelper } from '../../withUrlHelper';
 
 const Providers = ({ urlHelper }) => {

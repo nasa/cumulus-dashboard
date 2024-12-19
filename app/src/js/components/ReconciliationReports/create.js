@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-// import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { Form, Field } from 'react-final-form';
@@ -13,7 +12,6 @@ import {
   listProviders,
   listGranules,
 } from '../../actions';
-// import { historyPushWithQueryParams } from '../../utils/url-helper';
 import { reconciliationReportTypes } from '../../utils/type';
 import { dateTimeFormat } from '../../utils/datepicker';
 import SimpleDropdown from '../DropDown/simple-dropdown';
@@ -21,7 +19,6 @@ import Tooltip from '../Tooltip/tooltip';
 import Datepicker from '../Datepicker/Datepicker';
 import TextForm from '../TextAreaForm/text';
 import { displayCase, getCollectionId } from '../../utils/format';
-// import withRouter from '../../withRouter';
 import { withUrlHelper } from '../../withUrlHelper';
 
 const baseRoute = '/reconciliation-reports';
@@ -67,10 +64,6 @@ function getTooltipInfoFromType(reportType) {
 }
 
 const CreateReconciliationReport = ({
-  // collections,
-  // dispatch,
-  // granules,
-  // providers,
   urlHelper
 }) => {
   const dispatch = useDispatch();
@@ -363,14 +356,8 @@ const CreateReconciliationReport = ({
 };
 
 CreateReconciliationReport.propTypes = {
-  // collections: PropTypes.object,
-  //  dispatch: PropTypes.func,
-  // granules: PropTypes.object,
-  // providers: PropTypes.object,
   urlHelper: PropTypes.shape({
-    // location: PropTypes.object,
     historyPushWithQueryParams: PropTypes.func
-    // queryParams: PropTypes.object
   }),
 };
 

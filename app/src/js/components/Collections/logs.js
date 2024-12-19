@@ -46,8 +46,8 @@ CollectionLogs.propTypes = {
   }),
 };
 
-const mapStatetoProps = (state) => ({
+const mapStateToProps = (state) => ({
   logs: state.logs
 });
 
-export default withRouter(connect(mapStatetoProps)(CollectionLogs));
+export default withRouter(connect(mapStateToProps)(CollectionLogs));

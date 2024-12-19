@@ -28,8 +28,6 @@ const ExecutionsList = () => {
   const dispatch = useDispatch();
   const executions = useSelector((state) => state.executions);
 
-  console.log('Route params:', { collectionId, granuleId });
-
   const { map } = executions || {};
   const granuleExecutionslist = map[granuleId] || {};
   const { meta } = granuleExecutionslist;

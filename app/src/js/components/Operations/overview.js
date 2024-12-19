@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-// import { withRouter } from 'react-router-dom';
 import cloneDeep from 'lodash/cloneDeep';
 import {
   clearOperationsFilter,

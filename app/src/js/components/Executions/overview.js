@@ -144,10 +144,10 @@ ExecutionOverview.propTypes = {
   }),
 };
 
-const mapStatetoProps = (state) => ({
+const mapStateToProps = (state) => ({
   collections: state.collections,
   executions: state.executions,
   workflowOptions: workflowSelectOptions(state),
 });
 
-export default connect(mapStatetoProps)(withUrlHelper(ExecutionOverview));
+export default connect(mapStateToProps)(withUrlHelper(ExecutionOverview));

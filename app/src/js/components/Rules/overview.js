@@ -52,13 +52,8 @@ const RulesOverview = ({ urlHelper }) => {
   };
 
   useEffect(() => {
-    console.log('RulesOverview mounted, dispatching actions');
     dispatch(listRules());
   }, [dispatch]);
-
-  useEffect(() => {
-    console.log('Rules state:', rules);
-  }, [rules]);
 
   const generateBulkActions = useCallback(() => {
     if (!rules || !rules.list || !rules.list.data) {
@@ -160,9 +155,6 @@ const RulesOverview = ({ urlHelper }) => {
 };
 
 RulesOverview.propTypes = {
-  dispatch: PropTypes.func,
-  queryParams: PropTypes.object,
-  rules: PropTypes.object,
   urlHelper: PropTypes.shape({
     queryParams: PropTypes.object,
     getPersistentQueryParams: PropTypes.func

@@ -37,7 +37,6 @@ const breadcrumbConfig = [
 
 const ExecutionStatus = ({
   cumulusInstance,
-  // dispatch,
   executionStatus,
   logs,
   urlHelper
@@ -204,7 +203,6 @@ const ExecutionStatus = ({
 
 ExecutionStatus.propTypes = {
   cumulusInstance: PropTypes.object,
-  // dispatch: PropTypes.func,
   executionStatus: PropTypes.object,
   logs: PropTypes.object,
   urlHelper: PropTypes.shape({

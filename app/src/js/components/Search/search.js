@@ -1,11 +1,8 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-// import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-// import withQueryParams from 'react-router-query-params';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { get } from 'object-path';
-// import { getInitialValueFromLocation } from '../../utils/url-helper';
 import {
   renderSearchInput,
   renderSearchMenu,
@@ -24,27 +21,24 @@ import { withUrlHelper } from '../../withUrlHelper';
 const Search = ({
   action,
   clear,
-  // dispatch,
   inputProps = {
     className: 'search',
   },
   label,
   labelKey,
-  // location,
   options,
   paramKey = 'search',
   placeholder,
-  // queryParams,
   searchKey = '',
   urlHelper,
-  // setQueryParams,
+  setQueryParams,
   ...rest
 }) => {
   const dispatch = useDispatch();
   const searchRef = useRef();
   const {
-    // location,
-    // queryParams,
+    location,
+    queryParams,
     getInitialValueFromLocation,
     historyPushWithQueryParams,
   } = urlHelper;
@@ -62,6 +56,16 @@ const Search = ({
       dispatch(action(initialValueRef.current));
     }
   }, [action, dispatch, initialValueRef]);
+
+  // Handle location changes (browser back/forward)
+  useEffect(() => {
+    const searchValue = queryParams[paramKey];
+    if (searchValue) {
+      dispatch(action(searchValue));
+    } else {
+      dispatch(clear());
+    }
+  }, [location, queryParams, paramKey, action, clear, dispatch]);
 
   const handleSearch = useCallback(
     (query) => {
@@ -135,19 +139,17 @@ const Search = ({
 };
 
 Search.propTypes = {
-  // dispatch: PropTypes.func,
+  dispatch: PropTypes.func,
   action: PropTypes.func,
   clear: PropTypes.func,
   inputProps: PropTypes.object,
   paramKey: PropTypes.string,
   label: PropTypes.any,
   labelKey: PropTypes.string,
-  // location: PropTypes.object,
   options: PropTypes.array,
   query: PropTypes.object,
-  // queryParams: PropTypes.object,
   searchKey: PropTypes.string,
-  // setQueryParams: PropTypes.func,
+  setQueryParams: PropTypes.func,
   placeholder: PropTypes.string,
   urlHelper: PropTypes.shape({
     location: PropTypes.object,

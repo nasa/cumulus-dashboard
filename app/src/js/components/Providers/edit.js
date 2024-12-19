@@ -2,7 +2,6 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import { withRouter } from 'react-router-dom';
 import {
   getProvider,
   updateProvider,

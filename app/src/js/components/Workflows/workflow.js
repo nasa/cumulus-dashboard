@@ -2,7 +2,6 @@ import React from 'react';
 import Ace from 'react-ace';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import { withRouter } from 'react-router-dom';
 import { listWorkflows } from '../../actions';
 import config from '../../config';
 import { setWindowEditorRef } from '../../utils/browser';

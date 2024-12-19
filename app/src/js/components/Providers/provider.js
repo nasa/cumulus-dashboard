@@ -10,10 +10,8 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import LogViewer from '../Logs/viewer';
 import ErrorReport from '../Errors/report';
 import Metadata from '../Table/Metadata';
-// import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 import { metaAccessors } from '../../utils/table-config/providers';
 import { withUrlHelper } from '../../withUrlHelper';
-// import withRouter from '../../withRouter';
 
 const ProviderOverview = ({ urlHelper }) => {
   const dispatch = useDispatch();
@@ -21,7 +19,7 @@ const ProviderOverview = ({ urlHelper }) => {
   const { location, getPersistentQueryParams, historyPushWithQueryParams } = urlHelper;
 
   const providers = useSelector((state) => state.providers);
-  // const logs = useSelector((state) => state.logs);
+  // const logs = useSelector((state) => state.logs); -- logs was declared in previous class component but not used
 
   const record = providers.map[providerId];
 

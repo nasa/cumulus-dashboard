@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { resolve } from 'path';
 import sections from '../../paths';
-// import { getPersistentQueryParams } from '../../utils/url-helper';
 import { toggleSidebar } from '../../actions';
 import Tooltip from '../Tooltip/tooltip';
 import { withUrlHelper } from '../../withUrlHelper';
@@ -12,15 +11,8 @@ import { withUrlHelper } from '../../withUrlHelper';
 const currentPathClass = 'sidebar__nav--selected';
 
 const Sidebar = ({
-  // count,
   currentPath,
-  // dispatch,
-  // location,
-  // logs,
   match,
-  // params,
-  // sidebar,
-  // locationQueryParams,
   urlHelper
 }) => {
   const dispatch = useDispatch();
@@ -119,11 +111,8 @@ const Sidebar = ({
 Sidebar.propTypes = {
   count: PropTypes.array,
   currentPath: PropTypes.string,
-  // dispatch: PropTypes.func,
-  // location: PropTypes.object,
   logs: PropTypes.object,
   match: PropTypes.object,
-  // params: PropTypes.object,
   sidebar: PropTypes.shape({
     open: PropTypes.bool,
   }),

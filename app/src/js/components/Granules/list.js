@@ -33,7 +33,6 @@ import Search from '../Search/search';
 import { workflowOptionNames } from '../../selectors';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ListFilters from '../ListActions/ListFilters';
-// import withRouter from '../../withRouter';
 
 const generateBreadcrumbConfig = (view) => [
   {
@@ -54,7 +53,6 @@ const AllGranules = (props) => {
   const {
     collections,
     granules,
-    // match,
     queryParams,
     workflowOptions,
     stats,
@@ -75,9 +73,7 @@ const AllGranules = (props) => {
   const { dropdowns: providerDropdowns } = providers;
   const { list } = granules;
   const { count, queriedAt } = list.meta;
-  /* let {
-    params: { status },
-  } = match; */
+
   status = status === 'processing' ? 'running' : status;
   const logsQuery = { granules__exists: 'true', executions__exists: 'true' };
   const query = generateQuery();
@@ -271,16 +267,14 @@ const AllGranules = (props) => {
 
 AllGranules.propTypes = {
   collections: PropTypes.object,
-  // dispatch: PropTypes.func,
   granules: PropTypes.object,
-  // match: PropTypes.object,
   queryParams: PropTypes.object,
   workflowOptions: PropTypes.array,
   stats: PropTypes.object,
   providers: PropTypes.object,
 };
 
-const mapStatetoProps = (state) => ({
+const mapStateToProps = (state) => ({
   collections: state.collections,
   granules: state.granules,
   stats: state.stats,
@@ -290,4 +284,4 @@ const mapStatetoProps = (state) => ({
 
 export { AllGranules };
 
-export default connect(mapStatetoProps)(AllGranules);
+export default connect(mapStateToProps)(AllGranules);

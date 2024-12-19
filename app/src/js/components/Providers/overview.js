@@ -34,7 +34,7 @@ const ProvidersOverview = ({ urlHelper }) => {
 
   const { list } = providers;
   const { count, queriedAt } = list.meta;
-  // Incorporate the collection counts into the `list`
+
   const mutableList = cloneDeep(list);
   const collectionCounts = get(stats.count, 'data.collections.count', []);
 

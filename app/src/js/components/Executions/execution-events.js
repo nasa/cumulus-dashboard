@@ -4,7 +4,6 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkSquareAlt } from '@fortawesome/free-solid-svg-icons';
-// import { withRouter } from 'react-router-dom';
 import get from 'lodash/get';
 import {
   getExecutionStatus,
@@ -157,11 +156,11 @@ ExecutionEvents.propTypes = {
 
 ExecutionEvents.displayName = 'Execution Events';
 
-const mapStatetoProps = (state) => ({
+const mapStateToProps = (state) => ({
   executionStatus: state.executionStatus,
   cumulusInstance: state.cumulusInstance
 });
 
 export { ExecutionEvents };
 
-export default connect(mapStatetoProps)(withRouter(ExecutionEvents));
+export default connect(mapStateToProps)(withRouter(ExecutionEvents));

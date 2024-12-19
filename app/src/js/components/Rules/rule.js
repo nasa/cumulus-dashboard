@@ -29,7 +29,6 @@ import Metadata from '../Table/Metadata';
 import DropdownAsync from '../DropDown/dropdown-async-command';
 import ErrorReport from '../Errors/report';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-// import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 import { withUrlHelper } from '../../withUrlHelper';
 
 const breadcrumbConfig = [
@@ -59,7 +58,6 @@ const Rule = ({ urlHelper }) => {
     dispatch(getRule(ruleName));
   }, [dispatch, ruleName]);
 
-  // Getting warning load function error and wrap load in useCallback() hook
   useEffect(() => {
     load();
   }, [ruleName, dispatch, load]);
@@ -155,124 +153,6 @@ const Rule = ({ urlHelper }) => {
     { label: 'Collection', property: 'collection', accessor: (value) => collectionLink(getCollectionId(value)) }
   ];
 
-  // const errors = errors();
-
-  /*   constructor () {
-    super();
-    this.load = this.load.bind(this);
-    this.delete = this.delete.bind(this);
-    this.enable = this.enable.bind(this);
-    this.disable = this.disable.bind(this);
-    this.rerun = this.rerun.bind(this);
-    this.navigateBack = this.navigateBack.bind(this);
-    this.reload = this.reload.bind(this);
-    this.errors = this.errors.bind(this);
-  }
-
-  componentDidMount () {
-    this.load(this.props.match.params.ruleName);
-  }
-
-  componentDidUpdate (prevProps) {
-    if (this.props.match.params.ruleName !== prevProps.match.params.ruleName) {
-      this.load(this.props.match.params.ruleName);
-    }
-  }
-
-  load (ruleName) {
-    this.props.dispatch(getRule(ruleName));
-  }
-
-  delete () {
-    const { ruleName } = this.props.match.params;
-    this.props.dispatch(deleteRule(ruleName));
-  }
-
-  enable () {
-    const { ruleName } = this.props.match.params;
-    this.props.dispatch(enableRule(this.props.rules.map[ruleName].data));
-  }
-
-  disable () {
-    const { ruleName } = this.props.match.params;
-    this.props.dispatch(disableRule(this.props.rules.map[ruleName].data));
-  }
-
-  rerun () {
-    const { ruleName } = this.props.match.params;
-    this.props.dispatch(rerunRule(this.props.rules.map[ruleName].data));
-  }
-
-  navigateBack () {
-    historyPushWithQueryParams('/rules');
-  }
-
-  reload () {
-    const { ruleName } = this.props.match.params;
-    this.load(ruleName);
-  }
-
-  errors () {
-    const { ruleName } = this.props.match.params;
-    const { rules } = this.props;
-    return [
-      get(rules.map, [ruleName, 'error']),
-      get(rules.deleted, [ruleName, 'error']),
-      get(rules.enabled, [ruleName, 'error']),
-      get(rules.disabled, [ruleName, 'error']),
-      get(rules.rerun, [ruleName, 'error'])
-    ].filter(Boolean);
-  } */
-
-  /*  const { match: { params: { ruleName } }, rules } = this.props;
-    const record = rules.map[ruleName];
-
-    if (!record || (record.inflight && !record.data)) {
-      return <Loading />;
-    }
-    const data = get(record, 'data', {}); */
-
-  /*  const deleteStatus = get(rules, `deleted.${ruleName}.status`);
-    const enabledStatus = get(rules, `enabled.${ruleName}.status`);
-    const disabledStatus = get(rules, `disabled.${ruleName}.status`);
-    const rerunStatus = get(rules, `rerun.${ruleName}.status`);
-    const dropdownConfig = [{
-      text: 'Enable',
-      action: this.enable,
-      disabled: data.type === 'onetime',
-      status: enabledStatus,
-      confirmAction: true,
-      confirmText: enableText(ruleName),
-      postActionModal: true,
-      postActionText: enableConfirm(ruleName),
-      success: this.reload
-    }, {
-      text: 'Disable',
-      action: this.disable,
-      disabled: data.type === 'onetime',
-      status: disabledStatus,
-      confirmAction: true,
-      postActionModal: true,
-      confirmText: disableText(ruleName),
-      postActionText: disableConfirm(ruleName),
-      success: this.reload
-    }, {
-      text: 'Delete',
-      action: this.delete,
-      status: deleteStatus,
-      success: this.navigateBack,
-      confirmAction: true,
-      confirmText: deleteText(ruleName)
-    }, {
-      text: 'Rerun',
-      action: this.rerun,
-      status: rerunStatus,
-      success: this.reload,
-      confirmAction: true,
-      confirmText: rerunText(ruleName)
-    }];
-
-    const errors = this.errors(); */
   return (
     <div className='page__component'>
       <section className='page__section page__section__controls'>
@@ -322,8 +202,6 @@ const Rule = ({ urlHelper }) => {
 };
 
 Rule.propTypes = {
-  match: PropTypes.object,
-  dispatch: PropTypes.func,
   urlHelper: PropTypes.shape({
     getPersistentQueryParams: PropTypes.func,
     historyPushWithQueryParams: PropTypes.func,

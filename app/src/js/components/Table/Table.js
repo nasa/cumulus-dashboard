@@ -39,7 +39,6 @@ const List = ({
   list = {},
   onSelect,
   query = {},
-  // queryParams,
   renderRowSubComponent,
   rowId,
   tableColumns,
@@ -54,7 +53,6 @@ const List = ({
   const initialInfix = useRef(null);
   const { historyPushWithQueryParams, location, queryParams } = urlHelper;
 
-  // Extract query filters from query params
   const queryFilters = useMemo(() => {
     const {
       limit: limitQueryParam,
@@ -73,10 +71,8 @@ const List = ({
   } = list;
   const { count, limit } = meta || {};
 
-  // Memoize data
   const tableData = useMemo(() => data || listData || [], [data, listData]);
 
-  // State management
   const [selected, setSelected] = useState([]);
   const [clearSelected, setClearSelected] = useState(false);
   const [page, setPage] = useState(1);
@@ -98,7 +94,6 @@ const List = ({
     ...query,
   });
 
-  // Memoized values
   const memoizedQuery = useMemo(() => query, [query]);
 
   const memoizedQueryFilters = useMemo(() => omitBy(queryFilters, isNil), [queryFilters]);
@@ -227,17 +222,6 @@ const List = ({
     }
   }, [selected, onSelect]);
 
-  // Debug logging
-  /*   useEffect(() => {
-    console.log('Table render:', {
-      queryConfig,
-      page,
-      tableData,
-      meta
-    });
-  }, [queryConfig, page, tableData, meta]);
- */
-  // Bulk Actions
   const hasActions = useMemo(
     () => Array.isArray(bulkActions) && bulkActions.length > 0,
     [bulkActions]

@@ -223,10 +223,10 @@ CollectionGranules.propTypes = {
   }),
 };
 
-const mapStatetoProps = (state) => ({
+const mapStateToProps = (state) => ({
   granules: state.granules,
   workflowOptions: workflowOptionNames(state),
   providers: state.providers,
 });
 
-export default withRouter(connect(mapStatetoProps)(CollectionGranules));
+export default withRouter(connect(mapStateToProps)(CollectionGranules));

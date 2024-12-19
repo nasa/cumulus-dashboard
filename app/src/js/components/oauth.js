@@ -10,17 +10,15 @@ import { buildRedirectUrl } from '../utils/format';
 import _config from '../config';
 import ErrorReport from './Errors/report';
 import Header from './Header/header';
-// import { historyPushWithQueryParams } from '../utils/url-helper';
 import { withUrlHelper } from '../withUrlHelper';
-// import withRouter from '../withRouter';
 
 const { updateDelay, apiRoot, oauthMethod } = _config;
 
 const OAuth = ({ urlHelper }) => {
   const [token, setToken] = useState(null);
 
-  const dispatch = useDispatch(); // using dispatch hook to call from redux store actions
-  const { location, historyPushWithQueryParams } = urlHelper; // using props in withUrlHelper wrapper
+  const dispatch = useDispatch();
+  const { location, historyPushWithQueryParams } = urlHelper;
 
   const authenticated = useSelector((state) => state.api.authenicated);
   const api = useSelector((state) => state.api);
