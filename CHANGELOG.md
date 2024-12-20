@@ -17,7 +17,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-3860/3870**
   - Updated React and dependencies
   - react 17.0.2 ⇒ 18.3.1
-  - react-ace 9.5.0 ⇒ 9.5.0
 This version of the dashboard requires Cumulus API >= v19.2.0-alpha.1 (TBD API release)
 - **CUMULUS-3748**
   - Removed reconciliationReports aggregate stats call from Granules Page
