@@ -9,15 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - **CUMULUS-3861**
-  - Updated React 17 to React 18
-  - Updated Enzyme tests to React Testing Library
+  - Updated React 17 to React 18  
   - Removed test script references to Enzyme and replaced them with React compliant testing components
-    - Five Unit test scripts were converted covering 34 assertions
-      - test/components/executions/execution-events_correctStepName.js
-      - test/components/executions/execution-events_showEventHistory.js
-      - test/components/executions/execution-status.js
-      - test/components/granules/bulk-granule-modal.js
-      - test/components/header/condition.js
 
 ### Changed
 
