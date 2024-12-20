@@ -44,6 +44,7 @@ This version of the dashboard requires Cumulus API >= v19.2.0-alpha.1 (TBD API r
 This version of the dashboard requires Cumulus API >= v18.4.0
 
 ### Changed
+
 - **CUMULUS-3805**
   - Updated collections to sort by timestamp instead of duration
   - Changed the initialSortField of tables using createdAt to updatedAt
