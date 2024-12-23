@@ -1,26 +1,36 @@
 'use strict';
 
 import test from 'ava';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
-import { Provider } from 'react-redux';
-import { shallow, configure } from 'enzyme';
-
 import SimpleDropDown from '../../../app/src/js/components/DropDown/simple-dropdown';
-import TextArea from '../../../app/src/js/components/TextAreaForm/text-area';
 import { executeDialog } from '../../../app/src/js/utils/table-config/granules';
+import { render, screen } from '@testing-library/react';
+import { requestMiddleware } from '../../../app/src/js/middleware/request';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import { initialState } from '../../../app/src/js/reducers/datepicker';
+import { Provider } from 'react-redux';
 
-configure({ adapter: new Adapter() });
+const locationQueryParams = {
+  search: {}
+};
 
-test('CUMULUS-2108 executeDialog renders expected components', function (t) {
-  const store = {
-    getState: () => {},
-    dispatch: () => {},
-    subscribe: () => {}
-  };  
+const middlewares = [requestMiddleware, thunk];
+const mockStore = configureMockStore(middlewares);
+const someStore = mockStore({
+  timer: { running: false, seconds: -1 },
+  datepicker: initialState(),
+  locationQueryParams,
+  defaultQuery: {query: ''},
+  getState: () => {},
+  dispatch: () => {},
+  subscribe: () => {},
+  value: 'workflow',
+});
 
-  const element = shallow(
-    <Provider store={store}>
+test('CUMULUS-2108 executeDialog renders expected components', function (t) { 
+  const { container } = render(
+    <Provider store={someStore}>
       {executeDialog({
         selectHandler: () => {},
         label: 'workflow-dropdown',
@@ -32,6 +42,6 @@ test('CUMULUS-2108 executeDialog renders expected components', function (t) {
     </Provider>
   )
 
-  t.is(element.find(SimpleDropDown).length, 1);
-  t.is(element.find(TextArea).length, 1);
+  t.is(container.querySelectorAll('.form__dropdown').length, 1);
+  t.is(container.querySelectorAll('textarea').length, 1);
 });
