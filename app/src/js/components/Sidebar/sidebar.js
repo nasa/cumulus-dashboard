@@ -11,6 +11,7 @@ import { withUrlHelper } from '../../withUrlHelper';
 const currentPathClass = 'sidebar__nav--selected';
 
 const Sidebar = ({
+  count,
   currentPath,
   match,
   urlHelper
@@ -20,10 +21,10 @@ const Sidebar = ({
   const navigate = useNavigate();
   const params = useParams();
   const { getPersistentQueryParams } = urlHelper;
-  const { count, logs, sidebar } = useSelector((state) => ({
-    count: state.count,
+  const { logs, sidebar, locationQueryParams } = useSelector((state) => ({
     logs: state.logs,
-    sidebar: state.sidebar
+    sidebar: state.sidebar,
+    locationQueryParams: state.locationQueryParams
   }));
   const { open: sidebarOpen } = sidebar;
   const { metricsNotConfigured } = logs;
@@ -63,13 +64,12 @@ const Sidebar = ({
                 {d[0] && <li>
                   <Link
                     className={classes}
-                    to={path}
+                    to={location}
                     onClick={(e) => {
                       e.preventDefault();
-                      const locationQueryParams = getPersistentQueryParams(location);
                       navigate({
                         pathname: path,
-                        search: locationQueryParams
+                        search: locationQueryParams.search[path] || getPersistentQueryParams(location),
                       });
                     }}
                   >

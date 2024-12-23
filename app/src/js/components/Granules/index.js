@@ -10,7 +10,7 @@ import AllGranules from './list';
 import GranuleOverview from './granule';
 import GranulesOverview from './overview';
 import CollectionOverview from '../Collections/overview';
-import ReconciliationReportList from '../ReconciliationReports/list';
+// import ReconciliationReportList from '../ReconciliationReports/list';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import Loading from '../LoadingIndicator/loading-indicator';
 import { withUrlHelper } from '../../withUrlHelper';
@@ -20,15 +20,14 @@ const Sidebar = lazy(() => import('../Sidebar/sidebar'));
 const Granules = ({ urlHelper }) => {
   const dispatch = useDispatch();
   const { queryParams, filterQueryParams, location } = urlHelper;
-  const filteredQueryParams = filterQueryParams(queryParams);
   const { pathname } = location;
+  const filteredQueryParams = filterQueryParams(queryParams);
 
   const stats = useSelector((state) => state.stats);
-
   const granulesCount = get(stats, 'count.sidebar.granules.count') || [];
-  const reportCount =
-    get(stats, 'count.sidebar.reconciliationReports.count') || [];
-  const count = [...granulesCount, ...reportCount];
+  /* const reportCount =
+    get(stats, 'count.sidebar.reconciliationReports.count') || []; */ // The getCount for reports was removed previously
+  const count = [...granulesCount];
 
   function query() {
     dispatch(listGranules(filteredQueryParams));
@@ -58,11 +57,11 @@ const Granules = ({ urlHelper }) => {
           <div className='page__content--shortened'>
             <Routes>
               <Route index element={<Navigate to="all" replace />} />
-              <Route path='all' element={<GranulesOverview queryParams={filteredQueryParams} />} />
+              <Route path='all' element={<GranulesOverview queryParams={filteredQueryParams} stats={stats}/>} />
               <Route path='/granule/:granuleId' element={<GranuleOverview />} />
               <Route path='/collections/collection/:name/:version' element={<CollectionOverview />} />
-              <Route path='/lists' element={<ReconciliationReportList queryParams={filteredQueryParams} />} />
-              <Route path='/:status' element={<AllGranules queryParams={filteredQueryParams} />} />
+              {/* <Route path='/lists' element={<ReconciliationReportList queryParams={filteredQueryParams} />} /> */}
+              <Route path='/:status' element={<AllGranules queryParams={filteredQueryParams} stats={stats}/>} />
               <Route path='/running' element={<Navigate to='/granules/processing' />} />
             </Routes>
           </div>
@@ -73,6 +72,7 @@ const Granules = ({ urlHelper }) => {
 };
 
 Granules.propTypes = {
+  stats: PropTypes.object,
   urlHelper: PropTypes.shape({
     location: PropTypes.object,
     filterQueryParams: PropTypes.func,
