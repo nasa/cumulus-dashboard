@@ -53,14 +53,14 @@ const List = ({
   const initialInfix = useRef(null);
   const { historyPushWithQueryParams, location, queryParams } = urlHelper;
 
-  const queryFilters = useMemo(() => {
+  const memoizedQueryFilters = useMemo(() => {
     const {
       limit: limitQueryParam,
       page: pageQueryParam,
       search: searchQueryParam,
       ...filters
     } = queryParams;
-    return filters;
+    return omitBy(filters, isNil);
   }, [queryParams]);
 
   const {
@@ -87,25 +87,25 @@ const List = ({
   });
 
   // Initialize queryConfig with sortBy from Redux
-  const [queryConfig, setQueryConfig] = useState({
+  const initialConfig = useRef({
     page: 1,
     sort_key: buildSortKey(sortBy || [{ id: initialSortId, desc: true }]),
-    ...initialInfix.current ? { infix: initialInfix.current } : {},
+    ...(initialInfix.current ? { infix: initialInfix.current } : {}),
     ...query,
   });
 
-  const memoizedQuery = useMemo(() => query, [query]);
+  const [queryConfig, setQueryConfig] = useState(initialConfig.current);
 
-  const memoizedQueryFilters = useMemo(() => omitBy(queryFilters, isNil), [queryFilters]);
+  const memoizedQuery = useMemo(() => query, [query]);
 
   // Get query configuration: Remove empty keys so as not to mess up the query
   const getQueryConfig = useCallback((config = {}) => omitBy({
     ...queryConfig,
-    ...queryFilters,
+    ...memoizedQueryFilters,
     page,
     sort_key: sortBy ? buildSortKey(sortBy) : queryConfig.sort_key,
     ...config
-  }, isNil), [queryConfig, queryFilters, sortBy, page]);
+  }, isNil), [queryConfig, memoizedQueryFilters, sortBy, page]);
 
   // Memoize getQueryConfig result to prevent infinite loops
   const currentQueryConfig = useMemo(
@@ -113,49 +113,39 @@ const List = ({
     [getQueryConfig]
   );
 
+  // Add useRef for re-rendering issues
+  const queryConfigRef = useRef(queryConfig);
+  const paramsRef = useRef(params);
+
   // Effect for query changes
   useEffect(() => {
-    const newQueryConfig = currentQueryConfig;
-    if (!isEqual(newQueryConfig, queryConfig)) {
-      setQueryConfig(newQueryConfig);
+    if (!isEqual(currentQueryConfig, queryConfigRef.current)) {
+      queryConfigRef.current = currentQueryConfig;
+      setQueryConfig(currentQueryConfig);
     }
-  }, [currentQueryConfig, queryConfig]);
+  }, [currentQueryConfig]);
 
   // Effect for params changes
   useEffect(() => {
-    const newParams = omitBy({
-      ...params,
-      ...queryFilters,
-    }, isNil);
-
-    if (!isEqual(newParams, params)) {
+    const newParams = {
+      ...memoizedQueryFilters,
+    };
+    if (!isEqual(newParams, paramsRef.current)) {
+      paramsRef.current = newParams;
       setParams(newParams);
-      // Don't update queryConfig here as it will cause a loop
     }
-  }, [queryFilters, params]);
+  }, [memoizedQueryFilters]);
 
   // useEffects for query management
   useEffect(() => {
-    setQueryConfig((prevQueryConfig) => ({
-      ...prevQueryConfig,
-      ...getQueryConfig({}),
-    }));
+    const newConfig = getQueryConfig({});
+    setQueryConfig((prevQueryConfig) => {
+      if (isEqual(prevQueryConfig, newConfig)) {
+        return prevQueryConfig;
+      }
+      return newConfig;
+    });
   }, [memoizedQuery, getQueryConfig]);
-
-  useEffect(() => {
-    // Remove parameters with null or undefined values
-    const newParams = {
-      ...params,
-      ...memoizedQueryFilters,
-    };
-    if (!isEqual(newParams, params)) {
-      setParams(newParams);
-      setQueryConfig((prevQueryConfig) => ({
-        ...prevQueryConfig,
-        ...getQueryConfig({}),
-      }));
-    }
-  }, [params, memoizedQueryFilters, getQueryConfig]);
 
   useEffect(() => {
     setClearSelected(true);
@@ -201,14 +191,10 @@ const List = ({
 
   // Update sort handling
   const queryNewSort = useCallback((sortProps) => {
-    const newQueryConfig = getQueryConfig({
-      sort_key: buildSortKey(sortProps),
-    });
-    if (!isEqual(queryConfig, newQueryConfig)) {
-      setQueryConfig(newQueryConfig);
-      dispatch(action(newQueryConfig));
+    if (tableId) {
+      dispatch({ type: 'SET_SORT', payload: { tableId, sort: sortProps } });
     }
-  }, [getQueryConfig, queryConfig, dispatch, action]);
+  }, [dispatch, tableId]);
 
   // Update selection handling if needed
   const updateSelection = useCallback((selectedIds, currentSelectedRows) => {
