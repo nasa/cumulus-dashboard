@@ -1,6 +1,7 @@
-// HOC wrapper to replace url-helper.js with React Router v6 query changes
+// HOC wrapper to replace url-helper.js with React Router v6 query and Redux changes
 import React from 'react';
-import { useNavigate, useLocation, useParams } from 'react-router-dom'; // these hooks are used for queries
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import queryString from 'query-string';
 
 // Utility functions
@@ -75,16 +76,35 @@ export function withUrlHelper(Component) {
     const location = useLocation();
     const params = useParams();
 
+    const dispatch = useDispatch();
+
+    const isAuthenticated = useSelector((state) => state.api.authenticated);
+    const routerState = useSelector((state) => state.router);
+
     const urlHelper = {
       location,
       navigate,
       params,
+      isAuthenticated,
+      routerState,
+      dispatch,
       historyPushWithQueryParams: (path) => historyPushWithQueryParams(navigate, location, path),
       getPersistentQueryParams: () => getPersistentQueryParams(location),
       getInitialValueFromLocation: (paramKey) => getInitialValueFromLocation(location, paramKey),
       initialValuesFromLocation: (paramKeys) => initialValuesFromLocation(location, paramKeys),
       filterQueryParams,
       queryParams: queryString.parse(location.search),
+
+      requireAuth: () => {
+        if (!isAuthenticated) {
+          navigate('/auth');
+        }
+      },
+      checkAuth: () => {
+        if (isAuthenticated) {
+          navigate('/');
+        }
+      }
     };
 
     return <Component {...props} urlHelper={urlHelper} />;

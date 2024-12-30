@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import path from 'path';
 import get from 'lodash/get';
 import { displayCase, fullDate, parseJson } from '../format';
-// import { getPersistentQueryParams } from '../url-helper';
 import linkToKibana from '../kibana';
 import { window } from '../browser';
 import DefaultModal from '../../components/Modal/modal';

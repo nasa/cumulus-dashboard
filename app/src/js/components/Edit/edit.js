@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-// import { withRouter } from 'react-router-dom';
 import { getSchema } from '../../actions';
 import Loading from '../LoadingIndicator/loading-indicator';
 import Schema from '../FormSchema/schema';

@@ -84,7 +84,6 @@ export const tableColumns = [
     Header: 'Executions List',
     accessor: 'granuleId',
     isLink: true,
-    // eslint-disable-line react/prop-types
     linkTo: (row) => {
       const collectionId = row.collectionId || row.original?.collectionId;
       const granuleId = row.granuleId || row.original?.granuleId;

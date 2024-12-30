@@ -1,9 +1,7 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import cloneDeep from 'lodash/cloneDeep';
-// import get from 'lodash/get';
 import {
   displayCase,
   seconds,
@@ -11,11 +9,9 @@ import {
   fullDate
 } from '../format';
 import { strings } from '../../components/locale';
-// import { getPersistentQueryParams } from '../url-helper';
 import { getEventDetails } from '../../components/Executions/execution-graph-utils';
 import Tooltip from '../../components/Tooltip/tooltip';
 import { getExecutionStatus } from '../../actions';
-// import { getPersistentQueryParams } from '../../withUrlHelper';
 
 export const formatEvents = (events) => {
   const mutableEvents = cloneDeep(events);
