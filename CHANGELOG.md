@@ -11,6 +11,16 @@ This version of the dashboard requires Cumulus API >= v19.2.0-alpha.1 (TBD API r
 
 ### Changed
 
+- **CUMULUS-3861**
+  - Updated React 17 to React 18  
+  - Removed test script references to Enzyme and replaced them with React compliant testing components
+
+### Changed
+
+- **CUMULUS-3860/3870**
+  - Updated React and dependencies
+  - react 17.0.2 ⇒ 18.3.1
+This version of the dashboard requires Cumulus API >= v19.2.0-alpha.1 (TBD API release)
 - **CUMULUS-3748**
   - Removed reconciliationReports aggregate stats call from Granules Page
 - **CUMULUS-3821**

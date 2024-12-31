@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 
 import './css/main.scss';
 import './public/favicon.ico';
@@ -14,4 +14,4 @@ import App from './js/App';
     });
 } */
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.createRoot(document.getElementById('site-canvas')).render(<App />);

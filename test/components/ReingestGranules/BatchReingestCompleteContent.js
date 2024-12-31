@@ -1,15 +1,12 @@
 'use strict';
 
 import test from 'ava';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import { render } from '@testing-library/react'
 import React from 'react';
-import { shallow, configure } from 'enzyme';
 
 import BatchReingestComplete, {
   maxDisplayed
 } from '../../../app/src/js/components/ReingestGranules/BatchReingestCompleteContent';
-
-configure({ adapter: new Adapter() });
 
 const errors = [
   {
@@ -23,33 +20,33 @@ const errors = [
 ];
 
 test('Renders Error result', (t) => {
-  const wrapper = shallow(
+  const { container } = render(
     <BatchReingestComplete results={[]} errors={errors} />
   );
-  const errorWrapper = wrapper.find('s').dive();
 
-  t.true(errorWrapper.text().includes(errors[0].error));
+  const errorWrapper = container.querySelectorAll('.Collapsible__contentInner');
+  t.true(errorWrapper[0].textContent.includes(errors[0].error));
 });
 
 test('Renders success results with multiple Granules', (t) => {
   const results = ['granule-1', 'granule-2'];
-  const wrapper = shallow(
+  const { container } = render(
     <BatchReingestComplete results={results} error={undefined} />
   );
 
-  t.true(wrapper.html().includes('successfully reingested these granules'));
-  t.is(wrapper.find('ul').children().length, 2);
+  t.true(container.innerHTML.includes('successfully reingested these granules'));
+  t.is(container.querySelector('ul').children.length, 2);
 });
 
 test('Renders success results with a single granule', (t) => {
   const results = ['granule-1'];
-  const wrapper = shallow(
+  const { container } = render(
     <BatchReingestComplete results={results} error={undefined} />
   );
 
-  t.true(wrapper.html().includes('successfully reingested this granule'));
-  t.is(wrapper.find('ul').children().length, 1);
-  t.falsy(wrapper.html().match('and.* more'));
+  t.true(container.innerHTML.includes('successfully reingested this granule'));
+  t.is(container.querySelector('ul').children.length, 1);
+  t.falsy(container.innerHTML.match('and.* more'));
 });
 
 test('Limits success results with a many granules', (t) => {
@@ -57,11 +54,11 @@ test('Limits success results with a many granules', (t) => {
     (t) => `granule-${t}`
   );
 
-  const wrapper = shallow(
+  const { container } = render(
     <BatchReingestComplete results={results} error={undefined} />
   );
 
-  t.true(wrapper.html().includes('successfully reingested these granules'));
-  t.is(wrapper.find('ul').children().length, maxDisplayed + 1);
-  t.true(wrapper.html().includes('and 5 more'));
+  t.true(container.innerHTML.includes('successfully reingested these granules'));
+  t.is(container.querySelector('ul').children.length, maxDisplayed + 1);
+  t.true(container.innerHTML.includes('and 5 more'));
 });

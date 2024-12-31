@@ -1,13 +1,10 @@
 'use strict';
 
 import test from 'ava';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import { render, fireEvent } from '@testing-library/react'
 import React from 'react';
-import { configure, mount } from 'enzyme';
 
 import { BatchCommand } from '../../../app/src/js/components/BatchAsyncCommands/BatchAsyncCommands';
-
-configure({ adapter: new Adapter() });
 
 test.cb('collect multiple errors', function (t) {
   const noop = () => {};
@@ -65,7 +62,7 @@ test.cb('collect multiple errors', function (t) {
       confirm: noop
     };
 
-    const command = mount(
+    const { container } = render(
       <BatchCommand
         key={item.text}
         dispatch={noop}
@@ -80,10 +77,8 @@ test.cb('collect multiple errors', function (t) {
       />
     );
 
-    command.find('AsyncCommand').props().action();
+    fireEvent.click(container.querySelector('.button__group'));
     setTimeout(()=> {
-      command.update();
-      command.find('BatchCommand').props().cleanup();
       t.end();
     }, 1000);
   });
