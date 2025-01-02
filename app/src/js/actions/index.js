@@ -12,7 +12,7 @@ import { getCollectionId, collectionNameVersion } from '../utils/format';
 import { fetchCurrentTimeFilters } from '../utils/datepicker';
 import log from '../utils/log';
 import * as types from './types';
-import { historyPushWithQueryParams } from '../utils/url-helper';
+import { historyPushWithQueryParams } from '../withUrlHelper';
 
 const { CALL_API } = types;
 const {

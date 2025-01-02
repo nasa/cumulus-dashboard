@@ -6,7 +6,7 @@ import { getExecutionLogs } from '../../actions';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 
 import ErrorReport from '../Errors/report';
-import { historyPushWithQueryParams } from '../../utils/url-helper';
+import { historyPushWithQueryParams } from '../../withUrlHelper';
 import withRouter from '../../withRouter';
 
 class ExecutionLogs extends React.Component {

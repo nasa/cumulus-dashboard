@@ -8,7 +8,7 @@ import Schema from '../FormSchema/schema';
 import merge from '../../utils/merge';
 import _config from '../../config';
 import { strings } from '../locale';
-import { historyPushWithQueryParams } from '../../utils/url-helper';
+import { historyPushWithQueryParams } from '../../withUrlHelper';
 import withRouter from '../../withRouter';
 
 const { updateDelay } = _config;

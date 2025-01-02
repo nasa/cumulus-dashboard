@@ -8,7 +8,7 @@ import _config from '../../config';
 
 import TextArea from '../TextAreaForm/text-area';
 import DefaultModal from '../Modal/modal';
-import { historyPushWithQueryParams } from '../../utils/url-helper';
+import { historyPushWithQueryParams } from '../../withUrlHelper';
 import withRouter from '../../withRouter';
 
 const { updateDelay } = _config;

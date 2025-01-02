@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-// import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { getSchema } from '../../actions';
@@ -10,7 +9,7 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import TextArea from '../TextAreaForm/text-area';
 import DefaultModal from '../Modal/modal';
 import _config from '../../config';
-import { historyPushWithQueryParams } from '../../utils/url-helper';
+import { historyPushWithQueryParams } from '../../withUrlHelper';
 import withRouter from '../../withRouter';
 
 const { updateDelay } = _config;

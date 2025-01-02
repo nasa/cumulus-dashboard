@@ -9,7 +9,7 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import _config from '../../config';
 import { strings } from '../locale';
 import { window } from '../../utils/browser';
-import { historyPushWithQueryParams } from '../../utils/url-helper';
+import { historyPushWithQueryParams } from '../../withUrlHelper';
 import withRouter from '../../withRouter';
 
 const { updateDelay } = _config;

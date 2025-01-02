@@ -14,7 +14,7 @@ import { graphicsPath, nav } from '../../config';
 import { window } from '../../utils/browser';
 import { strings } from '../locale';
 import linkToKibana from '../../utils/kibana';
-import { getPersistentQueryParams } from '../../utils/url-helper';
+import { getPersistentQueryParams } from '../../withUrlHelper';
 import withRouter from '../../withRouter';
 
 const paths = [

@@ -13,7 +13,7 @@ import Dropdown from '../DropDown/dropdown';
 import statusOptions from '../../utils/status';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import { getPersistentQueryParams } from '../../utils/url-helper';
+import { getPersistentQueryParams } from '../../withUrlHelper';
 import withRouter from '../../withRouter';
 
 const breadcrumbConfig = [
