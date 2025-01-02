@@ -18,19 +18,37 @@ const locationQueryParams = {
     search: {}
   };
 
-const match = {
+const router = {
   params: { executionArn: executionHistory.execution.executionArn },
+  location: {}
 };
 
 const dispatch = () => {};
 
+const executionStatus = {
+  data: {
+    presignedS3Url: 'http://example.com/presignedS3Url',
+    data: {
+      execution: executionHistory.execution,
+      executionHistory: executionHistory.executionHistory,
+      stateMachine: executionHistory.execution,
+    }
+  },
+  inflight: true,
+  error: false,
+  meta: {},
+};
+
 const middlewares = [requestMiddleware, thunk];
 const mockStore = configureMockStore(middlewares);
 const someStore = mockStore({
+  api: { authenticated: true },
+  router: {location: {}, action: 'POP'},
   getState: () => {},
   subscribe: () => {},
   timer: { running: false, seconds: -1 },
   datepicker: initialState(),
+  executionStatus,
   locationQueryParams,
   dispatch
 });
@@ -90,7 +108,7 @@ test.serial('Execution Events displays the correct step name', function (t) {
     ],
   };
 
-  const executionStatus = {
+  const testExecutionStatus = {
     data: {
       presignedS3Url: 'http://example.com/presignedS3Url',
       data: {
@@ -109,9 +127,8 @@ test.serial('Execution Events displays the correct step name', function (t) {
       <MemoryRouter>
       <ExecutionEvents
         dispatch={dispatch}
-        location={{}}
-        match={match}
-        executionStatus={executionStatus}
+        router={router}
+        executionStatus={testExecutionStatus}
         executionHistory={executionHistory}
       />
       </MemoryRouter>
@@ -168,8 +185,7 @@ test.serial('Execution Events shows event history', function (t) {
       <MemoryRouter>
       <ExecutionEvents
         dispatch={dispatch}
-        location={{}}
-        match={match}
+        router={router}
         executionStatus={executionStatus}    
         executionHistory={executionHistory}    
       />

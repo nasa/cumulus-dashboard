@@ -57,20 +57,42 @@ const locationQueryParams = {
   search: {}
 };
 
+const urlHelper = {
+  queryParams: {},
+  location: {},
+  navigate: () => {},
+  params: {},
+  isAuthenticated: true,
+  routerState: { location: {} },
+  dispatch,
+  historyPushWithQueryParams: () => {},
+  getPersistentQueryParams: () => '',
+  getInitialValueFromLocation: () => '',
+  initialValuesFromLocation: () => ({}),
+  filterQueryParams: () => ({})
+};
+
 const middlewares = [requestMiddleware, thunk];
 const mockStore = configureMockStore(middlewares);
-const someStore = mockStore({
-  getState: () => {},
-  dispatch,
-  subscribe: () => {},
-  sorts: {},
-  timer: { running: false, seconds: -1 },
-  datepicker: initialState(),
-  locationQueryParams,
-});
 
 test('Collections Overview generates bulkAction for recovery button', function (t) {
   const config = { enableRecovery: true };
+
+  const someStore = mockStore({
+    api: { authenicated: true},
+    router: {location: {}, action: 'POP'},
+    collections,
+    providers,
+    getState: () => {},
+    dispatch,
+    subscribe: () => {},
+    sorts: {},
+    timer: { running: false, seconds: -1 },
+    datepicker: initialState(),
+    locationQueryParams,
+    config,
+  });
+
   const {container} = render(
     <Provider store={someStore}>
     <MemoryRouter>
@@ -80,6 +102,7 @@ test('Collections Overview generates bulkAction for recovery button', function (
       logs={logs}
       config={config}
       providers={providers}
+      urlHelper={urlHelper}
     />
     </MemoryRouter>
     </Provider>
@@ -94,6 +117,22 @@ test('Collections Overview generates bulkAction for recovery button', function (
 
 test('Collections Overview does not generate bulkAction for recovery button', function (t) {
   const config = { enableRecovery: false };
+
+  const someStore = mockStore({
+    api: { authenicated: true},
+    router: {location: {}, action: 'POP'},
+    collections,
+    providers,
+    getState: () => {},
+    dispatch,
+    subscribe: () => {},
+    sorts: {},
+    timer: { running: false, seconds: -1 },
+    datepicker: initialState(),
+    locationQueryParams,
+    config,
+  });
+
   const { container } = render(
     <Provider store={someStore}>
     <MemoryRouter>
@@ -103,6 +142,7 @@ test('Collections Overview does not generate bulkAction for recovery button', fu
       logs={logs}
       config={config}
       providers={providers}
+      urlHelper={urlHelper}
     />
     </MemoryRouter>
     </Provider>
