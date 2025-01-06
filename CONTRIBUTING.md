@@ -67,6 +67,8 @@ cd cumulus-dashboard
 4. Install the correct version fo Node.js for the Cumulus Dashboard and set the version for this project
 ```bash
 nvm install v20.12.2
+```
+```bash
 nvm use
 ```
 5. Install the cumulus dashboard
@@ -87,9 +89,11 @@ npm run serve-api
 8. In a seperate terminal, build and run the cumulus dashboard. This will start up a browser instance and load the application from localhost:3000. This can take a while.
 ```bash
 APIROOT=http://localhost:5001 npm run build
+```
+```bash
 APIROOT=http://localhost:5001 npm run serve
 ```
-9. Run the integration tests. This will start up a cypress instance. Click on `run all specs`. Do not proceed to the subsequent steps until all these tests have passed.
+9. Run the integration tests. This will start up a cypress instance. Click on `run all specs`. This action will bring up a browser and execute the integration tests for Cumulus Dashboard. Do not proceed to the subsequent steps until all these tests have passed.
 ```bash
 npm run cypress
 ```
