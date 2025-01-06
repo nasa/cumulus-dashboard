@@ -119,19 +119,19 @@ test('Collections Overview does not generate bulkAction for recovery button', fu
   const config = { enableRecovery: false };
 
   const someStore = mockStore({
-    api: { authenicated: true},
-    router: {location: {}, action: 'POP'},
-    collections,
-    providers,
-    getState: () => {},
-    dispatch,
-    subscribe: () => {},
-    sorts: {},
-    timer: { running: false, seconds: -1 },
-    datepicker: initialState(),
-    locationQueryParams,
-    config,
-  });
+  api: { authenicated: true},
+  router: {location: {}, action: 'POP'},
+  collections,
+  providers,
+  getState: () => {},
+  dispatch,
+  subscribe: () => {},
+  sorts: {},
+  timer: { running: false, seconds: -1 },
+  datepicker: initialState(),
+  locationQueryParams,
+  config,
+});
 
   const { container } = render(
     <Provider store={someStore}>

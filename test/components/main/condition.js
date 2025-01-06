@@ -10,11 +10,27 @@ import thunk from 'redux-thunk';
 import { requestMiddleware } from '../../../app/src/js/middleware/request';
 import { Main } from '../../../app/src/js/main';
 
+const urlHelper = {
+  queryParams: {},
+  location: {},
+  navigate: () => {},
+  params: {},
+  isAuthenticated: true,
+  routerState: { location: {} },
+  dispatch: () => {},
+  historyPushWithQueryParams: () => {},
+  getPersistentQueryParams: () => '',
+  getInitialValueFromLocation: () => '',
+  initialValuesFromLocation: () => ({}),
+  filterQueryParams: () => ({})
+};
+
 const middlewares = [requestMiddleware, thunk];
 const mockStore = configureMockStore(middlewares);
 const dispatch = () => {};
 const initialState = {
   api: { authenticated: true },
+  router: { location: {}, action: 'POP' },
   locationQueryParams: { search: {} },
   apiVersion : {
     versionNumber: '1.11.0',
@@ -38,6 +54,7 @@ test('Main wrapper shows `Local (Development)` at top by default', function (t) 
         api={initialState.api}
         apiVersion={initialState.apiVersion}
         cmrInfo={initialState.cmrInfo}
+        urlHelper={urlHelper}
          />
       </MemoryRouter>
     </Provider>

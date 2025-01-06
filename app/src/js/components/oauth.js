@@ -18,7 +18,7 @@ const OAuth = ({ urlHelper }) => {
   const [token, setToken] = useState(null);
 
   const dispatch = useDispatch();
-  const { location, historyPushWithQueryParams } = urlHelper;
+  const { location, navigate } = urlHelper;
 
   const authenticated = useSelector((state) => state.api.authenicated);
   const api = useSelector((state) => state.api);
@@ -52,10 +52,10 @@ const OAuth = ({ urlHelper }) => {
       if (pathname !== '/auth') {
         setTimeout(() => window.location.reload(), updateDelay);
       } else {
-        setTimeout(() => historyPushWithQueryParams('/'), updateDelay);
+        setTimeout(() => navigate('/'), updateDelay);
       }
     }
-  }, [authenticated, location, dispatch, token, historyPushWithQueryParams]);
+  }, [authenticated, location, dispatch, token, navigate]);
 
   let button;
   if (!authenticated && !api.inflight) {
@@ -103,7 +103,8 @@ const OAuth = ({ urlHelper }) => {
 OAuth.propTypes = {
   urlHelper: PropTypes.shape({
     location: PropTypes.object,
-    historyPushWithQueryParams: PropTypes.func,
+    navigate: PropTypes.func,
+    // historyPushWithQueryParams: PropTypes.func,
   }),
 };
 

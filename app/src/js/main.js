@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { connect } from 'react-redux';
 import isEqual from 'lodash/isEqual';
 import _config from './config';
@@ -10,7 +10,7 @@ import Footer from './components/Footer/footer';
 import TopButton from './components/TopButton/TopButton';
 import { getLogs } from './actions';
 import { initialState as logsInitialState } from './reducers/logs';
-import withRouter from './withRouter';
+import { withUrlHelper } from './withUrlHelper';
 
 const { target, environment } = _config;
 
@@ -18,12 +18,12 @@ const Main = ({
   api,
   apiVersion,
   cmrInfo,
-  // children,
   cumulusInstance,
   dispatch,
   logs,
+  urlHelper
 }) => {
-  const location = useLocation();
+  const { location } = urlHelper;
   useEffect(() => {
     // kick off an initial logs request to check if metrics is configured
     if (isEqual(logs, logsInitialState)) {
@@ -58,14 +58,17 @@ const Main = ({
 Main.propTypes = {
   // children: PropTypes.oneOfType([PropTypes.array, PropTypes.node]),
   dispatch: PropTypes.func,
-  location: PropTypes.object,
+  // location: PropTypes.object,
   api: PropTypes.object,
   apiVersion: PropTypes.object,
   cmrInfo: PropTypes.object,
   cumulusInstance: PropTypes.object,
   logs: PropTypes.object,
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+  }),
 };
 
 export { Main };
 
-export default withRouter(connect((state) => state)(Main));
+export default withUrlHelper(connect((state) => state)(Main));

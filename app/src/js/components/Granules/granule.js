@@ -477,7 +477,7 @@ const GranuleOverview = ({ urlHelper }) => {
 
 GranuleOverview.propTypes = {
   config: PropTypes.object,
-  match: PropTypes.object,
+  // match: PropTypes.object,
   dispatch: PropTypes.func,
   granules: PropTypes.object,
   executions: PropTypes.object,
