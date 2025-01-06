@@ -1,19 +1,16 @@
 'use strict';
 
 import test from 'ava';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import { render, fireEvent } from '@testing-library/react'
 import React from 'react';
 import configureMockStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
-import { configure, shallow } from 'enzyme';
 import {
   getProvider,
   updateProvider,
   clearUpdateProvider
 } from '../../../app/src/js/actions';
 import { EditRecord } from '../../../app/src/js/components/Edit/edit.js';
-
-configure({ adapter: new Adapter() });
 
 test('EditRecord sends full object when merge property is true', (t) => {
   const monkeyInTheMiddle = () =>
@@ -28,7 +25,7 @@ test('EditRecord sends full object when merge property is true', (t) => {
   const schema = { [schemaKey]: {} };
   const store = mockStore({});
 
-  const providerWrapper = shallow(
+  const { container } = render(
     <Provider store={store}>
       <EditRecord
         schemaState={schema}
@@ -45,13 +42,9 @@ test('EditRecord sends full object when merge property is true', (t) => {
     </Provider>
   );
 
-  const editRecordWrapper = providerWrapper.find(EditRecord).dive();
-  const schemaWrapper = editRecordWrapper.find('Schema').dive();
-  const formWrapper = schemaWrapper.find('Form').dive();
-  const submitButton = formWrapper.find('.button--submit');
-
+  const submitButton = container.querySelector('.button--submit');
   store.clearActions();
-  submitButton.simulate('click');
+  fireEvent.click(submitButton);
 
   t.is(store.getActions().length, 1);
   t.deepEqual(store.getActions()[0].data, provider);
