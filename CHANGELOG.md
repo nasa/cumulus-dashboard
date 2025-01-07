@@ -11,6 +11,11 @@ This version of the dashboard requires Cumulus API >= v19.2.0-alpha.1 (TBD API r
 
 ### Changed
 
+- **GitHub Issue 1162**
+  - Added documentation for beginners starting from scratch.
+
+### Changed
+
 - **CUMULUS-3861**
   - Updated React 17 to React 18  
   - Removed test script references to Enzyme and replaced them with React compliant testing components
