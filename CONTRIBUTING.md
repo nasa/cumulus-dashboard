@@ -14,7 +14,7 @@ If you want to submit your own contributions, follow these steps:
 
 * Fork the Cumulus Dashboard repo
 * Create a new branch from the branch you'd like to contribute to
-* Establish that everything is working before you write code. See ['Getting Started for beginners'](#getting-started-for-beginners) below.
+* Verify that everything is working before you write code. See ['Getting Started for beginners'](#getting-started-for-beginners) below.
 * If an issue doesn't already exist, submit one (see above)
 * [Create a pull request](https://help.github.com/articles/creating-a-pull-request/) from your fork into the target branch of the nasa/cumulus-dashboard repo
 * Be sure to [mention the corresponding issue number](https://help.github.com/articles/closing-issues-using-keywords/) in the PR description, i.e. "Fixes Issue #10"
@@ -49,7 +49,7 @@ Improve contributing docs and consolidate them in the standard location https://
 
 ### For more information on Cumulus governance, see the [Cumulus Code Contribution Guidelines](https://docs.google.com/document/d/14J_DS6nyQ32BpeVjdR-YKfzHAzFB299tKghPGshXUTU/edit) and [the Cumulus Wiki](https://wiki.earthdata.nasa.gov/display/CUMULUS/Cumulus).
 
-## Getting started for beginners 
+## Getting Started for Beginners 
 
 ### Pre-requisites
 - [Docker](https://www.docker.com/) a Docker daemon must be running on your local machine. Running Docker Desktop is a simple way to achieve this
@@ -72,12 +72,21 @@ nvm install v20.12.2
 nvm use
 ```
 5. Install the cumulus dashboard
+For your first install,
+```bash
+npm ci
+```
+For subsequent runs,
 ```bash
 npm install
 ```
+Then run,
+```bash
+npm install connected-react-router@6.9.3 --legacy-peer-deps
+```
 6. Run the unit tests for cumulus dashboard. Do not proceed to the subsequent steps until all these tests have passed.
 ```bash
-npm test
+npm test-unit-only
 ```
 7. Start up the mock services Cumulus Dashboard needs to communicate with. Cumulus API, EDL/Launchpad. These services will be accessible from `localhost:5001`.
 ```bash

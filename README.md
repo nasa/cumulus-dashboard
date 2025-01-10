@@ -106,7 +106,16 @@ We use npm for local package management. To install the requirements:
   npm ci
 ```
 
-Use `npm install` when package.json is updated.
+When package.json is updated.
+
+```bash
+npm install
+```
+
+```bash
+npm install connected-react-router@6.9.3 --legacy-peer-deps
+```
+
 
 To build a dashboard bundle<sup>[1](#bundlefootnote)</sup>:
 
@@ -181,7 +190,7 @@ Otherwise, follow the instructions for building and deploying the dashboard for 
 ### Unit Tests
 
 ```bash
-  npm run test
+  npm run test-unit-only
 ```
 
 Command to run a single test script locally using Ava:
@@ -224,7 +233,7 @@ Run the test suite (yet another terminal window)
   npm run cypress
 ```
 
-When the cypress editor opens, click on `run all specs`.
+When the cypress editor opens, click on `run X integration specs`. Where X is the current number of integration specs.
 
 
 ### Local API server
