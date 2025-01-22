@@ -41,6 +41,8 @@ This version of the dashboard requires Cumulus API >= v19.2.0-alpha.1 (TBD API r
   - Add placeholders for security information with `fakePassword` and `userName`
 - **CUMULUS-3892**
   - Updated Metrics Overview page executions and rules query to only get count from the past 24 hours
+- **CUMULUS-3990**
+  - Upgraded localstack from 3.0.0 to 4.0.3
 
 ### Fixed
 
