@@ -636,7 +636,7 @@ describe('Dashboard Collections Page', () => {
 
       cy.get('.filter-provider .rbt-input-main').as('provider-input');
       cy.get('@provider-input').click().type('s3').type('{enter}');
-
+      cy.wait(1000);
       cy.get('.search').as('search');
       cy.get('@search').click().type('Test').type('{enter}');
       cy.wait(1000);
