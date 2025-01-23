@@ -42,7 +42,7 @@ describe('Dashboard Home Page', () => {
       });
 
     cy.get('div[class=modal-content]').within(() => {
-      cy.get('a').click();
+      cy.get('a').click({ force: true });
     });
 
     shouldBeLoggedIn();
