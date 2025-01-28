@@ -1,12 +1,10 @@
 // Class Component
+import React from 'react';
+import { connect } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 import isNil from 'lodash/isNil';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import React from 'react';
-import { connect } from 'react-redux';
-// import { withRouter } from 'react-router-dom';
-// import withQueryParams from 'react-router-query-params';
 import noop from 'lodash/noop';
 import {
   DATEPICKER_DATECHANGE,
@@ -24,7 +22,7 @@ import {
 } from '../../utils/datepicker';
 import SimpleDropdown from '../DropDown/simple-dropdown';
 import Datepicker from './Datepicker';
-import withRouter from '../../withRouter';
+import { withRouter } from '../../withRouter';
 
 /*
  * If this is a shared URL, grab the date and time and update the datepicker
@@ -126,7 +124,8 @@ class DatepickerRange extends React.PureComponent {
   }
 
   updateQueryParams (newProps) {
-    const updatedQueryParams = { ...this.props.queryParams };
+    const { router } = this.props;
+    const updatedQueryParams = { ...router.queryParams };
     urlDateProps.forEach((time) => {
       let urlValue;
       if (newProps[time] !== null) {
@@ -134,7 +133,7 @@ class DatepickerRange extends React.PureComponent {
       }
       updatedQueryParams[time] = urlValue;
     });
-    this.props.setQueryParams(updatedQueryParams);
+    router.navigate(`${router.location.pathname}?${new URLSearchParams(updatedQueryParams)}`);
   }
 
   renderDateTimeRange (name, label) {
@@ -240,11 +239,14 @@ DatepickerRange.propTypes = {
   startDateTime: PropTypes.number,
   endDateTime: PropTypes.number,
   hourFormat: PropTypes.oneOf(allHourFormats.map((a) => a.label)),
-  queryParams: PropTypes.object,
-  setQueryParams: PropTypes.func,
   onChange: PropTypes.func,
   dispatch: PropTypes.func,
   hideWrapper: PropTypes.bool,
+  router: PropTypes.shape({
+    queryParams: PropTypes.object,
+    navigate: PropTypes.func,
+    location: PropTypes.object
+  })
 };
 
 export default withRouter((connect((state) => state.datepicker)(DatepickerRange)));

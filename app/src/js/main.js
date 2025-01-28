@@ -56,9 +56,7 @@ const Main = ({
 };
 
 Main.propTypes = {
-  // children: PropTypes.oneOfType([PropTypes.array, PropTypes.node]),
   dispatch: PropTypes.func,
-  // location: PropTypes.object,
   api: PropTypes.object,
   apiVersion: PropTypes.object,
   cmrInfo: PropTypes.object,
