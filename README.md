@@ -108,10 +108,6 @@ We use npm for local package management. To install the requirements:
 When package.json is updated.
 
 ```bash
- npm install --legacy-peer-deps
-```
-
-```bash
 npm install connected-react-router@6.9.3 --legacy-peer-deps
 ```
 
