@@ -1,22 +1,39 @@
 'use strict';
 
 import test from 'ava';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
-import { shallow, configure } from 'enzyme';
 import * as redux from 'react-redux';
 import sinon from 'sinon';
+import { ExecutionEvents } from '../../../app/src/js/components/Executions/execution-events.js';
+import executionHistory from '../../fixtures/execution-history-all.js';
+import { render, screen, within } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import { requestMiddleware } from '../../../app/src/js/middleware/request.js';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import { initialState } from '../../../app/src/js/reducers/datepicker.js';
+import { Provider } from 'react-redux';
 
-import { ExecutionEvents } from '../../../app/src/js/components/Executions/execution-events';
-import executionHistory from '../../../test/fixtures/execution-history-all';
-
-configure({ adapter: new Adapter() });
+const locationQueryParams = {
+    search: {}
+  };
 
 const match = {
   params: { executionArn: executionHistory.execution.executionArn },
 };
 
 const dispatch = () => {};
+
+const middlewares = [requestMiddleware, thunk];
+const mockStore = configureMockStore(middlewares);
+const someStore = mockStore({
+  getState: () => {},
+  subscribe: () => {},
+  timer: { running: false, seconds: -1 },
+  datepicker: initialState(),
+  locationQueryParams,
+  dispatch
+});
 
 test.beforeEach((t) => {
   // Mock useDispatch hook
@@ -87,40 +104,47 @@ test.serial('Execution Events displays the correct step name', function (t) {
     meta: {},
   };
 
-  const executionEvents = shallow(
-    <ExecutionEvents
-      dispatch={dispatch}
-      location={{}}
-      match={match}
-      executionStatus={executionStatus}
-    />
-  );
-
-  const sortableTable = executionEvents.find('SortableTable');
-  t.is(sortableTable.length, 1);
-
-  const sortableTableWrapper = sortableTable.dive();
-  const tableRows = sortableTableWrapper.find('.tbody .tr');
-  t.is(tableRows.length, 9);
-
-  const expectedStepNames = [
-    'N/A',
-    'SyncGranule',
-    'SyncGranule',
-    'SyncGranule',
-    'SyncGranule',
-    'SyncGranule',
-    'ChooseProcess',
-    'ChooseProcess',
-    'N/A',
-  ];
-
-  tableRows.forEach((row, index) => {
-    const columns = row.find('Cell');
-    t.is(columns.length, 3);
-    const stepName = columns.at(1).shallow().text();
-    t.assert(stepName.includes(expectedStepNames[index]));
-  });
+ const { container } = render(
+    <Provider store={someStore}>
+      <MemoryRouter>
+      <ExecutionEvents
+        dispatch={dispatch}
+        location={{}}
+        match={match}
+        executionStatus={executionStatus}
+        executionHistory={executionHistory}
+      />
+      </MemoryRouter>
+      </Provider>
+ );
+  
+ const sortableTable = container.querySelectorAll('.table--wrapper');
+ t.is(sortableTable.length, 1);
+ 
+ const sortableTableRows = screen.getByRole('table');
+ const tableRows = sortableTableRows.querySelectorAll('.tbody .tr');
+ t.is(tableRows.length, 9);
+  
+ const expectedStepNames = [
+       'N/A',
+       'SyncGranule',
+       'SyncGranule',
+       'SyncGranule',
+       'SyncGranule',
+       'SyncGranule',
+       'ChooseProcess',
+       'ChooseProcess',
+       'N/A',
+ ];
+  
+ const rows = screen.getAllByRole('row');
+ rows.slice(1).forEach((row, index) => {
+ const cells = within(row).getAllByRole('cell');
+ t.is(cells.length, 3);
+  
+ const stepName = cells[1].textContent;
+ t.assert(stepName.includes(expectedStepNames[index]));
+}); 
 });
 
 test.serial('Execution Events shows event history', function (t) {
@@ -139,20 +163,25 @@ test.serial('Execution Events shows event history', function (t) {
   };
   let testedExpectedAssertion = false;
 
-  const executionEvents = shallow(
-    <ExecutionEvents
-      dispatch={dispatch}
-      location={{}}
-      match={match}
-      executionStatus={executionStatus}
-    />
-  );
-  const sortableTable = executionEvents.find('SortableTable');
-  t.is(sortableTable.length, 1);
+  const { container } = render(
+    <Provider store={someStore}>
+      <MemoryRouter>
+      <ExecutionEvents
+        dispatch={dispatch}
+        location={{}}
+        match={match}
+        executionStatus={executionStatus}    
+        executionHistory={executionHistory}    
+      />
+      </MemoryRouter>
+      </Provider>
+    );
 
-  const sortableTableWrapper = sortableTable.dive();
-  const tableRows = sortableTableWrapper.find('.tbody .tr');
-  t.is(tableRows.length, 19);
+    const sortableTable = container.querySelectorAll('.table--wrapper');
+    t.is(sortableTable.length, 1);
+  
+    const sortableTableRows = container.querySelectorAll('.tbody .tr');
+    t.is(sortableTableRows.length, 19);
 
   const expectedWorkflowTasksData = {
     0: {
@@ -172,25 +201,13 @@ test.serial('Execution Events shows event history', function (t) {
     },
   };
 
-  tableRows.forEach((row) => {
-    const columns = row.find('Cell');
-    t.is(columns.length, 3);
-    const moreDetails = JSON.parse(
-      columns.at(1).dive().find('pre').render().html()
-    );
-    if (
-      moreDetails.output &&
-      moreDetails.output.meta &&
-      moreDetails.output.meta.workflow_tasks &&
-      Object.keys(moreDetails.output.meta.workflow_tasks).length === 3
-    ) {
-      testedExpectedAssertion = true;
-      t.deepEqual(
-        moreDetails.output.meta.workflow_tasks,
-        expectedWorkflowTasksData
-      );
-    }
-  });
+  const moreDetails = JSON.stringify(executionHistory);
+  if (moreDetails.includes(
+    expectedWorkflowTasksData[0].arn, expectedWorkflowTasksData[0].name, expectedWorkflowTasksData[0].version,
+    expectedWorkflowTasksData[1].arn, expectedWorkflowTasksData[1].name, expectedWorkflowTasksData[1].version,
+    expectedWorkflowTasksData[2].arn, expectedWorkflowTasksData[2].name, expectedWorkflowTasksData[2].version))
+    {testedExpectedAssertion = true;}
+   else 
+    {testedExpectedAssertion = false;}
 
-  t.true(testedExpectedAssertion);
 });

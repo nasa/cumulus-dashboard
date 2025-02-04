@@ -1,20 +1,16 @@
 'use strict';
 
 import test from 'ava';
-import { configure, shallow } from 'enzyme';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
 import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
+import { render } from '@testing-library/react'
 import { listGranules } from '../../../app/src/js/actions';
 import { List } from '../../../app/src/js/components/Table/Table';
-import Timer from '../../../app/src/js/components/Timer/timer.js';
 import { requestMiddleware } from '../../../app/src/js/middleware/request';
 import { initialState } from '../../../app/src/js/reducers/datepicker';
 import { errorTableColumns } from '../../../app/src/js/utils/table-config/granules';
-
-configure({ adapter: new Adapter() });
 
 test('table should properly initialize timer config prop', async (t) => {
   const dispatch = () => Promise.resolve();
@@ -31,7 +27,7 @@ test('table should properly initialize timer config prop', async (t) => {
     datepicker: initialState(),
   });
 
-  const providerWrapper = shallow(
+  const { container } = render(
     <Provider store={someStore}>
       <List
         list={list}
@@ -52,13 +48,11 @@ test('table should properly initialize timer config prop', async (t) => {
     }
   );
 
-  const listWrapper = providerWrapper.find('List').dive();
-  const listActionsWrapper = listWrapper.find('ListActions').dive();
-  const timerWrapper = listActionsWrapper.find(Timer);
+  const timerWrapper = container.querySelectorAll('.form__element__updateToggle'); // timer class name
   t.is(timerWrapper.length, 1);
 
-  t.truthy(timerWrapper.exists(), 'Timer not found');
+  t.truthy(timerWrapper[0], 'Timer not found');
   // Is the Timer's query configuration properly initialized via the
   // enclosing List's state, prior to any lifecycle method invocations?
-  t.is(timerWrapper.props().config.q, query.q);
+  t.is(timerWrapper[0].config, query.q);
 });
