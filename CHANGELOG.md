@@ -11,6 +11,9 @@ This version of the dashboard requires Cumulus API >= v19.2.0-alpha.1 (TBD API r
 
 ### Changed
 
+- **CUMULUS-3862**
+  - Updated documentation to account for short term React upgrade version dependency issues that arise using npm.
+
 - **GitHub Issue 1162**
   - Added documentation for beginners starting from scratch.
 

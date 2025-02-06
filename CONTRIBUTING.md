@@ -74,14 +74,6 @@ nvm use
 5. Install the cumulus dashboard
 For your first install,
 ```bash
-npm ci
-```
-For subsequent runs,
-```bash
-npm install
-```
-Then run,
-```bash
 npm install connected-react-router@6.9.3 --legacy-peer-deps
 ```
 6. Run the unit tests for cumulus dashboard. Do not proceed to the subsequent steps until all these tests have passed.
