@@ -11,14 +11,8 @@ This version of the dashboard requires Cumulus API >= v19.2.0-alpha.1 (TBD API r
 
 ### Changed
 
-- **CUMULUS-3862**
-  - Updated documentation to account for short term React upgrade version dependency issues that arise using npm.
-
 - **GitHub Issue 1162**
   - Added documentation for beginners starting from scratch.
-
-### Changed
-
 - **CUMULUS-3861**
   - Updated React 17 to React 18  
   - Removed test script references to Enzyme and replaced them with React compliant testing components
@@ -42,6 +36,7 @@ This version of the dashboard requires Cumulus API >= v19.2.0-alpha.1 (TBD API r
   - Established new router with withRouter.js HOC
   - Established withUrlHelper.js HOC to later replace URL params utility
   - Updated unit tests to accommodate component changes
+  - Updated documentation to account for short term React upgrade version dependency issues that arise using npm.
 - **CUMULUS-3870**
   - Remove launchpad security key information from cypress fixture for `valid-execution.json`
   - Add placeholders for security information with `fakePassword` and `userName`

@@ -78,9 +78,9 @@ describe('Dashboard Home Page', () => {
     it('displays metrics overview with default 24-hour time range', () => {
       const now = Date.now();
       cy.clock(now);
-      
+
       cy.visit('/');
-      
+
       // Check that metrics overview section exists
       cy.get('#metricsOverview').within(() => {
         cy.get('.heading--large').should('contain', 'Metrics Overview');
@@ -140,27 +140,27 @@ describe('Dashboard Home Page', () => {
     it('should retain query parameters when moving between pages.', () => {
       const now = Date.UTC(2009, 0, 5, 13, 35, 3); // 2009-01-05T13:35:03.000Z
       cy.clock(now);
-      
+
       cy.get('main[class=main] section').within(() => {
         cy.get('h3').should('have.text', 'Date and Time Range');
         cy.setDatepickerDropdown('1 week');
       });
-    
+
       // Verify initial parameters are set
       cy.url().should('include', 'startDateTime=20081229133500');
       cy.url().should('include', 'endDateTime=20090105133500');
-    
+
       // Navigate to granules with these same parameters
       cy.visit('/granules/all?startDateTime=20081229133500&endDateTime=20090105133500');
-    
+
       // Verify URL parameters are maintained on granules page
       cy.url().should('include', 'granules/all');
       cy.url().should('include', 'startDateTime=20081229133500');
       cy.url().should('include', 'endDateTime=20090105133500');
-    
+
       // Check parameters are retained when returning to home page
       cy.get('.logo > a').click();
-    
+
       // Verify URL parameters are maintained after returning to home
       cy.url().should('include', 'startDateTime=20081229133500');
       cy.url().should('include', 'endDateTime=20090105133500');
@@ -269,7 +269,7 @@ describe('Dashboard Home Page', () => {
 
     it('should update the Datepicker with the params in the URL', () => {
       cy.visit('/');
-      
+
       // Set start datetime
       cy.get('[data-cy=startDateTime]').within(() => {
         cy.get('input[name=month]').click().type(12);
@@ -279,7 +279,7 @@ describe('Dashboard Home Page', () => {
         cy.get('input[name=minute]').click().type(35);
         cy.get('select[name=amPm]').select('PM');
       });
-    
+
       // Set end datetime
       cy.get('[data-cy=endDateTime]').within(() => {
         cy.get('input[name=month]').click().type(1);
@@ -289,7 +289,7 @@ describe('Dashboard Home Page', () => {
         cy.get('input[name=minute]').click().type(35);
         cy.get('select[name=amPm]').select('PM');
       });
-    
+
       // Verify URL updates with both datetime parameters
       cy.url().should('include', 'startDateTime=20081229133500');
       cy.url().should('include', 'endDateTime=20090105133500');
