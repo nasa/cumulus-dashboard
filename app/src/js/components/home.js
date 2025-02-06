@@ -1,9 +1,8 @@
 import React, { useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { withRouter, Link } from 'react-router-dom';
-import withQueryParams from 'react-router-query-params';
 import { get } from 'object-path';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
@@ -27,16 +26,27 @@ import linkToKibana from '../utils/kibana';
 import Tooltip from './Tooltip/tooltip';
 import DatepickerRange from './Datepicker/DatepickerRange';
 import { strings } from './locale';
-import { getPersistentQueryParams } from '../utils/url-helper';
+import { withUrlHelper } from '../withUrlHelper';
 
-const Home = ({
-  stats,
-  executions,
-  granules,
-  rules,
-  dispatch,
-  location,
-}) => {
+const Home = ({ urlHelper }) => {
+  const dispatch = useDispatch();
+  const { location, getPersistentQueryParams } = urlHelper;
+  const {
+    executions,
+    granules,
+    rules,
+    stats,
+  } = useSelector((state) => ({
+    cumulusInstance: state.cumulusInstance,
+    datepicker: state.datepicker,
+    dist: state.dist,
+    executions: state.executions,
+    granules: state.granules,
+    rules: state.rules,
+    stats: state.stats,
+    pdrs: state.pdrs
+  }));
+
   const generateQuery = () => ({
     error__exists: true,
     status: 'failed',
@@ -210,18 +220,12 @@ Home.propTypes = {
   rules: PropTypes.object,
   stats: PropTypes.object,
   dispatch: PropTypes.func,
-  location: PropTypes.object
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    getPersistentQueryParams: PropTypes.func,
+  }),
 };
 
 export { Home };
 
-export default withRouter(withQueryParams()(connect((state) => ({
-  cumulusInstance: state.cumulusInstance,
-  datepicker: state.datepicker,
-  dist: state.dist,
-  executions: state.executions,
-  granules: state.granules,
-  rules: state.rules,
-  stats: state.stats,
-  pdrs: state.pdrs
-}))(Home)));
+export default withUrlHelper(Home);

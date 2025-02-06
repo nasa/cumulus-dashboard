@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router';
+// import { withRouter } from 'react-router';
 import queue from 'stubborn-queue';
 import {
   CircularProgressbar,
@@ -13,6 +13,7 @@ import isArray from 'lodash/isArray';
 import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import DefaultModal from '../Modal/modal';
 import ErrorReport from '../Errors/report';
+import withRouter from '../../withRouter';
 
 const CONCURRENCY = 3;
 

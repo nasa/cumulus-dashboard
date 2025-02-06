@@ -1,8 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import cloneDeep from 'lodash/cloneDeep';
 import {
   clearOperationsFilter,
@@ -23,6 +22,7 @@ import { tableColumns } from '../../utils/table-config/operations';
 import ListFilters from '../ListActions/ListFilters';
 import { operationStatus } from '../../utils/status';
 import { operationTypes } from '../../utils/type';
+import withRouter from '../../withRouter';
 
 class OperationOverview extends React.Component {
   constructor(props) {

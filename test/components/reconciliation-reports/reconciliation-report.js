@@ -3,12 +3,13 @@
 import test from 'ava';
 import { render, screen } from '@testing-library/react'
 import React from 'react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { requestMiddleware } from '../../../app/src/js/middleware/request';
 import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { ReconciliationReport } from '../../../app/src/js/components/ReconciliationReports/reconciliation-report';
+import { initialState } from '../../../app/src/js/reducers/datepicker.js';
 
 const reconciliationReports = {
   map: {
@@ -107,32 +108,32 @@ const reconciliationReports = {
   }
 };
 
-const middlewares = [requestMiddleware, thunk];
-const mockStore = configureMockStore(middlewares);
-const someStore = mockStore({
-  locationQueryParams: {
-    search: {}
-  },
-});
-
 const locationQueryParams = {
   search: {}
 };
 const dispatch = () => {};
 
-test('shows an individual inventory report', function (t) {
-  const match = { params: { reconciliationReportName: 'exampleInventoryReport' } };
+const middlewares = [requestMiddleware, thunk];
+const mockStore = configureMockStore(middlewares);
+const someStore = mockStore({
+  api: { authenticated: true },
+  router: {location: {}, action: 'POP'},
+  datepicker: initialState(),
+  reconciliationReports,
+  locationQueryParams,
+});
 
+test('shows an individual inventory report', function (t) {
   const { container } = render(
     <Provider store={someStore}>
-    <MemoryRouter>
-    <ReconciliationReport
-      dispatch={dispatch}
-      match={match}
-      reconciliationReports={reconciliationReports}
-      locationQueryParams={locationQueryParams}
-    />
-    </MemoryRouter>
+      <MemoryRouter initialEntries={['/reconciliation-reports/exampleInventoryReport']}>
+        <Routes>
+          <Route 
+            path="/reconciliation-reports/:reconciliationReportName" 
+            element={<ReconciliationReport reconciliationReports={reconciliationReports} />} 
+          />
+        </Routes>
+      </MemoryRouter>
     </Provider>
   );
 
@@ -155,17 +156,16 @@ test('shows an individual inventory report', function (t) {
 });
 
 test('shows an individual Granule Not Found report', function (t) {
-  const match = { params: { reconciliationReportName: 'exampleGranuleNotFoundReport' } };
-
   const { container } = render(
     <Provider store={someStore}>
-    <MemoryRouter>
-    <ReconciliationReport
-      dispatch={dispatch}
-      match={match}
-      reconciliationReports={reconciliationReports}
-    />
-    </MemoryRouter>
+      <MemoryRouter initialEntries={['/reconciliation-reports/exampleGranuleNotFoundReport']}>
+        <Routes>
+          <Route 
+            path="/reconciliation-reports/:reconciliationReportName" 
+            element={<ReconciliationReport reconciliationReports={reconciliationReports} />} 
+          />
+        </Routes>
+      </MemoryRouter>
     </Provider>
   );
 
@@ -182,17 +182,16 @@ test('shows an individual Granule Not Found report', function (t) {
 });
 
 test('correctly renders the heading', function (t) {
-  const match = { params: { reconciliationReportName: 'exampleInventoryReport' } };
-
   const { container } = render(
     <Provider store={someStore}>
-    <MemoryRouter>
-    <ReconciliationReport
-      dispatch={dispatch}
-      match={match}
-      reconciliationReports={reconciliationReports}
-    />
-    </MemoryRouter>
+      <MemoryRouter initialEntries={['/reconciliation-reports/exampleInventoryReport']}>
+        <Routes>
+          <Route 
+            path="/reconciliation-reports/:reconciliationReportName" 
+            element={<ReconciliationReport reconciliationReports={reconciliationReports} />} 
+          />
+        </Routes>
+      </MemoryRouter>
     </Provider>
   );
 
@@ -224,18 +223,16 @@ test('correctly renders the heading', function (t) {
 });
 
 test('report with error triggers error message', function (t) {
-  const match = { params: { reconciliationReportName: 'exampleReportWithError' } };
-
   const { container } = render(
     <Provider store={someStore}>
-    <MemoryRouter>
-    <ReconciliationReport
-      dispatch={dispatch}
-      match={match}
-      reconciliationReports={reconciliationReports}
-      locationQueryParams={locationQueryParams}
-    />
-    </MemoryRouter>
+      <MemoryRouter initialEntries={['/reconciliation-reports/exampleReportWithError']}>
+        <Routes>
+          <Route 
+            path="/reconciliation-reports/:reconciliationReportName" 
+            element={<ReconciliationReport reconciliationReports={reconciliationReports} />} 
+          />
+        </Routes>
+      </MemoryRouter>
     </Provider>
   );
 
@@ -253,18 +250,16 @@ test('report with error triggers error message', function (t) {
 });
 
 test('report which exceeds maximum allowed payload size triggers error message', function (t) {
-  const match = { params: { reconciliationReportName: 'exampleReportExceedsPayloadLimit' } };
-
   const { container } = render(
     <Provider store={someStore}>
-    <MemoryRouter>
-    <ReconciliationReport
-      dispatch={dispatch}
-      match={match}
-      reconciliationReports={reconciliationReports}
-      locationQueryParams={locationQueryParams}
-    />
-    </MemoryRouter>
+      <MemoryRouter initialEntries={['/reconciliation-reports/exampleReportExceedsPayloadLimit']}>
+        <Routes>
+          <Route 
+            path="/reconciliation-reports/:reconciliationReportName" 
+            element={<ReconciliationReport reconciliationReports={reconciliationReports} />} 
+          />
+        </Routes>
+      </MemoryRouter>
     </Provider>
   );
 

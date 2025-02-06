@@ -3,12 +3,27 @@
 import test from 'ava';
 import { Provider } from 'react-redux';
 import { render} from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import configureMockStore from 'redux-mock-store';
 import React from 'react';
 import thunk from 'redux-thunk';
 import { requestMiddleware } from '../../../app/src/js/middleware/request';
 import { Main } from '../../../app/src/js/main';
+
+const urlHelper = {
+  queryParams: {},
+  location: {},
+  navigate: () => {},
+  params: {},
+  isAuthenticated: true,
+  routerState: { location: {} },
+  dispatch: () => {},
+  historyPushWithQueryParams: () => {},
+  getPersistentQueryParams: () => '',
+  getInitialValueFromLocation: () => '',
+  initialValuesFromLocation: () => ({}),
+  filterQueryParams: () => ({})
+};
 
 const middlewares = [requestMiddleware, thunk];
 const mockStore = configureMockStore(middlewares);
@@ -25,6 +40,10 @@ const initialState = {
     cmrEnv: 'UAT',
     cmrProvider: 'CUMULUS',
     cmrOauthProvider: 'Launchpad'
+  },
+  router: {
+    location: {},
+    action: 'POP'
   }
 };
 
@@ -33,12 +52,17 @@ test('Main wrapper shows `Local (Development)` at top by default', function (t) 
   const { container } = render(
     <Provider store={someStore} >
       <MemoryRouter>
-        <Main 
-        dispatch={dispatch}
-        api={initialState.api}
-        apiVersion={initialState.apiVersion}
-        cmrInfo={initialState.cmrInfo}
-         />
+        <Routes>
+          <Route path="*" element={
+            <Main 
+            dispatch={dispatch}
+            api={initialState.api}
+            apiVersion={initialState.apiVersion}
+            cmrInfo={initialState.cmrInfo}
+            urlHelper={urlHelper}
+            />
+          } />
+        </Routes>
       </MemoryRouter>
     </Provider>
   );

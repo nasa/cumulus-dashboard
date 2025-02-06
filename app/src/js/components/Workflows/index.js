@@ -1,19 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { withRouter, Route, Switch } from 'react-router-dom';
-import withQueryParams from 'react-router-query-params';
+import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
 import WorkflowsOverview from './overview';
 import Workflow from './workflow';
-import { filterQueryParams } from '../../utils/url-helper';
+import { withUrlHelper } from '../../withUrlHelper';
 
-const Workflows = ({
-  location,
-  params,
-  queryParams,
-}) => {
+const Workflows = ({ urlHelper }) => {
+  const { queryParams, filterQueryParams, location, params } = urlHelper;
   const filteredQueryParams = filterQueryParams(queryParams);
+
   return (
     <div className="page__workflows">
       <Helmet>
@@ -28,19 +25,18 @@ const Workflows = ({
         <div className="wrapper__sidebar">
           <Sidebar currentPath={location.pathname} params={params} />
           <div className="page__content--shortened">
-            <Switch>
+            <Routes>
+            <Route index element={<Navigate to="all" replace />} />
               <Route
                 exact
-                path="/workflows"
-                render={(props) => (
-                  <WorkflowsOverview {...props} queryParams={filteredQueryParams} />
-                )}
+                path="all"
+                element={<WorkflowsOverview queryParams={filteredQueryParams} />}
               />
               <Route
-                path="/workflows/workflow/:workflowName"
-                component={Workflow}
+                path="/workflow/:workflowName"
+                element={<Workflow />}
               />
-            </Switch>
+            </Routes>
           </div>
         </div>
       </div>
@@ -49,9 +45,12 @@ const Workflows = ({
 };
 
 Workflows.propTypes = {
-  location: PropTypes.object,
-  params: PropTypes.object,
-  queryParams: PropTypes.object,
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    filterQueryParams: PropTypes.func,
+    params: PropTypes.object,
+    queryParams: PropTypes.object
+  }),
 };
 
-export default withRouter(withQueryParams()(Workflows));
+export default withUrlHelper(Workflows);

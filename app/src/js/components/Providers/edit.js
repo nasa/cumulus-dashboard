@@ -2,7 +2,6 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import {
   getProvider,
   updateProvider,
@@ -10,6 +9,7 @@ import {
 } from '../../actions';
 import EditRecord from '../Edit/edit';
 import { isValidProvider } from '../../utils/validate';
+import withRouter from '../../withRouter';
 
 const SCHEMA_KEY = 'provider';
 

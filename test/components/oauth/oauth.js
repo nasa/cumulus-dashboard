@@ -30,8 +30,14 @@ test('OAuth has link to Earthdata by default', function (t) {
     inflight: false,
   }
   const location = {
-    pathname: '/'
+    pathname: '/',
+    search:'',
   }
+
+  const urlHelper = {
+    location,
+    historyPushWithQueryParams: () => {}
+  };
 
   const someStore = mockStore(initialState);
   render(
@@ -42,6 +48,7 @@ test('OAuth has link to Earthdata by default', function (t) {
       api={api}
       location={location}
       queryParams={{}}
+      urlHelper={urlHelper}
     />
     </MemoryRouter>
     </Provider>

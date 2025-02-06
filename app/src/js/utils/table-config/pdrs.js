@@ -1,11 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { get } from 'object-path';
 import { seconds, bool, nullValue, collectionLink, displayCase, granuleLink, fromNowWithTooltip, deletePdrs, deleteGranules } from '../format';
 import { deleteGranule, deletePdr } from '../../actions';
 import ErrorReport from '../../components/Errors/report';
 import { strings } from '../../components/locale';
-import { getPersistentQueryParams } from '../url-helper';
+import { getPersistentQueryParams } from '../../withUrlHelper';
 
 export const tableColumns = [
   {
@@ -17,7 +16,13 @@ export const tableColumns = [
   {
     Header: 'Name',
     accessor: 'pdrName',
-    Cell: ({ cell: { value } }) => <Link to={(location) => ({ pathname: `/pdrs/pdr/${value}`, search: getPersistentQueryParams(location) })}>{value}</Link> // eslint-disable-line react/prop-types
+    isLink: true,
+    linkTo: (row) => {
+      const queryParams = getPersistentQueryParams(window.location);
+      const path = `/pdrs/pdr/${row.pdrName}`;
+      return queryParams ? `${path}?${queryParams}` : path;
+    },
+    Cell: ({ cell: { value } }) => (value)
   },
   {
     Header: 'Status',
@@ -60,7 +65,13 @@ export const errorTableColumns = [
   {
     Header: 'Name',
     accessor: 'pdrName',
-    Cell: ({ cell: { value } }) => <Link to={(location) => ({ pathname: `/pdrs/pdr/${value}`, search: getPersistentQueryParams(location) })}>{value}</Link> // eslint-disable-line react/prop-types
+    isLink: true,
+    linkTo: (row) => {
+      const queryParams = getPersistentQueryParams(window.location);
+      const path = `/pdrs/pdr/${row.pdrName}`;
+      return queryParams ? `${path}?${queryParams}` : path;
+    },
+    Cell: ({ cell: { value } }) => (value)
   },
   {
     Header: 'Error',
@@ -106,12 +117,16 @@ export const granuleTableColumns = [
   {
     Header: 'Name',
     accessor: 'granuleId',
+    isLink: true,
+    linkTo: (row) => `granules/granule/${encodeURIComponent(row.granuleId)}`,
     Cell: ({ cell: { value } }) => granuleLink(value),
     width: 200
   },
   {
     Header: strings.collection_id,
     accessor: 'collectionId',
+    isLink: true,
+    linkTo: (row) => `collections/collection/${encodeURIComponent(row.granuleId)}`,
     Cell: ({ cell: { value } }) => collectionLink(value)
   },
   {

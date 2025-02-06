@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { connect, useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
 import { get } from 'object-path';
 import {
   getCollectionId,
@@ -33,16 +32,17 @@ import { granuleStatus as statusOptions } from '../../utils/status';
 import { workflowOptionNames } from '../../selectors';
 import ListFilters from '../ListActions/ListFilters';
 import CollectionHeader from './collection-header';
+import withRouter from '../../withRouter';
 
 const CollectionGranules = ({
-  dispatch,
   granules,
-  match,
   queryParams,
   workflowOptions,
   providers,
+  router
 }) => {
-  const { params } = match;
+  const dispatch = useDispatch();
+  const { params } = router;
   const { name: collectionName, version: collectionVersion, status } = params;
   const granuleStatus = status === 'processing' ? 'running' : status;
   const { list } = granules;
@@ -52,9 +52,11 @@ const CollectionGranules = ({
     name: collectionName,
     version: decodedVersion,
   });
+
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const [selected, setSelected] = useState([]);
+
   const query = generateQuery();
   const { dropdowns } = providers;
 
@@ -213,16 +215,18 @@ const CollectionGranules = ({
 CollectionGranules.propTypes = {
   granules: PropTypes.object,
   dispatch: PropTypes.func,
-  match: PropTypes.object,
   queryParams: PropTypes.object,
   workflowOptions: PropTypes.array,
   providers: PropTypes.object,
+  router: PropTypes.shape({
+    params: PropTypes.object
+  }),
 };
 
-export default withRouter(
-  connect((state) => ({
-    granules: state.granules,
-    workflowOptions: workflowOptionNames(state),
-    providers: state.providers,
-  }))(CollectionGranules)
-);
+const mapStateToProps = (state) => ({
+  granules: state.granules,
+  workflowOptions: workflowOptionNames(state),
+  providers: state.providers,
+});
+
+export default withRouter(connect(mapStateToProps)(CollectionGranules));

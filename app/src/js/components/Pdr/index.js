@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
+import { Route, Routes, Navigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
-import { connect } from 'react-redux';
-import { withRouter, Route, Switch } from 'react-router-dom';
-import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import { getCount, listPdrs } from '../../actions';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
@@ -12,12 +11,16 @@ import Pdr from './pdr';
 import PdrOverview from './overview';
 import PdrList from './list';
 import { strings } from '../locale';
-import { filterQueryParams } from '../../utils/url-helper';
+import { withUrlHelper } from '../../withUrlHelper';
 
-const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
-  const { pathname } = location;
-  const count = get(stats, 'count.sidebar.pdrs.count');
+const Pdrs = ({ urlHelper }) => {
+  const dispatch = useDispatch();
+  const { queryParams, filterQueryParams, location, params } = urlHelper;
   const filteredQueryParams = filterQueryParams(queryParams);
+  const { pathname } = location;
+
+  const stats = useSelector((state) => ({ stats: state.stats }));
+  const count = get(stats, 'count.sidebar.pdrs.count');
 
   function query() {
     dispatch(listPdrs(filteredQueryParams));
@@ -43,27 +46,21 @@ const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
         <div className="wrapper__sidebar">
           <Sidebar currentPath={pathname} params={params} count={count} />
           <div className="page__content--shortened">
-            <Switch>
+            <Routes>
+              <Route index element={<Navigate to="all" replace />} />
               <Route
-                exact
-                path="/pdrs"
-                render={(props) => (
-                  <PdrOverview queryParams={filteredQueryParams} {...props} />
-                )}
+                path="all"
+                element={<PdrOverview queryParams={filteredQueryParams} />}
               />
               <Route
-                path="/pdrs/pdr/:pdrName"
-                render={(props) => (
-                  <Pdr queryParams={filteredQueryParams} {...props} />
-                )}
+                path="/pdr/:pdrName"
+                element={<Pdr queryParams={filteredQueryParams} />}
               />
               <Route
-                path="/pdrs/:status"
-                render={(props) => (
-                  <PdrList queryParams={filteredQueryParams} {...props} />
-                )}
+                path="/:status"
+                element={<PdrList queryParams={filteredQueryParams} />}
               />
-            </Switch>
+            </Routes>
           </div>
         </div>
       </div>
@@ -72,17 +69,12 @@ const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
 };
 
 Pdrs.propTypes = {
-  dispatch: PropTypes.func,
-  location: PropTypes.object,
-  params: PropTypes.object,
-  queryParams: PropTypes.object,
-  stats: PropTypes.object,
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    filterQueryParams: PropTypes.func,
+    params: PropTypes.object,
+    queryParams: PropTypes.object
+  }),
 };
 
-export default withRouter(
-  withQueryParams()(
-    connect((state) => ({
-      stats: state.stats,
-    }))(Pdrs)
-  )
-);
+export default withUrlHelper(Pdrs);
