@@ -102,20 +102,14 @@ The dashboard uses node v20.12.2. To build/run the dashboard on your local machi
 #### install requirements
 We use npm for local package management. To install the requirements:
 ```bash
-  nvm use
-  npm ci
+  nvm use 
 ```
 
 When package.json is updated.
 
 ```bash
-npm install
-```
-
-```bash
 npm install connected-react-router@6.9.3 --legacy-peer-deps
 ```
-
 
 To build a dashboard bundle<sup>[1](#bundlefootnote)</sup>:
 
