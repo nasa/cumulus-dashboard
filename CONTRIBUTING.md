@@ -14,6 +14,7 @@ If you want to submit your own contributions, follow these steps:
 
 * Fork the Cumulus Dashboard repo
 * Create a new branch from the branch you'd like to contribute to
+* Verify that everything is working before you write code. See ['Getting Started for beginners'](#getting-started-for-beginners) below.
 * If an issue doesn't already exist, submit one (see above)
 * [Create a pull request](https://help.github.com/articles/creating-a-pull-request/) from your fork into the target branch of the nasa/cumulus-dashboard repo
 * Be sure to [mention the corresponding issue number](https://help.github.com/articles/closing-issues-using-keywords/) in the PR description, i.e. "Fixes Issue #10"
@@ -47,3 +48,54 @@ Improve contributing docs and consolidate them in the standard location https://
 ```
 
 ### For more information on Cumulus governance, see the [Cumulus Code Contribution Guidelines](https://docs.google.com/document/d/14J_DS6nyQ32BpeVjdR-YKfzHAzFB299tKghPGshXUTU/edit) and [the Cumulus Wiki](https://wiki.earthdata.nasa.gov/display/CUMULUS/Cumulus).
+
+## Getting Started for Beginners 
+
+### Pre-requisites
+- [Docker](https://www.docker.com/) a Docker daemon must be running on your local machine. Running Docker Desktop is a simple way to achieve this
+- Node Version Manager ([NVM](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating))
+- Node Package Manager ([NPM](https://github.com/npm/cli))
+
+### Instructions
+1. If you have not done so already, [fork this repo](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo). 
+2. [Clone your forked repo](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) to your local environment.
+```bash
+git clone https://github.com/<your github account name>/cumulus-dashboard.git
+cd cumulus-dashboard
+```
+3. [Create a branch](https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging) to develop your code in
+4. Install the correct version fo Node.js for the Cumulus Dashboard and set the version for this project
+```bash
+nvm install v20.12.2
+```
+```bash
+nvm use
+```
+5. Install the cumulus dashboard
+For your first install,
+```bash
+npm install connected-react-router@6.9.3 --legacy-peer-deps
+```
+6. Run the unit tests for cumulus dashboard. Do not proceed to the subsequent steps until all these tests have passed.
+```bash
+npm test-unit-only
+```
+7. Start up the mock services Cumulus Dashboard needs to communicate with. Cumulus API, EDL/Launchpad. These services will be accessible from `localhost:5001`.
+```bash
+npm run start-localstack
+```
+```bash
+npm run serve-api
+```
+8. In a seperate terminal, build and run the cumulus dashboard. This will start up a browser instance and load the application from localhost:3000. This can take a while.
+```bash
+APIROOT=http://localhost:5001 npm run build
+```
+```bash
+APIROOT=http://localhost:5001 npm run serve
+```
+9. Run the integration tests. This will start up a cypress instance. Click on `run all specs`. This action will bring up a browser and execute the integration tests for Cumulus Dashboard. Do not proceed to the subsequent steps until all these tests have passed.
+```bash
+npm run cypress
+```
+You are now ready to start developing!

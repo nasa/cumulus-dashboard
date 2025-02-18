@@ -11,6 +11,24 @@ This version of the dashboard requires Cumulus API >= v19.2.0-alpha.1 (TBD API r
 
 ### Changed
 
+- **CUMULUS-3862**
+  - Updated documentation to account for short term React upgrade version dependency issues that arise using npm.
+
+- **GitHub Issue 1162**
+  - Added documentation for beginners starting from scratch.
+
+### Changed
+
+- **CUMULUS-3861**
+  - Updated React 17 to React 18  
+  - Removed test script references to Enzyme and replaced them with React compliant testing components
+
+### Changed
+
+- **CUMULUS-3860/3870**
+  - Updated React and dependencies
+  - react 17.0.2 ⇒ 18.3.1
+This version of the dashboard requires Cumulus API >= v19.2.0-alpha.1 (TBD API release)
 - **CUMULUS-3748**
   - Removed reconciliationReports aggregate stats call from Granules Page
 - **CUMULUS-3821**
@@ -26,6 +44,8 @@ This version of the dashboard requires Cumulus API >= v19.2.0-alpha.1 (TBD API r
   - Add placeholders for security information with `fakePassword` and `userName`
 - **CUMULUS-3892**
   - Updated Metrics Overview page executions and rules query to only get count from the past 24 hours
+- **CUMULUS-3990**
+  - Upgraded localstack from 3.0.0 to 4.0.3
 
 ### Fixed
 

@@ -1,15 +1,29 @@
 'use strict';
 
 import test from 'ava';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
-import { shallow, configure } from 'enzyme';
-
 import { OAuth } from '../../../app/src/js/components/oauth';
+import { Provider } from 'react-redux';
+import { render, screen } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import { requestMiddleware } from '../../../app/src/js/middleware/request';
 
-configure({ adapter: new Adapter() });
+const middlewares = [requestMiddleware, thunk];
+const mockStore = configureMockStore(middlewares);
+const initialState = {
+  api: {
+    authenticated: false,
+    inflight: false,
+  },
+  location: {
+    pathname: '/'
+  },
+  queryParams: {}
+};
 
-test('OAuth has link to Earthdaata by default', function (t) {
+test('OAuth has link to Earthdata by default', function (t) {
   const dispatch = () => {};
   const api = {
     authenticated: false,
@@ -19,17 +33,23 @@ test('OAuth has link to Earthdaata by default', function (t) {
     pathname: '/'
   }
 
-  const header = shallow(
+  const someStore = mockStore(initialState);
+  render(
+    <Provider store={someStore} >
+    <MemoryRouter>
     <OAuth
       dispatch={dispatch}
       api={api}
       location={location}
       queryParams={{}}
     />
+    </MemoryRouter>
+    </Provider>
   );
 
-  const loginButton = header.find('.button--oauth');
-  t.is(loginButton.length, 1);
-  t.regex(loginButton.props().href, /token\?state/);
-  t.regex(loginButton.text(), /Earthdata/);
+  const appTarget = screen.getAllByRole('link');
+  t.is(appTarget.length, 1);
+
+  t.regex(appTarget[0].getAttribute('href'), /token\?state/);
+  t.regex(appTarget[0].textContent, /Earthdata/);
 });

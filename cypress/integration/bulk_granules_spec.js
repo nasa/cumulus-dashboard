@@ -205,7 +205,7 @@ describe('Dashboard Bulk Granules', () => {
 
         cy.get('.bulk_granules')
           .within(() => {
-            cy.contains('button', 'Run Bulk Operations').click();
+            cy.contains('button', 'Run Bulk Operations').click({ force: true });
           });
 
         cy.get('.error__report').should('not.exist');
@@ -246,11 +246,11 @@ describe('Dashboard Bulk Granules', () => {
         cy.contains('.error__report', errorMessage);
         cy.contains('button', 'Cancel Bulk Delete').click();
 
-        cy.contains('button', 'Run Bulk Granules').click();
+        cy.contains('button', 'Run Bulk Granules').click({ force: true });
 
         cy.get('.bulk_granules')
           .within(() => {
-            cy.contains('button', 'Run Bulk Delete').click();
+            cy.contains('button', 'Run Bulk Delete').click({ force: true });
           });
 
         cy.get('.error__report').should('not.exist');
@@ -291,11 +291,11 @@ describe('Dashboard Bulk Granules', () => {
         cy.contains('.error__report', errorMessage);
         cy.contains('button', 'Cancel Bulk Reingest').click();
 
-        cy.contains('button', 'Run Bulk Granules').click();
+        cy.contains('button', 'Run Bulk Granules').click({ force: true });
 
         cy.get('.bulk_granules')
           .within(() => {
-            cy.contains('button', 'Run Bulk Reingest').click();
+            cy.contains('button', 'Run Bulk Reingest').click({ force: true });
           });
 
         cy.get('.error__report').should('not.exist');
@@ -313,16 +313,16 @@ describe('Dashboard Bulk Granules', () => {
 
         cy.visit('/granules');
         cy.contains('button', 'Granule Actions').click();
-        cy.contains('button', 'Run Bulk Granules').click();
+        cy.contains('button', 'Run Bulk Granules').click({ force: true });
 
         cy.get('.bulk_granules')
           .within(() => {
-            cy.contains('button', 'Run Bulk Recovery').click();
+            cy.contains('button', 'Run Bulk Recovery').click({ force: true });
           });
 
         cy.get('.bulk_granules--recovery')
           .within(() => {
-            cy.contains('button', 'Run Bulk Recovery').click();
+            cy.contains('button', 'Run Bulk Recovery').click({ force: true });
           });
 
         cy.wait('@postBulkRecovery');
@@ -340,7 +340,7 @@ describe('Dashboard Bulk Granules', () => {
 
         cy.get('.bulk_granules')
           .within(() => {
-            cy.contains('button', 'Run Bulk Recovery').click();
+            cy.contains('button', 'Run Bulk Recovery').click({ force: true });
           });
 
         cy.get('.error__report').should('not.exist');

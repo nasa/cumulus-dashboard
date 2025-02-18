@@ -1,20 +1,49 @@
 'use strict';
 
 import test from 'ava';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import { Provider } from 'react-redux';
+import { render} from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom';
+import configureMockStore from 'redux-mock-store';
 import React from 'react';
-import { shallow, configure } from 'enzyme';
-
+import thunk from 'redux-thunk';
+import { requestMiddleware } from '../../../app/src/js/middleware/request';
 import { Main } from '../../../app/src/js/main';
 
-configure({ adapter: new Adapter() });
+const middlewares = [requestMiddleware, thunk];
+const mockStore = configureMockStore(middlewares);
+const dispatch = () => {};
+const initialState = {
+  api: { authenticated: true },
+  locationQueryParams: { search: {} },
+  apiVersion : {
+    versionNumber: '1.11.0',
+    warning: '',
+    isCompatible: true
+  },
+  cmrInfo: {
+    cmrEnv: 'UAT',
+    cmrProvider: 'CUMULUS',
+    cmrOauthProvider: 'Launchpad'
+  }
+};
 
-test('Main wrapper displays STAGE and ENVIRONMENT variables', function (t) {
-  const dispatch = () => {};
+test('Main wrapper shows `Local (Development)` at top by default', function (t) {
+  const someStore = mockStore(initialState);
+  const { container } = render(
+    <Provider store={someStore} >
+      <MemoryRouter>
+        <Main 
+        dispatch={dispatch}
+        api={initialState.api}
+        apiVersion={initialState.apiVersion}
+        cmrInfo={initialState.cmrInfo}
+         />
+      </MemoryRouter>
+    </Provider>
+  );
 
-  const main = shallow(<Main dispatch={dispatch} />);
-
-  const appTarget = main.find('.app__target');
+  const appTarget = container.querySelectorAll('.app__target');
   t.is(appTarget.length, 1);
-  t.is(appTarget.text(), 'Cumulus_daac (Production)');
+  t.is(appTarget[0].textContent, 'Cumulus_daac (Production)');
 });

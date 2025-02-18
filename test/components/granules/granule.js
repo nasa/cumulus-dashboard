@@ -1,17 +1,20 @@
 'use strict';
 
 import test from 'ava';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
-import { shallow, configure } from 'enzyme';
 import * as redux from 'react-redux';
 import sinon from 'sinon';
+import { render } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom';
+import { requestMiddleware } from '../../../app/src/js/middleware/request';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import { initialState } from '../../../app/src/js/reducers/datepicker';
+import { Provider } from 'react-redux';
 
 import { GranuleOverview } from '../../../app/src/js/components/Granules/granule.js';
 
-configure({ adapter: new Adapter() });
-
-const logs = { items: [] };
+const logs = { items: [''] };
 
 const match = { params: { granuleId: 'my-granule-id' } };
 const dispatch = () => {};
@@ -36,6 +39,22 @@ const granules = {
   }
 };
 
+const locationQueryParams = {
+  search: {}
+};
+
+const middlewares = [requestMiddleware, thunk];
+const mockStore = configureMockStore(middlewares);
+const someStore = mockStore({
+  getState: () => {},
+  dispatch,
+  subscribe: () => {},
+  timer: { running: false, seconds: -1 },
+  datepicker: initialState(),
+  locationQueryParams,
+  logs,
+});
+
 test.beforeEach((t) => {
   // Mock useDispatch hook
   sinon.stub(redux, "useDispatch").returns(sinon.spy());
@@ -47,7 +66,9 @@ test.afterEach.always(() => {
 
 test.serial('CUMULUS-336 Granule file links use the correct URL', function (t) {
 
-  const granuleOverview = shallow(
+  const { container } = render(
+    <Provider store={someStore}>
+    <MemoryRouter>
     <GranuleOverview
       dispatch={dispatch}
       match={match}
@@ -57,19 +78,23 @@ test.serial('CUMULUS-336 Granule file links use the correct URL', function (t) {
       recoveryStatus={{}}
       skipReloadOnMount={true}
       workflowOptions={[]}
-    />);
+    />
+    </MemoryRouter>
+    </Provider>
+  );
 
-  const sortableTable = granuleOverview.find('SortableTable')
+  const sortableTable = container.querySelectorAll('.table--wrapper');
   t.is(sortableTable.length, 1);
-  const sortableTableWrapper = sortableTable.dive();
-  t.is(sortableTableWrapper
-    .find('.tbody .tr')
-    .find('Cell').at(1).dive()
-    .find('a[href="https://my-bucket.s3.amazonaws.com/my-key-path/my-name"]').length, 1);
+
+  const sortableTableWrapper = sortableTable[0].querySelectorAll('.tbody .tr [role="cell"]');
+  const sortableHrefWrapper = sortableTableWrapper[1].querySelectorAll('a[href="https://my-bucket.s3.amazonaws.com/my-key-path/my-name"]');
+  t.is(sortableHrefWrapper.length, 1);
 });
 
 test.serial('Checking granule for size prop', function (t) {
-  const granuleOverview = shallow(
+  const { container } = render(
+    <Provider store={someStore}>
+    <MemoryRouter>
     <GranuleOverview
       dispatch={dispatch}
       match={match}
@@ -79,13 +104,15 @@ test.serial('Checking granule for size prop', function (t) {
       recoveryStatus={{}}
       skipReloadOnMount={true}
       workflowOptions={[]}
-    />);
-
-  const sortableTable = granuleOverview.find('SortableTable');
+    />
+    </MemoryRouter>
+    </Provider>
+  );
+  
+  const sortableTable = container.querySelectorAll('.table--wrapper');
   t.is(sortableTable.length, 1);
-  const sortableTableWrapper = sortableTable.dive();
-  t.is(sortableTableWrapper
-    .find('.tbody .tr .td')
-    .find('Cell').at(2).dive()
-    .text(), '10239');
+
+  const sortableTableWrapper = sortableTable[0].querySelectorAll('.tbody .tr .td[role="cell"]');
+  const sortableCellWrapper = sortableTableWrapper[2].textContent;
+  t.is(sortableCellWrapper, '10239');
 });
