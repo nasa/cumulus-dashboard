@@ -17,13 +17,9 @@ This version of the dashboard requires Cumulus API >= v20.0.0
 - **GitHub Issue 1162**
   - Added documentation for beginners starting from scratch.
 
-### Changed
-
 - **CUMULUS-3861**
   - Updated React 17 to React 18  
   - Removed test script references to Enzyme and replaced them with React compliant testing components
-
-### Changed
 
 - **CUMULUS-3860/3870**
   - Updated React and dependencies
@@ -45,6 +41,9 @@ This version of the dashboard requires Cumulus API >= v20.0.0
   - Updated Metrics Overview page executions and rules query to only get count from the past 24 hours
 - **CUMULUS-3990**
   - Upgraded localstack from 3.0.0 to 4.0.3
+- **Cypress Upgrade**
+  - Upgraded cypress from 8.7.0 to 9.7.0 to work with updated @cumulus/api@20.0.0 and
+    @cumulus/aws-client@20.0.0 packages
 
 ### Fixed
 

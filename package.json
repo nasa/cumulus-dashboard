@@ -206,6 +206,6 @@
     "vm-browserify": "^1.1.2"
   },
   "optionalDependencies": {
-    "cypress": "8.7.0"
+    "cypress": "9.7.0"
   }
 }
