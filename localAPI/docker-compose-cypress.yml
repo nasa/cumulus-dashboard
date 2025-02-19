@@ -9,6 +9,7 @@ services:
       /cumulus-dashboard
     volumes:
       - ../:/cumulus-dashboard
+      - ../cypress-cache:/root/.config/Cypress
     environment:
       - CYPRESS_TESTING=true
       - NODE_ENV=test
