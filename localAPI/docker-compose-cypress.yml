@@ -9,7 +9,7 @@ services:
       /cumulus-dashboard
     volumes:
       - ../:/cumulus-dashboard
-      - ../cypress-dir:/root/.config/Cypress/cy/production
+      - ../cumulus-dashboard/cypress-dir:/root/.config/Cypress/cy/production
     environment:
       - CYPRESS_TESTING=true
       - NODE_ENV=test
