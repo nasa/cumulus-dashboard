@@ -9,10 +9,12 @@ services:
       /cumulus-dashboard
     volumes:
       - ../:/cumulus-dashboard
-      - ../cypress-config:/root/.config/Cypress
+      - cypress-config:/root/.config/Cypress
     environment:
       - CYPRESS_TESTING=true
       - NODE_ENV=test
       - LOCALSTACK_HOST=localhost
     # cargo cult guesses from https://github.com/cypress-io/cypress/issues/350
     shm_size: '512MB'
+volumes:
+  cypress-config:
