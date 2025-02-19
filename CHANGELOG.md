@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-This version of the dashboard requires Cumulus API >= v19.2.0-alpha.1 (TBD API release)
+This version of the dashboard requires Cumulus API >= v20.0.0
 
 ### Changed
 
@@ -17,18 +17,13 @@ This version of the dashboard requires Cumulus API >= v19.2.0-alpha.1 (TBD API r
 - **GitHub Issue 1162**
   - Added documentation for beginners starting from scratch.
 
-### Changed
-
 - **CUMULUS-3861**
   - Updated React 17 to React 18  
   - Removed test script references to Enzyme and replaced them with React compliant testing components
 
-### Changed
-
 - **CUMULUS-3860/3870**
   - Updated React and dependencies
   - react 17.0.2 ⇒ 18.3.1
-This version of the dashboard requires Cumulus API >= v19.2.0-alpha.1 (TBD API release)
 - **CUMULUS-3748**
   - Removed reconciliationReports aggregate stats call from Granules Page
 - **CUMULUS-3821**
@@ -46,6 +41,10 @@ This version of the dashboard requires Cumulus API >= v19.2.0-alpha.1 (TBD API r
   - Updated Metrics Overview page executions and rules query to only get count from the past 24 hours
 - **CUMULUS-3990**
   - Upgraded localstack from 3.0.0 to 4.0.3
+- **Cypress Upgrade**
+  - Upgraded cypress from 8.7.0 to 9.7.0 to work with updated @cumulus/api@20.0.0 and
+    @cumulus/aws-client@20.0.0 packages
+  - Updated localAPI docker-compose-cypress.yml to use cypress 9.7.0
 
 ### Fixed
 
