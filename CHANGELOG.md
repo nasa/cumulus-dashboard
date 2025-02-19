@@ -44,6 +44,7 @@ This version of the dashboard requires Cumulus API >= v20.0.0
 - **Cypress Upgrade**
   - Upgraded cypress from 8.7.0 to 9.7.0 to work with updated @cumulus/api@20.0.0 and
     @cumulus/aws-client@20.0.0 packages
+  - Updated localAPI docker-compose-cypress.yml to use cypress 9.7.0
 
 ### Fixed
 
