@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v13.0.0] - 2024-02-19
 This version of the dashboard requires Cumulus API >= v20.0.0
 
 ### Changed
@@ -1444,7 +1445,8 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
-  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v12.2.0...HEAD
+  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v13.0.0...HEAD
+  [v13.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v12.2.0...v13.0.0
   [v12.2.0]: https://github.com/nasa/cumulus-dashboard/compare/v12.1.0...v12.2.0
   [v12.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.2...v12.1.0
   [v12.0.2]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.1...v12.0.2
