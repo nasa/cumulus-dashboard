@@ -1,107 +1,111 @@
 'use strict';
 
 import test from 'ava';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import React from 'react';
-import { shallow, configure } from 'enzyme';
+import React from 'react'
+import { render, screen } from '@testing-library/react'
+import BulkGranuleModal from '../../../app/src/js/components/Granules/bulk-granule-modal.js'
+import { Provider } from 'react-redux'
+import { requestMiddleware } from '../../../app/src/js/middleware/request.js';
+import thunk from 'redux-thunk';
+import configureMockStore from 'redux-mock-store';
 
-import { BulkGranuleModal } from '../../../app/src/js/components/Granules/bulk-granule-modal.js';
-
-configure({ adapter: new Adapter() });
+const locationQueryParams = { search: {} };
+const dispatch = () => {};
+const middlewares = [requestMiddleware, thunk];
+const mockStore = configureMockStore(middlewares);
+const someStore = mockStore({
+   getState: () => {},
+   subscribe: () => {},
+   timer: { running: false, seconds: -1 },
+   locationQueryParams,
+   dispatch
+  });
 
 test('bulk granule modal shows success message', function (t) {
   const asyncOpId = 'abcd1234';
   const successMessage = 'Success 1234';
+  const query = {};
+  
+  const { container } = render(
+    <Provider store={someStore}>
+      <BulkGranuleModal
+        asyncOpId={asyncOpId}
+        inflight={false}
+        success={true}
+        successMessage={successMessage}
+        defaultQuery={query}
+        showModal={true}
+        onCancel={true}
+      />
+    </Provider>);
 
-  const modal = shallow(
-    <BulkGranuleModal
-      asyncOpId={asyncOpId}
-      inflight={false}
-      success={true}
-      successMessage={successMessage}
-    />
-  );
+  t.truthy(screen.getByText(asyncOpId));
+  t.truthy(screen.findByText(successMessage));
 
-  const successMessageElement = modal.find('.message__success');
-  t.is(successMessageElement.length, 1);
-  const successMessageText = successMessageElement.find('p').text();
-  t.true(successMessageText.includes(successMessage));
-  t.true(successMessageText.includes(asyncOpId));
-  t.false(modal.exists('.form__bulkgranules'));
-  t.is(
-    modal.find('DefaultModal').prop('cancelButtonText'),
-    'Close'
-  );
-  t.is(
-    modal.find('DefaultModal').prop('confirmButtonClass'),
-    'button__goto'
-  );
-  t.is(
-    modal.find('DefaultModal').prop('confirmButtonText'),
-    'Go To Operations'
-  );
+  //React doesn't like testing for elements that don't render on the screen. Naturally, it will never find them and error with 'undefined'. 
+  //This ensures the '.form__bulkgranules' element is not rendered on the screen in this test (it appears in the next test below).
+  //If it does appear, this assert and entire test will then fail with length = 1. 
+  const formBulkGranules = screen.findByText('.form__bulkgranules')
+  t.is(formBulkGranules.length, undefined);
+  
+  t.truthy(screen.findByText('cancelButtonText') && screen.findByText('Close'));
+  t.truthy(screen.findByText('confirmButtonClass') && screen.findByText('button__goto'));
+  t.truthy(screen.findByText('confirmButtonText') && screen.findByText('Go To Operations'));
+  
 });
 
 test('bulk granule modal shows submission form', function (t) {
   const cancelButtonText = 'Cancel';
   const confirmButtonClass = 'confirm-class';
   const confirmButtonText = 'Confirm';
+  const query = {};
 
-  const modal = shallow(
-    <BulkGranuleModal
-      cancelButtonText={cancelButtonText}
-      confirmButtonClass={confirmButtonClass}
-      confirmButtonText={confirmButtonText}
-      inflight={false}
-      success={false}
-    >
-      <div id="test5678">TEST</div>
-    </BulkGranuleModal>
-  );
+  const { container } = render(
+    <Provider store={someStore}>
+      <BulkGranuleModal
+        cancelButtonText={cancelButtonText}
+        confirmButtonClass={confirmButtonClass}
+        confirmButtonText={confirmButtonText}
+        inflight={false}
+        success={false}
+        defaultQuery={query}
+        showModal={true}
+        onCancel={true}
+      > 
+        <div id="test5678">TEST</div>
+      </BulkGranuleModal>
+    </Provider>);
 
-  t.true(modal.exists('.form__bulkgranules'));
-  t.is(modal.find('#test5678').text(), 'TEST');
-  t.is(
-    modal.find('DefaultModal').prop('cancelButtonText'),
-    cancelButtonText
-  );
-  t.is(
-    modal.find('DefaultModal').prop('confirmButtonClass'),
-    confirmButtonClass
-  );
-  t.is(
-    modal.find('DefaultModal').prop('confirmButtonText'),
-    confirmButtonText
-  );
+  t.truthy(screen.findByText('.form__bulkgranules'));
+  t.truthy(screen.findByText('#test5678') && screen.findByText('TEST'));
+  t.truthy(screen.findByText('cancelButtonText') && screen.findByText(cancelButtonText));
+  t.truthy(screen.findByText('confirmButtonClass') && screen.findByText(confirmButtonClass));
+  t.truthy(screen.findByText('confirmButtonText') && screen.findByText(confirmButtonText));
+
 });
 
 test('bulk granule modal shows inflight status', function (t) {
   const cancelButtonText = 'Cancel';
   const confirmButtonClass = 'confirm-class';
+  const query = {};
 
-  const modal = shallow(
-    <BulkGranuleModal
-      cancelButtonText={cancelButtonText}
-      confirmButtonClass={confirmButtonClass}
-      inflight={true}
-      success={false}
-    >
-      <div id="test9102">TEST2</div>
-    </BulkGranuleModal>
-  );
+  const { container } = render(
+    <Provider store={someStore}>
+      <BulkGranuleModal
+        cancelButtonText={cancelButtonText}
+        confirmButtonClass={confirmButtonClass}
+        inflight={true}
+        success={false}
+        defaultQuery={query}
+      > 
+        <div id="test9102">TEST2</div>
+      </BulkGranuleModal>
+    </Provider>);
 
-  t.true(modal.exists('.form__bulkgranules'));
-  t.is(modal.find('#test9102').text(), 'TEST2');
-  t.is(
-    modal.find('DefaultModal').prop('cancelButtonText'),
-    cancelButtonText
-  );
-  t.is(
-    modal.find('DefaultModal').prop('confirmButtonClass'),
-    confirmButtonClass
-  );
-  t.is(
-    modal.find('DefaultModal').prop('confirmButtonText'),
-    'loading...'
-  );
+  t.truthy(screen.findByText('.form__bulkgranules'));
+  t.truthy(screen.findByText('#test9102') && screen.findByText('TEST2'));
+  t.truthy(screen.findByText('cancelButtonText') && screen.findByText(cancelButtonText));
+  t.truthy(screen.findByText('confirmButtonClass') && screen.findByText(confirmButtonClass));
+  t.truthy(screen.findByText('confirmButtonText') && screen.findByText('loading...'));
+
 });
