@@ -1,13 +1,15 @@
 'use strict';
 
 import test from 'ava';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import { render } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom';
+import { requestMiddleware } from '../../../app/src/js/middleware/request';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 import React from 'react';
-import { shallow, configure } from 'enzyme';
+import { initialState } from '../../../app/src/js/reducers/datepicker';
 import { Provider } from 'react-redux';
 import { CollectionList } from '../../../app/src/js/components/Collections/list';
-
-configure({ adapter: new Adapter() });
 
 const collections = {
   created: {},
@@ -19,7 +21,7 @@ const collections = {
     meta: {
       count: 0,
       queriedAt: 0
-    }
+    },
   },
   map: {},
   updated: {}
@@ -49,60 +51,66 @@ const providers = {
   }
 };
 
+const dispatch = () => {};
+const logs = {};
+const locationQueryParams = {
+  search: {}
+};
+
+const middlewares = [requestMiddleware, thunk];
+const mockStore = configureMockStore(middlewares);
+const someStore = mockStore({
+  getState: () => {},
+  dispatch,
+  subscribe: () => {},
+  sorts: {},
+  timer: { running: false, seconds: -1 },
+  datepicker: initialState(),
+  locationQueryParams,
+});
+
 test('Collections Overview generates bulkAction for recovery button', function (t) {
-  const dispatch = () => {};
-  const logs = {};
   const config = { enableRecovery: true };
-  const store = {
-    getState: () => {},
-    dispatch,
-    subscribe: () => {}
-  };
+  const {container} = render(
+    <Provider store={someStore}>
+    <MemoryRouter>
+    <CollectionList
+      collections={collections}
+      dispatch={dispatch}
+      logs={logs}
+      config={config}
+      providers={providers}
+    />
+    </MemoryRouter>
+    </Provider>
+  );
 
-  const providerWrapper = shallow(
-    <Provider store={store}>
-      <CollectionList
-        collections = {collections}
-        dispatch = {dispatch}
-        logs = {logs}
-        config = {config}
-        providers = {providers}/>
-    </Provider>);
+  const bulkActions = container.querySelectorAll('button');
 
-  const collectionsWrapper = providerWrapper.find('CollectionList').dive();
-  const listWrapper = collectionsWrapper.find('withRouter(withQueryParams(Connect(List)))');
-  const listBulkActions = listWrapper.prop('bulkActions');
-
-  const recoverFilter = (object) => object.text === 'Recover';
-  const recoverActionList = listBulkActions.filter(recoverFilter);
+  const recoverFilter = (object) => object.textContent === 'Recover';
+  const recoverActionList = Array.from(bulkActions).filter(recoverFilter);
   t.is(recoverActionList.length, 1);
 });
 
 test('Collections Overview does not generate bulkAction for recovery button', function (t) {
-  const dispatch = () => {};
-  const logs = {};
   const config = { enableRecovery: false };
-  const store = {
-    getState: () => {},
-    dispatch,
-    subscribe: () => {}
-  };
+  const { container } = render(
+    <Provider store={someStore}>
+    <MemoryRouter>
+    <CollectionList
+      collections={collections}
+      dispatch={dispatch}
+      logs={logs}
+      config={config}
+      providers={providers}
+    />
+    </MemoryRouter>
+    </Provider>
+  );
 
-  const providerWrapper = shallow(
-    <Provider store={store}>
-      <CollectionList
-        collections = {collections}
-        dispatch = {dispatch}
-        logs = {logs}
-        config = {config}
-        providers = {providers}/>
-    </Provider>);
+  const bulkActions = container.querySelectorAll('button');
 
-  const collectionsWrapper = providerWrapper.find('CollectionList').dive();
-  const listWrapper = collectionsWrapper.find('withRouter(withQueryParams(Connect(List)))');
-  const listBulkActions = listWrapper.prop('bulkActions');
-
-  const recoverFilter = (object) => object.text === 'Recover';
-  const recoverActionList = listBulkActions.filter(recoverFilter);
+  const recoverFilter = (object) => object.textContent === 'Recover';
+  const recoverActionList = Array.from(bulkActions).filter(recoverFilter);
   t.is(recoverActionList.length, 0);
 });

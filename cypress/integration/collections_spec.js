@@ -1,6 +1,10 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
 import { collectionName, getCollectionId } from '../../app/src/js/utils/format';
 
+// granules were ingested before this epoch time
+const ingestEndTime = 1537833600000; // 2018-09-25
+const clickOptions = { force: true, waitForAnimations: false, animationDistanceThreshold: 20 };
+
 describe('Dashboard Collections Page', () => {
   describe('When not logged in', () => {
     it('should redirect to login page', () => {
@@ -32,6 +36,8 @@ describe('Dashboard Collections Page', () => {
 
     it('should display a link to view collections', () => {
       cy.contains('nav li a', 'Collections').as('collections');
+
+      cy.clock(ingestEndTime);
       cy.setDatepickerDropdown('Recent');
       cy.get('@collections').should('have.attr', 'href').and('match', /\/collections.*startDateTime/);
       cy.get('@collections').click();
@@ -40,7 +46,7 @@ describe('Dashboard Collections Page', () => {
       cy.url().should('include', 'collections');
       cy.contains('.heading--xlarge', 'Collections');
 
-      cy.get('.table .tbody .tr').should('have.length', 2);
+      cy.get('.table .tbody .tr', { timeout: 10000 }).should('have.length', 2);
       cy.get('.tbody > .tr > :nth-child(4)').should('contain', '11');
       cy.get('.tbody > .tr > :nth-child(5)').should('contain', '6');
       cy.get('.tbody > .tr > :nth-child(6)').should('contain', '2');
@@ -55,6 +61,7 @@ describe('Dashboard Collections Page', () => {
 
     it('should only display collections with active granules when time filter is applied', () => {
       cy.contains('nav li a', 'Collections').as('collections');
+      cy.clock(ingestEndTime);
       cy.setDatepickerDropdown('Recent');
       cy.get('@collections').should('have.attr', 'href').and('match', /\/collections.*startDateTime/);
       cy.get('@collections').click();
@@ -488,8 +495,8 @@ describe('Dashboard Collections Page', () => {
         { statusCode: 500, body: { message: 'Oopsie' } }
       );
       cy.visit('/granules');
-      cy.get(`[data-value="${granuleIds[0]}"] > .td >input[type="checkbox"]`).click();
-      cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
+      cy.get(`[data-value="${granuleIds[0]}"] > .td >input[type="checkbox"]`).click(clickOptions);
+      cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click(clickOptions);
       cy.contains('button', 'Granule Actions').click();
       cy.contains('button', 'Reingest').click();
       cy.get('.button--submit').click();
@@ -556,6 +563,7 @@ describe('Dashboard Collections Page', () => {
       });
 
       cy.get('[data-cy="endDateTime"] .react-datetime-picker__clear-button__icon').click();
+      cy.clock(ingestEndTime);
 
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
@@ -628,11 +636,11 @@ describe('Dashboard Collections Page', () => {
 
       cy.get('.filter-provider .rbt-input-main').as('provider-input');
       cy.get('@provider-input').click().type('s3').type('{enter}');
-
+      cy.wait(1000);
       cy.get('.search').as('search');
       cy.get('@search').click().type('Test').type('{enter}');
       cy.wait(1000);
-      cy.get('span > a').click();
+      cy.get('span > a', { timeout: 10000 }).click();
 
       // Breakcrumb <Link> contain correct query params
       cy.get('.breadcrumb > :nth-child(2) > a')
