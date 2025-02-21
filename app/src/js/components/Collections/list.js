@@ -147,9 +147,7 @@ CollectionList.propTypes = {
   collections: PropTypes.object,
   config: PropTypes.object,
   datepicker: PropTypes.object,
-  // dispatch: PropTypes.func,
   providers: PropTypes.object,
-  // queryParams: PropTypes.object,
   urlHelper: PropTypes.shape({
     queryParams: PropTypes.object
   }),

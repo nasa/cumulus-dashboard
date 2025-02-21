@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import Modal from 'react-bootstrap/Modal';
 import PropTypes from 'prop-types';
-// import get from 'lodash/get';
 import { login, setTokenState } from '../actions';
 import { window } from '../utils/browser';
 import { buildRedirectUrl } from '../utils/format';
@@ -104,7 +103,6 @@ OAuth.propTypes = {
   urlHelper: PropTypes.shape({
     location: PropTypes.object,
     navigate: PropTypes.func,
-    // historyPushWithQueryParams: PropTypes.func,
   }),
 };
 

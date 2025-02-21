@@ -12,7 +12,6 @@ import { getCollectionId, collectionNameVersion } from '../utils/format';
 import { fetchCurrentTimeFilters } from '../utils/datepicker';
 import log from '../utils/log';
 import * as types from './types';
-// import { historyPushWithQueryParams } from '../withUrlHelper';
 
 const { CALL_API } = types;
 const {
@@ -618,7 +617,6 @@ export const deleteToken = () => (dispatch, getState) => {
 
 export const loginError = (error) => (dispatch) => dispatch(deleteToken())
   .then(() => dispatch({ type: 'LOGIN_ERROR', error }));
-  // .then(() => historyPushWithQueryParams('/auth')); -- handled in oauth component instead
 
 export const getSchema = (type) => ({
   [CALL_API]: {

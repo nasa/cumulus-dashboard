@@ -2,7 +2,6 @@ import React, { useState, useEffect, createRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-// import withQueryParams from 'react-router-query-params';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { renderTypeaheadInput, renderTypeaheadMenu } from '../../utils/typeahead-helpers';
 
@@ -16,15 +15,12 @@ const Dropdown = ({
   onChange,
   options = [],
   paramKey,
-  // queryParams,
   selectedValues = [],
-  // setQueryParams,
   clearOnClick,
 }) => {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const typeaheadRef = createRef();
-  // const [initialQueryParams] = useState(queryParams);
   const [selected, setSelected] = useState(selectedValues);
   const allowNew = paramKey === 'limit' || paramKey === 'page';
 
@@ -150,16 +146,13 @@ Dropdown.propTypes = {
   action: PropTypes.func,
   clear: PropTypes.func,
   clearButton: PropTypes.bool,
-  // dispatch: PropTypes.func,
   getOptions: PropTypes.func,
   inputProps: PropTypes.object,
   label: PropTypes.any,
   onChange: PropTypes.func,
   options: PropTypes.array,
   paramKey: PropTypes.string,
-  // queryParams: PropTypes.object,
   selectedValues: PropTypes.array,
-  // setQueryParams: PropTypes.func,
   clearOnClick: PropTypes.bool,
 };
 

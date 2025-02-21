@@ -10,7 +10,6 @@ import AllGranules from './list';
 import GranuleOverview from './granule';
 import GranulesOverview from './overview';
 import CollectionOverview from '../Collections/overview';
-// import ReconciliationReportList from '../ReconciliationReports/list';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import Loading from '../LoadingIndicator/loading-indicator';
 import { withUrlHelper } from '../../withUrlHelper';
@@ -25,8 +24,6 @@ const Granules = ({ urlHelper }) => {
 
   const stats = useSelector((state) => state.stats);
   const granulesCount = get(stats, 'count.sidebar.granules.count') || [];
-  /* const reportCount =
-    get(stats, 'count.sidebar.reconciliationReports.count') || []; */ // The getCount for reports was removed previously
   const count = [...granulesCount];
 
   function query() {
@@ -60,7 +57,6 @@ const Granules = ({ urlHelper }) => {
               <Route path='all' element={<GranulesOverview queryParams={filteredQueryParams} stats={stats}/>} />
               <Route path='/granule/:granuleId' element={<GranuleOverview />} />
               <Route path='/collections/collection/:name/:version' element={<CollectionOverview />} />
-              {/* <Route path='/lists' element={<ReconciliationReportList queryParams={filteredQueryParams} />} /> */}
               <Route path='/:status' element={<AllGranules queryParams={filteredQueryParams} stats={stats}/>} />
               <Route path='/running' element={<Navigate to='/granules/processing' />} />
             </Routes>

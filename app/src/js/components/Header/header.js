@@ -60,7 +60,6 @@ const Header = ({
     };
   }, [api.authenticated, dispatch]);
 
-  // Navigation
   const navigation = (path) => {
     const { pathname } = location.pathname;
     const active = pathname?.slice(0, path.length) === path;

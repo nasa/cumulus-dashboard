@@ -16,7 +16,6 @@ import { GranuleOverview } from '../../../app/src/js/components/Granules/granule
 
 const logs = { items: [''] };
 
-// const match = { params: { granuleId: 'my-granule-id' } }; // removed because useParams hook now
 const dispatch = () => {};
 const granules = {
   map: {

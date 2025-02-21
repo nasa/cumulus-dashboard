@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import path from 'path';
 import { get } from 'object-path';
-// import isEqual from 'lodash/isEqual';
 import pick from 'lodash/pick';
 import {
   getGranule,
@@ -477,7 +476,6 @@ const GranuleOverview = ({ urlHelper }) => {
 
 GranuleOverview.propTypes = {
   config: PropTypes.object,
-  // match: PropTypes.object,
   dispatch: PropTypes.func,
   granules: PropTypes.object,
   executions: PropTypes.object,

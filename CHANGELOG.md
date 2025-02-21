@@ -35,7 +35,6 @@ This version of the dashboard requires Cumulus API >= v19.2.0-alpha.1 (TBD API r
   - Updated routes and hooks for app navigation
   - Established new router with withRouter.js HOC
   - Established withUrlHelper.js HOC to later replace URL params utility
-  - Updated unit tests to accommodate component changes
   - Updated documentation to account for short term React upgrade version dependency issues that arise using npm.
 - **CUMULUS-3870**
   - Remove launchpad security key information from cypress fixture for `valid-execution.json`
