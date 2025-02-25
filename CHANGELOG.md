@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- **CUMULUS-4008**
+  - Updated the Dockerfile with improved NPM install command to prevent error messages.
+
 ## [v13.0.0] - 2024-02-19
 This version of the dashboard requires Cumulus API >= v20.0.0
 
