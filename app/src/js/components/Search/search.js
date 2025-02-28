@@ -31,7 +31,6 @@ const Search = ({
   placeholder,
   searchKey = '',
   urlHelper,
-  setQueryParams,
   ...rest
 }) => {
   const dispatch = useDispatch();
@@ -149,7 +148,6 @@ Search.propTypes = {
   options: PropTypes.array,
   query: PropTypes.object,
   searchKey: PropTypes.string,
-  setQueryParams: PropTypes.func,
   placeholder: PropTypes.string,
   urlHelper: PropTypes.shape({
     location: PropTypes.object,

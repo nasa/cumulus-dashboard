@@ -27,6 +27,7 @@ const OAuth = ({ urlHelper }) => {
     const params = new URLSearchParams(location.search);
     const queryToken = params.get('token');
     const stateParam = params.get('state');
+    const userDebug = params.get('debug') === '1';
 
     if (queryToken) {
       setToken(queryToken);
@@ -34,9 +35,13 @@ const OAuth = ({ urlHelper }) => {
       let state = {};
       try {
         state = JSON.parse(decodeURIComponent(stateParam));
-        console.log('Parsed state:', state);
+        if (userDebug) {
+          console.log('Parsed state:', state);
+        }
       } catch (error) {
-        console.error('Error parsing state:', error);
+        if (userDebug) {
+          console.error('Error parsing state:', error);
+        }
       }
 
       dispatch(login(queryToken));

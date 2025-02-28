@@ -80,7 +80,6 @@ const CollectionOverview = ({ urlHelper }) => {
   const providers = useSelector((state) => state.providers);
   const workflowOptions = useSelector(workflowOptionNames);
 
-  // const { params } = match;
   const { deleted: deletedCollections, map: collectionsMap } = collections;
   const { list: granulesList } = granules;
   const { dropdowns } = providers;
@@ -91,7 +90,7 @@ const CollectionOverview = ({ urlHelper }) => {
   const deleteStatus = get(deletedCollections, [collectionId, 'status']);
   const hasGranules = get(collectionsMap[collectionId], 'data.stats.total', 0) > 0;
 
-  const [workflow, setWorkflow] = useState(null);
+  const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const [selected, setSelected] = useState([]);
 
