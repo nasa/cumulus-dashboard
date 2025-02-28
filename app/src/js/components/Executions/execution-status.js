@@ -13,7 +13,7 @@ import {
 import List from '../Table/Table';
 import ErrorReport from '../Errors/report';
 
-import ExecutionStatusGraph from './execution-status-graph';
+//import ExecutionStatusGraph from './execution-status-graph';
 import Metadata from '../Table/Metadata';
 import Loading from '../LoadingIndicator/loading-indicator';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
@@ -131,7 +131,7 @@ const ExecutionStatus = ({
           <div className="heading__wrapper--border">
             <h2 className="heading--medium">Visual</h2>
           </div>
-          <ExecutionStatusGraph executionStatus={recordData} />
+          {/* <ExecutionStatusGraph executionStatus={recordData} /> */ /* removed, because d3 is uninstalled */} 
         </section>
       )}
 

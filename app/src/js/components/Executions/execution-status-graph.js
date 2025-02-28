@@ -9,7 +9,7 @@ import {
   getExecutionEvents,
   workflowToGraph,
   addEventsToGraph,
-  draw
+  //draw
 } from './execution-graph-utils';
 import { window } from '../../utils/browser';
 
@@ -26,14 +26,14 @@ const ExecutionStatusGraph = ({ executionStatus }) => {
     const events = getExecutionEvents(executionHistory);
     const graph = workflowToGraph(workflow);
     addEventsToGraph(events, graph);
-    g.current = draw(graph);
+    //g.current = draw(graph);
     renderGraph('.visual', g);
   }, [executionHistory, stateMachine.definition]);
 
   function renderGraph (svgSelector) {
     const render = new dagre.render();
     const svg = d3.select(svgSelector);
-    render(svg, g.current);
+    //render(svg, g.current);
     const { height } = d3.select(`${svgSelector} g`).node().getBBox();
     const { width } = d3.select(`${svgSelector} g`).node().getBBox();
     svg.attr('viewBox', `0 0 ${width} ${height}`);
