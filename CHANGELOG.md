@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- **CUMULUS-4003**
+  - Remove D3 and related libraries from dashboard.
+
 - **CUMULUS-4008**
   - Updated the Dockerfile with improved NPM install command to prevent error messages.
 
