@@ -98,7 +98,6 @@ describe('Dashboard Executions Page', () => {
 
       cy.contains('.heading--large', 'Execution');
       cy.get('.button--download').should('have.length', 1);
-      cy.contains('.heading--medium', 'Visual').should('not.exist');
 
       cy.get('.status--process')
         .within(() => {
@@ -303,7 +302,6 @@ describe('Dashboard Executions Page', () => {
       cy.visit(`/executions/execution/${executionArn}`);
 
       cy.contains('.heading--large', 'Execution');
-      cy.contains('.heading--medium', 'Visual').should('not.exist');
 
       const startMatch = fullDate('2018-12-06T19:18:11.174Z');
       const endMatch = fullDate('2018-12-06T19:18:41.145Z');
@@ -372,46 +370,6 @@ describe('Dashboard Executions Page', () => {
       cy.get('@granule').then((granule) => {
         cy.get('.heading--large').should('contain.text', granule.granuleId);
       });
-    });
-
-    it('should no longer show an execution graph for a single execution', () => {
-      const executionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';
-      cy.intercept(
-        { method: 'GET', url: `http://localhost:5001/executions/status/${executionArn}` },
-        { fixture: 'valid-execution.json', statusCode: 200 }
-      );
-
-      cy.visit(`/executions/execution/${executionArn}`);
-
-      cy.contains('.heading--medium', 'Visual').should('not.exist');
-      cy.get('svg').should('not.exist');
-    });
-
-    it('should no longer show the execution graph after previously viewing a different execution', () => {
-      const firstExecutionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';
-      const secondExecutionArn = 'arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:7a71f849-57a0-40e7-8fca-5cf796602a07';
-
-      cy.intercept(
-        { method: 'GET', url: `http://localhost:5001/executions/status/${firstExecutionArn}` },
-        { fixture: 'valid-execution.json', statusCode: 200 }
-      );
-
-      cy.intercept(
-        { method: 'GET', url: `http://localhost:5001/executions/status/${secondExecutionArn}` },
-        { fixture: 'valid-execution-2.json', statusCode: 200 }
-      );
-
-      cy.visit(`/executions/execution/${firstExecutionArn}`);
-
-      cy.contains('.heading--medium', 'Visual').should('not.exist');
-      cy.get('svg').should('not.exist');
-
-      cy.contains('.sidebar__nav--back', 'Back to Executions').click();
-      cy.wait(1000);
-      cy.get(`.td a[href="/executions/execution/${secondExecutionArn}"]`).click();
-
-      cy.contains('.heading--medium', 'Visual').should('not.exist');
-      cy.get('svg').should('not.exist');
     });
 
     it('should show executions for a granule/collection', () => {

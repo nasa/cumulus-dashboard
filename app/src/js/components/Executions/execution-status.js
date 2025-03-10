@@ -53,7 +53,7 @@ const ExecutionStatus = ({
     recordData = {};
   }
 
-  const { execution, executionHistory, stateMachine } = recordData;
+  const { execution } = recordData;
   const { executionArn } = execution || {};
   const { executionArn: executionArnParam } = match.params;
 
