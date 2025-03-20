@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-4028**
   - Renamed cumulus-dashboard package name to `@cumulus/cumulus-dashboard`
+- **security vulnerabilities**
+  - Upgraded axios and xml-crypto packages to fix audit issue
 
 ### Deleted
 
