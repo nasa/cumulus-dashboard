@@ -1,5 +1,5 @@
 {
-  "name": "cumulus-dashboard",
+  "name": "@cumulus/cumulus-dashboard",
   "version": "13.0.0",
   "description": "A dashboard for Cumulus API",
   "repository": {
