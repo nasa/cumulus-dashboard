@@ -76,7 +76,7 @@
     "audit-ci": "^7.1.0",
     "autoprefixer": "^10.4.0",
     "ava": "^3.15.0",
-    "axios": "^1.7.4",
+    "axios": "^1.8.4",
     "babel-loader": "^8.2.1",
     "babel-plugin-rewire": "^1.2.0",
     "babel-plugin-webpack-alias-7": "^0.1.1",
