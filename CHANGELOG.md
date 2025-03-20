@@ -7,8 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- **CUMULUS-4028**
+  - Renamed cumulus-dashboard package name to `@cumulus/cumulus-dashboard`
+- **security vulnerabilities**
+  - Upgraded axios and xml-crypto packages to fix audit issue
+
+### Deleted
+
 - **CUMULUS-4003**
   - Remove D3 and related libraries from dashboard.
+
+### Fixed
 
 - **CUMULUS-4008**
   - Updated the Dockerfile with improved NPM install command to prevent error messages.
