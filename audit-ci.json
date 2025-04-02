@@ -1,6 +1,5 @@
 {
   "high": true,
   "pass-enoaudit": true,
-  "retry-count": 20,
-  "allowlist": ["d3-color" ]
+  "retry-count": 20
 }
