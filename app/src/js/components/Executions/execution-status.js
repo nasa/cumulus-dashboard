@@ -13,7 +13,6 @@ import {
 import List from '../Table/Table';
 import ErrorReport from '../Errors/report';
 
-import ExecutionStatusGraph from './execution-status-graph';
 import Metadata from '../Table/Metadata';
 import Loading from '../LoadingIndicator/loading-indicator';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
@@ -54,7 +53,7 @@ const ExecutionStatus = ({
     recordData = {};
   }
 
-  const { execution, executionHistory, stateMachine } = recordData;
+  const { execution } = recordData;
   const { executionArn } = execution || {};
   const { executionArn: executionArnParam } = match.params;
 
@@ -124,16 +123,6 @@ const ExecutionStatus = ({
           {error && <ErrorReport report={error} />}
         </div>
       </section>
-
-      {/* stateMachine's definition and executionHistory's event statuses are needed to draw the graph */}
-      {stateMachine && executionHistory && (
-        <section className="page__section">
-          <div className="heading__wrapper--border">
-            <h2 className="heading--medium">Visual</h2>
-          </div>
-          <ExecutionStatusGraph executionStatus={recordData} />
-        </section>
-      )}
 
       <section className="page__section">
         <div className="heading__wrapper--border">
