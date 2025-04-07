@@ -20,7 +20,7 @@ export const fullDate = (datestring) => {
   if (!datestring) {
     return nullValue;
   }
-  return moment(datestring).format('kk:mm:ss MM/DD/YY');
+  return moment(datestring).format('HH:mm:ss MM/DD/YY');
 };
 
 export const dateOnly = (datestring) => {
