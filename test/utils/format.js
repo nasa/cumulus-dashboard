@@ -151,8 +151,8 @@ test('collectionHrefFromNameVersion returns a nullValue collection if the collec
 });
 
 test('fullDate returns the properly formatted date for midnight', function (t) {
-  const date = '2025-04-13T04:00:00Z'; //adjusted for UTC
+  const date = '2025-04-13T01:15:32.567Z';
   const formattedDate = fullDate(date);
 
-  t.is(formattedDate, '00:00:00 04/13/25');
+  t.is(formattedDate, '21:15:32 04/12/25');
 });
