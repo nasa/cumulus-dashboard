@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [v13.1.0] - 2025-03-25
 
 ### Changed
 
@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-4008**
   - Updated the Dockerfile with improved NPM install command to prevent error messages.
 
-## [v13.0.0] - 2024-02-19
+## [v13.0.0] - 2025-02-19
 This version of the dashboard requires Cumulus API >= v20.0.0
 
 ### Changed
@@ -1464,7 +1464,8 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
-  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v13.0.0...HEAD
+  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v13.1.0...HEAD
+  [v13.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.0.0...v13.1.0
   [v13.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v12.2.0...v13.0.0
   [v12.2.0]: https://github.com/nasa/cumulus-dashboard/compare/v12.1.0...v12.2.0
   [v12.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.2...v12.1.0
