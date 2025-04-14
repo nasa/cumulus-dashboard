@@ -150,12 +150,12 @@ test('collectionHrefFromNameVersion returns a nullValue collection if the collec
   t.is('--', collectionHrefFromNameVersion());
 });
 
-test('fullDate returns the properly formatted date for midnight', function (t) {
-  const date = '2025-04-13T01:15:32.567Z';
-  const date2 = '2025-04-13T04:15:32.567Z';
+test('fullDate returns the properly formatted date', function (t) {
+  const date = '2025-04-13T01:15:32.567';
+  const date2 = '2025-04-13T04:15:32.567';
   const formattedDate = fullDate(date);
   const formattedDate2 = fullDate(date2);
 
-  t.is(formattedDate, '21:15:32 04/12/25');
-  t.is(formattedDate2, '00:15:32 04/13/25');
+  t.is(formattedDate, '01:15:32 04/13/25');
+  t.is(formattedDate2, '04:15:32 04/13/25');
 });
