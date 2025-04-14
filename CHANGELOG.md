@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 
 - **CUMULUS-3263**
-  - Updated datestring format to show the hours correctly
+  - Updated datestring format to show the correct hours
 - **CUMULUS-4008**
   - Updated the Dockerfile with improved NPM install command to prevent error messages.
 
