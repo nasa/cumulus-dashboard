@@ -4,6 +4,7 @@ import {
   buildRedirectUrl,
   getFormattedCollectionId,
   formatCollectionId,
+  fullDate,
   collectionHrefFromId,
   collectionHrefFromNameVersion,
   getEncodedCollectionId,
@@ -147,4 +148,11 @@ test('collectionHrefFromNameVersion returns a nullValue collection if the collec
 
 test('collectionHrefFromNameVersion returns a nullValue collection if the collection is undefined', function (t) {
   t.is('--', collectionHrefFromNameVersion());
+});
+
+test('fullDate returns the properly formatted date for midnight', function (t) {
+  const date = '2025-04-13T04:00:00Z'; //adjusted for UTC
+  const formattedDate = fullDate(date);
+
+  t.is(formattedDate, '00:00:00 04/13/25');
 });
