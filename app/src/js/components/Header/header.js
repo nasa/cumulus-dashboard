@@ -15,6 +15,7 @@ import { window } from '../../utils/browser';
 import { strings } from '../locale';
 import linkToKibana from '../../utils/kibana';
 import { getPersistentQueryParams } from '../../utils/url-helper';
+import LaunchpadExpirationWarningModal from '../InactivityModal/inactivity-modal';
 
 const paths = [
   [strings.collections, '/collections/all'],
@@ -89,6 +90,7 @@ const Header = ({
 
   return (
       <div className="header" role='banner'>
+        <div className="inactivity"><LaunchpadExpirationWarningModal/></div>
         <div className="row">
           <h1 className="logo">
             <Link to={{ pathname: '/', search: locationSearch }}>
