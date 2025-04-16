@@ -9,7 +9,7 @@ import { logout } from '../../actions';
 const LaunchpadExpirationWarningModal = ({
   tokenExpiration,
   title = 'Session Expiration Warning',
-  children = 'Your session will expire in about 5 minutes. Please re-login if you would like to stay signed in.',
+  children = 'Your session will expire in 5 minutes. Please re-login if you would like to stay signed in.',
   dispatch,
 }) => {
   const [hasModal, setHasModal] = useState(false);
@@ -39,13 +39,13 @@ const LaunchpadExpirationWarningModal = ({
         return;
       }
 
-      const currentTime = Math.ceil(Date.now() / 1000); // current time in seconds
+      const currentTime = Math.ceil(Date.now() / 1000);
       const secondsLeft = tokenExpiration - currentTime;
 
-      if (secondsLeft <= 300) { // within 5 minutes of expiration
+      if (secondsLeft <= 300) {
         setHasModal(true);
       }
-    }, 1000); // check every second
+    }, 1000);
 
     return () => clearInterval(interval);
   }, [tokenExpiration, hasModal, modalClose]);
@@ -53,15 +53,15 @@ const LaunchpadExpirationWarningModal = ({
   return (
     <DefaultModal
       title={title}
-      className='LaunchpadExpirationModal'
+      className="LaunchpadExpirationModal"
       onCancel={handleLogout}
       onCloseModal={handleClose}
       onConfirm={handleConfirm}
       showModal={hasModal}
       hasConfirmButton={true}
       hasCancelButton={true}
-      cancelButtonText='Log Out'
-      confirmButtonText='Close'
+      cancelButtonText="Log Out"
+      confirmButtonText="Close"
     >
       {children}
     </DefaultModal>

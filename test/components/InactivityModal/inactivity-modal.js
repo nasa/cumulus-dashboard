@@ -1,62 +1,54 @@
 import test from 'ava';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { render, screen, act, waitFor } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import sinon from 'sinon';
 import thunk from 'redux-thunk';
-import { requestMiddleware } from '../../../app/src/js/middleware/request';
 import configureMockStore from 'redux-mock-store';
-import * as jwt from 'jsonwebtoken';
+import { requestMiddleware } from '../../../app/src/js/middleware/request';
 import LaunchpadExpirationWarningModal from '../../../app/src/js/components/InactivityModal/inactivity-modal';
+import jwt from 'jsonwebtoken';
 
 const middlewares = [requestMiddleware, thunk];
 const mockStore = configureMockStore(middlewares);
 
+function createDummyToken(expiration) {
+  return jwt.sign({ exp: expiration }, '', { algorithm: 'none' });
+}
+
 let clock;
 
-test.beforeEach(t => {
+test.before(() => {
   clock = sinon.useFakeTimers();
-  jwt.decode = sinon.stub().returns({
-    exp: Math.floor(Date.now() / 1000) + 95, // Token will expire in 95 seconds
-  });
 });
 
-test.afterEach.always(t => {
+test.after.always(() => {
   clock.restore();
 });
 
-test('modal shows up when token is close to expiring', async (t) => {
-  const expiration = Math.floor(Date.now() / 1000) + 95;
-
-  jwt.decode = sinon.stub().returns({ exp: expiration });
+test('InactivityModal shows up 5 minutes before token expiration', async (t) => {
+  const futureExp = Math.floor(Date.now() / 1000) + 400; // expires in 400 seconds
+  const dummyToken = createDummyToken(futureExp);
 
   const store = mockStore({
     api: {
-      tokens: {
-        token: 'dummy.jwt.token',
-      },
-    },
-    session: {
-      tokenExpiration: expiration,
+      tokens: { token: dummyToken },
     },
   });
 
-  const { container } = render(
+  render(
     <Provider store={store}>
       <LaunchpadExpirationWarningModal />
     </Provider>
   );
 
-  t.falsy(container.textContent.includes('Your session will expire in about 5 minutes'));
+  t.falsy(screen.queryByText('Your session will expire in 5 minutes'));
 
-  await act(() => {
-    clock.tick(96000);
-    return Promise.resolve();
+  await act(async () => {
+    clock.tick(100000);
+    await Promise.resolve();
   });
 
-  const content = container.textContent;
-  console.log('Modal content after time tick:', content);
-  console.log('Rendered HTML:', container.innerHTML);
-
-  t.true(content.includes('Your session will expire in about 5 minutes'));
+  const modalText = screen.getByText(/Your session will expire in 5 minutes/);
+  t.truthy(modalText);
 });
