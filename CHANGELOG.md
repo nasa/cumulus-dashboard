@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [v13.1.0] - 2025-03-25
 
+### Added
+
+- **CUMULUS-4048**
+  - Added an inactivity modal which pops up five minutes before the session expires
+
 ### Changed
 
 - **CUMULUS-4028**
