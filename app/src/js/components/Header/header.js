@@ -90,7 +90,7 @@ const Header = ({
 
   return (
       <div className="header" role='banner'>
-        <div className="inactivity"><LaunchpadExpirationWarningModal/></div>
+        <div className="launchpad-expiration"><LaunchpadExpirationWarningModal/></div>
         <div className="row">
           <h1 className="logo">
             <Link to={{ pathname: '/', search: locationSearch }}>

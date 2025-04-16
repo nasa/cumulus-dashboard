@@ -9,13 +9,11 @@ import { logout } from '../../actions';
 const LaunchpadExpirationWarningModal = ({
   tokenExpiration,
   title = 'Session Expiration Warning',
-  children = 'Your session will expire in 5 minutes. Please re-login if you would like to stay signed in.',
+  children = 'Your session will expire in about 5 minutes. Please re-login if you would like to stay signed in.',
   dispatch,
 }) => {
   const [hasModal, setHasModal] = useState(false);
-
-  const EXPIRATION_THRESHOLD = 1000000;
-  // const CHECK_INTERVAL = 1000;
+  const [modalClose, setModalClose] = useState(false);
 
   const handleLogout = useCallback(() => {
     dispatch(logout()).then(() => {
@@ -27,38 +25,43 @@ const LaunchpadExpirationWarningModal = ({
 
   const handleConfirm = () => {
     setHasModal(false);
+    setModalClose(true);
+  };
+
+  const handleClose = () => {
+    setHasModal(false);
+    setModalClose(true);
   };
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const currentTime = Math.floor(Date.now() / 1000);
+      if (!tokenExpiration || hasModal || modalClose) {
+        return;
+      }
 
+      const currentTime = Math.ceil(Date.now() / 1000); // current time in seconds
       const secondsLeft = tokenExpiration - currentTime;
 
-      if (secondsLeft <= TIME_THRESHOLD && secondsLeft > 0 && !hasModal) {
+      if (secondsLeft <= 300) { // within 5 minutes of expiration
         setHasModal(true);
       }
-
-      if (secondsLeft <= 0 && hasModal) {
-        handleLogout();
-      }
-    }, CHECK_INTERVAL);
+    }, 1000); // check every second
 
     return () => clearInterval(interval);
-  }, [tokenExpiration, hasModal, handleLogout]);
+  }, [tokenExpiration, hasModal, modalClose]);
 
   return (
     <DefaultModal
       title={title}
-      className='IAModal'
+      className='LaunchpadExpirationModal'
       onCancel={handleLogout}
-      onCloseModal={() => setHasModal(false)}
+      onCloseModal={handleClose}
       onConfirm={handleConfirm}
       showModal={hasModal}
       hasConfirmButton={true}
       hasCancelButton={true}
       cancelButtonText='Log Out'
-      confirmButtonText='Continue Session'
+      confirmButtonText='Close'
     >
       {children}
     </DefaultModal>
@@ -75,11 +78,9 @@ LaunchpadExpirationWarningModal.propTypes = {
 const mapStateToProps = (state) => {
   const token = get(state, 'api.tokens.token');
   const jwtData = token ? jwtDecode(token) : null;
-  const tokenExpiration = get(jwtData, 'exp'); // UNIX seconds
+  const tokenExpiration = get(jwtData, 'exp');
 
-  return {
-    tokenExpiration,
-  };
+  return { tokenExpiration };
 };
 
 export default connect(mapStateToProps)(LaunchpadExpirationWarningModal);

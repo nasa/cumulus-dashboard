@@ -1,95 +1,62 @@
-'use strict';
-
 import test from 'ava';
-import { render, screen } from '@testing-library/react'
 import React from 'react';
-
-import { Header } from '../../../app/src/js/components/Header/header';
 import { Provider } from 'react-redux';
-import { MemoryRouter } from 'react-router-dom';
-import configureMockStore from 'redux-mock-store';
+import { render, screen, act, waitFor } from '@testing-library/react';
+import sinon from 'sinon';
 import thunk from 'redux-thunk';
 import { requestMiddleware } from '../../../app/src/js/middleware/request';
+import configureMockStore from 'redux-mock-store';
+import * as jwt from 'jsonwebtoken';
+import LaunchpadExpirationWarningModal from '../../../app/src/js/components/InactivityModal/inactivity-modal';
 
 const middlewares = [requestMiddleware, thunk];
 const mockStore = configureMockStore(middlewares);
-const initialState = {
-  api: { authenticated: true },
-  locationQueryParams: { search: {} },
-  apiVersion : {
-    versionNumber: '1.11.0',
-    warning: '',
-    isCompatible: true
-  },
-  cmrInfo: {
-    cmrEnv: 'UAT',
-    cmrProvider: 'CUMULUS',
-    cmrOauthProvider: 'Launchpad'
-  }
-};
 
-test('Header contains correct number of nav items and excludes PDRs and Logs', function (t) {
-  const dispatch = () => {};
-  const api = {
-    authenticated: true
-  }
-  const location = {
-    pathname: '/'
-  }
-  const locationQueryParams = {
-    search: {}
-  };
+let clock;
 
-  const someStore = mockStore(initialState);
-  const { container } = render(
-    <Provider store={someStore} >
-    <MemoryRouter>
-    <Header
-      dispatch={dispatch}
-      api={api}
-      location={location}
-      locationQueryParams={locationQueryParams}
-    />
-    </MemoryRouter>
-    </Provider>
-  );
-  const navigation = container.querySelectorAll('nav li');
-  t.is(navigation.length, 9);
-
-  const pdrsFilter = (object) => object.textContent.includes('PDRs');
-  const logsFilter = (object) => object.textContent.includes('Logs');
-  const pdrsList = Array.from(navigation).filter(pdrsFilter);
-  const logsList = Array.from(navigation).filter(logsFilter);
-  t.is(pdrsList.length, 0);
-  t.is(logsList.length, 0);
+test.beforeEach(t => {
+  clock = sinon.useFakeTimers();
+  jwt.decode = sinon.stub().returns({
+    exp: Math.floor(Date.now() / 1000) + 95, // Token will expire in 95 seconds
+  });
 });
 
-test('Logo path is "/cumulus-logo.png" when BUCKET is not specified', function (t) {
-  const dispatch = () => {};
-  const api = {
-    authenticated: true
-  }
-  const location = {
-    pathname: '/'
-  }
-  const locationQueryParams = {
-    search: {}
-  };
+test.afterEach.always(t => {
+  clock.restore();
+});
 
-  const someStore = mockStore(initialState);
+test('modal shows up when token is close to expiring', async (t) => {
+  const expiration = Math.floor(Date.now() / 1000) + 95;
+
+  jwt.decode = sinon.stub().returns({ exp: expiration });
+
+  const store = mockStore({
+    api: {
+      tokens: {
+        token: 'dummy.jwt.token',
+      },
+    },
+    session: {
+      tokenExpiration: expiration,
+    },
+  });
+
   const { container } = render(
-    <Provider store={someStore} >
-    <MemoryRouter>
-    <Header
-      dispatch={dispatch}
-      api={api}
-      location={location}
-      locationQueryParams={locationQueryParams}
-    />
-    </MemoryRouter>
+    <Provider store={store}>
+      <LaunchpadExpirationWarningModal />
     </Provider>
   );
 
-  const logo = container.querySelector('img[alt="Logo"]');
-  t.is(logo.getAttribute("src"), "/cumulus-logo.png");
+  t.falsy(container.textContent.includes('Your session will expire in about 5 minutes'));
+
+  await act(() => {
+    clock.tick(96000);
+    return Promise.resolve();
+  });
+
+  const content = container.textContent;
+  console.log('Modal content after time tick:', content);
+  console.log('Rendered HTML:', container.innerHTML);
+
+  t.true(content.includes('Your session will expire in about 5 minutes'));
 });
