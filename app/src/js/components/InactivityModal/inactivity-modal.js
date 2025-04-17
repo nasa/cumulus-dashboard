@@ -13,7 +13,7 @@ const LaunchpadExpirationWarningModal = ({
   dispatch,
 }) => {
   const [hasModal, setHasModal] = useState(false);
-  const [modalClose, setModalClose] = useState(false);
+  const [modalClosed, setModalClosed] = useState(false);
 
   const handleLogout = useCallback(() => {
     dispatch(logout()).then(() => {
@@ -23,19 +23,14 @@ const LaunchpadExpirationWarningModal = ({
     });
   }, [dispatch]);
 
-  const handleConfirm = () => {
-    setHasModal(false);
-    setModalClose(true);
-  };
-
   const handleClose = () => {
     setHasModal(false);
-    setModalClose(true);
+    setModalClosed(true);
   };
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (!tokenExpiration || hasModal || modalClose) {
+      if (!tokenExpiration || hasModal || modalClosed) {
         return;
       }
 
@@ -48,20 +43,20 @@ const LaunchpadExpirationWarningModal = ({
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [tokenExpiration, hasModal, modalClose]);
+  }, [tokenExpiration, hasModal, modalClosed]);
 
   return (
     <DefaultModal
       title={title}
       className="LaunchpadExpirationModal"
-      onCancel={handleLogout}
+      onCancel={handleClose}
       onCloseModal={handleClose}
-      onConfirm={handleConfirm}
+      onConfirm={handleLogout}
       showModal={hasModal}
       hasConfirmButton={true}
       hasCancelButton={true}
-      cancelButtonText="Log Out"
-      confirmButtonText="Close"
+      cancelButtonText="Dismiss"
+      confirmButtonText="Refresh"
     >
       {children}
     </DefaultModal>
@@ -69,18 +64,16 @@ const LaunchpadExpirationWarningModal = ({
 };
 
 LaunchpadExpirationWarningModal.propTypes = {
-  tokenExpiration: PropTypes.number.isRequired,
+  tokenExpiration: PropTypes.number,
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   children: PropTypes.string,
-  dispatch: PropTypes.func.isRequired,
+  dispatch: PropTypes.func,
 };
 
-const mapStateToProps = (state) => {
+export default connect((state) => {
   const token = get(state, 'api.tokens.token');
   const jwtData = token ? jwtDecode(token) : null;
   const tokenExpiration = get(jwtData, 'exp');
 
   return { tokenExpiration };
-};
-
-export default connect(mapStateToProps)(LaunchpadExpirationWarningModal);
+})(LaunchpadExpirationWarningModal);

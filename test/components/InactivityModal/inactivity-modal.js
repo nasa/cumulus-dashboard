@@ -45,10 +45,16 @@ test('InactivityModal shows up 5 minutes before token expiration', async (t) => 
   t.falsy(screen.queryByText('Your session will expire in 5 minutes'));
 
   await act(async () => {
-    clock.tick(100000);
+    clock.tick(100000); // fast-forwards a 100 seconds, to within 5 minutes of expiration
     await Promise.resolve();
   });
 
   const modalText = screen.getByText(/Your session will expire in 5 minutes/);
   t.truthy(modalText);
+
+  const logoutButton = screen.getByRole('button', { name: /Dismiss/i });
+  const closeButton = screen.getByRole('button', { name: /Refresh/i });
+
+  t.truthy(logoutButton);
+  t.truthy(closeButton);
 });

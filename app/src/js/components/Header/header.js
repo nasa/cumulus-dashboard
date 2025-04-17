@@ -90,7 +90,6 @@ const Header = ({
 
   return (
       <div className="header" role='banner'>
-        <div className="launchpad-expiration"><LaunchpadExpirationWarningModal/></div>
         <div className="row">
           <h1 className="logo">
             <Link to={{ pathname: '/', search: locationSearch }}>
@@ -124,6 +123,7 @@ const Header = ({
                 )}
           </nav>
         </div>
+        <div className="launchpad-expiration"><LaunchpadExpirationWarningModal/></div>
       </div>
   );
 };
