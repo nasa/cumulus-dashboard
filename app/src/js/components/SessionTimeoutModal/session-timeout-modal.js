@@ -6,7 +6,7 @@ import { decode as jwtDecode } from 'jsonwebtoken';
 import DefaultModal from '../Modal/modal';
 import { logout } from '../../actions';
 
-const LaunchpadExpirationWarningModal = ({
+const SessionTimeoutModal = ({
   tokenExpiration,
   title = 'Session Expiration Warning',
   children = 'Your session will expire in 5 minutes. Please re-login if you would like to stay signed in.',
@@ -48,7 +48,7 @@ const LaunchpadExpirationWarningModal = ({
   return (
     <DefaultModal
       title={title}
-      className="LaunchpadExpirationModal"
+      className="SessionTimeoutModal"
       onCancel={handleClose}
       onCloseModal={handleClose}
       onConfirm={handleLogout}
@@ -63,7 +63,7 @@ const LaunchpadExpirationWarningModal = ({
   );
 };
 
-LaunchpadExpirationWarningModal.propTypes = {
+SessionTimeoutModal.propTypes = {
   tokenExpiration: PropTypes.number,
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   children: PropTypes.string,
@@ -76,4 +76,4 @@ export default connect((state) => {
   const tokenExpiration = get(jwtData, 'exp');
 
   return { tokenExpiration };
-})(LaunchpadExpirationWarningModal);
+})(SessionTimeoutModal);

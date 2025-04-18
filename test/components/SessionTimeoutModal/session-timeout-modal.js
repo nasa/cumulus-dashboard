@@ -6,8 +6,8 @@ import sinon from 'sinon';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import { requestMiddleware } from '../../../app/src/js/middleware/request';
-import LaunchpadExpirationWarningModal from '../../../app/src/js/components/InactivityModal/inactivity-modal';
 import jwt from 'jsonwebtoken';
+import SessionTimeoutModal from '../../../app/src/js/components/SessionTimeoutModal/session-timeout-modal';
 
 const middlewares = [requestMiddleware, thunk];
 const mockStore = configureMockStore(middlewares);
@@ -26,7 +26,7 @@ test.after.always(() => {
   clock.restore();
 });
 
-test('InactivityModal shows up 5 minutes before token expiration', async (t) => {
+test('SessionTimeout modal shows up 5 minutes before token expiration', async (t) => {
   const futureExp = Math.floor(Date.now() / 1000) + 400; // expires in 400 seconds
   const dummyToken = createDummyToken(futureExp);
 
@@ -38,7 +38,7 @@ test('InactivityModal shows up 5 minutes before token expiration', async (t) => 
 
   render(
     <Provider store={store}>
-      <LaunchpadExpirationWarningModal />
+      <SessionTimeoutModal />
     </Provider>
   );
 
