@@ -5,9 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [v13.1.0] - 2025-03-25
 
-This version of the dashboard requires Cumulus API >= v19.2.0-alpha.1 (TBD API release)
+### Changed
+
+- **CUMULUS-4028**
+  - Renamed cumulus-dashboard package name to `@cumulus/cumulus-dashboard`
+- **security vulnerabilities**
+  - Upgraded axios and xml-crypto packages to fix audit issue
+
+### Deleted
+
+- **CUMULUS-4003**
+  - Remove D3 and related libraries from dashboard.
+
+### Fixed
+
+- **CUMULUS-3263**
+  - Updated datestring format to show the correct hours
+- **CUMULUS-4008**
+  - Updated the Dockerfile with improved NPM install command to prevent error messages.
+
+## [v13.0.0] - 2025-02-19
+This version of the dashboard requires Cumulus API >= v20.0.0
 
 ### Changed
 
@@ -19,7 +39,6 @@ This version of the dashboard requires Cumulus API >= v19.2.0-alpha.1 (TBD API r
 - **CUMULUS-3860/3870**
   - Updated React and dependencies
   - react 17.0.2 ⇒ 18.3.1
-This version of the dashboard requires Cumulus API >= v19.2.0-alpha.1 (TBD API release)
 - **CUMULUS-3748**
   - Removed reconciliationReports aggregate stats call from Granules Page
 - **CUMULUS-3821**
@@ -43,6 +62,10 @@ This version of the dashboard requires Cumulus API >= v19.2.0-alpha.1 (TBD API r
   - Updated Metrics Overview page executions and rules query to only get count from the past 24 hours
 - **CUMULUS-3990**
   - Upgraded localstack from 3.0.0 to 4.0.3
+- **Cypress Upgrade**
+  - Upgraded cypress from 8.7.0 to 9.7.0 to work with updated @cumulus/api@20.0.0 and
+    @cumulus/aws-client@20.0.0 packages
+  - Updated localAPI docker-compose-cypress.yml to use cypress 9.7.0
 
 ### Fixed
 
@@ -1442,7 +1465,9 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
-  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v12.2.0...HEAD
+  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v13.1.0...HEAD
+  [v13.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.0.0...v13.1.0
+  [v13.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v12.2.0...v13.0.0
   [v12.2.0]: https://github.com/nasa/cumulus-dashboard/compare/v12.1.0...v12.2.0
   [v12.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.2...v12.1.0
   [v12.0.2]: https://github.com/nasa/cumulus-dashboard/compare/v12.0.1...v12.0.2
