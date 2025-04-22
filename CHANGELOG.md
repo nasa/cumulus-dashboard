@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - **CUMULUS-4048**
-  - Added an inactivity modal which pops up five minutes before the session expires
+  - Added an session timeout warning modal which pops up five minutes before the session expires
 
 ### Changed
 
