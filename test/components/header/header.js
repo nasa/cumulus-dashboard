@@ -28,7 +28,7 @@ const initialState = {
   }
 };
 
-test('Header contains correct number of nav items and excludes PDRs and Logs', function (t) {
+test('Header contains sessionTimeoutModal, correct number of nav items and excludes PDRs and Logs', function (t) {
   const dispatch = () => {};
   const api = {
     authenticated: true
@@ -53,6 +53,10 @@ test('Header contains correct number of nav items and excludes PDRs and Logs', f
     </MemoryRouter>
     </Provider>
   );
+
+  const modal = container.querySelector('.session-timeout-modal');
+  t.truthy(modal);
+
   const navigation = container.querySelectorAll('nav li');
   t.is(navigation.length, 9);
 
