@@ -30,7 +30,8 @@ const SessionTimeoutModal = ({
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (!tokenExpiration || hasModal || modalClosed) {
+      // the modal will only pop up when the user is logged in, not already shown, or closed
+      if (hasModal || modalClosed) {
         return;
       }
 
