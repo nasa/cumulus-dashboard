@@ -53,7 +53,7 @@ test('SessionTimeout modal shows up 5 minutes before token expiration', async (t
   t.truthy(modalText);
 
   const logoutButton = screen.getByRole('button', { name: /Dismiss/i });
-  const closeButton = screen.getByRole('button', { name: /Refresh/i });
+  const closeButton = screen.getByRole('button', { name: /Re-login/i });
 
   t.truthy(logoutButton);
   t.truthy(closeButton);

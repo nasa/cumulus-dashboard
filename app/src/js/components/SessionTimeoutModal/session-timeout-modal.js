@@ -56,7 +56,7 @@ const SessionTimeoutModal = ({
       hasConfirmButton={true}
       hasCancelButton={true}
       cancelButtonText="Dismiss"
-      confirmButtonText="Refresh"
+      confirmButtonText="Re-login"
     >
       {children}
     </DefaultModal>
