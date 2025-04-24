@@ -1,7 +1,6 @@
 /* eslint-disable import/no-cycle */
 import get from 'lodash/get';
 import queryString from 'query-string';
-import { history } from '../store/configureStore';
 
 /**
  * Retrieve initial value for component based on react-router's location.
@@ -54,18 +53,4 @@ export function getPersistentQueryParams(location = {}) {
   const parsedQueryParams = queryString.parse(location.search);
   const { startDateTime, endDateTime } = parsedQueryParams;
   return queryString.stringify({ startDateTime, endDateTime });
-}
-
-/**
- * Calls history.push while perserving the queryParams that should persist across pages
- *
- * @param {string} path the path to be passed to history.push
- */
-export function historyPushWithQueryParams(path) {
-  if (!history) return;
-  const { location } = history;
-  history.push({
-    pathname: path,
-    search: getPersistentQueryParams(location)
-  });
 }
