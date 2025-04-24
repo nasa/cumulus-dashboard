@@ -16,7 +16,6 @@ import { strings } from '../locale';
 import linkToKibana from '../../utils/kibana';
 import { getPersistentQueryParams } from '../../withUrlHelper';
 import withRouter from '../../withRouter';
-import { getPersistentQueryParams } from '../../utils/url-helper';
 import SessionTimeoutModal from '../SessionTimeoutModal/session-timeout-modal';
 
 const paths = [

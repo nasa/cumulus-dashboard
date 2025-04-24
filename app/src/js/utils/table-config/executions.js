@@ -9,8 +9,6 @@ import {
   fullDate
 } from '../format';
 import { strings } from '../../components/locale';
-import { getEventDetails } from '../../components/Executions/execution-graph-utils';
-import { getPersistentQueryParams } from '../url-helper';
 import Tooltip from '../../components/Tooltip/tooltip';
 import { getExecutionStatus } from '../../actions';
 

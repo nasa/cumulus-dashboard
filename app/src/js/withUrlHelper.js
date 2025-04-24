@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import queryString from 'query-string';
 
 // Utility functions
@@ -39,24 +39,18 @@ export function initialValuesFromLocation(location, paramKeys) {
   return initialValues;
 }
 
-// HOC wrapper
 export function withUrlHelper(Component) {
   function ComponentWithUrlHelper(props) {
     const navigate = useNavigate();
     const location = useLocation();
     const params = useParams();
-    const dispatch = useDispatch();
-
     const isAuthenticated = useSelector((state) => state.api.authenticated);
-    const routerState = useSelector((state) => state.router);
 
     const urlHelper = {
       location,
       navigate,
       params,
       isAuthenticated,
-      routerState,
-      dispatch,
       historyPushWithQueryParams: (path) => historyPushWithQueryParams(navigate, location, path),
       getPersistentQueryParams: () => getPersistentQueryParams(location),
       getInitialValueFromLocation: (paramKey) => getInitialValueFromLocation(location, paramKey),
