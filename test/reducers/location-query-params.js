@@ -12,7 +12,7 @@ test('updateSearchForPath action captures latest query params', (t) => {
   expected.search = {
     [route]: routeQueryParams,
   };
-            
+
   const action = updateSearchForPath({ pathname: route, search: routeQueryParams });
   const actual = reducer(inputState, action);
   t.deepEqual(actual, expected);

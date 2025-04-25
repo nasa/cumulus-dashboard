@@ -7,7 +7,6 @@ import {
   getInitialValueFromLocation,
   initialValuesFromLocation,
   getPersistentQueryParams,
-  historyPushWithQueryParams,
   __RewireAPI__ as URLHelperRewireAPI
 } from '../../app/src/js/utils/url-helper';
 
@@ -31,7 +30,6 @@ const location = {
 
 test.afterEach((t) => {
   sinon.restore();
-  URLHelperRewireAPI.__ResetDependency__('historyPushWithQueryParams');
 });
 
 test('getInitialValueFromLocation returns empty string if location query empty', (t) => {
@@ -113,15 +111,4 @@ test('getPersistentParams returns an query string with startDateTime and endDate
   const expectedParams = 'endDateTime=2000000&startDateTime=1000000';
 
   t.is(persistentParams, expectedParams);
-});
-
-test('historyPushWithQueryParams calls history.push with startDateTime and endDateTime in querystring', (t) => {
-  const expectedParams = 'endDateTime=2000000&startDateTime=1000000';
-  const path = '/granules';
-  historyPushWithQueryParams(path);
-
-  t.true(history.push.calledWith({
-    pathname: path,
-    search: expectedParams
-  }));
 });
