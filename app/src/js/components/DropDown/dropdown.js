@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createRef } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Typeahead } from 'react-bootstrap-typeahead';
@@ -19,7 +19,6 @@ const Dropdown = ({
   clearOnClick,
 }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const typeaheadRef = createRef();
   const [selected, setSelected] = useState(selectedValues);

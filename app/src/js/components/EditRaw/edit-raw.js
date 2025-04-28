@@ -78,8 +78,8 @@ const EditRaw = ({
     if (updateStatus === 'error' && !isError) {
       setRecord({ ...record, error: errorMessage });
     }
-  }, [hasModal, isSuccess, updateStatus, isError, dispatch, clearRecordUpdate, pk, history, backRoute,
-    record, errorMessage]);
+  }, [hasModal, isSuccess, updateStatus, isError, dispatch, clearRecordUpdate, location, navigate, pk, history,
+    backRoute, record, errorMessage]);
 
   // ported from componentDidUpdate
   useEffect(() => {

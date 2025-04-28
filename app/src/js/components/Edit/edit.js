@@ -66,7 +66,7 @@ const EditRecord = ({
         }
       }
     },
-    [backRoute, clearRecordUpdate, dispatch, getRecord, pk, pkState, record, state.updated]
+    [backRoute, clearRecordUpdate, dispatch, getRecord, location, navigate, pk, pkState, record, state.updated]
   );
 
   function navigateBack () {
