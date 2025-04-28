@@ -28,12 +28,14 @@ const EditRecord = ({
   updateRecord,
   validate,
   validationError,
+  router
 }) => {
   const record = get(state.map, pk, {});
   const meta = get(state.updated, pk, {});
   const schema = schemaState[schemaKey];
   const [error, setError] = useState(record.error || meta.error);
   const [pkState, setPkState] = useState(pk);
+  const { navigate, location } = router;
 
   useEffect(() => {
     dispatch(getRecord(pk));
@@ -46,7 +48,7 @@ const EditRecord = ({
       if (updateStatus === 'success') {
         setTimeout(() => {
           dispatch(clearRecordUpdate(pk));
-          historyPushWithQueryParams(backRoute);
+          historyPushWithQueryParams(navigate, location, backRoute);
         }, updateDelay);
       }
 
@@ -68,7 +70,7 @@ const EditRecord = ({
   );
 
   function navigateBack () {
-    historyPushWithQueryParams(backRoute);
+    historyPushWithQueryParams(navigate, location, backRoute);
   }
 
   function onSubmit (_id, payload) {
@@ -128,6 +130,7 @@ EditRecord.propTypes = {
   clearRecordUpdate: PropTypes.func,
   validate: PropTypes.func,
   validationError: PropTypes.string,
+  router: PropTypes.object
 };
 
 export { EditRecord };

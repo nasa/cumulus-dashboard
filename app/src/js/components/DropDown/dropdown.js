@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Typeahead } from 'react-bootstrap-typeahead';
@@ -19,6 +19,7 @@ const Dropdown = ({
   clearOnClick,
 }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const typeaheadRef = createRef();
   const [selected, setSelected] = useState(selectedValues);
@@ -76,10 +77,17 @@ const Dropdown = ({
   function updateSelection(selections, value) {
     dispatch(action({ key: paramKey, value }));
     setSelected(selections);
-    setSearchParams((params) => {
-      params.set(paramKey, value);
-      return params;
-    });
+    if (value !== undefined) {
+      setSearchParams((params) => {
+        params.set(paramKey, value);
+        return params;
+      });
+    } else {
+      const newParams = new URLSearchParams(searchParams);
+      newParams.delete(paramKey);
+      setSearchParams(newParams);
+      navigate({ search: new URLSearchParams(newParams).toString() }, { replace: true });
+    }
   }
 
   function handleChange(selections) {

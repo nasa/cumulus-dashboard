@@ -64,7 +64,10 @@ const Sidebar = ({
                 {d[0] && <li>
                   <Link
                     className={classes}
-                    to={location}
+                    to={{
+                      pathname: path,
+                      search: getPersistentQueryParams(location)
+                    }}
                     onClick={(e) => {
                       e.preventDefault();
                       navigate({

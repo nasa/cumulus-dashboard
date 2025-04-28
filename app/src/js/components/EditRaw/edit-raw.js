@@ -31,7 +31,8 @@ const EditRaw = ({
   pk,
   schemaState,
   schemaKey,
-  hasModal
+  hasModal,
+  router
 }) => {
   const [record, setRecord] = useState(defaultState);
   const [showModal, setShowModal] = useState(false);
@@ -43,6 +44,7 @@ const EditRaw = ({
   const isInflight = updateStatus === 'inflight';
   const isError = !!error;
   const recordDisplayName = displayCase(schemaKey);
+  const { navigate, location } = router;
 
   let buttonText;
 
@@ -70,7 +72,7 @@ const EditRaw = ({
     if (!hasModal && isSuccess) {
       setTimeout(() => {
         dispatch(clearRecordUpdate(pk));
-        historyPushWithQueryParams(backRoute);
+        historyPushWithQueryParams(navigate, location, backRoute);
       }, updateDelay);
     }
     if (updateStatus === 'error' && !isError) {
@@ -127,7 +129,7 @@ const EditRaw = ({
     if (isError) {
       dispatch(clearRecordUpdate(pk));
     }
-    historyPushWithQueryParams(backRoute);
+    historyPushWithQueryParams(navigate, location, backRoute);
   }
 
   function onChange (id, value) {
@@ -229,7 +231,8 @@ EditRaw.propTypes = {
   getRecord: PropTypes.func,
   updateRecord: PropTypes.func,
   clearRecordUpdate: PropTypes.func,
-  hasModal: PropTypes.bool
+  hasModal: PropTypes.bool,
+  router: PropTypes.object
 };
 
 export default withRouter(connect((state) => ({
