@@ -77,17 +77,10 @@ const Dropdown = ({
   function updateSelection(selections, value) {
     dispatch(action({ key: paramKey, value }));
     setSelected(selections);
-    if (value !== undefined) {
-      setSearchParams((params) => {
-        params.set(paramKey, value);
-        return params;
-      });
-    } else {
-      const newParams = new URLSearchParams(searchParams);
-      newParams.delete(paramKey);
-      setSearchParams(newParams);
-      navigate({ search: new URLSearchParams(newParams).toString() }, { replace: true });
-    }
+    setSearchParams((params) => {
+      params.set(paramKey, value);
+      return params;
+    });
   }
 
   function handleChange(selections) {
