@@ -12,7 +12,13 @@ export function getPersistentQueryParams(location = {}) {
 
 export function filterQueryParams(queryParams = {}) {
   const { startDateTime, endDateTime, search, ...filteredQueryParams } = queryParams;
-  return filteredQueryParams;
+  const updatedFilteredQueryParams = Object.keys(filteredQueryParams).reduce((updated, key) => {
+    if (filteredQueryParams[key] !== 'undefined') {
+      updated[key] = filteredQueryParams[key];
+    }
+    return updated;
+  }, {});
+  return updatedFilteredQueryParams;
 }
 
 export function historyPushWithQueryParams(navigate, location, path) {

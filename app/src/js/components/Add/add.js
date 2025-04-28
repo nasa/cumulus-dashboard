@@ -31,11 +31,13 @@ const AddRecord = ({
   title,
   validate,
   validationError,
+  router
 }) => {
   const [pk, setPk] = useState(null);
   const [error, setError] = useState(null);
   const record = pk ? get(state.created, pk, {}) : {};
   const schema = schemaState[schemaKey];
+  const { location, navigate } = router;
 
   useEffect(() => {
     if (!schema) {
@@ -47,16 +49,16 @@ const AddRecord = ({
     const status = get(state, ['created', pk, 'status']);
     if (status === 'success') {
       setTimeout(() => {
-        historyPushWithQueryParams(path.join(baseRoute, pk));
+        historyPushWithQueryParams(navigate, location, path.join(baseRoute, pk));
         if (window) {
           window.scrollTo(0, 0);
         }
       }, updateDelay);
     }
-  }, [baseRoute, pk, state]);
+  }, [navigate, location, baseRoute, pk, state]);
 
   function navigateBack() {
-    historyPushWithQueryParams(`/${baseRoute.split('/')[1]}`);
+    historyPushWithQueryParams(navigate, location, `/${baseRoute.split('/')[1]}`);
   }
 
   function post(_id, payload) {
@@ -142,6 +144,8 @@ AddRecord.propTypes = {
     PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(RegExp)])
   ),
   handleInputChange: PropTypes.objectOf(PropTypes.func),
+
+  router: PropTypes.object,
 };
 
 Schema.defaultProps = {
