@@ -22,8 +22,6 @@ const Collections = ({ urlHelper }) => {
   const filteredQueryParams = filterQueryParams(queryParams);
   const { pathname } = location;
   const existingCollection = pathname !== '/collections/add';
-
-  const collections = useSelector((state) => state.collections);
   const logs = useSelector((state) => state.logs);
   const { metricsNotConfigured } = logs;
 
@@ -33,7 +31,7 @@ const Collections = ({ urlHelper }) => {
 
   useEffect(() => {
     dispatch(listCollections(filteredQueryParams));
-  }, [dispatch, filteredQueryParams, collections]);
+  }, [dispatch, filteredQueryParams]);
 
   return (
     <div className='page__collections'>
