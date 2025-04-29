@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { displayCase } from '../../utils/format';
@@ -8,7 +7,8 @@ import _config from '../../config';
 
 import TextArea from '../TextAreaForm/text-area';
 import DefaultModal from '../Modal/modal';
-import { historyPushWithQueryParams } from '../../utils/url-helper';
+import { historyPushWithQueryParams } from '../../withUrlHelper';
+import withRouter from '../../withRouter';
 
 const { updateDelay } = _config;
 
@@ -29,13 +29,15 @@ const AddRaw = ({
   requireConfirmation,
   title,
   type = '',
-  ModalBody
+  ModalBody,
+  router
 }) => {
   const [record, setRecord] = useState({ ...defaultState, data: JSON.stringify(defaultValue, null, 2) });
   const [showModal, setShowModal] = useState(false);
   const { data, pk, error } = record;
   const status = get(state.created, [pk, 'status']);
   const handleOnClick = requireConfirmation ? handleModalOpen : handleSubmit;
+  const { navigate, location } = router;
 
   useEffect(() => {
     setRecord((currRecord) => {
@@ -55,15 +57,15 @@ const AddRaw = ({
     if (status === 'success') {
       const baseRoute = getBaseRoute(pk);
       setTimeout(() => {
-        historyPushWithQueryParams(baseRoute);
+        historyPushWithQueryParams(navigate, location, baseRoute);
       }, updateDelay);
     } else if (status === 'error' && !error) {
       setRecord({ ...record, error: get(state.created, [pk, 'error']) });
     }
-  }, [pk, status, error, getBaseRoute, history, record, state.created]);
+  }, [navigate, location, pk, status, error, getBaseRoute, history, record, state.created]);
 
   function handleCancel (e) {
-    historyPushWithQueryParams(getBaseRoute());
+    historyPushWithQueryParams(navigate, location, getBaseRoute());
   }
 
   function handleSubmit (e) {
@@ -164,7 +166,8 @@ AddRaw.propTypes = {
   createRecord: PropTypes.func,
   requireConfirmation: PropTypes.bool,
   type: PropTypes.string,
-  ModalBody: PropTypes.oneOfType([PropTypes.node, PropTypes.func])
+  ModalBody: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
+  router: PropTypes.object
 };
 
 export default withRouter(connect()(AddRaw));

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { getSchema } from '../../actions';
@@ -10,7 +9,8 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import TextArea from '../TextAreaForm/text-area';
 import DefaultModal from '../Modal/modal';
 import _config from '../../config';
-import { historyPushWithQueryParams } from '../../utils/url-helper';
+import { historyPushWithQueryParams } from '../../withUrlHelper';
+import withRouter from '../../withRouter';
 
 const { updateDelay } = _config;
 
@@ -31,7 +31,8 @@ const EditRaw = ({
   pk,
   schemaState,
   schemaKey,
-  hasModal
+  hasModal,
+  router
 }) => {
   const [record, setRecord] = useState(defaultState);
   const [showModal, setShowModal] = useState(false);
@@ -43,6 +44,7 @@ const EditRaw = ({
   const isInflight = updateStatus === 'inflight';
   const isError = !!error;
   const recordDisplayName = displayCase(schemaKey);
+  const { navigate, location } = router;
 
   let buttonText;
 
@@ -70,14 +72,14 @@ const EditRaw = ({
     if (!hasModal && isSuccess) {
       setTimeout(() => {
         dispatch(clearRecordUpdate(pk));
-        historyPushWithQueryParams(backRoute);
+        historyPushWithQueryParams(navigate, location, backRoute);
       }, updateDelay);
     }
     if (updateStatus === 'error' && !isError) {
       setRecord({ ...record, error: errorMessage });
     }
-  }, [hasModal, isSuccess, updateStatus, isError, dispatch, clearRecordUpdate, pk, history, backRoute,
-    record, errorMessage]);
+  }, [hasModal, isSuccess, updateStatus, isError, dispatch, clearRecordUpdate, location, navigate, pk, history,
+    backRoute, record, errorMessage]);
 
   // ported from componentDidUpdate
   useEffect(() => {
@@ -127,7 +129,7 @@ const EditRaw = ({
     if (isError) {
       dispatch(clearRecordUpdate(pk));
     }
-    historyPushWithQueryParams(backRoute);
+    historyPushWithQueryParams(navigate, location, backRoute);
   }
 
   function onChange (id, value) {
@@ -229,7 +231,8 @@ EditRaw.propTypes = {
   getRecord: PropTypes.func,
   updateRecord: PropTypes.func,
   clearRecordUpdate: PropTypes.func,
-  hasModal: PropTypes.bool
+  hasModal: PropTypes.bool,
+  router: PropTypes.object
 };
 
 export default withRouter(connect((state) => ({

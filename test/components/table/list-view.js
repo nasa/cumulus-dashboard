@@ -3,6 +3,7 @@
 import test from 'ava';
 import React from 'react';
 import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { render } from '@testing-library/react'
@@ -20,24 +21,44 @@ test('table should properly initialize timer config prop', async (t) => {
     data: [],
   };
 
+  const urlHelper = {
+    queryParams: {},
+    location: {},
+    navigate: () => {},
+    params: {},
+    isAuthenticated: true,
+    routerState: { location: {} },
+    dispatch: () => {},
+    historyPushWithQueryParams: () => {},
+    getPersistentQueryParams: () => '',
+    getInitialValueFromLocation: () => '',
+    initialValuesFromLocation: () => ({}),
+    filterQueryParams: () => ({})
+  };
+
   const middlewares = [requestMiddleware, thunk];
   const mockStore = configureMockStore(middlewares);
   const someStore = mockStore({
     timer: { running: false, seconds: -1 },
     datepicker: initialState(),
+    api: { authenticated: true },
+    router: { location: {}, action: 'POP' }
   });
 
   const { container } = render(
     <Provider store={someStore}>
-      <List
-        list={list}
-        dispatch={dispatch}
-        action={listGranules}
-        tableColumns={errorTableColumns}
-        initialSortId="updatedAt"
-        query={query}
-        queryParams={{}}
-      />
+      <MemoryRouter>
+        <List
+          list={list}
+          dispatch={dispatch}
+          action={listGranules}
+          tableColumns={errorTableColumns}
+          initialSortId="updatedAt"
+          query={query}
+          queryParams={{}}
+          urlHelper={urlHelper}
+        />
+      </MemoryRouter>
     </Provider>,
     {
       // We must disable lifecycle methods so that when we find the Timer its

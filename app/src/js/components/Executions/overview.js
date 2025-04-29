@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
+import { connect, useDispatch } from 'react-redux';
 import { get } from 'object-path';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import {
   clearExecutionsFilter,
   filterExecutions,
@@ -22,6 +21,7 @@ import Search from '../Search/search';
 import Overview from '../Overview/overview';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import { withUrlHelper } from '../../withUrlHelper';
 
 const breadcrumbConfig = [
   {
@@ -37,11 +37,12 @@ const breadcrumbConfig = [
 
 const ExecutionOverview = ({
   collections,
-  dispatch,
   executions,
-  queryParams,
   workflowOptions,
+  urlHelper
 }) => {
+  const dispatch = useDispatch();
+  const { queryParams } = urlHelper;
   const { dropdowns } = collections;
   const { list } = executions;
   const { inflight, meta } = list;
@@ -137,14 +138,16 @@ ExecutionOverview.propTypes = {
   collections: PropTypes.object,
   dispatch: PropTypes.func,
   executions: PropTypes.object,
-  queryParams: PropTypes.object,
   workflowOptions: PropTypes.array,
+  urlHelper: PropTypes.shape({
+    queryParams: PropTypes.object
+  }),
 };
 
-export default withRouter(
-  connect((state) => ({
-    collections: state.collections,
-    executions: state.executions,
-    workflowOptions: workflowSelectOptions(state),
-  }))(ExecutionOverview)
-);
+const mapStateToProps = (state) => ({
+  collections: state.collections,
+  executions: state.executions,
+  workflowOptions: workflowSelectOptions(state),
+});
+
+export default connect(mapStateToProps)(withUrlHelper(ExecutionOverview));

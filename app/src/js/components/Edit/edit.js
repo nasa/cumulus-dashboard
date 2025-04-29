@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import { withRouter } from 'react-router-dom';
 import { getSchema } from '../../actions';
 import Loading from '../LoadingIndicator/loading-indicator';
 import Schema from '../FormSchema/schema';
 import merge from '../../utils/merge';
 import _config from '../../config';
 import { strings } from '../locale';
-import { historyPushWithQueryParams } from '../../utils/url-helper';
+import { historyPushWithQueryParams } from '../../withUrlHelper';
+import withRouter from '../../withRouter';
 
 const { updateDelay } = _config;
 
@@ -28,12 +28,14 @@ const EditRecord = ({
   updateRecord,
   validate,
   validationError,
+  router
 }) => {
   const record = get(state.map, pk, {});
   const meta = get(state.updated, pk, {});
   const schema = schemaState[schemaKey];
   const [error, setError] = useState(record.error || meta.error);
   const [pkState, setPkState] = useState(pk);
+  const { navigate, location } = router;
 
   useEffect(() => {
     dispatch(getRecord(pk));
@@ -46,7 +48,7 @@ const EditRecord = ({
       if (updateStatus === 'success') {
         setTimeout(() => {
           dispatch(clearRecordUpdate(pk));
-          historyPushWithQueryParams(backRoute);
+          historyPushWithQueryParams(navigate, location, backRoute);
         }, updateDelay);
       }
 
@@ -64,11 +66,11 @@ const EditRecord = ({
         }
       }
     },
-    [backRoute, clearRecordUpdate, dispatch, getRecord, pk, pkState, record, state.updated]
+    [backRoute, clearRecordUpdate, dispatch, getRecord, location, navigate, pk, pkState, record, state.updated]
   );
 
   function navigateBack () {
-    historyPushWithQueryParams(backRoute);
+    historyPushWithQueryParams(navigate, location, backRoute);
   }
 
   function onSubmit (_id, payload) {
@@ -128,6 +130,7 @@ EditRecord.propTypes = {
   clearRecordUpdate: PropTypes.func,
   validate: PropTypes.func,
   validationError: PropTypes.string,
+  router: PropTypes.object
 };
 
 export { EditRecord };

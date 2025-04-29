@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useParams, useLocation } from 'react-router-dom';
+import { connect, useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Link, withRouter } from 'react-router-dom';
 import get from 'lodash/get';
 import { getExecutionStatus, getCumulusInstanceMetadata } from '../../actions';
 import {
@@ -17,6 +17,7 @@ import Metadata from '../Table/Metadata';
 import Loading from '../LoadingIndicator/loading-indicator';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import { handleDownloadUrlClick } from '../../utils/download-file';
+import { withUrlHelper } from '../../withUrlHelper';
 
 const breadcrumbConfig = [
   {
@@ -35,11 +36,13 @@ const breadcrumbConfig = [
 
 const ExecutionStatus = ({
   cumulusInstance,
-  dispatch,
   executionStatus,
   logs,
-  match,
+  urlHelper
 }) => {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const { getPersistentQueryParams } = urlHelper;
   const [showInputModal, setShowInputModal] = useState(false);
   const [showOutputModal, setShowOutputModal] = useState(false);
   let error = get(executionStatus, 'error');
@@ -55,16 +58,37 @@ const ExecutionStatus = ({
 
   const { execution } = recordData;
   const { executionArn } = execution || {};
-  const { executionArn: executionArnParam } = match.params;
+
+  const [isLoading, setIsLoading] = useState(true);
+  const params = useParams();
+  const { executionArn: executionArnParam } = params;
 
   useEffect(() => {
-    dispatch(getExecutionStatus(executionArnParam));
-    dispatch(getCumulusInstanceMetadata());
+    let isMounted = true;
+
+    const fetchData = async () => {
+      setIsLoading(true);
+      await dispatch(getExecutionStatus(executionArnParam));
+      await dispatch(getCumulusInstanceMetadata());
+      if (isMounted) {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      isMounted = false;
+    };
   }, [dispatch, executionArnParam]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   if (!execution) {
     return (
@@ -78,8 +102,6 @@ const ExecutionStatus = ({
         {error && <ErrorReport report={error} />}
       </section>);
   }
-
-  if (executionArn !== executionArnParam) return <Loading />;
 
   const { name } = execution;
   const { metricsNotConfigured } = logs;
@@ -131,9 +153,10 @@ const ExecutionStatus = ({
             <span className="float-right">
               <Link
                 className="button button--small button--events"
-                to={() => ({
+                to={{
                   pathname: `/executions/execution/${executionArn}/events`,
-                })}
+                  search: getPersistentQueryParams(location)
+                }}
               >
                 Events
               </Link>
@@ -169,15 +192,16 @@ const ExecutionStatus = ({
 
 ExecutionStatus.propTypes = {
   cumulusInstance: PropTypes.object,
-  dispatch: PropTypes.func,
   executionStatus: PropTypes.object,
   logs: PropTypes.object,
-  match: PropTypes.object,
+  urlHelper: PropTypes.shape({
+    getPersistentQueryParams: PropTypes.func
+  }),
 };
 
 export { ExecutionStatus };
 
-export default withRouter(
+export default withUrlHelper(
   connect((state) => ({
     cumulusInstance: state.cumulusInstance,
     executionStatus: state.executionStatus,

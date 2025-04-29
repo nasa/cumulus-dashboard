@@ -24,7 +24,11 @@ test('EditRecord sends full object when merge property is true', (t) => {
   const schemaKey = 'provider';
   const schema = { [schemaKey]: {} };
   const store = mockStore({});
-
+  const mockRouter = {
+    navigate: () => {},
+    location: {}
+  };
+  
   const { container } = render(
     <Provider store={store}>
       <EditRecord
@@ -38,6 +42,7 @@ test('EditRecord sends full object when merge property is true', (t) => {
         updateRecord={updateProvider}
         clearRecordUpdate={clearUpdateProvider}
         backRoute={`providers/provider/${provider.id}`}
+        router={mockRouter}
       />
     </Provider>
   );

@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
-import path from 'path';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import path from 'path';
 import get from 'lodash/get';
 import { displayCase, fullDate, parseJson } from '../format';
-import { getPersistentQueryParams } from '../url-helper';
 import linkToKibana from '../kibana';
 import { window } from '../browser';
 import DefaultModal from '../../components/Modal/modal';
+import { getPersistentQueryParams } from '../../withUrlHelper';
 
 export const tableColumns = [
   {
@@ -265,11 +265,11 @@ export const associatedGranulesTableColumns = [
     accessor: 'granuleId',
     Cell: ({ cell: { value } }) => (
       <Link
-        to={() => ({
+        to={{
           pathname: `/granules/granule/${encodeURIComponent(
             path.basename(value)
           )}`,
-        })}
+        }}
       >
         {value}
       </Link>
@@ -280,11 +280,11 @@ export const associatedGranulesTableColumns = [
     id: 'associatedExecutions',
     Cell: ({ row: { original: { collectionId, granuleId } } }) => (
       <Link
-        to={() => ({
+        to={{
           pathname: `/executions/executions-list/${encodeURIComponent(
             collectionId
           )}/${encodeURIComponent(path.basename(granuleId))}`,
-        })}
+        }}
       >
         Link
       </Link>

@@ -1,7 +1,6 @@
-import React, { useState, useEffect, lazy, Suspense, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useMemo, lazy, Suspense, useCallback, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import withQueryParams from 'react-router-query-params';
 import isNil from 'lodash/isNil';
 import isEqual from 'lodash/isEqual';
 import omitBy from 'lodash/omitBy';
@@ -14,6 +13,8 @@ import ListActions from '../ListActions/ListActions';
 import TableHeader from '../TableHeader/table-header';
 import ListFilters from '../ListActions/ListFilters';
 import TableFilters from './TableFilters';
+
+import { withUrlHelper } from '../../withUrlHelper';
 
 const SortableTable = lazy(() => import('../SortableTable/SortableTable'));
 
@@ -28,7 +29,6 @@ const List = ({
   bulkActions,
   children,
   data,
-  dispatch,
   filterAction,
   filterClear,
   groupAction,
@@ -39,15 +39,30 @@ const List = ({
   list = {},
   onSelect,
   query = {},
-  queryParams,
   renderRowSubComponent,
   rowId,
-  sorts,
   tableColumns,
   tableId,
   toggleColumnOptionsAction,
   useSimplePagination = false,
+  urlHelper,
 }) => {
+  const dispatch = useDispatch();
+  const sorts = useSelector((state) => state.sorts);
+  const sortBy = tableId ? sorts[tableId] : null;
+  const initialInfix = useRef(null);
+  const { historyPushWithQueryParams, location, queryParams } = urlHelper;
+
+  const memoizedQueryFilters = useMemo(() => {
+    const {
+      limit: limitQueryParam,
+      page: pageQueryParam,
+      search: searchQueryParam,
+      ...filters
+    } = queryParams;
+    return omitBy(filters, isNil);
+  }, [queryParams]);
+
   const {
     data: listData,
     error: listError,
@@ -55,96 +70,134 @@ const List = ({
     meta,
   } = list;
   const { count, limit } = meta || {};
-  const tableData = data || listData || [];
+
+  const tableData = useMemo(() => data || listData || [], [data, listData]);
 
   const [selected, setSelected] = useState([]);
   const [clearSelected, setClearSelected] = useState(false);
   const [page, setPage] = useState(1);
-  const sortBy = tableId ? sorts[tableId] : null;
-  const initialInfix = useRef(queryParams.search);
-
-  const [queryConfig, setQueryConfig] = useState({
-    page: 1,
-    sort_key: buildSortKey(sortBy || [{ id: initialSortId, desc: true }]),
-    ...initialInfix.current ? { infix: initialInfix.current } : {},
-    ...query,
-  });
-  const [params, setParams] = useState({});
   const [bulkActionMeta, setBulkActionMeta] = useState({
     completedBulkActions: 0,
     bulkActionError: null,
   });
+  const [params, setParams] = useState({});
   const [toggleColumnOptions, setToggleColumnOptions] = useState({
     hiddenColumns: initialHiddenColumns,
     setHiddenColumns: noop,
   });
-  const { bulkActionError, completedBulkActions } = bulkActionMeta;
-  const {
-    limit: limitQueryParam,
-    page: pageQueryParam,
-    search: searchQueryParam,
-    ...queryFilters
-  } = queryParams;
 
-  const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
+  // Initialize queryConfig with sortBy from Redux
+  const initialConfig = useRef({
+    page: 1,
+    sort_key: buildSortKey(sortBy || [{ id: initialSortId, desc: true }]),
+    ...(initialInfix.current ? { infix: initialInfix.current } : {}),
+    ...query,
+  });
 
+  const [queryConfig, setQueryConfig] = useState(initialConfig.current);
+
+  const memoizedQuery = useMemo(() => query, [query]);
+
+  // Get query configuration: Remove empty keys so as not to mess up the query
+  const getQueryConfig = useCallback((config = {}) => omitBy({
+    ...queryConfig,
+    ...memoizedQueryFilters,
+    page,
+    sort_key: sortBy ? buildSortKey(sortBy) : queryConfig.sort_key,
+    ...config
+  }, isNil), [queryConfig, memoizedQueryFilters, sortBy, page]);
+
+  // Memoize getQueryConfig result to prevent infinite loops
+  const currentQueryConfig = useMemo(
+    () => getQueryConfig({}),
+    [getQueryConfig]
+  );
+
+  // Add useRef for re-rendering issues
+  const queryConfigRef = useRef(queryConfig);
+  const paramsRef = useRef(params);
+
+  // Effect for query changes
   useEffect(() => {
-    setQueryConfig((prevQueryConfig) => ({
-      ...prevQueryConfig,
-      ...getQueryConfig({}),
-    }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(query)]);
-
-  useEffect(() => {
-    // Remove parameters with null or undefined values
-    const newParams = omitBy(list.params, isNil);
-
-    if (!isEqual(newParams, params)) {
-      setParams(newParams);
-      setQueryConfig((prevQueryConfig) => ({
-        ...prevQueryConfig,
-        ...getQueryConfig({}),
-      }));
+    if (!isEqual(currentQueryConfig, queryConfigRef.current)) {
+      queryConfigRef.current = currentQueryConfig;
+      setQueryConfig(currentQueryConfig);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(list.params), JSON.stringify(params)]);
+  }, [currentQueryConfig]);
+
+  // Effect for params changes
+  useEffect(() => {
+    const newParams = {
+      ...memoizedQueryFilters,
+    };
+    if (!isEqual(newParams, paramsRef.current)) {
+      paramsRef.current = newParams;
+      setParams(newParams);
+    }
+  }, [memoizedQueryFilters]);
+
+  // useEffects for query management
+  useEffect(() => {
+    const newConfig = getQueryConfig({});
+    setQueryConfig((prevQueryConfig) => {
+      if (isEqual(prevQueryConfig, newConfig)) {
+        return prevQueryConfig;
+      }
+      return newConfig;
+    });
+  }, [memoizedQuery, getQueryConfig]);
 
   useEffect(() => {
     setClearSelected(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(queryFilters)]);
+  }, [memoizedQueryFilters]);
 
   useEffect(() => {
-    if (typeof toggleColumnOptionsAction === 'function') {
+    if (typeof toggleColumnOptionsAction === 'function') { // replaces noop with modern JS
       const allColumns = tableColumns.map(
         (column) => column.id || column.accessor
       );
       dispatch(
-        toggleColumnOptionsAction(toggleColumnOptions.hiddenColumns, allColumns)
+        toggleColumnOptionsAction(initialHiddenColumns, allColumns)
       );
     }
-  }, [
-    dispatch,
-    tableColumns,
-    toggleColumnOptions.hiddenColumns,
-    toggleColumnOptionsAction,
-  ]);
+  }, [dispatch, toggleColumnOptionsAction, initialHiddenColumns, tableColumns]);
 
-  function queryNewPage(newPage) {
+  // Update page handling
+  const queryNewPage = useCallback((newPage) => {
     setPage(newPage);
-  }
 
-  function queryNewSort(sortProps) {
-    const newQueryConfig = getQueryConfig({
-      sort_key: buildSortKey(sortProps),
-    });
-    if (!isEqual(queryConfig, newQueryConfig)) {
-      setQueryConfig(newQueryConfig);
+    // Update URL with new page number
+    if (historyPushWithQueryParams) {
+      const currentPath = location.pathname;
+      const currentSearch = new URLSearchParams(location.search);
+      currentSearch.set('page', newPage.toString());
+      historyPushWithQueryParams(`${currentPath}?${currentSearch.toString()}`);
     }
-  }
 
-  function updateSelection(selectedIds, currentSelectedRows) {
+    // Dispatch action to fetch new page data
+    const newQueryConfig = getQueryConfig();
+    newQueryConfig.page = newPage;
+    dispatch(action(newQueryConfig));
+  }, [getQueryConfig, historyPushWithQueryParams, location, dispatch, action]);
+
+  useEffect(() => {
+    if (queryConfig.page !== page) {
+      setQueryConfig((prev) => ({
+        ...prev,
+        page
+      }));
+    }
+  }, [page, queryConfig.page]);
+
+  // Update sort handling
+  const queryNewSort = useCallback((sortProps) => {
+    if (tableId) {
+      dispatch({ type: 'SET_SORT', payload: { tableId, sort: sortProps } });
+    }
+  }, [dispatch, tableId]);
+
+  // Update selection handling if needed
+  const updateSelection = useCallback((selectedIds, currentSelectedRows) => {
     if (!isEqual(selected, selectedIds)) {
       setSelected(selectedIds);
       setClearSelected(false);
@@ -153,49 +206,36 @@ const List = ({
         onSelect(selectedIds, currentSelectedRows);
       }
     }
-  }
+  }, [selected, onSelect]);
 
-  function onBulkActionSuccess(results, error) {
-    // not-elegant way to trigger a re-fresh in the timer
-    setBulkActionMeta((prevBulkActionMeta) => {
-      const {
-        completedBulkActions: prevCompletedBulkActions,
-        bulkActionError: prevBulkActionError,
-      } = prevBulkActionMeta;
-      return {
-        completedBulkActions: prevCompletedBulkActions + 1,
-        bulkActionError: error ? prevBulkActionError : null,
-      };
-    });
+  const hasActions = useMemo(
+    () => Array.isArray(bulkActions) && bulkActions.length > 0,
+    [bulkActions]
+  );
+
+  const { completedBulkActions } = bulkActionMeta;
+
+  const onBulkActionSuccess = useCallback((results) => {
+    setBulkActionMeta((prevState) => ({
+      ...prevState,
+      completedBulkActions: prevState.completedBulkActions + 1,
+      bulkActionsError: null,
+    }));
     setClearSelected(true);
-  }
+  }, []);
 
-  function onBulkActionError(error) {
+  const onBulkActionError = useCallback((error) => {
     const newBulkActionError =
       error.id && error.error
         ? `Could not process ${error.id}, ${error.error}`
         : error;
 
-    setBulkActionMeta((prevBulkActionMeta) => ({
-      ...prevBulkActionMeta,
+    setBulkActionMeta((prevState) => ({
+      ...prevState,
       bulkActionError: newBulkActionError,
     }));
     setClearSelected(true);
-  }
-
-  function getQueryConfig(config = {}) {
-    // Remove empty keys so as not to mess up the query
-    return omitBy(
-      {
-        page,
-        sort_key: queryConfig.sort_key,
-        ...params,
-        ...config,
-        ...query,
-      },
-      isNil
-    );
-  }
+  }, []);
 
   const getToggleColumnOptions = useCallback((newOptions) => {
     setToggleColumnOptions(newOptions);
@@ -227,7 +267,7 @@ const List = ({
       <div className="list-view">
         {listInflight && <Loading />}
         {listError && <ErrorReport report={listError} truncate={true} />}
-        {bulkActionError && <ErrorReport report={bulkActionError} />}
+        {bulkActionMeta.bulkActionError && <ErrorReport report={bulkActionMeta.bulkActionError} />}
         <div className="list__wrapper">
           {filterAction && (
             <TableHeader
@@ -252,7 +292,7 @@ const List = ({
               initialHiddenColumns={initialHiddenColumns}
               initialSortId={initialSortId}
               // if there's an initialSortId, it means the first fetch request for the list should be sorted
-              // according to that id, and therefore we are using sever-side/manual sorting
+              // according to that id, and therefore we are using server-side/manual sorting
               shouldManualSort={!!initialSortId}
               getToggleColumnOptions={getToggleColumnOptions}
               renderRowSubComponent={renderRowSubComponent}
@@ -296,15 +336,17 @@ List.propTypes = {
   toggleColumnOptionsAction: PropTypes.func,
   tableColumns: PropTypes.array,
   onSelect: PropTypes.func,
-  queryParams: PropTypes.object,
   renderRowSubComponent: PropTypes.func,
   tableId: PropTypes.string,
   sorts: PropTypes.object,
   useSimplePagination: PropTypes.bool,
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    historyPushWithQueryParams: PropTypes.func,
+    queryParams: PropTypes.object,
+  }),
 };
 
 export { List };
 
-export default withQueryParams()(
-  connect((state) => ({ sorts: state.sorts }))(List)
-);
+export default withUrlHelper(List);

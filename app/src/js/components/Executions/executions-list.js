@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Link, withRouter } from 'react-router-dom';
 import { listExecutionsByGranule } from '../../actions';
 import { tableColumns } from '../../utils/table-config/executions-list';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
@@ -24,29 +23,37 @@ const breadcrumbConfig = [
   }
 ];
 
-const ExecutionsList = ({
-  match,
-  executions
-}) => {
-  const { params } = match || {};
-  const { collectionId, granuleId } = params;
+const ExecutionsList = () => {
+  const { collectionId, granuleId } = useParams();
+  const dispatch = useDispatch();
+  const executions = useSelector((state) => state.executions);
+
   const { map } = executions || {};
   const granuleExecutionslist = map[granuleId] || {};
   const { meta } = granuleExecutionslist;
 
-  const payload = {
+  const payload = useMemo(() => ({
     granules: [
       {
-        granuleId: decodeURIComponent(granuleId),
-        collectionId: decodeURIComponent(collectionId)
+        granuleId: granuleId ? decodeURIComponent(granuleId) : '',
+        collectionId: collectionId ? decodeURIComponent(collectionId) : ''
       }
     ],
-  };
+  }), [granuleId, collectionId]);
 
-  function renderRowSubComponent(row) {
-    return (
-      <ExecutionSnapshot row={row} />
-    );
+  // Initial data fetch
+  useEffect(() => {
+    if (granuleId && collectionId) {
+      dispatch(listExecutionsByGranule(granuleId, payload));
+    }
+  }, [dispatch, granuleId, collectionId, payload]);
+
+  const renderRowSubComponent = useCallback((row) => {
+    <ExecutionSnapshot row={row} />;
+  }, []);
+  // If there are no params, show error
+  if (!granuleId || !collectionId) {
+    return <div>Error: Missing granuleId or collectionId</div>;
   }
 
   return (
@@ -88,15 +95,6 @@ const ExecutionsList = ({
   );
 };
 
-ExecutionsList.propTypes = {
-  match: PropTypes.object,
-  executions: PropTypes.object
-};
-
 export { ExecutionsList };
 
-export default withRouter(
-  connect((state) => ({
-    executions: state.executions
-  }))(ExecutionsList)
-);
+export default ExecutionsList;

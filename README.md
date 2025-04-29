@@ -105,11 +105,7 @@ We use npm for local package management. To install the requirements:
   nvm use 
 ```
 
-When package.json is updated.
-
-```bash
-npm install connected-react-router@6.9.3 --legacy-peer-deps
-```
+When package.json is updated (after running `npm install`).
 
 To build a dashboard bundle<sup>[1](#bundlefootnote)</sup>:
 

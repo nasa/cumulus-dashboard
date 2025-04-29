@@ -1,6 +1,5 @@
 /* eslint-disable import/no-cycle */
 import { combineReducers } from 'redux';
-import { connectRouter } from 'connected-react-router';
 import api from './api';
 import apiVersion from './api-version';
 import cmrInfo from './cmr-info';
@@ -60,7 +59,6 @@ export const reducers = {
   locationQueryParams,
 };
 
-export const createRootReducer = (history) => combineReducers({
-  router: connectRouter(history),
+export const createRootReducer = () => combineReducers({
   ...reducers,
 });

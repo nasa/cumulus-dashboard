@@ -2,7 +2,6 @@ import path from 'path';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import { get } from 'object-path';
 import { getSchema } from '../../actions';
 import Schema from '../FormSchema/schema';
@@ -10,7 +9,8 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import _config from '../../config';
 import { strings } from '../locale';
 import { window } from '../../utils/browser';
-import { historyPushWithQueryParams } from '../../utils/url-helper';
+import { historyPushWithQueryParams } from '../../withUrlHelper';
+import withRouter from '../../withRouter';
 
 const { updateDelay } = _config;
 
@@ -31,11 +31,13 @@ const AddRecord = ({
   title,
   validate,
   validationError,
+  router
 }) => {
   const [pk, setPk] = useState(null);
   const [error, setError] = useState(null);
   const record = pk ? get(state.created, pk, {}) : {};
   const schema = schemaState[schemaKey];
+  const { location, navigate } = router;
 
   useEffect(() => {
     if (!schema) {
@@ -47,16 +49,16 @@ const AddRecord = ({
     const status = get(state, ['created', pk, 'status']);
     if (status === 'success') {
       setTimeout(() => {
-        historyPushWithQueryParams(path.join(baseRoute, pk));
+        historyPushWithQueryParams(navigate, location, path.join(baseRoute, pk));
         if (window) {
           window.scrollTo(0, 0);
         }
       }, updateDelay);
     }
-  }, [baseRoute, pk, state]);
+  }, [navigate, location, baseRoute, pk, state]);
 
   function navigateBack() {
-    historyPushWithQueryParams(`/${baseRoute.split('/')[1]}`);
+    historyPushWithQueryParams(navigate, location, `/${baseRoute.split('/')[1]}`);
   }
 
   function post(_id, payload) {
@@ -142,6 +144,8 @@ AddRecord.propTypes = {
     PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(RegExp)])
   ),
   handleInputChange: PropTypes.objectOf(PropTypes.func),
+
+  router: PropTypes.object,
 };
 
 Schema.defaultProps = {

@@ -1,10 +1,10 @@
 // This is the main Collections Overview page
-import { get } from 'object-path';
 import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { get } from 'object-path';
+
 import {
   applyRecoveryWorkflowToCollection,
   clearCollectionsSearch,
@@ -27,6 +27,7 @@ import List from '../Table/Table';
 import { strings } from '../locale';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ListFilters from '../ListActions/ListFilters';
+import { withUrlHelper } from '../../withUrlHelper';
 
 const breadcrumbConfig = [
   {
@@ -39,14 +40,15 @@ const breadcrumbConfig = [
   },
 ];
 
-const CollectionList = ({
-  collections,
-  config,
-  datepicker,
-  dispatch,
-  providers,
-  queryParams,
-}) => {
+const CollectionList = ({ urlHelper }) => {
+  const dispatch = useDispatch();
+  const { queryParams } = urlHelper;
+
+  const collections = useSelector((state) => state.collections);
+  const config = useSelector((state) => state.config);
+  const datepicker = useSelector((state) => state.datepicker);
+  const providers = useSelector((state) => state.providers);
+
   const { dropdowns } = providers;
   const { list } = collections;
   const { startDateTime, endDateTime } = datepicker || {};
@@ -145,17 +147,12 @@ CollectionList.propTypes = {
   collections: PropTypes.object,
   config: PropTypes.object,
   datepicker: PropTypes.object,
-  dispatch: PropTypes.func,
   providers: PropTypes.object,
-  queryParams: PropTypes.object,
+  urlHelper: PropTypes.shape({
+    queryParams: PropTypes.object
+  }),
 };
 
 export { CollectionList };
-export default withRouter(
-  connect((state) => ({
-    collections: state.collections,
-    config: state.config,
-    datepicker: state.datepicker,
-    providers: state.providers,
-  }))(CollectionList)
-);
+
+export default withUrlHelper(CollectionList);

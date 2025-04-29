@@ -1,16 +1,16 @@
 /* eslint-disable import/no-cycle */
 
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import numeral from 'numeral';
-import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import { Alert } from 'react-bootstrap';
-import { getPersistentQueryParams } from './url-helper';
 import Tooltip from '../components/Tooltip/tooltip';
 import Popover from '../components/Popover/popover';
+import { getPersistentQueryParams } from '../withUrlHelper';
 
 export const nullValue = '--';
 
@@ -261,10 +261,10 @@ export const granuleLink = (granuleId) => {
   if (!granuleId) return nullValue;
   return (
     <Link
-      to={(location) => ({
+      to={{
         pathname: `/granules/granule/${granuleId}`,
-        search: getPersistentQueryParams(location),
-      })}
+        search: getPersistentQueryParams(),
+      }}
     >
       {granuleId}
     </Link>
@@ -275,10 +275,10 @@ export const pdrLink = (pdrName) => {
   if (!pdrName) return nullValue;
   return (
     <Link
-      to={(location) => ({
+      to={{
         pathname: `/pdrs/pdr/${pdrName}`,
-        location: getPersistentQueryParams(location),
-      })}
+        search: getPersistentQueryParams(),
+      }}
     >
       {pdrName}
     </Link>
@@ -289,10 +289,10 @@ export const providerLink = (provider) => {
   if (!provider) return nullValue;
   return (
     <Link
-      to={(location) => ({
+      to={{
         pathname: `/providers/provider/${provider}`,
-        search: getPersistentQueryParams(location),
-      })}
+        search: getPersistentQueryParams(),
+      }}
     >
       {provider}
     </Link>
@@ -302,6 +302,7 @@ export const providerLink = (provider) => {
 export const bool = (value) => (value ? 'Yes' : 'No');
 
 export const displayCase = (string) => {
+  if (!string) return nullValue;
   const split = string.split(' ');
   return split
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
@@ -402,10 +403,10 @@ export const collectionLink = (collectionId) => {
   if (!collectionId || collectionId === nullValue) return nullValue;
   return (
     <Link
-      to={(location) => ({
+      to={{
         pathname: collectionHrefFromId(collectionId),
-        search: getPersistentQueryParams(location),
-      })}
+        search: getPersistentQueryParams()
+      }}
     >
       {collectionName(collectionId)}
     </Link>

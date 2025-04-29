@@ -1,34 +1,21 @@
 import React from 'react';
-import { get } from 'object-path';
 import { Link } from 'react-router-dom';
-import { tally, collectionNameVersion, fromNowWithTooltip, CopyCellPopover, collectionHrefFromNameVersion, recoverCollectionText } from '../format';
+import { get } from 'object-path';
+import { tally, collectionNameVersion, fromNowWithTooltip, collectionHrefFromNameVersion, recoverCollectionText } from '../format';
 import { deleteCollection } from '../../actions';
 import { strings } from '../../components/locale';
 import BatchDeleteConfirmContent from '../../components/DeleteCollection/BatchDeleteConfirmContent';
 import BatchDeleteCompleteContent from '../../components/DeleteCollection/BatchDeleteCompleteContent';
 import BatchDeleteWithGranulesContent from '../../components/DeleteCollection/BatchDeleteWithGranulesContent';
-import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../../withUrlHelper';
 
 export const tableColumns = [
   {
     Header: 'Name',
     accessor: 'name',
-    Cell: ({ cell: { value, row } }) => { // eslint-disable-line react/prop-types
-      const { values } = row; // eslint-disable-line react/prop-types
-      const content = <Link to={(location) => ({
-        // eslint-disable-next-line react/prop-types
-        pathname: collectionHrefFromNameVersion({ name: value, version: values.version }),
-        search: getPersistentQueryParams(location)
-      })}>{value}</Link>;
-      return (
-        <CopyCellPopover
-          cellContent={content}
-          id={`collectionId-${value}-popover`}
-          popoverContent={content}
-          value={value}
-        />
-      );
-    },
+    isLink: true,
+    useCopyCellPopover: true,
+    linkTo: (row) => collectionHrefFromNameVersion({ name: row.name, version: row.version }),
     width: 175
   },
   {
@@ -73,9 +60,10 @@ export const tableColumns = [
   {
     Header: 'MMT',
     accessor: 'MMTLink',
-    Cell: ({ cell: { value } }) => (value ? <a href={value} target="_blank">MMT</a> : null), // eslint-disable-line react/prop-types
+    Cell: ({ cell: { value } }) => (value ? <a href={value} target="_blank" rel="noopener noreferrer">MMT</a> : null), // eslint-disable-line react/prop-types
     disableSortBy: true,
-    width: 100
+    width: 100,
+    openInNewTab: true
   },
   {
     Header: 'Updated',
@@ -139,10 +127,10 @@ export const bulkActions = (collections) => {
       Component: (
         <Link
           className="button button--green button--add button--small form-group__element"
-          to={(location) => ({
+          to={{
             pathname: '/collections/add',
-            search: getPersistentQueryParams(location),
-          })}
+            search: getPersistentQueryParams(),
+          }}
           role="button"
         >
           {strings.add_collection}

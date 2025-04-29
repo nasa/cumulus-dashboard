@@ -1,40 +1,31 @@
 /* eslint-disable import/no-cycle */
-import { createHashHistory, createBrowserHistory } from 'history';
+import React from 'react';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-import { routerMiddleware } from 'connected-react-router';
 import { createLogger } from 'redux-logger';
+import { Navigate } from 'react-router-dom';
 import { createRootReducer } from '../reducers';
 import { refreshTokenMiddleware } from '../middleware/token';
 import { requestMiddleware } from '../middleware/request';
 import { window } from '../utils/browser';
 import config from '../config';
 
-let historyCreator;
-
-if (typeof document !== 'undefined') {
-  historyCreator = config.servedByCumulusAPI ? createHashHistory({}) : createBrowserHistory({});
-}
-
-export const history = historyCreator;
-
-// redirect to login when not auth'd
-export const requireAuth = (store) => (nextState, replace) => {
+export const requireAuth = (store) => {
   if (!store.getState().api.authenticated) {
-    replace('/auth');
+    return <Navigate to="/auth" />;
   }
+  return null;
 };
 
-// redirect to homepage from login if authed
-export const checkAuth = (store) => (nextState, replace) => {
+export const checkAuth = (store) => {
   if (store.getState().api.authenticated) {
-    replace('/');
+    return <Navigate to="/" />;
   }
+  return null;
 };
 
 const isDevelopment = config.environment === 'development';
 
 const middlewares = [
-  routerMiddleware(history), // for dispatching history actions
   refreshTokenMiddleware,
   requestMiddleware,
   ...getDefaultMiddleware()
@@ -51,7 +42,7 @@ if (isDevelopment) {
 // create the store and build redux middleware
 export default function ourConfigureStore (preloadedState) {
   const store = configureStore({
-    reducer: createRootReducer(history), // root reducer with router state
+    reducer: createRootReducer(),
     middleware: middlewares,
     preloadedState
   });
