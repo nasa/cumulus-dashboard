@@ -6,11 +6,22 @@ import {
   DATEPICKER_HOUR_FORMAT,
 } from '../actions/types';
 
+const parseInitialDate = () => {
+  // eslint-disable-next-line no-restricted-globals
+  const initialDateRange = isNaN(process.env.INITIAL_DATE_RANGE)
+    ? process.env.INITIAL_DATE_RANGE
+    : Number(process.env.INITIAL_DATE_RANGE);
+  if (findDateRangeByValue(initialDateRange)) {
+    return initialDateRange;
+  }
+  return 'Custom';
+};
+
 // Also becomes default props for Datepicker
 export const initialState = () => ({
   startDateTime: null,
   endDateTime: null,
-  dateRange: findDateRangeByValue('Custom'),
+  dateRange: findDateRangeByValue(parseInitialDate()),
   hourFormat: '12HR'
 });
 
