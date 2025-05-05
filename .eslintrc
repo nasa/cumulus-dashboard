@@ -1,5 +1,5 @@
 {
-  "root": false,
+  "root": true,
   "extends": [
     "airbnb-base",
     "standard",
