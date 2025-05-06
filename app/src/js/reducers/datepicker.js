@@ -1,29 +1,35 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { msPerDay, findDateRangeByValue } from '../utils/datepicker';
+import config from '../config';
 import {
   DATEPICKER_DATECHANGE,
   DATEPICKER_DROPDOWN_FILTER,
   DATEPICKER_HOUR_FORMAT,
 } from '../actions/types';
-
-const parseInitialDate = () => {
-  // eslint-disable-next-line no-restricted-globals
-  const initialDateRange = isNaN(process.env.INITIAL_DATE_RANGE)
-    ? process.env.INITIAL_DATE_RANGE
-    : Number(process.env.INITIAL_DATE_RANGE);
-  if (findDateRangeByValue(initialDateRange)) {
-    return initialDateRange;
-  }
-  return 'Custom';
-};
-
 // Also becomes default props for Datepicker
-export const initialState = () => ({
-  startDateTime: null,
-  endDateTime: null,
-  dateRange: findDateRangeByValue(parseInitialDate()),
-  hourFormat: '12HR'
-});
+export const initialState = () => {
+  // eslint-disable-next-line no-restricted-globals
+  if (isNaN(config.initialDateRange)) {
+    if (config.initialDateRange === 'Recent') {
+      return {
+        ...recentData(),
+        hourFormat: '12HR'
+      };
+    }
+    return {
+      startDateTime: null,
+      endDateTime: null,
+      dateRange: findDateRangeByValue('Custom'),
+      hourFormat: '12HR'
+    };
+  }
+  const initialDateRange = Number(config.initialDateRange);
+  return {
+    ...computeDateTimeDelta(initialDateRange),
+    dateRange: { value: initialDateRange, label: `${initialDateRange} day${initialDateRange === 1 ? '' : 's'}` },
+    hourFormat: '12HR'
+  };
+};
 
 /**
  * Computes the desired time range from present.
@@ -58,7 +64,7 @@ const recentData = () => ({
 export default createReducer(initialState(), {
   [DATEPICKER_DROPDOWN_FILTER]: (state, action) => {
     const { data } = action;
-
+    console.log('data.dateRange:', data.dateRange);
     switch (data.dateRange.label) {
       case 'Custom':
       case 'All':
