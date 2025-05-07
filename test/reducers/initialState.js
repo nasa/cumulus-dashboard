@@ -32,7 +32,7 @@ test.serial('initialState defaults to Custom if unset or unrecognized', (t) => {
   });
 });
 
-test.serial('initialState is based on INITIAL_DATE_RANGE environment variable', (t) => {
+test.serial('initialState is based on INITIAL_DATE_RANGE_IN_DAYS environment variable', (t) => {
   config.initialDateRange = 'Custom';
   let state = initialState();
   console.log(state)
