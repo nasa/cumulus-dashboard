@@ -8,25 +8,19 @@ import {
 } from '../actions/types';
 // Also becomes default props for Datepicker
 export const initialState = () => {
+  let initialDateRange;
   // eslint-disable-next-line no-restricted-globals
   if (isNaN(config.initialDateRange)) {
-    if (config.initialDateRange === 'Recent') {
-      return {
-        ...recentData(),
-        hourFormat: '12HR'
-      };
-    }
-    return {
-      startDateTime: null,
-      endDateTime: null,
-      dateRange: findDateRangeByValue('Custom'),
-      hourFormat: '12HR'
-    };
+    initialDateRange = 'Custom';
+  } else {
+    initialDateRange = Number(config.initialDateRange);
   }
-  const initialDateRange = Number(config.initialDateRange);
+  const label = initialDateRange === 'Custom'
+    ? 'Custom'
+    : `${initialDateRange} day${initialDateRange === 1 ? '' : 's'}`;
   return {
     ...computeDateTimeDelta(initialDateRange),
-    dateRange: { value: initialDateRange, label: `${initialDateRange} day${initialDateRange === 1 ? '' : 's'}` },
+    dateRange: { value: initialDateRange, label },
     hourFormat: '12HR'
   };
 };
@@ -41,8 +35,8 @@ export const initialState = () => {
 const computeDateTimeDelta = (timeDeltaInDays) => {
   let endDateTime = null;
   let startDateTime = null;
-
-  if (!Number.isNaN(+timeDeltaInDays)) {
+  // eslint-disable-next-line no-restricted-globals
+  if (!isNaN(+timeDeltaInDays)) {
     endDateTime = Date.now();
     startDateTime = endDateTime - timeDeltaInDays * msPerDay;
   }
@@ -64,7 +58,6 @@ const recentData = () => ({
 export default createReducer(initialState(), {
   [DATEPICKER_DROPDOWN_FILTER]: (state, action) => {
     const { data } = action;
-    console.log('data.dateRange:', data.dateRange);
     switch (data.dateRange.label) {
       case 'Custom':
       case 'All':

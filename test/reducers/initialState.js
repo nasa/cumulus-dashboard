@@ -6,20 +6,17 @@ import config from '../../app/src/js/config';
 
 test.serial('initialState defaults to Custom if unset or unrecognized', (t) => {
   
-  state = initialState();
+  let state = initialState();
   t.deepEqual(state.dateRange, { value: 'Custom', label: 'Custom' });
   
   config.initialDateRange = 'skibidy toilet';
-  let state = initialState();
+  state = initialState();
   t.deepEqual(state.dateRange, { value: 'Custom', label: 'Custom' });
 });
 
 test.serial('initialState is based on INITIAL_DATE_RANGE environment variable', (t) => {
-  config.initialDateRange = 'Recent';
-  let state = initialState();
-  t.deepEqual(state.dateRange, { value: 'Recent', label: 'Recent' });
   config.initialDateRange = 'Custom';
-  state = initialState();
+  let state = initialState();
   t.deepEqual(state.dateRange, { value: 'Custom', label: 'Custom' });
 
   config.initialDateRange = '1';
