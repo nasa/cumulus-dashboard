@@ -14,8 +14,7 @@ export const allDateRanges = [
   { value: 366, label: '1 year' }
 ];
 
-export const findDateRangeByValue = (value) => allDateRanges.find((r) => value === r.value)
-  || { value, label: `${value} days`};
+export const findDateRangeByValue = (value) => allDateRanges.find((r) => value === r.value);
 
 export const allHourFormats = [
   { value: '12HR', label: '12HR' },

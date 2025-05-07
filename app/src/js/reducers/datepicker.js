@@ -7,20 +7,11 @@ import {
   DATEPICKER_HOUR_FORMAT,
 } from '../actions/types';
 // Also becomes default props for Datepicker
-export const initialState = () => {
-  let initialDateRange;
-  // eslint-disable-next-line no-restricted-globals
-  if (isNaN(config.initialDateRange)) {
-    initialDateRange = 'Custom';
-  } else {
-    initialDateRange = Number(config.initialDateRange);
-  }
-  return {
-    ...computeDateTimeDelta(initialDateRange),
-    dateRange: findDateRangeByValue(initialDateRange),
-    hourFormat: '12HR'
-  };
-};
+export const initialState = () => ({
+  ...computeDateTimeDelta(config.initialDateRange),
+  dateRange: findDateRangeByValue(+config.initialDateRange) || findDateRangeByValue('Custom'),
+  hourFormat: '12HR'
+});
 
 /**
  * Computes the desired time range from present.
@@ -32,8 +23,7 @@ export const initialState = () => {
 const computeDateTimeDelta = (timeDeltaInDays) => {
   let endDateTime = null;
   let startDateTime = null;
-  // eslint-disable-next-line no-restricted-globals
-  if (!isNaN(+timeDeltaInDays)) {
+  if (!Number.isNaN(+timeDeltaInDays)) {
     endDateTime = Date.now();
     startDateTime = endDateTime - timeDeltaInDays * msPerDay;
   }
