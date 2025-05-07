@@ -3,50 +3,65 @@
 import test from 'ava';
 import { initialState } from '../../app/src/js/reducers/datepicker';
 import config from '../../app/src/js/config';
+import { msPerDay } from '../../app/src/js/utils/datepicker';
 
 test.serial('initialState defaults to Custom if unset or unrecognized', (t) => {
-  
-  state = initialState();
-  t.deepEqual(state.dateRange, { value: 'Custom', label: 'Custom' });
-  
-  config.initialDateRange = 'skibidy toilet';
+
+  config.initialDateRange = 'ljsdlkj';
   let state = initialState();
-  t.deepEqual(state.dateRange, { value: 'Custom', label: 'Custom' });
+  t.deepEqual(state, {
+    dateRange: {
+      value: 'Custom',
+      label: 'Custom',
+    },
+    hourFormat: '12HR',
+    endDateTime: null,
+    startDateTime: null,
+  });
+
+  config.initialDateRange = 'skibidy toilet';
+  state = initialState();
+  t.deepEqual(state, {
+    dateRange: {
+      value: 'Custom',
+      label: 'Custom',
+    },
+    hourFormat: '12HR',
+    endDateTime: null,
+    startDateTime: null,
+  });
 });
 
 test.serial('initialState is based on INITIAL_DATE_RANGE environment variable', (t) => {
   config.initialDateRange = 'Custom';
   let state = initialState();
-  t.deepEqual(state.dateRange, { value: 'Custom', label: 'Custom' });
+  console.log(state)
+  t.deepEqual(state, {
+    dateRange: {
+      value: 'Custom',
+      label: 'Custom',
+    },
+    hourFormat: '12HR',
+    endDateTime: null,
+    startDateTime: null,
+  });
 
   config.initialDateRange = '1';
   state = initialState();
-  t.deepEqual(state.dateRange, { value: 1, label: '1 day' });
+  t.deepEqual(state.dateRange, { value: 'Custom', label: 'Custom' });
+  t.true(state.startDateTime <= Date.now() - 1 * msPerDay);
+  t.true(state.endDateTime <= Date.now() * msPerDay);
 
-
-  config.initialDateRange = '7';
+  config.initialDateRange = '365';
   state = initialState();
-  t.deepEqual(state.dateRange, { value: 7, label: '1 week' });
+  t.deepEqual(state.dateRange, { value: 'Custom', label: 'Custom' });
+  t.true(state.startDateTime <= Date.now() - 365 * msPerDay);
+  t.true(state.endDateTime <= Date.now() * msPerDay);
 
-
-  config.initialDateRange = '30';
+  config.initialDateRange = '12';
   state = initialState();
-  t.deepEqual(state.dateRange, { value: 30, label: '1 month' });
-
-
-  config.initialDateRange = '90';
-  state = initialState();
-  t.deepEqual(state.dateRange, { value: 90, label: '3 months' });
-
-
-  config.initialDateRange = '180';
-  state = initialState();
-  t.deepEqual(state.dateRange, { value: 180, label: '6 months' });
-
-
-  config.initialDateRange = '366';
-  state = initialState();
-  t.deepEqual(state.dateRange, { value: 366, label: '1 year' });
-  config.initialDateRange = 'Custom';
+  t.deepEqual(state.dateRange, { value: 'Custom', label: 'Custom' });
+  t.true(state.startDateTime <= Date.now() - 12 * msPerDay);
+  t.true(state.endDateTime <= Date.now() * msPerDay);
 });
 
