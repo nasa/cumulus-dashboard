@@ -14,7 +14,6 @@ services:
     environment:
       - APIROOT=http://localhost:5001
       - ENABLE_RECOVERY=true
-      - INITIAL_DATE_RANGE_IN_DAYS=Recent
       - HIDE_PDR=false
       - DAAC_NAME=local
       - STAGE=LOCALHOST-Development

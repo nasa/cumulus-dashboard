@@ -22,7 +22,7 @@ declare -a param_list=(
     "bamboo_SIT_HIDE_PDR"
     "bamboo_SIT_STAGE"
     "bamboo_SIT_DASHBOARD_BUCKET"
-    "bamboo_INITIAL_DATE_RANGE"
+    "bamboo_INITIAL_DATE_RANGE_IN_DAYS"
 )
 
 ## Strip 'bamboo_SECRET_' from secret keys
