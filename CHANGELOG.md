@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## Changed
 
 - **CUMULUS-4094**
-  - added INITIAL_DATE_RANGE environment variable to allow "Recent" or other custom range to be initial state in dashboard
+  - added INITIAL_DATE_RANGE_IN_DAYS environment variable to allow control over how many objects will be loaded at startup of the dashboard
 
 ## [v13.1.0] - 2025-03-25
 
