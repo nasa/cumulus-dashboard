@@ -15,12 +15,9 @@ export const initialState = () => {
   } else {
     initialDateRange = Number(config.initialDateRange);
   }
-  const label = initialDateRange === 'Custom'
-    ? 'Custom'
-    : `${initialDateRange} day${initialDateRange === 1 ? '' : 's'}`;
   return {
     ...computeDateTimeDelta(initialDateRange),
-    dateRange: { value: initialDateRange, label },
+    dateRange: findDateRangeByValue(initialDateRange),
     hourFormat: '12HR'
   };
 };
