@@ -7,7 +7,7 @@ import { msPerDay } from '../../app/src/js/utils/datepicker';
 
 test.serial('initialState defaults to Custom if unset or unrecognized', (t) => {
 
-  config.initialDateRange = 'ljsdlkj';
+  config.initialDateRange = 'All';
   let state = initialState();
   t.deepEqual(state, {
     dateRange: {
@@ -35,7 +35,6 @@ test.serial('initialState defaults to Custom if unset or unrecognized', (t) => {
 test.serial('initialState is based on INITIAL_DATE_RANGE_IN_DAYS environment variable', (t) => {
   config.initialDateRange = 'Custom';
   let state = initialState();
-  console.log(state)
   t.deepEqual(state, {
     dateRange: {
       value: 'Custom',
