@@ -3,7 +3,7 @@
 import test from 'ava';
 import sinon from 'sinon';
 import reducer, { initialState } from '../../app/src/js/reducers/datepicker';
-import { allDateRanges, msPerDay, findDateRangeByValue } from '../../app/src/js/utils/datepicker';
+import { msPerDay, findDateRangeByValue } from '../../app/src/js/utils/datepicker';
 import {
   DATEPICKER_DATECHANGE,
   DATEPICKER_DROPDOWN_FILTER,
