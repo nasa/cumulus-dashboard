@@ -7,7 +7,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-
 ### Added
 
 - **CUMULUS-4048**
@@ -17,7 +16,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - added INITIAL_DATE_RANGE_IN_DAYS environment variable to allow control over how many days objects will be loaded at startup of the dashboard
 
 ## [v13.1.0] - 2025-03-25
-
 
 ### Changed
 
