@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { Provider } from 'react-redux';
-import { Route, Redirect, Switch } from 'react-router-dom';
-import { ConnectedRouter } from 'connected-react-router';
-
-import ourConfigureStore, { history } from './store/configureStore';
+import { Provider, useSelector } from 'react-redux';
+import {
+  Routes,
+  Route,
+  Navigate,
+  BrowserRouter,
+} from 'react-router-dom';
+import ourConfigureStore from './store/configureStore';
 
 // Authorization & Error Handling
-// import ErrorBoundary from './components/Errors/ErrorBoundary';
+import ErrorBoundary from './components/Errors/ErrorBoundary';
 import NotFound from './components/404';
 import OAuth from './components/oauth';
 
@@ -27,44 +30,50 @@ import config from './config';
 
 console.log('Environment', config.environment);
 
-// Wrapper for Main component to include routing
-const MainRoutes = () => (
-  <Main path='/'>
-    <Switch>
-      <Route exact path='/' component={Home} />
-      <Route path='/404' component={NotFound} />
-      <Route path='/collections' component={Collections} />
-      <Route path='/granules' component={Granules} />
-      <Route path='/pdrs' component={Pdrs} />
-      <Route path='/providers' component={Providers} />
-      <Route path='/workflows' component={Workflows} />
-      <Route path='/executions' component={Executions} />
-      <Route path='/operations' component={Operations} />
-      <Route path='/rules' component={Rules} />
-      <Route path='/reconciliation-reports' component={ReconciliationReports} />
-    </Switch>
-  </Main>
-);
+// Establish auth and login rules if user is or is not authenticated via Launchpad
+const AuthenicatedRoute = () => {
+  const isAuthenticated = useSelector((state) => state.api.authenticated);
+  console.log('Authentication status:', isAuthenticated);
+  return isAuthenticated ? <Main /> : <Navigate to='auth' replace />;
+};
 
-// generate the root App Component
+const LoginRoute = () => {
+  const isAuthenticated = useSelector((state) => state.api.authenticated);
+  return isAuthenticated ? <Navigate to='/' replace /> : <OAuth />;
+};
+
+// Routes for the Cumulus Dashboard app
 const App = () => {
   const [store] = useState(ourConfigureStore({}));
-  const isLoggedIn = () => store.getState().api.authenticated;
 
   return (
-      // <ErrorBoundary> // Add after troublshooting other errors
-      // Routes
-      <div className="routes">
+    // Router with Store
+    <div className='routes'>
+      <ErrorBoundary>
         <Provider store={store}>
-          <ConnectedRouter history={history}>
-            <Switch>
-              <Redirect exact from='/login' to='/auth' />
-              <Route path='/auth' render={() => (isLoggedIn() ? <Redirect to='/' /> : <OAuth />)} />
-              <Route path='/' render={() => (isLoggedIn() ? <MainRoutes /> : <Redirect to='/auth' />)} />
-            </Switch>
-          </ConnectedRouter>
+          <BrowserRouter>
+            <Routes>
+              <Route path={'/login'} element={<Navigate to='/auth' replace />} />
+              <Route path={'/auth'} element={<LoginRoute />} />
+              <Route element={<AuthenicatedRoute />}>
+                <Route path={'/'} index element={<Home />} />
+                <Route path={'/collections/*'} element={<Collections />} />
+                <Route path={'/providers/*'} element={<Providers />} />
+                <Route path={'/granules/*'} element={<Granules />} />
+                <Route path={'/workflows/*'} element={<Workflows />} />
+                <Route path={'/executions/*'} element={<Executions />} />
+                <Route path={'/operations/*'} element={<Operations />} />
+                <Route path={'/rules/*'} element={<Rules />} />
+                <Route path={'/pdrs/*'} element={<Pdrs />} />
+                <Route path={'/reconciliation-reports/*'} element={<ReconciliationReports />}/>
+              </Route>
+              <Route path={'/404'} element={<NotFound />} />
+              <Route path={'*'} element={<Navigate to='/404' replace />} />
+            </Routes>
+          </BrowserRouter>
         </Provider>
-      </div>
+      </ErrorBoundary>
+    </div>
   );
 };
 

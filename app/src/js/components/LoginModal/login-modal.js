@@ -7,7 +7,7 @@ import { window } from '../../utils/browser';
 import { updateDelay } from '../../config';
 import ErrorReport from '../Errors/report';
 import Text from '../TextAreaForm/text';
-import { historyPushWithQueryParams } from '../../utils/url-helper';
+import { historyPushWithQueryParams } from '../../withUrlHelper';
 
 class LoginModal extends React.Component {
   constructor () {

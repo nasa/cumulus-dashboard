@@ -2,7 +2,6 @@ import path from 'path';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import { get } from 'object-path';
 import { getSchema } from '../../actions';
 import Schema from '../FormSchema/schema';
@@ -10,7 +9,8 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import _config from '../../config';
 import { strings } from '../locale';
 import { window } from '../../utils/browser';
-import { historyPushWithQueryParams } from '../../utils/url-helper';
+import { historyPushWithQueryParams } from '../../withUrlHelper';
+import withRouter from '../../withRouter';
 
 const { updateDelay } = _config;
 

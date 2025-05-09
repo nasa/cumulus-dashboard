@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronCircleDown, faChevronCircleUp } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -7,15 +6,18 @@ import {
   seconds,
   fromNowWithTooltip
 } from '../format';
-import { getPersistentQueryParams } from '../url-helper';
 
 export const tableColumns = [
   {
     Header: 'Name',
     accessor: 'name',
     width: 150,
-    Cell: ({ row: { original: { arn, name } } }) => ( // eslint-disable-line react/prop-types
-      <Link to={(location) => ({ pathname: `/executions/execution/${arn}`, search: getPersistentQueryParams(location) })} title={name}>{name}</Link>)
+    isLink: true,
+    linkTo: (row) => {
+      const path = `/executions/execution/${row.arn}`;
+      return path;
+    },
+    Cell: ({ cell: { value } }) => value
   },
   {
     Header: 'Status',
@@ -30,6 +32,7 @@ export const tableColumns = [
   {
     Header: 'Updated',
     accessor: 'updatedAt',
+    useTooltip: true,
     Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
     id: 'updatedAt'
   },

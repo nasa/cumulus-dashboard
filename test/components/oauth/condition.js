@@ -10,12 +10,31 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { requestMiddleware } from '../../../app/src/js/middleware/request';
 
+const urlHelper = {
+  queryParams: {},
+  location: {},
+  navigate: () => {},
+  params: {},
+  isAuthenticated: true,
+  routerState: { location: {} },
+  dispatch: () => {},
+  historyPushWithQueryParams: () => {},
+  getPersistentQueryParams: () => '',
+  getInitialValueFromLocation: () => '',
+  initialValuesFromLocation: () => ({}),
+  filterQueryParams: () => ({})
+};
+
 const middlewares = [requestMiddleware, thunk];
 const mockStore = configureMockStore(middlewares);
 const initialState = {
   api: {
     authenticated: false,
     inflight: false,
+  },
+  router: {
+    location: {},
+    action: 'POP'
   },
   location: {
     pathname: '/'
@@ -36,14 +55,15 @@ test('OAuth has link to Earthdata by default', function (t) {
   const someStore = mockStore(initialState);
   render(
     <Provider store={someStore} >
-    <MemoryRouter>
-    <OAuth
-      dispatch={dispatch}
-      api={api}
-      location={location}
-      queryParams={{}}
-    />
-    </MemoryRouter>
+      <MemoryRouter>
+        <OAuth
+          dispatch={dispatch}
+          api={api}
+          location={location}
+          queryParams={{}}
+          urlHelper={urlHelper}
+        />
+      </MemoryRouter>
     </Provider>
   );
 

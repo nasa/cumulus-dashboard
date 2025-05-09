@@ -1,53 +1,70 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import withQueryParams from 'react-router-query-params';
-import { withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import Modal from 'react-bootstrap/Modal';
-import get from 'lodash/get';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
+import Modal from 'react-bootstrap/Modal';
+import PropTypes from 'prop-types';
 import { login, setTokenState } from '../actions';
 import { window } from '../utils/browser';
 import { buildRedirectUrl } from '../utils/format';
 import _config from '../config';
 import ErrorReport from './Errors/report';
 import Header from './Header/header';
-import { historyPushWithQueryParams } from '../utils/url-helper';
+import { withUrlHelper } from '../withUrlHelper';
 
 const { updateDelay, apiRoot, oauthMethod } = _config;
 
-const OAuth = ({
-  dispatch,
-  api,
-  location,
-  apiVersion,
-  queryParams,
-}) => {
+const OAuth = ({ urlHelper }) => {
   const [token, setToken] = useState(null);
 
-  useEffect(() => {
-    if (api.authenticated) {
-      dispatch(setTokenState(token));
-      const { pathname } = location;
-      if (pathname !== '/auth' && get(window, 'location.reload')) {
-        setTimeout(() => window.location.reload(), updateDelay);
-      } else if (pathname === '/auth') {
-        setTimeout(() => historyPushWithQueryParams('/'), updateDelay); // react isn't seeing this a function
-      }
-    }
-  }, [api.authenticated, dispatch, location, token]);
+  const dispatch = useDispatch();
+  const { location, navigate } = urlHelper;
+
+  const authenticated = useSelector((state) => state.api.authenicated);
+  const api = useSelector((state) => state.api);
+  const apiVersion = useSelector((state) => state.apiVersion);
 
   useEffect(() => {
-    const { token: queryToken } = queryParams;
+    const params = new URLSearchParams(location.search);
+    const queryToken = params.get('token');
+    const stateParam = params.get('state');
+    const userDebug = params.get('debug') === '1';
+
     if (queryToken) {
       setToken(queryToken);
+
+      let state = {};
+      try {
+        state = JSON.parse(decodeURIComponent(stateParam));
+        if (userDebug) {
+          console.log('Parsed state:', state);
+        }
+      } catch (error) {
+        if (userDebug) {
+          console.error('Error parsing state:', error);
+        }
+      }
+
       dispatch(login(queryToken));
+      dispatch(setTokenState(queryToken));
     }
-  }, [queryParams, dispatch]);
+  }, [dispatch, location]);
+
+  useEffect(() => {
+    if (authenticated) {
+      dispatch(setTokenState(token));
+      const { pathname } = location;
+      if (pathname !== '/auth') {
+        setTimeout(() => window.location.reload(), updateDelay);
+      } else {
+        setTimeout(() => navigate('/'), updateDelay);
+      }
+    }
+  }, [authenticated, location, dispatch, token, navigate]);
 
   let button;
-  if (!api.authenticated && !api.inflight) {
+  if (!authenticated && !api.inflight) {
     const redirect = buildRedirectUrl(window.location);
+    console.log('Redirect URL:', redirect);
     if (oauthMethod === 'launchpad') {
       button = <div style={{ textAlign: 'center' }}><a className="button button--oauth" href={new URL(`saml/login?RelayState=${redirect}`, apiRoot).href}>Login with Launchpad</a></div>;
     } else {
@@ -88,13 +105,12 @@ const OAuth = ({
 };
 
 OAuth.propTypes = {
-  dispatch: PropTypes.func,
-  api: PropTypes.object,
-  location: PropTypes.object,
-  apiVersion: PropTypes.object,
-  queryParams: PropTypes.object
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    navigate: PropTypes.func,
+  }),
 };
 
 export { OAuth };
 
-export default withRouter(withQueryParams()(connect((state) => state)(OAuth)));
+export default withUrlHelper(OAuth);
