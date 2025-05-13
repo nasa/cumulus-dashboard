@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-4094**
   - Added INITIAL_DATE_RANGE_IN_DAYS environment variable to allow control over how many days objects will be loaded at startup of the dashboard
 - **CUMULUS-4088**
-  - Added sortKey=[timestamp] to GET collections and GET providers queries
+  - Added sortKey=[-timestamp] and set no limit to queries to get collection and provider options
 
 ## [v13.1.0] - 2025-03-25
 
