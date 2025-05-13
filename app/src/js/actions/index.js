@@ -427,7 +427,7 @@ export const getOptionsCollectionName = (options) => ({
     type: types.OPTIONS_COLLECTIONNAME,
     method: 'GET',
     url: new URL('collections', root).href,
-    params: { limit: 100, fields: 'name,version' }
+    params: { limit: 100, 'sort_key[]': '-updatedAt', fields: 'name,version' }
   }
 });
 
