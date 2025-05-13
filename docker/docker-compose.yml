@@ -16,6 +16,7 @@ services:
         - ENABLE_RECOVERY
         - HIDE_PDR
         - KIBANAROOT
+        - INITIAL_DATE_RANGE_IN_DAYS
         - SERVED_BY_CUMULUS_API
         - STAGE
   dashboard:
@@ -32,5 +33,6 @@ services:
         - ENABLE_RECOVERY
         - HIDE_PDR
         - KIBANAROOT
+        - INITIAL_DATE_RANGE_IN_DAYS
         - SERVED_BY_CUMULUS_API
         - STAGE

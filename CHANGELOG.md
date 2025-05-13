@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **CUMULUS-4048**
+  - Added a session timeout warning modal that pops up five minutes before the session expires
+- **CUMULUS-4094**
+  - Added INITIAL_DATE_RANGE_IN_DAYS environment variable to allow control over how many days objects will be loaded at startup of the dashboard
+- **CUMULUS-4088**
+  - Added sortKey=[-timestamp] and set no limit to queries to get collection and provider options
+
 ## [v13.1.0] - 2025-03-25
 
 ### Changed
@@ -21,6 +32,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+- **CUMULUS-3263**
+  - Updated datestring format to show the correct hours
 - **CUMULUS-4008**
   - Updated the Dockerfile with improved NPM install command to prevent error messages.
 

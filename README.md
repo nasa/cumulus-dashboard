@@ -36,6 +36,7 @@ Setting the following environment variables can override the default values.
 | LABELS | Select `daac` localization. | *daac* |
 | STAGE | Identifier displayed at top of dashboard page: e.g. PROD, UAT | *development* |
 | KIBANAROOT | \<optional\>  Points to a Kibana endpoint. | |
+| INITIAL_DATE_RANGE_IN_DAYS| \<optional\> Number of days to load up before at start | |
 
 
 ## Quick start

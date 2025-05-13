@@ -26,8 +26,9 @@ const config = {
   oauthMethod: process.env.AUTH_METHOD || 'earthdata',
   kibanaRoot: process.env.KIBANAROOT || '',
   graphicsPath: process.env.BUCKET || '',
+  initialDateRange: process.env.INITIAL_DATE_RANGE_IN_DAYS || 'All',
   enableRecovery: computeBool(process.env.ENABLE_RECOVERY, false),
-  servedByCumulusAPI: computeBool(process.env.SERVED_BY_CUMULUS_API, '')
+  servedByCumulusAPI: computeBool(process.env.SERVED_BY_CUMULUS_API, ''),
 };
 
 module.exports = config;

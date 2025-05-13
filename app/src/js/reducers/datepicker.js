@@ -1,15 +1,14 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { msPerDay, findDateRangeByValue } from '../utils/datepicker';
+import config from '../config';
 import {
   DATEPICKER_DATECHANGE,
   DATEPICKER_DROPDOWN_FILTER,
   DATEPICKER_HOUR_FORMAT,
 } from '../actions/types';
-
 // Also becomes default props for Datepicker
 export const initialState = () => ({
-  startDateTime: null,
-  endDateTime: null,
+  ...computeDateTimeDelta(config.initialDateRange),
   dateRange: findDateRangeByValue('Custom'),
   hourFormat: '12HR'
 });
@@ -24,7 +23,6 @@ export const initialState = () => ({
 const computeDateTimeDelta = (timeDeltaInDays) => {
   let endDateTime = null;
   let startDateTime = null;
-
   if (!Number.isNaN(+timeDeltaInDays)) {
     endDateTime = Date.now();
     startDateTime = endDateTime - timeDeltaInDays * msPerDay;
@@ -47,7 +45,6 @@ const recentData = () => ({
 export default createReducer(initialState(), {
   [DATEPICKER_DROPDOWN_FILTER]: (state, action) => {
     const { data } = action;
-
     switch (data.dateRange.label) {
       case 'Custom':
       case 'All':
