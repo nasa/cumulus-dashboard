@@ -67,7 +67,7 @@
     "@babel/preset-env": "^7.16.5",
     "@babel/preset-react": "^7.16.5",
     "@babel/register": "^7.16.5",
-    "@babel/runtime": "^7.16.5",
+    "@babel/runtime": "^7.27.0",
     "@cumulus/api": "20.0.0",
     "@cumulus/aws-client": "20.0.0",
     "@cypress/webpack-preprocessor": "^5.11.0",
