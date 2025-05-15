@@ -103,7 +103,8 @@ The dashboard uses node v20.12.2. To build/run the dashboard on your local machi
 #### install requirements
 We use npm for local package management. To install the requirements:
 ```bash
-  nvm use 
+  nvm use
+  npm ci --legacy-peer-deps
 ```
 
 When package.json is updated.

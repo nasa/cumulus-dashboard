@@ -52,10 +52,12 @@
         }
       ],
       "collectionId": "MOD09GQ___006",
+      "producerGranuleId": "MOD09GQ.A1530852.CljGDp.006.2163412421938",
       "status": "queued",
       "timestamp": 1537831783729,
       "updatedAt": 1537831783389
-    },    {
+    },
+    {
       "granuleId": "test_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl2",
       "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:7a71f849-57a0-40e7-8fca-5cf796602a07",
       "lastUpdateDateTime": "2018-04-25T21:45:45.524Z",
@@ -82,6 +84,7 @@
         }
       ],
       "collectionId": "Test-L2-Coastal___Operational/Near-Real-Time",
+      "producerGranuleId": "test_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl2",
       "status": "completed",
       "timestamp": 1537831783729,
       "updatedAt": 1537831783389
@@ -132,6 +135,7 @@
         }
       ],
       "collectionId": "MOD09GQ___006",
+      "producerGranuleId": "MOD09GQ.A1657416.CbyoRi.006.9697917818587",
       "status": "running",
       "timestamp": 1537831751216,
       "updatedAt": 1537831750922
@@ -166,6 +170,7 @@
         }
       ],
       "collectionId": "MOD09GQ___006",
+      "producerGranuleId": "MOD09GQ.A2016358.h13v04.006.2016360104606.hdf",
       "status": "completed",
       "timestamp": 1537831678152,
       "updatedAt": 1537831677777
@@ -204,6 +209,7 @@
         }
       ],
       "collectionId": "MOD09GQ___006",
+      "producerGranuleId": "MOD09GQ.A2016358.h13v04.006.2016360104606",
       "status": "completed",
       "timestamp": 1537803544626,
       "updatedAt": 1537803544626
@@ -249,6 +255,7 @@
         }
       ],
       "collectionId": "MOD09GQ___006",
+      "producerGranuleId": "MOD09GQ.A5456658.rso6Y4.006.4979096122140",
       "status": "completed",
       "timestamp": 1537830693975,
       "updatedAt": 1537830693542
@@ -273,6 +280,7 @@
         }
       ],
       "collectionId": "MOD09GQ___006",
+      "producerGranuleId": "MOD09GQ.A2417309.YZ9tCV.006.4640974889044",
       "status": "failed",
       "timestamp": 1537830620568,
       "updatedAt": 1537830620074
@@ -318,6 +326,7 @@
         }
       ],
       "collectionId": "MOD09GQ___006",
+      "producerGranuleId": "MOD09GQ.A0142558.ee5lpE.006.5112577830916",
       "status": "completed",
       "timestamp": 1537811617065,
       "updatedAt": 1537811616392
@@ -364,6 +373,7 @@
         }
       ],
       "collectionId": "MOD09GQ___006",
+      "producerGranuleId": "MOD09GQ.A0501579.PZB_CG.006.8580266395214",
       "status": "running",
       "timestamp": 1537811586955,
       "updatedAt": 1537811586313
@@ -409,6 +419,7 @@
         }
       ],
       "collectionId": "MOD09GQ___006",
+      "producerGranuleId": "MOD09GQ.A8022119.sk3Sph.006.0494433853533",
       "status": "completed",
       "timestamp": 1537810722632,
       "updatedAt": 1537810722395
@@ -433,6 +444,7 @@
         }
       ],
       "collectionId": "MOD09GQ___006",
+      "producerGranuleId": "MOD09GQ.A9344328.K9yI3O.006.4625818663028",
       "status": "failed",
       "timestamp": 1537810219425,
       "updatedAt": 1537810218839
@@ -462,6 +474,7 @@
       "lastUpdateDateTime": "2018-04-25T21:45:45.524053",
       "processingEndDateTime": "2019-12-11T23:19:30.946Z",
       "processingStartDateTime": "2019-12-11T23:19:23.823Z",
+      "producerGranuleId": "MOD09GQ.A4622742.B7A8Ma.006.7857260550036",
       "productionDateTime": "2018-07-19T12:01:01Z",
       "productVolume": "2488",
       "provider": "s3_provider",
