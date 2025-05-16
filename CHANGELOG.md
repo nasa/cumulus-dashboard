@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## Handle Granules with Identical producerGranuleId in Different Collections
 This version of the dashboard requires Cumulus API >= feature/duplicate-granule-924 release(TBD)
 
+- **CUMULUS-4063**
+  - Visualized producerGranuleId in all locations where granules are displayed
 - **CUMULUS-4064**
   - Populated producer ID in dash/db fixtures
   - Updated the dashboard to use alpha version `@cumulus/api@20.1.3-alpha.2` and
