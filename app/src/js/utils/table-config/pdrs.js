@@ -115,6 +115,12 @@ export const granuleTableColumns = [
     Cell: ({ cell: { value } }) => collectionLink(value)
   },
   {
+    Header: 'ProducerGranuleId',
+    accessor: (row) => row.producerGranuleId,
+    id: 'producerGranuleId',
+    width: 225
+  },
+  {
     Header: 'Duration',
     accessor: (row) => seconds(row.duration),
     id: 'duration'

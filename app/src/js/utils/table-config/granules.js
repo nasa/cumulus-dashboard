@@ -83,6 +83,12 @@ export const tableColumns = [
     id: 'execution-list'
   },
   {
+    Header: 'ProducerGranuleId',
+    accessor: (row) => row.producerGranuleId,
+    id: 'producerGranuleId',
+    width: 225
+  },
+  {
     Header: 'Provider',
     accessor: 'provider',
     Cell: ({ cell: { value } }) => providerLink(value)
@@ -131,6 +137,12 @@ export const errorTableColumns = [
     accessor: 'granuleId',
     Cell: ({ cell: { value } }) => granuleLink(value),
     width: 200
+  },
+  {
+    Header: 'ProducerGranuleId',
+    accessor: (row) => row.producerGranuleId,
+    id: 'producerGranuleId',
+    width: 225
   },
   {
     Header: 'Duration',
