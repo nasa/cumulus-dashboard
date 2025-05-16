@@ -90,7 +90,7 @@
       "updatedAt": 1537831783389
     },
     {
-      "granuleId": "MOD09GQ.A1657416.CbyoRi.006.9697917818587",
+      "granuleId": "MOD09GQ.A1657416.CbyoRi.006.9697917818587_e798fe37",
       "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationParsePdrStateMachine-JVlCKfoXElDQ:9888b858-d70c-42ec-a887-c9367dcfd7cf",
       "lastUpdateDateTime": "2018-04-25T21:45:45.524Z",
       "processingEndDateTime": "2018-09-24T23:28:45.731Z",
@@ -261,7 +261,7 @@
       "updatedAt": 1537830693542
     },
     {
-      "granuleId": "MOD09GQ.A2417309.YZ9tCV.006.4640974889044",
+      "granuleId": "MOD09GQ.A2417309.YZ9tCV.006.4640974889044_ca2a8dfe",
       "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:c33e4091-e90d-449c-93f5-c4462b6e4e87",
       "published": false,
       "cmrLink": null,
