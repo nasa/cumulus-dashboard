@@ -471,7 +471,7 @@ describe('Dashboard Granules Page', () => {
 
     it('Should reingest multiple granules and redirect to the running page.', () => {
       const granuleIds = [
-        'MOD09GQ.A2417309.YZ9tCV.006.4640974889044',
+        'MOD09GQ.A2417309.YZ9tCV.006.4640974889044_ca2a8dfe',
         'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
       ];
       cy.intercept(
@@ -568,7 +568,7 @@ describe('Dashboard Granules Page', () => {
       // granule IDs in alphanumeric order. We sort the actual result for comparison.
       const granuleIds = [
         'MOD09GQ.A0501579.PZB_CG.006.8580266395214',
-        'MOD09GQ.A1657416.CbyoRi.006.9697917818587'
+        'MOD09GQ.A1657416.CbyoRi.006.9697917818587_e798fe37'
       ];
 
       cy.intercept({

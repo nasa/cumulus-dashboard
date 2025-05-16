@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## Handle Granules with Identical producerGranuleId in Different Collections
+This version of the dashboard requires Cumulus API >= feature/duplicate-granule-924 release(TBD)
+
+- **CUMULUS-4064**
+  - Populated producer ID in dash/db fixtures
+  - Updated the dashboard to use alpha version `@cumulus/api@20.1.3-alpha.2` and
+    `@cumulus/aws-client@20.1.3-alpha.2`
+
 ## [Unreleased]
 
 ### Added
