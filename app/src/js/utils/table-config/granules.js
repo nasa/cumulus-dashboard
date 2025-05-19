@@ -1,9 +1,8 @@
+import React from 'react';
+import Collapsible from 'react-collapsible';
 import path from 'path';
 import pick from 'lodash/pick';
-import React from 'react';
 import { get } from 'object-path';
-import Collapsible from 'react-collapsible';
-import { Link } from 'react-router-dom';
 import noop from 'lodash/noop';
 import {
   seconds,
@@ -14,11 +13,11 @@ import {
   granuleLink,
   providerLink,
   fromNowWithTooltip,
-  CopyCellPopover,
   recoverGranules,
   deleteGranules,
   removeGranulesFromCmr,
   removeFromCmrDelete,
+  deconstructCollectionId
 } from '../format';
 import {
   applyWorkflowToGranuleClearError,
@@ -37,8 +36,8 @@ import BulkGranule from '../../components/Granules/bulk';
 import BatchReingestConfirmContent from '../../components/ReingestGranules/BatchReingestConfirmContent';
 import BatchReingestCompleteContent from '../../components/ReingestGranules/BatchReingestCompleteContent';
 import TextArea from '../../components/TextAreaForm/text-area';
-import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
 import GranuleInventory from '../../components/Granules/granule-inventory';
+import { historyPushWithQueryParams } from '../../withUrlHelper';
 
 export const groupAction = {
   title: 'Granule Actions',
@@ -50,18 +49,22 @@ export const tableColumns = [
     Header: 'Status',
     accessor: 'status',
     width: 110,
-    Cell: ({ cell: { value } }) => <Link to={(location) => ({ pathname: `/granules/${value}`, search: getPersistentQueryParams(location) })} className={`granule__status granule__status--${value}`}>{displayCase(value)}</Link> // eslint-disable-line react/prop-types
+    isLink: true,
+    linkTo: (row) => `/granules/${row.status}`,
+    Cell: ({ cell: { value } }) => (<span className={`granule__status granule__status--${value}`}>{displayCase(value)}</span>) // eslint-disable-line react/prop-types
   },
   {
     Header: 'Name',
     accessor: 'granuleId',
-    // eslint-disable-next-line react/prop-types
-    Cell: ({ cell: { value } }) => <CopyCellPopover cellContent={granuleLink(value)} id={`granuleId-${value}-popover`} popoverContent={granuleLink(value)} value={value} />,
-    width: 225
+    width: 225,
+    isLink: true,
+    useCopyCellPopover: true,
+    linkTo: (row) => `/granules/granule/${row.granuleId || row.values?.granuleId || row.original?.granuleId}`
   },
   {
     Header: 'Published',
     accessor: 'published',
+    isLink: true,
     Cell: ({ row: { original: { cmrLink, published } } }) => (// eslint-disable-line react/prop-types
       cmrLink && bool(published) ? <a href={cmrLink} target='_blank'>{bool(published)}</a> : bool(published)
     )
@@ -69,22 +72,38 @@ export const tableColumns = [
   {
     Header: strings.collection_id,
     accessor: 'collectionId',
-    // eslint-disable-next-line react/prop-types
-    Cell: ({ cell: { value } }) => <CopyCellPopover cellContent={collectionLink(value)} id={`collectionId-${value}-popover`} popoverContent={collectionLink(value)} value={value} />,
+    isLink: true,
+    useCopyCellPopover: true,
+    linkTo: (row) => {
+      const { name, version } = deconstructCollectionId(row.collectionId);
+      return `/collections/collection/${name}/${encodeURIComponent(version)}`;
+    },
+    Cell: ({ cell: { value } }) => collectionLink(value)
   },
   {
     Header: 'Executions List',
     accessor: 'granuleId',
-    Cell: ({ row: { original: { collectionId, granuleId } } }) => (// eslint-disable-line react/prop-types
-      <Link to={(location) => ({ pathname: `/executions/executions-list/${encodeURIComponent(collectionId)}/${encodeURIComponent(path.basename(granuleId))}` })}>link</Link>
-    ),
+    isLink: true,
+    linkTo: (row) => {
+      const collectionId = row.collectionId || row.original?.collectionId;
+      const granuleId = row.granuleId || row.original?.granuleId;
+
+      if (collectionId && granuleId) {
+        return `/executions/executions-list/${encodeURIComponent(collectionId)}/${encodeURIComponent(path.basename(granuleId))}`;
+      }
+      // Return a fallback path or null if data is missing
+      return null;
+    },
     disableSortBy: true,
+    Cell: () => 'link',
     width: 90,
     id: 'execution-list'
   },
   {
     Header: 'Provider',
     accessor: 'provider',
+    isLink: true,
+    linkTo: (row) => `/providers/provider/${encodeURIComponent(row.provider)}`,
     Cell: ({ cell: { value } }) => providerLink(value)
   },
   {
@@ -110,6 +129,7 @@ export const tableColumns = [
 
 export const defaultHiddenColumns = ['recoveryStatus'];
 
+// Errors' Table on Home Overview Page
 export const errorTableColumns = [
   {
     Header: 'Error Type',
@@ -129,6 +149,8 @@ export const errorTableColumns = [
   {
     Header: 'Granule',
     accessor: 'granuleId',
+    isLink: true,
+    linkTo: (row) => `granules/granule/${encodeURIComponent(row.granuleId)}`,
     Cell: ({ cell: { value } }) => granuleLink(value),
     width: 200
   },

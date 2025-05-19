@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkSquareAlt } from '@fortawesome/free-solid-svg-icons';
-import { withRouter } from 'react-router-dom';
 import get from 'lodash/get';
 import {
   getExecutionStatus,
@@ -22,6 +21,7 @@ import SortableTable from '../SortableTable/SortableTable';
 import ListFilters from '../ListActions/ListFilters';
 import { formatEvents } from '../../utils/table-config/executions';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import withRouter from '../../withRouter';
 
 const breadcrumbConfig = [
   {
@@ -41,10 +41,9 @@ const breadcrumbConfig = [
 const ExecutionEvents = ({
   dispatch,
   executionStatus,
-  location,
-  match,
+  router
 }) => {
-  const { params } = match || {};
+  const { params } = router || {};
   const { executionArn } = params;
 
   const { searchString } = executionStatus;
@@ -148,15 +147,20 @@ const ExecutionEvents = ({
 ExecutionEvents.propTypes = {
   dispatch: PropTypes.func,
   executionStatus: PropTypes.object,
-  location: PropTypes.object,
-  match: PropTypes.object,
+  router: PropTypes.shape({
+    location: PropTypes.object,
+    navigate: PropTypes.func,
+    params: PropTypes.object
+  }),
 };
 
 ExecutionEvents.displayName = 'Execution Events';
 
-export { ExecutionEvents };
-
-export default withRouter(connect((state) => ({
+const mapStateToProps = (state) => ({
   executionStatus: state.executionStatus,
   cumulusInstance: state.cumulusInstance
-}))(ExecutionEvents));
+});
+
+export { ExecutionEvents };
+
+export default connect(mapStateToProps)(withRouter(ExecutionEvents));

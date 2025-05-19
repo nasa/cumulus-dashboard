@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { withRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { listPdrs, getCount, clearPdrsFilter, filterPdrs } from '../../actions';
 import { lastUpdated, tally } from '../../utils/format';
@@ -13,7 +13,8 @@ import Dropdown from '../DropDown/dropdown';
 import statusOptions from '../../utils/status';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import { getPersistentQueryParams } from '../../utils/url-helper';
+import { getPersistentQueryParams } from '../../withUrlHelper';
+import withRouter from '../../withRouter';
 
 const breadcrumbConfig = [
   {

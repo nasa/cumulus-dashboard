@@ -1,23 +1,20 @@
 import React from 'react';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { withRouter, Route, Switch } from 'react-router-dom';
-import withQueryParams from 'react-router-query-params';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
 import AddProvider from './add';
 import EditProvider from './edit';
 import ProvidersOverview from './overview';
 import ProviderOverview from './provider';
-import { filterQueryParams } from '../../utils/url-helper';
+import { withUrlHelper } from '../../withUrlHelper';
 
-const Providers = ({
-  location,
-  params,
-  queryParams,
-}) => {
+const Providers = ({ urlHelper }) => {
+  const { queryParams, filterQueryParams, location, params } = urlHelper;
   const { pathname } = location;
   const showSidebar = pathname !== '/providers/add';
   const filteredQueryParams = filterQueryParams(queryParams);
+
   return (
     <div className="page__providers">
       <Helmet>
@@ -36,24 +33,22 @@ const Providers = ({
               showSidebar ? 'page__content--shortened' : 'page__content'
             }
           >
-            <Switch>
+            <Routes>
+            <Route index element={<Navigate to="all" replace />} />
               <Route
-                exact
-                path="/providers"
-                render={(props) => (
-                  <ProvidersOverview {...props} queryParams={filteredQueryParams} />
-                )}
+                path="all"
+                element={<ProvidersOverview queryParams={filteredQueryParams} />}
               />
-              <Route path="/providers/add" component={AddProvider} />
+              <Route path="add" element={<AddProvider />} />
               <Route
-                path="/providers/edit/:providerId"
-                component={EditProvider}
+                path="edit/:providerId"
+                element={<EditProvider />}
               />
               <Route
-                path="/providers/provider/:providerId"
-                component={ProviderOverview}
+                path="provider/:providerId"
+                element={<ProviderOverview />}
               />
-            </Switch>
+            </Routes>
           </div>
         </div>
       </div>
@@ -62,9 +57,12 @@ const Providers = ({
 };
 
 Providers.propTypes = {
-  location: PropTypes.object,
-  params: PropTypes.object,
-  queryParams: PropTypes.object,
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    filterQueryParams: PropTypes.func,
+    params: PropTypes.object,
+    queryParams: PropTypes.object
+  }),
 };
 
-export default withRouter(withQueryParams()(Providers));
+export default withUrlHelper(Providers);

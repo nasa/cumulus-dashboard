@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback, useRef } from 'react';
-import c from 'classnames';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { withRouter, Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
 import get from 'lodash/get';
 import {
@@ -14,6 +14,8 @@ import { graphicsPath, nav } from '../../config';
 import { window } from '../../utils/browser';
 import { strings } from '../locale';
 import linkToKibana from '../../utils/kibana';
+import { getPersistentQueryParams } from '../../withUrlHelper';
+import withRouter from '../../withRouter';
 import { getPersistentQueryParams } from '../../utils/url-helper';
 import SessionTimeoutModal from '../SessionTimeoutModal/session-timeout-modal';
 
@@ -33,12 +35,13 @@ const paths = [
 const Header = ({
   api,
   dispatch,
-  location,
   minimal,
   locationQueryParams,
 }) => {
+  const location = useLocation();
   const mounted = useRef(true);
 
+  // Logout action
   const handleLogout = useCallback(() => {
     dispatch(logout()).then(() => {
       if (get(window, 'location.reload')) {
@@ -47,6 +50,7 @@ const Header = ({
     });
   }, [dispatch]);
 
+  // Dispatch API information to footer tooltip
   useEffect(() => {
     if (api.authenticated && mounted.current) {
       dispatch(getApiVersion());
@@ -58,11 +62,12 @@ const Header = ({
     };
   }, [api.authenticated, dispatch]);
 
-  const className = (path) => {
-    const active = location.pathname?.slice(0, path.length) === path; // nav issue with router
+  const navigation = (path) => {
+    const { pathname } = location.pathname;
+    const active = pathname?.slice(0, path.length) === path;
     const menuItem = path.replace('/', '');
     const order = `nav__order-${!nav.order.includes(menuItem) ? 2 : nav.order.indexOf(menuItem)}`;
-    return c({
+    return classNames({
       active,
       [order]: true,
     });
@@ -101,7 +106,7 @@ const Header = ({
               ? (
               <ul>
                 {activePaths.map((path) => (
-                  <li key={path[0]} className={className(path[1])}>
+                  <li key={path[0]} className={navigation(path[1])}>
                     {linkTo(path, locationQueryParams.search[path[1]] || locationSearch)}
                   </li>
                 ))}
@@ -131,7 +136,6 @@ const Header = ({
 Header.propTypes = {
   api: PropTypes.object,
   dispatch: PropTypes.func,
-  location: PropTypes.object,
   minimal: PropTypes.bool,
   cumulusInstance: PropTypes.object,
   datepicker: PropTypes.object,

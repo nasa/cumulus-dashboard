@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Route, Routes, Navigate, useParams, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import { withRouter, Route, Switch } from 'react-router-dom';
-import { connect } from 'react-redux';
-import withQueryParams from 'react-router-query-params';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
@@ -13,16 +12,36 @@ import ExecutionEvents from './execution-events';
 import ExecutionsList from './executions-list';
 import { getCount, listExecutions } from '../../actions';
 import { strings } from '../locale';
-import { filterQueryParams } from '../../utils/url-helper';
+import { withUrlHelper } from '../../withUrlHelper';
 
-const Executions = ({
-  dispatch,
-  location,
-  queryParams
-}) => {
-  const { pathname } = location;
-  const showDatePicker = pathname === '/executions';
+// Wrapper component to validate execution ARN
+const ExecutionRouteWrapper = ({ Component }) => {
+  const { executionArn } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!executionArn) {
+      console.warn('No execution ARN provided');
+      navigate('/executions/all');
+    }
+  }, [executionArn, navigate]);
+
+  if (!executionArn) {
+    return null;
+  }
+
+  return <Component executionArn={executionArn} />;
+};
+
+const Executions = ({ urlHelper }) => {
+  const dispatch = useDispatch();
+  const { queryParams, filterQueryParams, location } = urlHelper;
   const filteredQueryParams = filterQueryParams(queryParams);
+  const { pathname } = location;
+  const { executionArn } = useParams();
+
+  const showSidebar = pathname !== '/executions/add';
+  const showDatePicker = pathname === '/executions';
 
   function query () {
     dispatch(getCount({
@@ -48,17 +67,16 @@ const Executions = ({
       }
       <div className='page__content'>
         <div className='wrapper__sidebar'>
-          <Route path='/executions/execution/:executionArn' component={Sidebar} />
-          <Route path='/executions/executions-list/:granule' component={Sidebar} />
-          <Route exact path='/executions' component={Sidebar} />
+          { showSidebar && <Sidebar currentPath={pathname} params={{ executionArn }}/> }
           <div className='page__content--shortened'>
-            <Switch>
-              <Route exact path='/executions' render={(props) => <ExecutionOverview queryParams={filteredQueryParams} {...props} />} />
-              <Route exact path='/executions/execution/:executionArn/logs' component={ExecutionLogs} />
-              <Route exact path='/executions/execution/:executionArn/events' component={ExecutionEvents} />
-              <Route exact path='/executions/execution/:executionArn' component={ExecutionStatus} />
-              <Route exact path='/executions/executions-list/:collectionId/:granuleId' component={ExecutionsList} />
-            </Switch>
+            <Routes>
+              <Route index element={<Navigate to="all" replace />} />
+              <Route path='all' element={<ExecutionOverview queryParams={filteredQueryParams} />} />
+              <Route path='execution/:executionArn/logs' element={<ExecutionLogs />} />
+              <Route path='execution/:executionArn/events' element={<ExecutionEvents/>} />
+              <Route path='execution/:executionArn' element={<ExecutionStatus />} />
+              <Route path='executions-list/:collectionId/:granuleId' element ={<ExecutionsList />} />
+            </Routes>
           </div>
         </div>
       </div>
@@ -66,10 +84,16 @@ const Executions = ({
   );
 };
 
-Executions.propTypes = {
-  dispatch: PropTypes.func,
-  location: PropTypes.object,
-  queryParams: PropTypes.object
+ExecutionRouteWrapper.propTypes = {
+  Component: PropTypes.elementType.isRequired
 };
 
-export default withRouter(withQueryParams()(connect()(Executions)));
+Executions.propTypes = {
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    filterQueryParams: PropTypes.func,
+    queryParams: PropTypes.object
+  }),
+};
+
+export default withUrlHelper(Executions);

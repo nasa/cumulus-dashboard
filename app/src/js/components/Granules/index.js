@@ -1,28 +1,30 @@
 import React, { useEffect, lazy, Suspense } from 'react';
-import PropTypes from 'prop-types';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
+import PropTypes from 'prop-types';
 import { get } from 'object-path';
-import { connect } from 'react-redux';
-import { withRouter, Redirect, Route, Switch } from 'react-router-dom';
-import withQueryParams from 'react-router-query-params';
 import { getCount, listGranules } from '../../actions';
 import { strings } from '../locale';
 import AllGranules from './list';
 import GranuleOverview from './granule';
 import GranulesOverview from './overview';
-import ReconciliationReportList from '../ReconciliationReports/list';
+import CollectionOverview from '../Collections/overview';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
-import { filterQueryParams } from '../../utils/url-helper';
 import Loading from '../LoadingIndicator/loading-indicator';
+import { withUrlHelper } from '../../withUrlHelper';
 
 const Sidebar = lazy(() => import('../Sidebar/sidebar'));
 
-const Granules = ({ dispatch, location, queryParams, stats }) => {
+const Granules = ({ urlHelper }) => {
+  const dispatch = useDispatch();
+  const { queryParams, filterQueryParams, location } = urlHelper;
   const { pathname } = location;
-  const granulesCount = get(stats, 'count.sidebar.granules.count') || [];
-  const reportCount = get(stats, 'count.sidebar.reconciliationReports.count') || [];
-  const count = [...granulesCount, ...reportCount];
   const filteredQueryParams = filterQueryParams(queryParams);
+
+  const stats = useSelector((state) => state.stats);
+  const granulesCount = get(stats, 'count.sidebar.granules.count') || [];
+  const count = [...granulesCount];
 
   function query() {
     dispatch(listGranules(filteredQueryParams));
@@ -39,50 +41,25 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
   }, [dispatch]);
 
   return (
-    <div className="page__granules">
+    <div className='page__granules'>
       <Helmet>
         <title> Granules </title>
       </Helmet>
       <DatePickerHeader onChange={query} heading={strings.granules} />
-      <div className="page__content">
-        <div className="wrapper__sidebar">
-          <Suspense fallback={<Loading/>}>
+      <div className='page__content'>
+        <div className='wrapper__sidebar'>
+          <Suspense fallback={<Loading />}>
             <Sidebar currentPath={pathname} count={count} location={location} />
           </Suspense>
-          <div className="page__content--shortened">
-            <Switch>
-              <Route
-                exact
-                path="/granules"
-                render={(props) => (
-                  <GranulesOverview
-                    queryParams={filteredQueryParams}
-                    {...props}
-                  />
-                )}
-              />
-              <Route
-                path="/granules/granule/:granuleId"
-                component={GranuleOverview}
-              />
-              <Route
-                path="/granules/lists"
-                render={(props) => (
-                  <ReconciliationReportList queryParams={filteredQueryParams} {...props} />
-                )}
-              />
-              <Route
-                path="/granules/:status"
-                render={(props) => (
-                  <AllGranules queryParams={filteredQueryParams} {...props} />
-                )}
-              />
-              <Redirect
-                exact
-                from="/granules/running"
-                to="/granules/processing"
-              />
-            </Switch>
+          <div className='page__content--shortened'>
+            <Routes>
+              <Route index element={<Navigate to="all" replace />} />
+              <Route path='all' element={<GranulesOverview queryParams={filteredQueryParams} stats={stats}/>} />
+              <Route path='/granule/:granuleId' element={<GranuleOverview />} />
+              <Route path='/collections/collection/:name/:version' element={<CollectionOverview />} />
+              <Route path='/:status' element={<AllGranules queryParams={filteredQueryParams} stats={stats}/>} />
+              <Route path='/running' element={<Navigate to='/granules/processing' />} />
+            </Routes>
           </div>
         </div>
       </div>
@@ -91,16 +68,12 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
 };
 
 Granules.propTypes = {
-  location: PropTypes.object,
-  dispatch: PropTypes.func,
-  queryParams: PropTypes.object,
   stats: PropTypes.object,
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    filterQueryParams: PropTypes.func,
+    queryParams: PropTypes.object
+  }),
 };
 
-export default withRouter(
-  withQueryParams()(
-    connect((state) => ({
-      stats: state.stats,
-    }))(Granules)
-  )
-);
+export default withUrlHelper(Granules);

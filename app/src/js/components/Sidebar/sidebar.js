@@ -1,26 +1,31 @@
 import React, { Fragment } from 'react';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { resolve } from 'path';
 import sections from '../../paths';
-import { getPersistentQueryParams } from '../../utils/url-helper';
 import { toggleSidebar } from '../../actions';
 import Tooltip from '../Tooltip/tooltip';
+import { withUrlHelper } from '../../withUrlHelper';
 
 const currentPathClass = 'sidebar__nav--selected';
 
 const Sidebar = ({
   count,
   currentPath,
-  dispatch,
-  location,
-  logs,
   match,
-  params,
-  sidebar,
-  locationQueryParams
+  urlHelper
 }) => {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const params = useParams();
+  const { getPersistentQueryParams } = urlHelper;
+  const { logs, sidebar, locationQueryParams } = useSelector((state) => ({
+    logs: state.logs,
+    sidebar: state.sidebar,
+    locationQueryParams: state.locationQueryParams
+  }));
   const { open: sidebarOpen } = sidebar;
   const { metricsNotConfigured } = logs;
 
@@ -59,10 +64,14 @@ const Sidebar = ({
                 {d[0] && <li>
                   <Link
                     className={classes}
-                    to={(routeLocation) => ({
-                      pathname: path,
-                      search: locationQueryParams.search[path] || getPersistentQueryParams(routeLocation),
-                    })}
+                    to={location}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate({
+                        pathname: path,
+                        search: locationQueryParams.search[path] || getPersistentQueryParams(location),
+                      });
+                    }}
                   >
                     {d[0]}
                   </Link>
@@ -102,19 +111,15 @@ const Sidebar = ({
 Sidebar.propTypes = {
   count: PropTypes.array,
   currentPath: PropTypes.string,
-  dispatch: PropTypes.func,
-  location: PropTypes.object,
   logs: PropTypes.object,
   match: PropTypes.object,
-  params: PropTypes.object,
   sidebar: PropTypes.shape({
     open: PropTypes.bool,
   }),
   locationQueryParams: PropTypes.object,
+  urlHelper: PropTypes.shape({
+    getPersistentQueryParams: PropTypes.func
+  }),
 };
 
-export default connect((state) => ({
-  logs: state.logs,
-  sidebar: state.sidebar,
-  locationQueryParams: state.locationQueryParams
-}))(Sidebar);
+export default withUrlHelper(Sidebar);

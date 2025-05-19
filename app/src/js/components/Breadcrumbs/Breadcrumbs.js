@@ -1,11 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Link, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Breadcrumb } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { getPersistentQueryParams } from '../../utils/url-helper';
+import PropTypes from 'prop-types';
+import { withUrlHelper } from '../../withUrlHelper';
 
-const Breadcrumbs = ({ config, locationQueryParams }) => (
+const Breadcrumbs = ({ config, urlHelper }) => {
+  const location = useLocation();
+  const locationQueryParams = useSelector((state) => state.locationQueryParams);
+  const { getPersistentQueryParams } = urlHelper;
+
+  return (
   <Breadcrumb>
     {config.map((item, index) => {
       const { href, label, active } = item || {};
@@ -17,24 +22,24 @@ const Breadcrumbs = ({ config, locationQueryParams }) => (
           {active
             ? <span>{label}</span>
             : <Link
-              to={(toLocation) => (
-                {
-                  pathname: href,
-                  search: locationQueryParams.search[href] || getPersistentQueryParams(toLocation)
-                })}>
+              to={{
+                pathname: href,
+                search: locationQueryParams.search[href] || getPersistentQueryParams(location)
+              }}>
               {label}
             </Link>}
         </li>
       );
     })}
   </Breadcrumb>
-);
+  );
+};
 
 Breadcrumbs.propTypes = {
   config: PropTypes.arrayOf(PropTypes.object),
-  locationQueryParams: PropTypes.object,
+  urlHelper: PropTypes.shape({
+    getPersistentQueryParams: PropTypes.func
+  }),
 };
 
-export default connect((state) => ({
-  locationQueryParams: state.locationQueryParams
-}))(Breadcrumbs);
+export default withUrlHelper(Breadcrumbs);

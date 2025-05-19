@@ -1,10 +1,10 @@
 import React from 'react';
+import { connect, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import LogViewer from '../Logs/viewer';
 import { strings } from '../locale';
 import CollectionHeader from './collection-header';
+import { withRouter } from '../../withRouter';
 
 const breadcrumbConfig = [
   {
@@ -13,8 +13,9 @@ const breadcrumbConfig = [
   }
 ];
 
-const CollectionLogs = ({ dispatch, logs, match }) => {
-  const { params } = match;
+const CollectionLogs = ({ logs, router }) => {
+  const dispatch = useDispatch();
+  const { params } = router;
   const { name: collectionName, version: collectionVersion } = params;
   const decodedVersion = decodeURIComponent(collectionVersion);
   const { queriedAt } = logs;
@@ -39,13 +40,14 @@ const CollectionLogs = ({ dispatch, logs, match }) => {
 CollectionLogs.displayName = strings.collection_logs;
 
 CollectionLogs.propTypes = {
-  dispatch: PropTypes.func,
   logs: PropTypes.object,
-  match: PropTypes.object,
+  router: PropTypes.shape({
+    params: PropTypes.object
+  }),
 };
 
-export default withRouter(
-  connect((state) => ({
-    logs: state.logs,
-  }))(CollectionLogs)
-);
+const mapStateToProps = (state) => ({
+  logs: state.logs
+});
+
+export default withRouter(connect(mapStateToProps)(CollectionLogs));

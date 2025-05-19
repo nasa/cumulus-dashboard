@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 
 import './css/main.scss';
 import './public/favicon.ico';
@@ -13,5 +13,5 @@ import App from './js/App';
       axe.default(React, ReactDOM, 1000);
     });
 } */
-
-ReactDOM.createRoot(document.getElementById('site-canvas')).render(<App />);
+const root = createRoot(document.getElementById('app'));
+root.render(<App />);

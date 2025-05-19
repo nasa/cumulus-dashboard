@@ -6,16 +6,20 @@ import React, {
   useState,
   createRef
 } from 'react';
+import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination, useExpanded } from 'react-table';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
-import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination, useExpanded } from 'react-table';
-import { useDispatch } from 'react-redux';
+import isEqual from 'lodash/isEqual';
 import TableHeader from '../TableHeader/table-header';
 import SimplePagination from '../Pagination/simple-pagination';
 import TableFilters from '../Table/TableFilters';
 import ListFilters from '../ListActions/ListFilters';
 import { sortPersist } from '../../actions/index';
+import { withUrlHelper } from '../../withUrlHelper';
+import { CopyCellPopover, fromNowWithTooltip } from '../../utils/format';
 
 const getColumnWidth = (rows, accessor, headerText, originalWidth) => {
   const maxWidth = 400;
@@ -73,7 +77,18 @@ const SortableTable = ({
   renderRowSubComponent,
   tableId,
   initialSortBy = [],
+  urlHelper,
 }) => {
+  let rightScrollInterval;
+  let leftScrollInterval;
+  let sortByState;
+
+  // State
+  const [fitColumn, setFitColumn] = useState({});
+  const [leftScrollButtonVisibility, setLeftScrollButtonVisibility] = useState({ display: 'none', opacity: 0 });
+  const [rightScrollButtonVisibility, setRightScrollButtonVisibility] = useState({ display: 'none', opacity: 0 });
+
+  // Memoized functions
   const defaultColumn = useMemo(
     () => ({
       Cell: ({ value = '' }) => value,
@@ -83,10 +98,19 @@ const SortableTable = ({
     }),
     []
   );
-  const [fitColumn, setFitColumn] = useState({});
-  const [leftScrollButtonVisibility, setLeftScrollButtonVisibility] = useState({ display: 'none', opacity: 0 });
-  const [rightScrollButtonVisibility, setRightScrollButtonVisibility] = useState({ display: 'none', opacity: 0 });
-  let sortByState;
+
+  const memoizedTableColumns = useMemo(() => (
+    Array.isArray(tableColumns)
+      ? tableColumns.map((column) => ({
+        ...defaultColumn,
+        ...column,
+      }))
+      : [defaultColumn] // Provide a default column if tableColumns is not an array
+  ), [tableColumns, defaultColumn]);
+
+  // Memoize data
+  const memoizedData = useMemo(() => data, [data]);
+
   if (initialSortBy?.length > 0) {
     sortByState = initialSortBy;
   } else if (initialSortId) {
@@ -94,8 +118,11 @@ const SortableTable = ({
   } else {
     sortByState = [];
   }
-  let rightScrollInterval;
-  let leftScrollInterval;
+
+  const initialState = useMemo(() => ({
+    hiddenColumns: initialHiddenColumns,
+    sortBy: sortByState,
+  }), [initialHiddenColumns, sortByState]);
 
   const {
     getTableProps,
@@ -118,11 +145,11 @@ const SortableTable = ({
     gotoPage,
     nextPage,
     previousPage,
-    setHiddenColumns
+    setHiddenColumns,
   } = useTable(
     {
-      data,
-      columns: tableColumns,
+      data: memoizedData,
+      columns: memoizedTableColumns,
       defaultColumn,
       getRowId: (row, relativeIndex) => (typeof rowId === 'function' ? rowId(row) : row[rowId] || relativeIndex),
       autoResetSelectedRows: false,
@@ -130,10 +157,7 @@ const SortableTable = ({
       manualSortBy: shouldManualSort,
       // if we want to use the pagination hook, then pagination should not be manual
       manualPagination: !shouldUsePagination,
-      initialState: {
-        hiddenColumns: initialHiddenColumns,
-        sortBy: sortByState,
-      },
+      initialState
     },
     useFlexLayout, // this allows table to have dynamic layouts outside of standard table markup
     useResizeColumns, // this allows for resizing columns
@@ -161,6 +185,7 @@ const SortableTable = ({
     }
   );
   const dispatch = useDispatch();
+  const { getPersistentQueryParams } = urlHelper;
   const tableRows = page || rows;
   // We only include filters if not wrapped in list component and hideFilter is false
   const wrappedInList = typeof getToggleColumnOptions === 'function';
@@ -170,12 +195,14 @@ const SortableTable = ({
   const scrollLeftButton = createRef();
   const scrollRightButton = createRef();
 
+  // Reset selection
   useEffect(() => {
     if (canSelect && clearSelected) {
       toggleAllRowsSelected(false);
     }
   }, [canSelect, clearSelected, toggleAllRowsSelected]);
 
+  // Handle selection changes using react-table functionality
   useEffect(() => {
     const selectedIds = Object.keys(selectedRowIds).reduce((ids, key) => {
       if (selectedRowIds[key]) {
@@ -198,6 +225,7 @@ const SortableTable = ({
     }
   }, [dispatch, tableId, sortBy]);
 
+  // Handle sort changes
   useEffect(() => {
     if (typeof changeSortProps === 'function') {
       changeSortProps(sortBy);
@@ -464,12 +492,81 @@ const SortableTable = ({
                         onMouseEnter={(e) => handleTableColumnMouseEnter(e)}
                         onMouseLeave={(e) => handleTableColumnMouseLeave(e)}
                       >
-                        {cell.render('Cell')}
+                        {(() => {
+                          // Check for custom Cell renderer first
+                          if (typeof cell.column === 'function') {
+                            return cell.column({ cell, row: cell.row, value: cell.value });
+                          }
+
+                          // Then check for isLink
+                          if (cell.column.isLink) {
+                            // Use default link rendering for columns with isLink: true but no custom Cell function
+                            let linkTo;
+                            if (typeof cell.column.linkTo === 'function') {
+                              linkTo = cell.column.linkTo(cell.row.original);
+                            } else if (typeof cell.column.linkTo === 'string') {
+                              linkTo = cell.column.linkTo;
+                            } else {
+                              return cell.value;
+                            }
+
+                            const pathname = linkTo;
+                            const search = getPersistentQueryParams() || '';
+
+                            const content = (
+                              <Link to={{ pathname, search }}>
+                                {cell.value}
+                              </Link>
+                            );
+
+                            // Check if the column uses CopyCellPopover
+                            if (cell.column.useCopyCellPopover) {
+                              return (
+                                <CopyCellPopover
+                                  cellContent={content}
+                                  id={`${cell.column.id || cell.column.accessor}-${cell.value}-popover`}
+                                  popoverContent={cell.value}
+                                  value={cell.value}
+                                />
+                              );
+                            }
+
+                            return content;
+                          }
+
+                          // Handle external links
+                          if (cell.column.openInNewTab && cell.value) {
+                            return (
+                              <a href={cell.value} target="_blank" rel="noopener noreferrer">
+                                {cell.value}
+                              </a>
+                            );
+                          }
+
+                          // Check for non-link cells that use CopyCellPopover
+                          if (cell.column.useCopyCellPopover) {
+                            return (
+                              <CopyCellPopover
+                                cellContent={cell.value}
+                                id={`${cell.column.id || cell.column.accessor}-${cell.value}-popover`}
+                                popoverContent={cell.value}
+                                value={cell.value}
+                              />
+                            );
+                          }
+
+                          // Check for non-link cells that use Tooltip
+                          if (cell.column.useTooltip) {
+                            return fromNowWithTooltip(cell.value);
+                          }
+
+                          // Default cell rendering
+                          return cell.render('Cell');
+                        })()}
                       </div>
                     );
                   })}
                 </div>
-
                 {renderRowSubComponent &&
                   <>{renderRowSubComponent(row)}</>
                 }
@@ -540,10 +637,21 @@ SortableTable.propTypes = {
   rowId: PropTypes.any,
   shouldManualSort: PropTypes.bool,
   shouldUsePagination: PropTypes.bool,
-  tableColumns: PropTypes.array,
+  tableColumns: PropTypes.arrayOf(PropTypes.object),
   renderRowSubComponent: PropTypes.func,
   tableId: PropTypes.string,
   initialSortBy: PropTypes.array,
+  urlHelper: PropTypes.shape({
+    getPersistentQueryParams: PropTypes.func,
+  })
 };
 
-export default SortableTable;
+SortableTable.defaultProps = {
+  tableColumns: [],
+};
+
+export default withUrlHelper(
+  React.memo(SortableTable, (prevProps, nextProps) => {
+    isEqual(prevProps, nextProps);
+  })
+);

@@ -54,12 +54,30 @@ const granulesExecutions = {
     data: ['fakeworkflow1', 'fakeworkflow2']
   }
 };
+
+const urlHelper = {
+  queryParams: {},
+  location: {},
+  navigate: () => {},
+  params: {},
+  isAuthenticated: true,
+  routerState: { location: {} },
+  dispatch,
+  historyPushWithQueryParams: () => {},
+  getPersistentQueryParams: () => '',
+  getInitialValueFromLocation: () => '',
+  initialValuesFromLocation: () => ({}),
+  filterQueryParams: () => ({})
+};
+
 const middlewares = [requestMiddleware, thunk];
 const mockStore = configureMockStore(middlewares);
 
 test('GranulesOverview generates bulkAction for recovery button', function (t) {
   const configWithRecovery = { enableRecovery: true };
   const someStore = mockStore({
+    api: { authenicated: true},
+    router: {location: {}, action: 'POP'},
     sorts: {},
     timer: { running: false, seconds: -1 },
     datepicker: initialState(),
@@ -70,20 +88,24 @@ test('GranulesOverview generates bulkAction for recovery button', function (t) {
     granules,
     config: configWithRecovery,
     granulesExecutions,
+    collections,
+    providers
   });
 
   const { container } = render(
     <Provider store={someStore}>
       <MemoryRouter>
-      <GranulesOverview
-        granules = {granules}
-        stats = {stats}
-        dispatch = {dispatch}
-        workflowOptions = {workflowOptions}
-        collections = {collections}
-        location = {location}
-        config={configWithRecovery}
-        providers={providers}/>
+        <GranulesOverview
+          granules = {granules}
+          stats = {stats}
+          dispatch = {dispatch}
+          workflowOptions = {workflowOptions}
+          collections = {collections}
+          location = {location}
+          config={configWithRecovery}
+          providers={providers}
+          urlHelper={urlHelper}
+          />
       </MemoryRouter>
     </Provider>);
 
@@ -98,6 +120,8 @@ test('GranulesOverview generates bulkAction for recovery button', function (t) {
 test('GranulesOverview does not generate bulkAction for recovery button', function (t) {
   const config = { enableRecovery: false };
   const someStore = mockStore({
+    api: { authenicated: true},
+    router: {location: {}, action: 'POP'},
     sorts: {},
     timer: { running: false, seconds: -1 },
     datepicker: initialState(),
@@ -108,20 +132,24 @@ test('GranulesOverview does not generate bulkAction for recovery button', functi
     granules,
     config,
     granulesExecutions,
+    collections,
+    providers
   });
 
   const { container } = render(
     <Provider store={someStore}>
       <MemoryRouter>
-      <GranulesOverview
-        granules = {granules}
-        stats = {stats}
-        dispatch = {dispatch}
-        workflowOptions = {workflowOptions}
-        collections = {collections}
-        location = {location}
-        config={config}
-        providers={providers}/>
+        <GranulesOverview
+          granules = {granules}
+          stats = {stats}
+          dispatch = {dispatch}
+          workflowOptions = {workflowOptions}
+          collections = {collections}
+          location = {location}
+          config={config}
+          providers={providers}
+          urlHelper={urlHelper}
+        />
       </MemoryRouter>
     </Provider>);
 
@@ -134,6 +162,8 @@ test('GranulesOverview does not generate bulkAction for recovery button', functi
 
 test('GranulesOverview generates Granule Inventory List button', function (t) {
   const someStore = mockStore({
+    api: { authenicated: true},
+    router: {location: {}, action: 'POP'},
     sorts: {},
     timer: { running: false, seconds: -1 },
     datepicker: initialState(),
@@ -144,20 +174,24 @@ test('GranulesOverview generates Granule Inventory List button', function (t) {
     granules,
     config: { enableRecovery: true },
     granulesExecutions,
+    collections,
+    providers
   });
 
   const { container } = render(
     <Provider store={someStore}>
       <MemoryRouter>
-      <GranulesOverview
-        granules = {granules}
-        stats = {stats}
-        dispatch = {dispatch}
-        workflowOptions = {workflowOptions}
-        collections = {collections}
-        location = {location}
-        config={{ enableRecovery: true }}
-        providers={providers}/>
+        <GranulesOverview
+          granules = {granules}
+          stats = {stats}
+          dispatch = {dispatch}
+          workflowOptions = {workflowOptions}
+          collections = {collections}
+          location = {location}
+          config={{ enableRecovery: true }}
+          providers={providers}
+          urlHelper={urlHelper}
+        />
       </MemoryRouter>
     </Provider>);
 

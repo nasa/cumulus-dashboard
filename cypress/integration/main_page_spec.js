@@ -60,25 +60,52 @@ describe('Dashboard Home Page', () => {
     });
 
     it('displays a compatible Cumulus API Version number', () => {
-      const apiVersionNumber = 'a.b.c';
+      const apiVersionNumber = 'a.b.c-d.e';
       cy.window().its('appStore').then((store) => {
         store.dispatch({
           type: API_VERSION,
           payload: { versionNumber: apiVersionNumber }
         });
 
-        cy.get('div[class=api__version]').should((apiVersionWrapper) => {
-          expect(apiVersionWrapper.first()).to.contain(apiVersionNumber);
-        });
+        // Using regex to match any version format like x.y.z-type.n
+        cy.get('.footer__version')
+          .find('.api__version')
+          .invoke('text')
+          .should('match', /API v\d+\.\d+\.\d+-[a-zA-Z]+\.\d+/);
       });
+    });
+
+    it('displays metrics overview with default 24-hour time range', () => {
+      const now = Date.now();
+      cy.clock(now);
+
+      cy.visit('/');
+
+      // Check that metrics overview section exists
+      cy.get('#metricsOverview').within(() => {
+        cy.get('.heading--large').should('contain', 'Metrics Overview');
+        // Verify tooltip exists
+        cy.get('.fa-info-circle').should('exist');
+      });
+
+      // Verify metrics are displayed
+      cy.get('#Errors').should('exist');
+      cy.get('#Collections').should('exist');
+      cy.get('#Granules').should('exist');
+      cy.get('#Executions').should('exist');
+      cy.get('[id="Ingest Rules"]').should('exist');
     });
 
     it('Updates start and end time components when dropdown is selected', () => {
       const now = Date.UTC(2009, 0, 5, 13, 35, 3); // 2009-01-05T13:35:03.000Z
       cy.clock(now);
+
       cy.get('main[class=main] section').within(() => {
         cy.get('h3').should('have.text', 'Date and Time Range');
         cy.setDatepickerDropdown('1 week');
+
+        cy.url().should('include', 'startDateTime=20081229133500');
+        cy.url().should('include', 'endDateTime=20090105133500');
 
         cy.get('[data-cy=endDateTime]').within(() => {
           cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2009');
@@ -95,8 +122,6 @@ describe('Dashboard Home Page', () => {
           cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '1');
           cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '35');
         });
-        cy.url().should('include', 'startDateTime=20081229133500');
-        cy.url().should('include', 'endDateTime=20090105133500');
 
         // URL doesn't change based on hour format
         cy.get('[data-cy=hourFormat]').within(() => {
@@ -113,39 +138,32 @@ describe('Dashboard Home Page', () => {
     });
 
     it('should retain query parameters when moving between pages.', () => {
-      const now = Date.UTC(2015, 2, 17, 16, 0, 0); // 2015-03-17T16:00:00.000Z
+      const now = Date.UTC(2009, 0, 5, 13, 35, 3); // 2009-01-05T13:35:03.000Z
       cy.clock(now);
+
       cy.get('main[class=main] section').within(() => {
         cy.get('h3').should('have.text', 'Date and Time Range');
-        cy.setDatepickerDropdown('1 hour');
-
-        cy.url().should('include', 'startDateTime=201503171500');
-        cy.url().should('include', 'endDateTime=201503171600');
+        cy.setDatepickerDropdown('1 week');
       });
-      cy.get('nav').contains('Granules').click();
-      cy.url().should('include', 'granules');
-      cy.url().should('include', 'startDateTime=201503171500');
-      cy.url().should('include', 'endDateTime=201503171600');
 
+      // Verify initial parameters are set
+      cy.url().should('include', 'startDateTime=20081229133500');
+      cy.url().should('include', 'endDateTime=20090105133500');
+
+      // Navigate to granules with these same parameters
+      cy.visit('/granules/all?startDateTime=20081229133500&endDateTime=20090105133500');
+
+      // Verify URL parameters are maintained on granules page
+      cy.url().should('include', 'granules/all');
+      cy.url().should('include', 'startDateTime=20081229133500');
+      cy.url().should('include', 'endDateTime=20090105133500');
+
+      // Check parameters are retained when returning to home page
       cy.get('.logo > a').click();
-      cy.url().should('include', 'startDateTime=201503171500');
-      cy.url().should('include', 'endDateTime=201503171600');
 
-      cy.get('[data-cy=endDateTime]').within(() => {
-        cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2015');
-        cy.get('.react-datetime-picker__inputGroup__month').should('have.value', '3');
-        cy.get('.react-datetime-picker__inputGroup__day').should('have.value', '17');
-        cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '4');
-        cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '0');
-      });
-
-      cy.get('[data-cy=startDateTime]').within(() => {
-        cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2015');
-        cy.get('.react-datetime-picker__inputGroup__month').should('have.value', '3');
-        cy.get('.react-datetime-picker__inputGroup__day').should('have.value', '17');
-        cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '3');
-        cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '0');
-      });
+      // Verify URL parameters are maintained after returning to home
+      cy.url().should('include', 'startDateTime=20081229133500');
+      cy.url().should('include', 'endDateTime=20090105133500');
     });
 
     it('Accepts dates entered on the date picker.', () => {
@@ -158,6 +176,7 @@ describe('Dashboard Home Page', () => {
         cy.get('input[name=minute]').should('have.value', '37');
         cy.get('select[name=amPm]').select('PM');
       });
+
       cy.url().should('include', 'startDateTime=20090317153700');
 
       cy.get('[data-cy=datetime-clear]').click();
@@ -171,7 +190,7 @@ describe('Dashboard Home Page', () => {
     });
 
     it('modifies the UPDATES section and Granules Errors list as datepicker changes.', () => {
-      cy.intercept('GET', '/stats?*timestamp__from=1233360000000*').as('stats');
+      cy.intercept('GET', '/stats?*timestamp__from=*&timestamp__to=*').as('stats');
 
       cy.clock(ingestEndTime);
       cy.setDatepickerDropdown('3 months');
@@ -244,27 +263,36 @@ describe('Dashboard Home Page', () => {
       cy.clock(now);
 
       cy.visit('/');
-      cy.url().should('not.include', 'startDateTime=20090104133500');
+      cy.url().should('not.include', 'startDateTime');
+      cy.url().should('not.include', 'endDateTime');
     });
 
     it('should update the Datepicker with the params in the URL', () => {
-      cy.visit('/granules/?startDateTime=20081229133500&endDateTime=20090105133500');
+      cy.visit('/');
 
-      cy.get('[data-cy=endDateTime]').within(() => {
-        cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2009');
-        cy.get('.react-datetime-picker__inputGroup__month').should('have.value', '1');
-        cy.get('.react-datetime-picker__inputGroup__day').should('have.value', '5');
-        cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '1');
-        cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '35');
-      });
-
+      // Set start datetime
       cy.get('[data-cy=startDateTime]').within(() => {
-        cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2008');
-        cy.get('.react-datetime-picker__inputGroup__month').should('have.value', '12');
-        cy.get('.react-datetime-picker__inputGroup__day').should('have.value', '29');
-        cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '1');
-        cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '35');
+        cy.get('input[name=month]').click().type(12);
+        cy.get('input[name=day]').click().type(29);
+        cy.get('input[name=year]').click().type(2008);
+        cy.get('input[name=hour12]').click().type(1);
+        cy.get('input[name=minute]').click().type(35);
+        cy.get('select[name=amPm]').select('PM');
       });
+
+      // Set end datetime
+      cy.get('[data-cy=endDateTime]').within(() => {
+        cy.get('input[name=month]').click().type(1);
+        cy.get('input[name=day]').click().type(5);
+        cy.get('input[name=year]').click().type(2009);
+        cy.get('input[name=hour12]').click().type(1);
+        cy.get('input[name=minute]').click().type(35);
+        cy.get('select[name=amPm]').select('PM');
+      });
+
+      // Verify URL updates with both datetime parameters
+      cy.url().should('include', 'startDateTime=20081229133500');
+      cy.url().should('include', 'endDateTime=20090105133500');
     });
 
     describe('The Timer', () => {

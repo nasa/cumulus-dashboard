@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import {
   getCollection,
   updateCollection,
@@ -10,6 +9,7 @@ import {
 } from '../../actions';
 import { getCollectionId, collectionHrefFromNameVersion } from '../../utils/format';
 import EditRaw from '../EditRaw/edit-raw';
+import { withRouter } from '../../withRouter';
 
 const SCHEMA_KEY = 'collection';
 
@@ -19,6 +19,12 @@ const EditCollection = ({ match, collections }) => {
   } = match;
   const decodedVersion = decodeURIComponent(version);
   const collectionId = getCollectionId({ name, version: decodedVersion });
+
+  useEffect(() => {
+    if (name && version) {
+      getCollection(name, version);
+    }
+  }, [name, version, decodedVersion]);
 
   return (
     <div className = "edit_collections">
@@ -47,6 +53,6 @@ EditCollection.propTypes = {
 
 export default withRouter(
   connect((state) => ({
-    collections: state.collections,
+    collections: state.collections
   }))(EditCollection)
 );

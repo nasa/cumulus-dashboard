@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import { get } from 'object-path';
 import {
   searchGranules,
@@ -49,26 +49,31 @@ const generateBreadcrumbConfig = (view) => [
   },
 ];
 
-const AllGranules = ({
-  collections,
-  dispatch,
-  granules,
-  match,
-  queryParams,
-  workflowOptions,
-  stats,
-  providers,
-}) => {
+const AllGranules = (props) => {
+  const {
+    collections,
+    granules,
+    queryParams,
+    workflowOptions,
+    stats,
+    providers,
+  } = props;
+
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
+  let { status } = useParams();
+  const searchParams = new URLSearchParams(location.search);
+
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const [selected, setSelected] = useState([]);
+
   const { dropdowns } = collections;
   const { dropdowns: providerDropdowns } = providers;
   const { list } = granules;
   const { count, queriedAt } = list.meta;
-  let {
-    params: { status },
-  } = match;
+
   status = status === 'processing' ? 'running' : status;
   const logsQuery = { granules__exists: 'true', executions__exists: 'true' };
   const query = generateQuery();
@@ -96,10 +101,29 @@ const AllGranules = ({
     );
   }, [dispatch]);
 
+  useEffect(() => {
+    dispatch(listGranules(query));
+  }, [location, status, dispatch, query]);
+
   function generateQuery() {
-    const options = { ...queryParams };
+    const options = {};
+    Object.entries(searchParams).forEach(([key, value]) => {
+      options[key] = value;
+    });
     options.status = status;
-    return options;
+    return { ...options, ...queryParams };
+  }
+
+  function updateUrlParams(params) {
+    const newSearchParams = new URLSearchParams(searchParams);
+    Object.entries(params).forEach(([key, value]) => {
+      if (value === null || value === '') {
+        newSearchParams.delete(key);
+      } else {
+        newSearchParams.set(key, value);
+      }
+    });
+    navigate(`${location.pathname}?${newSearchParams.toString()}`, { replace: true });
   }
 
   function generateBulkActions() {
@@ -112,7 +136,7 @@ const AllGranules = ({
     return bulkActions(granules, config, selected);
   }
 
-  function selectWorkflow(selector, selectedWorkflow) {
+  function selectWorkflow(_selector, selectedWorkflow) {
     setWorkflow(selectedWorkflow);
   }
 
@@ -172,6 +196,7 @@ const AllGranules = ({
           action={listGranules}
           tableColumns={status === 'failed' ? errorTableColumns : tableColumns}
           query={query}
+          onUpdateUrlParams={updateUrlParams}
           bulkActions={generateBulkActions()}
           groupAction={groupAction}
           rowId="granuleId"
@@ -242,23 +267,21 @@ const AllGranules = ({
 
 AllGranules.propTypes = {
   collections: PropTypes.object,
-  dispatch: PropTypes.func,
   granules: PropTypes.object,
-  match: PropTypes.object,
   queryParams: PropTypes.object,
   workflowOptions: PropTypes.array,
   stats: PropTypes.object,
   providers: PropTypes.object,
 };
 
+const mapStateToProps = (state) => ({
+  collections: state.collections,
+  granules: state.granules,
+  stats: state.stats,
+  workflowOptions: workflowOptionNames(state),
+  providers: state.providers,
+});
+
 export { AllGranules };
 
-export default withRouter(
-  connect((state) => ({
-    collections: state.collections,
-    granules: state.granules,
-    stats: state.stats,
-    workflowOptions: workflowOptionNames(state),
-    providers: state.providers,
-  }))(AllGranules)
-);
+export default connect(mapStateToProps)(AllGranules);

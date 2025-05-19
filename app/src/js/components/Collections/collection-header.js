@@ -7,7 +7,7 @@ import {
   lastUpdated,
   collectionHrefFromNameVersion,
 } from '../../utils/format';
-import { getPersistentQueryParams } from '../../utils/url-helper';
+import { getPersistentQueryParams } from '../../withUrlHelper';
 import { strings } from '../locale';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 

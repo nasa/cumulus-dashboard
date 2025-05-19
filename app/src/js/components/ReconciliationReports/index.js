@@ -1,9 +1,8 @@
 import React from 'react';
+import { Route, Routes, Navigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { withRouter, Route, Switch } from 'react-router-dom';
-import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import { strings } from '../locale';
 import { getCount, listReconciliationReports } from '../../actions';
@@ -12,17 +11,14 @@ import ReconciliationReportList from './list';
 import ReconciliationReport from './reconciliation-report';
 import BackupReportGranuleDetails from './backup-report-granule-details';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
-import { filterQueryParams } from '../../utils/url-helper';
+import { withUrlHelper } from '../../withUrlHelper';
 
-const ReconciliationReports = ({
-  dispatch,
-  location,
-  params,
-  queryParams,
-}) => {
+const ReconciliationReports = ({ urlHelper }) => {
+  const dispatch = useDispatch();
+  const { queryParams, filterQueryParams, location, params } = urlHelper;
+  const filteredQueryParams = filterQueryParams(queryParams);
   const { pathname } = location;
   const showSidebar = pathname !== '/reconciliation-reports/create';
-  const filteredQueryParams = filterQueryParams(queryParams);
 
   function query() {
     dispatch(listReconciliationReports(filteredQueryParams));
@@ -48,12 +44,13 @@ const ReconciliationReports = ({
               showSidebar ? 'page__content--shortened' : 'page__content'
             }
           >
-            <Switch>
-              <Route exact path='/reconciliation-reports' render={(props) => <ReconciliationReportList queryParams={filteredQueryParams} {...props} />} />
-              <Route path="/reconciliation-reports/create" component={CreateReconciliationReport} />
-              <Route path='/reconciliation-reports/report/:reconciliationReportName/details' component={BackupReportGranuleDetails} />
-              <Route path='/reconciliation-reports/report/:reconciliationReportName' component={ReconciliationReport} />
-            </Switch>
+            <Routes>
+              <Route index element={<Navigate to="all" replace />} />
+              <Route path='all' element={<ReconciliationReportList queryParams={filteredQueryParams} />} />
+              <Route path="/create" element={<CreateReconciliationReport />} />
+              <Route path='/report/:reconciliationReportName/details' element={<BackupReportGranuleDetails />} />
+              <Route path='/report/:reconciliationReportName' element={<ReconciliationReport />} />
+            </Routes>
           </div>
         </div>
       </div>
@@ -62,12 +59,14 @@ const ReconciliationReports = ({
 };
 
 ReconciliationReports.propTypes = {
-  dispatch: PropTypes.func,
-  location: PropTypes.object,
-  params: PropTypes.object,
-  queryParams: PropTypes.object,
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    filterQueryParams: PropTypes.func,
+    params: PropTypes.object,
+    queryParams: PropTypes.object
+  }),
 };
 
 ReconciliationReports.displayName = 'Reconciliation Reports';
 
-export default withRouter(withQueryParams()(connect()(ReconciliationReports)));
+export default withUrlHelper(ReconciliationReports);

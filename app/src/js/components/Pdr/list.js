@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import {
   searchPdrs,
   clearPdrsSearch,
@@ -20,6 +19,7 @@ import List from '../Table/Table';
 
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import withRouter from '../../withRouter';
 
 const generateBreadcrumbConfig = (view) => [
   {

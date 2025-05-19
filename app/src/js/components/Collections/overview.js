@@ -1,9 +1,9 @@
-import { get } from 'object-path';
+import React, { useEffect, useState } from 'react';
+import { Link, Outlet } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { Link, withRouter } from 'react-router-dom';
+import { get } from 'object-path';
 import {
   clearGranulesFilter,
   clearGranulesSearch,
@@ -28,7 +28,6 @@ import {
   collectionHrefFromId,
 } from '../../utils/format';
 import { granuleStatus as statusOptions } from '../../utils/status';
-import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 import {
   bulkActions,
   defaultHiddenColumns,
@@ -48,6 +47,7 @@ import Overview from '../Overview/overview';
 import Search from '../Search/search';
 import List from '../Table/Table';
 import { workflowOptionNames } from '../../selectors';
+import { withUrlHelper } from '../../withUrlHelper';
 
 const breadcrumbConfig = [
   {
@@ -64,17 +64,22 @@ const breadcrumbConfig = [
   },
 ];
 
-const CollectionOverview = ({
-  collections,
-  datepicker,
-  dispatch,
-  granules,
-  match,
-  providers,
-  queryParams,
-  workflowOptions
-}) => {
-  const { params } = match;
+const CollectionOverview = ({ urlHelper }) => {
+  const dispatch = useDispatch();
+  const {
+    location,
+    queryParams,
+    params,
+    getPersistentQueryParams,
+    historyPushWithQueryParams
+  } = urlHelper;
+
+  const collections = useSelector((state) => state.collections);
+  const datepicker = useSelector((state) => state.datepicker);
+  const granules = useSelector((state) => state.granules);
+  const providers = useSelector((state) => state.providers);
+  const workflowOptions = useSelector(workflowOptionNames);
+
   const { deleted: deletedCollections, map: collectionsMap } = collections;
   const { list: granulesList } = granules;
   const { dropdowns } = providers;
@@ -84,6 +89,7 @@ const CollectionOverview = ({
   const record = collectionsMap[collectionId];
   const deleteStatus = get(deletedCollections, [collectionId, 'status']);
   const hasGranules = get(collectionsMap[collectionId], 'data.stats.total', 0) > 0;
+
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const [selected, setSelected] = useState([]);
@@ -103,9 +109,11 @@ const CollectionOverview = ({
   }, [dispatch]);
 
   useEffect(() => {
-    setWorkflow(workflowOptions[0]);
+    if (workflowOptions.length > 0 && !workflow) {
+      setWorkflow(workflowOptions[0]);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(workflowOptions)]);
+  }, [(JSON.stringify(workflowOptions)), workflow]);
 
   function generateQuery() {
     return {
@@ -233,14 +241,14 @@ const CollectionOverview = ({
             <li>
               <Link
                 className="button button--copy button--small button--green"
-                to={(location) => ({
+                to={{
                   pathname: '/collections/add',
                   search: getPersistentQueryParams(location),
                   state: {
                     name: collectionName,
                     version: decodedVersion,
                   },
-                })}
+                }}
               >
                 Copy
               </Link>
@@ -248,10 +256,10 @@ const CollectionOverview = ({
             <li>
               <Link
                 className="button button--edit button--small button--green"
-                to={(location) => ({
+                to={{
                   pathname: `/collections/edit/${collectionName}/${collectionVersion}`,
                   search: getPersistentQueryParams(location),
-                })}
+                }}
               >
                 Edit
               </Link>
@@ -282,6 +290,7 @@ const CollectionOverview = ({
         {record && <Overview type='granules' params={{ collectionId }} inflight={record.inflight} />}
       </section>
       <section className="page__section">
+        <Outlet />
         <div className="heading__wrapper--border">
           <h2 className="heading--medium heading--shared-content with-description">
             {strings.total_granules}
@@ -291,7 +300,7 @@ const CollectionOverview = ({
           </h2>
           <Link
             className="button button--small button__goto button--green form-group__element--right"
-            to={(location) => ({
+            to={({
               pathname: `${collectionHrefFromNameVersion({ name: collectionName, version: collectionVersion })}/granules`,
               search: getPersistentQueryParams(location),
             })}
@@ -355,20 +364,16 @@ const CollectionOverview = ({
 CollectionOverview.propTypes = {
   collections: PropTypes.object,
   datepicker: PropTypes.object,
-  dispatch: PropTypes.func,
   granules: PropTypes.object,
-  match: PropTypes.object,
-  queryParams: PropTypes.object,
   providers: PropTypes.object,
-  workflowOptions: PropTypes.array
+  workflowOptions: PropTypes.array,
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    queryParams: PropTypes.object,
+    params: PropTypes.object,
+    getPersistentQueryParams: PropTypes.func,
+    historyPushWithQueryParams: PropTypes.func
+  }),
 };
 
-export default withRouter(
-  connect((state) => ({
-    collections: state.collections,
-    datepicker: state.datepicker,
-    granules: state.granules,
-    providers: state.providers,
-    workflowOptions: workflowOptionNames(state)
-  }))(CollectionOverview)
-);
+export default withUrlHelper(CollectionOverview);

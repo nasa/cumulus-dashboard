@@ -1,15 +1,13 @@
-import React, { createRef, useCallback, useEffect, useRef } from 'react';
-import { connect } from 'react-redux';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import withQueryParams from 'react-router-query-params';
-import { withRouter } from 'react-router-dom';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { get } from 'object-path';
-import { getInitialValueFromLocation } from '../../utils/url-helper';
 import {
   renderSearchInput,
   renderSearchMenu,
 } from '../../utils/typeahead-helpers';
+import { withUrlHelper } from '../../withUrlHelper';
 
 /**
  * Search
@@ -23,29 +21,29 @@ import {
 const Search = ({
   action,
   clear,
-  dispatch,
   inputProps = {
     className: 'search',
   },
   label,
   labelKey,
-  location,
   options,
   paramKey = 'search',
   placeholder,
-  queryParams,
   searchKey = '',
-  setQueryParams,
+  urlHelper,
   ...rest
 }) => {
-  const searchRef = createRef();
-  const formID = `form-${label}-${paramKey}`;
-  const initialValueRef = useRef(getInitialValueFromLocation({
+  const dispatch = useDispatch();
+  const searchRef = useRef();
+  const {
     location,
-    paramKey,
     queryParams,
-  }));
-  const searchList = get(rest[searchKey], 'list');
+    getInitialValueFromLocation,
+    historyPushWithQueryParams,
+  } = urlHelper;
+  const formID = `form-${label}-${paramKey}`;
+  const initialValueRef = getInitialValueFromLocation(paramKey);
+  const searchList = useSelector((state) => get(state, `${searchKey}.list`));
   const { data: searchOptions, inflight = false } = searchList || {};
 
   useEffect(() => {
@@ -56,30 +54,43 @@ const Search = ({
     if (initialValueRef.current) {
       dispatch(action(initialValueRef.current));
     }
-  }, [action, dispatch]);
+  }, [action, dispatch, initialValueRef]);
 
-  const handleSearch = useCallback((query) => {
-    if (query) dispatch(action(query));
-    else dispatch(clear);
-  }, [action, clear, dispatch]);
+  // Handle location changes (browser back/forward)
+  useEffect(() => {
+    const searchValue = queryParams[paramKey];
+    if (searchValue) {
+      dispatch(action(searchValue));
+    } else {
+      dispatch(clear());
+    }
+  }, [location, queryParams, paramKey, action, clear, dispatch]);
+
+  const handleSearch = useCallback(
+    (query) => {
+      if (query) dispatch(action(query));
+      else dispatch(clear);
+    },
+    [action, clear, dispatch]
+  );
 
   function handleChange(selections) {
     if (selections && selections.length > 0) {
       const query = selections[0][labelKey];
       dispatch(action(query));
-      setQueryParams({ [paramKey]: query });
+      historyPushWithQueryParams({ [paramKey]: query });
     } else {
       dispatch(clear());
-      setQueryParams({ [paramKey]: undefined });
+      historyPushWithQueryParams({ [paramKey]: undefined });
     }
   }
 
   function handleInputChange(text) {
     if (text) {
-      setQueryParams({ [paramKey]: text });
+      historyPushWithQueryParams({ [paramKey]: text });
     } else {
       dispatch(clear());
-      setQueryParams({ [paramKey]: undefined });
+      historyPushWithQueryParams({ [paramKey]: undefined });
     }
   }
 
@@ -95,17 +106,17 @@ const Search = ({
   }
 
   return (
-    <div className="search__box">
+    <div className='search__box'>
       {label && (
-        <label htmlFor="search" form={formID}>
+        <label htmlFor='search' form={formID}>
           {label}
         </label>
       )}
-      <form className="search__wrapper form-group__element">
+      <form className='search__wrapper form-group__element'>
         <AsyncTypeahead
           defaultInputValue={initialValueRef.current}
           highlightOnlyResult={true}
-          id="search"
+          id='search'
           inputProps={{ id: 'search', ...inputProps }}
           isLoading={inflight}
           labelKey={labelKey}
@@ -118,7 +129,8 @@ const Search = ({
           placeholder={placeholder}
           ref={searchRef}
           renderInput={renderSearchInput}
-          renderMenu={(results, menuProps) => renderSearchMenu(results, menuProps, labelKey)}
+          renderMenu={(results, menuProps) => renderSearchMenu(results, menuProps, labelKey)
+          }
         />
       </form>
     </div>
@@ -133,13 +145,16 @@ Search.propTypes = {
   paramKey: PropTypes.string,
   label: PropTypes.any,
   labelKey: PropTypes.string,
-  location: PropTypes.object,
   options: PropTypes.array,
   query: PropTypes.object,
-  queryParams: PropTypes.object,
   searchKey: PropTypes.string,
-  setQueryParams: PropTypes.func,
   placeholder: PropTypes.string,
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    queryParams: PropTypes.object,
+    getInitialValueFromLocation: PropTypes.func,
+    historyPushWithQueryParams: PropTypes.func,
+  }),
 };
 
-export default withRouter(withQueryParams()(connect((state) => state)(Search)));
+export default withUrlHelper(Search);

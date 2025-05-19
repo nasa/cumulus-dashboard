@@ -1,7 +1,6 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Link, withRouter } from 'react-router-dom';
 import {
   searchReconciliationReports,
   clearReconciliationReportSearch,
@@ -12,17 +11,17 @@ import {
 import { lastUpdated } from '../../utils/format';
 import { reconciliationReportStatus as statusOptions } from '../../utils/status';
 import { reconciliationReportTypes as reportTypeOptions } from '../../utils/type';
-import { getPersistentQueryParams } from '../../utils/url-helper';
 import {
   tableColumns,
   bulkActions,
 } from '../../utils/table-config/reconciliation-reports';
-import LoadingEllipsis from '../LoadingEllipsis/loading-ellipsis';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import List from '../Table/Table';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import { withUrlHelper } from '../../withUrlHelper';
+import CreateNewReportButton from './CreateNewReportButton';
 
 const breadcrumbConfig = [
   {
@@ -50,18 +49,17 @@ const granuleBreadcrumbConfig = [
   },
 ];
 
-const ReconciliationReportList = ({
-  dispatch,
-  location,
-  queryParams,
-  reconciliationReports,
-}) => {
+const ReconciliationReportList = ({ urlHelper }) => {
+  const dispatch = useDispatch();
+  const { getPersistentQueryParams, location, queryParams } = urlHelper;
   const { pathname } = location;
   const isGranules = pathname.includes('granules');
+  const reconciliationReports = useSelector((state) => state.reconciliationReports);
   const { list } = reconciliationReports;
   const { queriedAt, count } = list.meta;
   const query = generateQuery();
   const tableColumnsArray = tableColumns({ dispatch, isGranules, query });
+  const { createReportInflight } = reconciliationReports;
 
   function generateQuery() {
     return {
@@ -87,21 +85,10 @@ const ReconciliationReportList = ({
             {isGranules ? 'Lists' : 'Reconciliation Reports Overview'}
           </h1>
           {!isGranules && (
-            <Link
-              className="button button--green button--file button--small form-group__element--right"
-              to={(routerLocation) => ({
-                pathname: '/reconciliation-reports/create',
-                search: getPersistentQueryParams(routerLocation),
-              })}
-            >
-              {reconciliationReports.createReportInflight
-                ? (
-                <LoadingEllipsis />
-                  )
-                : (
-                    'Create New Report'
-                  )}
-            </Link>
+            <CreateNewReportButton
+              createReportInflight={createReportInflight}
+              getPersistentQueryParams={getPersistentQueryParams}
+            />
           )}
           {lastUpdated(queriedAt)}
         </div>
@@ -166,14 +153,11 @@ const ReconciliationReportList = ({
 };
 
 ReconciliationReportList.propTypes = {
-  dispatch: PropTypes.func,
-  location: PropTypes.object,
-  queryParams: PropTypes.object,
-  reconciliationReports: PropTypes.object,
+  urlHelper: PropTypes.shape({
+    location: PropTypes.object,
+    getPersistentQueryParams: PropTypes.func,
+    queryParams: PropTypes.object
+  }),
 };
 
-export default withRouter(
-  connect((state) => ({
-    reconciliationReports: state.reconciliationReports,
-  }))(ReconciliationReportList)
-);
+export default withUrlHelper(ReconciliationReportList);
