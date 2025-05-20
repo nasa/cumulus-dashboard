@@ -115,7 +115,7 @@ export const granuleTableColumns = [
     Cell: ({ cell: { value } }) => collectionLink(value)
   },
   {
-    Header: 'ProducerGranuleId',
+    Header: 'Producer Granule ID',
     accessor: (row) => row.producerGranuleId,
     id: 'producerGranuleId',
     width: 225
