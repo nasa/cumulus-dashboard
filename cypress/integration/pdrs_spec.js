@@ -218,9 +218,11 @@ describe('Dashboard PDRs Page', () => {
           cy.get('@columns').eq(3)
             .contains('a', collectionName(granule.collectionId))
             .should('have.attr', 'href', collectionHrefFromId(granule.collectionId));
-          cy.get('@columns').eq(4)
+          cy.get('@columns').eq(4).invoke('text')
+            .should('be.eq', `${granule.producerGranuleId}`);
+          cy.get('@columns').eq(5)
             .should('have.text', `${Number(granule.duration.toFixed(2))}s`);
-          cy.get('@columns').eq(5).invoke('text')
+          cy.get('@columns').eq(6).invoke('text')
             .should('match', /.+[0-9]{2}\/[0-9]{2}\/[0-9]{2}$/);
           cy.intercept('DELETE', `/granules/${granule.granuleId}`).as(`deleteGranule${granule.granuleId}`);
           cy.get(`[data-value="${granule.granuleId}"] > .td >input[type="checkbox"]`).check();

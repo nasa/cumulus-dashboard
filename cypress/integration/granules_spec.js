@@ -108,7 +108,7 @@ describe('Dashboard Granules Page', () => {
             // Wait for this granule to appear before proceeding.
             cy.contains(granule.granuleId);
             cy.get(`[data-value="${granule.granuleId}"]`).children().as('columns');
-            cy.get('@columns').should('have.length', 9);
+            cy.get('@columns').should('have.length', 10);
 
             // Granule Status Column is correct
             cy.get('@columns').eq(1).invoke('text')
@@ -176,15 +176,19 @@ describe('Dashboard Granules Page', () => {
               .should('have.attr', 'href')
               .and('be.eq', `/providers/provider/${granule.provider}`);
 
-            // Duration column
+            // Producer Granule ID
             cy.get('@columns').eq(7).invoke('text')
+              .should('be.eq', `${granule.producerGranuleId}`);
+
+            // Duration column
+            cy.get('@columns').eq(8).invoke('text')
               .should('be.eq', `${Number(granule.duration).toFixed(2)}s`);
             // Updated column
-            cy.get('@columns').eq(8).invoke('text')
+            cy.get('@columns').eq(9).invoke('text')
               .should('match', /.+[0-9]{2}\/[0-9]{2}\/[0-9]{2}$/);
-            cy.get('@columns').eq(8).find('span').trigger('mouseover');
+            cy.get('@columns').eq(9).find('span').trigger('mouseover');
             cy.get('#table-timestamp-tooltip').should('be.visible');
-            cy.get('@columns').eq(8).find('span').trigger('mouseleave');
+            cy.get('@columns').eq(9).find('span').trigger('mouseleave');
           }
         });
 
@@ -471,7 +475,7 @@ describe('Dashboard Granules Page', () => {
 
     it('Should reingest multiple granules and redirect to the running page.', () => {
       const granuleIds = [
-        'MOD09GQ.A2417309.YZ9tCV.006.4640974889044',
+        'MOD09GQ.A2417309.YZ9tCV.006.4640974889044_ca2a8dfe',
         'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
       ];
       cy.intercept(
@@ -568,7 +572,7 @@ describe('Dashboard Granules Page', () => {
       // granule IDs in alphanumeric order. We sort the actual result for comparison.
       const granuleIds = [
         'MOD09GQ.A0501579.PZB_CG.006.8580266395214',
-        'MOD09GQ.A1657416.CbyoRi.006.9697917818587'
+        'MOD09GQ.A1657416.CbyoRi.006.9697917818587_e798fe37'
       ];
 
       cy.intercept({
