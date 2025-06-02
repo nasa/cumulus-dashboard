@@ -59,6 +59,7 @@
     },
     {
       "granuleId": "test_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl2",
+      "pdrName": "MOD09GQ_1granule_v3.PDR",
       "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:7a71f849-57a0-40e7-8fca-5cf796602a07",
       "lastUpdateDateTime": "2018-04-25T21:45:45.524Z",
       "published": true,
@@ -137,6 +138,58 @@
       "collectionId": "MOD09GQ___006",
       "producerGranuleId": "MOD09GQ.A1657416.CbyoRi.006.9697917818587",
       "status": "running",
+      "timestamp": 1537831751216,
+      "updatedAt": 1537831750922
+    },
+    {
+      "granuleId": "MOD09GQ.A1657416.CbyoRi.006.9697917818587_e798fe38",
+      "pdrName": "MOD09GQ_1granule_v3.PDR",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationParsePdrStateMachine-JVlCKfoXElDQ:9888b858-d70c-42ec-a887-c9367dcfd7cf",
+      "lastUpdateDateTime": "2018-04-25T21:45:45.524Z",
+      "processingEndDateTime": "2018-09-24T23:28:45.731Z",
+      "published": true,
+      "error": {
+        "Cause": "\"None\"",
+        "Error": "Unknown Error"
+      },
+      "productVolume": "17956339",
+      "endingDateTime": "2017-11-08T23:59:59.000Z",
+      "timeToPreprocess": 0.3,
+      "duration": 14.815,
+      "cmrLink": "https://cmr.uat.earthdata.nasa.gov/search/granules.json?concept_id=G1224020881-CUMULUS",
+      "createdAt": 1537831723341,
+      "provider": "s3_provider",
+      "beginningDateTime": "2017-10-24T00:00:00.000Z",
+      "timeToArchive": 10.541,
+      "files": [
+        {
+          "bucket": "cumulus-test-sandbox-protected",
+          "key": "MOD09GQ___006/2017/MOD/MOD09GQ.A1657416.CbyoRi.006.9697917818587.hdf",
+          "size" : 10239,
+          "fileName": "MOD09GQ.A1657416.CbyoRi.006.9697917818587.hdf"
+        },
+        {
+          "bucket": "cumulus-test-sandbox-private",
+          "key": "MOD09GQ___006/MOD/MOD09GQ.A1657416.CbyoRi.006.9697917818587.hdf.met",
+          "size" : 657,
+          "fileName": "MOD09GQ.A1657416.CbyoRi.006.9697917818587.hdf.met"
+        },
+        {
+          "bucket": "cumulus-test-sandbox-public",
+          "key": "MOD09GQ___006/MOD/MOD09GQ.A1657416.CbyoRi.006.9697917818587_ndvi.jpg",
+          "size" : 2341,
+          "fileName": "MOD09GQ.A1657416.CbyoRi.006.9697917818587_ndvi.jpg"
+        },
+        {
+          "bucket": "cumulus-test-sandbox-protected-2",
+          "key": "MOD09GQ___006/MOD/MOD09GQ.A1657416.CbyoRi.006.9697917818587.cmr.xml",
+          "size" : 124521,
+          "fileName": "MOD09GQ.A1657416.CbyoRi.006.9697917818587.cmr.xml"
+        }
+      ],
+      "collectionId": "MOD09GQ___006",
+      "producerGranuleId": "MOD09GQ.A1657416.CbyoRi.006.9697917818587",
+      "status": "completed",
       "timestamp": 1537831751216,
       "updatedAt": 1537831750922
     },

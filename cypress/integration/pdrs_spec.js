@@ -203,7 +203,7 @@ describe('Dashboard PDRs Page', () => {
       cy.url().should('include', 'search=GQ');
 
       cy.get('.table .tbody .tr').as('list');
-      cy.get('@list').should('have.length', 2);
+      cy.get('@list').should('have.length', 4);
 
       cy.getFakeApiFixture('granules').its('results')
         .then((granules) => granules.filter((item) => item.pdrName === pdrName))
@@ -231,6 +231,13 @@ describe('Dashboard PDRs Page', () => {
           cy.wait(`@deleteGranule${granule.granuleId}`);
           cy.get('.button--cancel').click();
         });
+
+      cy.getFakeApiFixture('granules').its('results').then((granules) => {
+        const producerGranuleIds = granules.map((g) => g.producerGranuleId);
+        const filteredProducerCount = producerGranuleIds.filter((id) => (id === 'MOD09GQ.A1657416.CbyoRi.006.9697917818587')).length;
+        expect(producerGranuleIds.length).to.equal(13);
+        expect(filteredProducerCount).to.equal(2);
+      });
 
       cy.url().should('include', `/pdrs/pdr/${pdrName}`);
       cy.get('.heading--large').should('have.text', `PDR: ${pdrName}`);
