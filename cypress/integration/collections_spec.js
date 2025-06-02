@@ -47,8 +47,8 @@ describe('Dashboard Collections Page', () => {
       cy.contains('.heading--xlarge', 'Collections');
 
       cy.get('.table .tbody .tr', { timeout: 10000 }).should('have.length', 2);
-      cy.get('.tbody > .tr > :nth-child(4)').should('contain', '11');
-      cy.get('.tbody > .tr > :nth-child(5)').should('contain', '6');
+      cy.get('.tbody > .tr > :nth-child(4)').should('contain', '12');
+      cy.get('.tbody > .tr > :nth-child(5)').should('contain', '7');
       cy.get('.tbody > .tr > :nth-child(6)').should('contain', '2');
       cy.get('.tbody > .tr > :nth-child(7)').should('contain', '2');
       cy.get('.tbody > .tr > :nth-child(8)').should('contain', '1');
@@ -567,7 +567,7 @@ describe('Dashboard Collections Page', () => {
 
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
-          .first().should('contain', 6).and('contain', 'Completed')
+          .first().should('contain', 7).and('contain', 'Completed')
           .next()
           .should('contain', 2)
           .and('contain', 'Failed')
@@ -585,7 +585,7 @@ describe('Dashboard Collections Page', () => {
 
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
-          .first().should('contain', 6).and('contain', 'Completed')
+          .first().should('contain', 7).and('contain', 'Completed')
           .next()
           .should('contain', 2)
           .and('contain', 'Failed')
