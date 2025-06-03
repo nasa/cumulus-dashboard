@@ -196,9 +196,9 @@
       "createdAt": 1596203522716,
       "provider": "s3_provider",
       "stats": {
+        "total": 4,
         "processing": 0,
-        "total": 2,
-        "completed": 2,
+        "completed": 4,
         "failed": 0
       },
       "progress": 100,
