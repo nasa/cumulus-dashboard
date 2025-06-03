@@ -15,7 +15,7 @@ This version of the dashboard requires Cumulus API >= feature/duplicate-granule-
   - Updated the dashboard to use alpha version `@cumulus/api@20.1.3-alpha.2` and
     `@cumulus/aws-client@20.1.3-alpha.2`
 - **CUMULUS-4086**
-  - Added fixture and test case for cypress tests to test if duplicate producerGranuleIds will show in the
+  - Added fixture and cypress tests to verify that duplicate granules with the same producerGranuleIds will show in the Granules and PDRs pages
     granules' producerGranuleId column
 
 ## [Unreleased]
