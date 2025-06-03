@@ -234,6 +234,11 @@ describe('Dashboard PDRs Page', () => {
 
       cy.url().should('include', `/pdrs/pdr/${pdrName}`);
       cy.get('.heading--large').should('have.text', `PDR: ${pdrName}`);
+
+      cy.getFakeApiFixture('granules').its('results').then((results) => {
+        const duplicateGranules = results.filter((g) => g.producerGranuleId === 'MOD09GQ.A1657416.CbyoRi.006.9697917818587');
+        expect(duplicateGranules.length).to.equal(3);
+      });
     });
 
     it('Should dynamically update menu, sidbar and breadcrumb /pdrs links with latest filter criteria', () => {

@@ -194,6 +194,10 @@ describe('Dashboard Granules Page', () => {
 
       cy.get('.table .tbody .tr').as('list');
       cy.get('@list').should('have.length', 14);
+      cy.get('@granulesListFixture').its('results').then((results) => {
+        const duplicateGranules = results.filter((g) => g.producerGranuleId === 'MOD09GQ.A1657416.CbyoRi.006.9697917818587');
+        expect(duplicateGranules.length).to.equal(3);
+      });
     });
 
     it('should be able to sort table by multiple fields', () => {
