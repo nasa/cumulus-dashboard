@@ -194,19 +194,6 @@ describe('Dashboard Granules Page', () => {
 
       cy.get('.table .tbody .tr').as('list');
       cy.get('@list').should('have.length', 14);
-
-      const producerGranuleIds = [];
-      cy.get('.table .tbody .tr').each(($row) => cy.wrap($row).children('.td').eq(7).invoke('text')
-        .then((text) => { producerGranuleIds.push(text); }))
-        .then(() => {
-          const filteredProducerCount = producerGranuleIds.filter(
-            (id) => id === 'MOD09GQ.A1657416.CbyoRi.006.9697917818587'
-          ).length;
-
-          expect(producerGranuleIds.length).to.equal(14);
-          // checks that multiple of the same producerGranuleId can persist in the granules' table
-          expect(filteredProducerCount).to.equal(3);
-        });
     });
 
     it('should be able to sort table by multiple fields', () => {

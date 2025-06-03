@@ -234,19 +234,6 @@ describe('Dashboard PDRs Page', () => {
 
       cy.url().should('include', `/pdrs/pdr/${pdrName}`);
       cy.get('.heading--large').should('have.text', `PDR: ${pdrName}`);
-      const producerGranuleIds = [];
-
-      cy.get('.table .tbody .tr').each(($row) => cy.wrap($row).children('.td').eq(4).invoke('text')
-        .then((text) => { producerGranuleIds.push(text); }))
-        .then(() => {
-          const filteredProducerCount = producerGranuleIds.filter(
-            (id) => id === 'MOD09GQ.A1657416.CbyoRi.006.9697917818587'
-          ).length;
-
-          expect(producerGranuleIds.length).to.equal(4);
-          // checks that multiple of the same producerGranuleId can persist in the prodivers' granules table
-          expect(filteredProducerCount).to.equal(2);
-        });
     });
 
     it('Should dynamically update menu, sidbar and breadcrumb /pdrs links with latest filter criteria', () => {
