@@ -682,9 +682,9 @@ describe('Dashboard Collections Page', () => {
       it('should properly query sidebar pages', () => {
         cy.visit(`/collections/collection/${name}/${encodedVersion}`);
         cy.contains('.sidebar a', 'Granules').click();
-        cy.get('.table .tbody .tr').should('have.length', 1);
+        cy.get('.table .tbody .tr').should('have.length', 2);
         cy.contains('.sidebar a', 'Completed').click();
-        cy.get('.table .tbody .tr').should('have.length', 1);
+        cy.get('.table .tbody .tr').should('have.length', 2);
         cy.contains('.sidebar a', 'Running').click();
         cy.get('.table .tbody .tr').should('have.length', 0);
         cy.contains('.sidebar a', 'Failed').click();
