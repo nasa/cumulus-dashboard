@@ -203,7 +203,7 @@ describe('Dashboard PDRs Page', () => {
       cy.url().should('include', 'search=GQ');
 
       cy.get('.table .tbody .tr').as('list');
-      cy.get('@list').should('have.length', 2);
+      cy.get('@list').should('have.length', 4);
 
       cy.getFakeApiFixture('granules').its('results')
         .then((granules) => granules.filter((item) => item.pdrName === pdrName))
@@ -218,9 +218,11 @@ describe('Dashboard PDRs Page', () => {
           cy.get('@columns').eq(3)
             .contains('a', collectionName(granule.collectionId))
             .should('have.attr', 'href', collectionHrefFromId(granule.collectionId));
-          cy.get('@columns').eq(4)
+          cy.get('@columns').eq(4).invoke('text')
+            .should('be.eq', `${granule.producerGranuleId}`);
+          cy.get('@columns').eq(5)
             .should('have.text', `${Number(granule.duration.toFixed(2))}s`);
-          cy.get('@columns').eq(5).invoke('text')
+          cy.get('@columns').eq(6).invoke('text')
             .should('match', /.+[0-9]{2}\/[0-9]{2}\/[0-9]{2}$/);
           cy.intercept('DELETE', `/granules/${granule.granuleId}`).as(`deleteGranule${granule.granuleId}`);
           cy.get(`[data-value="${granule.granuleId}"] > .td >input[type="checkbox"]`).check();
@@ -232,6 +234,11 @@ describe('Dashboard PDRs Page', () => {
 
       cy.url().should('include', `/pdrs/pdr/${pdrName}`);
       cy.get('.heading--large').should('have.text', `PDR: ${pdrName}`);
+
+      cy.getFakeApiFixture('granules').its('results').then((results) => {
+        const duplicateGranules = results.filter((g) => g.producerGranuleId === 'MOD09GQ.A1657416.CbyoRi.006.9697917818587');
+        expect(duplicateGranules.length).to.equal(3);
+      });
     });
 
     it('Should dynamically update menu, sidbar and breadcrumb /pdrs links with latest filter criteria', () => {

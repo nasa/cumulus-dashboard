@@ -109,7 +109,7 @@ describe('Dashboard Bulk Granules', () => {
 
     it('handles successful bulk granule reingest request', () => {
       const asyncOperationId = Math.random().toString(36).substring(2, 15);
-      const granuleIds = ['MOD09GQ.A9344328.K9yI3O.006.4625818663028', 'MOD09GQ.A2417309.YZ9tCV.006.4640974889044'];
+      const granuleIds = ['MOD09GQ.A9344328.K9yI3O.006.4625818663028', 'MOD09GQ.A2417309.YZ9tCV.006.4640974889044_ca2a8dfe'];
 
       cy.intercept('POST', '/granules/bulkReingest', {
         id: asyncOperationId

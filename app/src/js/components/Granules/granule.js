@@ -123,9 +123,8 @@ const metaAccessors = [
     accessor: bool,
   },
   {
-    label: 'Duplicate',
-    property: 'hasDuplicate',
-    accessor: bool,
+    label: 'Producer Granule ID',
+    property: 'producerGranuleId',
   },
   {
     label: 'Total duration',
