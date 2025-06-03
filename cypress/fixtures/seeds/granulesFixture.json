@@ -59,7 +59,6 @@
     },
     {
       "granuleId": "test_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl2",
-      "pdrName": "MOD09GQ_1granule_v3.PDR",
       "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:7a71f849-57a0-40e7-8fca-5cf796602a07",
       "lastUpdateDateTime": "2018-04-25T21:45:45.524Z",
       "published": true,
@@ -143,6 +142,7 @@
     },
     {
       "granuleId": "coastal_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl3",
+      "pdrName": "MOD09GQ_1granule_v3.PDR",
       "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:7a71f849-57a0-40e7-8fca-5cf796602a07",
       "lastUpdateDateTime": "2018-04-25T21:45:45.524Z",
       "published": true,
