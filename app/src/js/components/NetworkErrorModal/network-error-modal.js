@@ -4,7 +4,7 @@ import DefaultModal from '../Modal/modal';
 
 const NetworkErrorModal = ({
   title = 'Network Connection Error',
-  children = 'Your network appears to be offline. Please reconnect as any changes made while offline may not be saved.',
+  children = 'Your network appears to be offline. To avoid redirection, please reconnect as some contents may become unavailable.',
 }) => {
   const [modalVisible, setModalVisible] = useState(!navigator.onLine);
   const handleClose = () => setModalVisible(false);
