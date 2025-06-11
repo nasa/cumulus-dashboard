@@ -4,7 +4,7 @@ import DefaultModal from '../Modal/modal';
 
 const NetworkErrorModal = ({
   title = 'Network Connection Error',
-  children = 'Your network appears to be offline. Please check your internet connection and refresh the page.',
+  children = 'Your network appears to be offline. Please reconnect as any changes made while offline may not be saved.',
 }) => {
   const [modalVisible, setModalVisible] = useState(!navigator.onLine);
   const handleClose = () => setModalVisible(false);
@@ -15,7 +15,7 @@ const NetworkErrorModal = ({
     };
     window.addEventListener('online', updateStatus);
     window.addEventListener('offline', updateStatus);
-    const interval = setInterval(updateStatus, 1000); // check every second
+    const interval = setInterval(updateStatus, 300000); // check five minutes
 
     return () => {
       window.removeEventListener('online', updateStatus);
