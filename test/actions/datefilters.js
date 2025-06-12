@@ -67,7 +67,6 @@ test('Each of these list action creators will pull data from datepicker state wh
     { action: 'OPERATIONS_INFLIGHT', dispatcher: listOperations },
     { action: 'PDRS_INFLIGHT', dispatcher: listPdrs },
     { action: 'RECONCILIATIONS_INFLIGHT', dispatcher: listReconciliationReports },
-    { action: 'RULES_INFLIGHT', dispatcher: listRules },
     { action: 'STATS_INFLIGHT', dispatcher: getStats }
   ];
 
