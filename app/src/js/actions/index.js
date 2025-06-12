@@ -727,17 +727,14 @@ export const clearOperationsSearch = () => ({ type: types.CLEAR_OPERATIONS_SEARC
 export const filterOperations = (param) => ({ type: types.FILTER_OPERATIONS, param });
 export const clearOperationsFilter = (paramKey) => ({ type: types.CLEAR_OPERATIONS_FILTER, paramKey });
 
-export const listRules = (options) => (dispatch, getState) => {
-  const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-  return dispatch({
-    [CALL_API]: {
-      type: types.RULES,
-      method: 'GET',
-      url: new URL('rules', root).href,
-      params: { limit: defaultPageLimit, ...options, ...timeFilters }
-    }
-  });
-};
+export const listRules = (options) => ({
+  [CALL_API]: {
+    type: types.RULES,
+    method: 'GET',
+    url: new URL('rules', root).href,
+    params: { limit: defaultPageLimit, ...options }
+  }
+});
 
 export const getRule = (ruleName) => ({
   [CALL_API]: {
