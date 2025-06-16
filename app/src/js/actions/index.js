@@ -427,7 +427,7 @@ export const getOptionsCollectionName = (options) => ({
     type: types.OPTIONS_COLLECTIONNAME,
     method: 'GET',
     url: new URL('collections', root).href,
-    params: { limit: 100, fields: 'name,version' }
+    params: { limit: 'null', fields: 'name,version', sort_key: ['-timestamp'] }
   }
 });
 
@@ -514,7 +514,7 @@ export const getOptionsProviderName = () => ({
     type: types.OPTIONS_PROVIDERNAME,
     method: 'GET',
     url: new URL('providers', root).href,
-    params: { limit: 100, fields: 'id' }
+    params: { limit: 'null', fields: 'id', sort_key: ['-timestamp'] }
   }
 });
 

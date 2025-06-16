@@ -5,18 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [Unreleased]
 
 ### Changed
 - **CUMULUS-4039**
   - Updated to allow slashes in provider name and collection name
 
-## [v13.1.0] - 2025-03-25
+## [v13.2.0] - 2025-05-14
 
 ### Added
 
+- **CUMULUS-3849**
+  - Added a network error modal that pops up when the user is offline
 - **CUMULUS-4048**
   - Added a session timeout warning modal that pops up five minutes before the session expires
+- **CUMULUS-4088**
+  - Added sortKey=[-timestamp] and set no limit to queries to get collection and provider options
+- **CUMULUS-4094**
+  - Added `INITIAL_DATE_RANGE_IN_DAYS` environment variable to allow control over how many days objects will be loaded at startup of the dashboard
+
+## [v13.1.0] - 2025-03-25
 
 ### Changed
 
@@ -1475,7 +1483,8 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
-  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v13.1.0...HEAD
+  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v13.2.0...HEAD
+  [v13.2.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.1.0...v13.2.0
   [v13.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.0.0...v13.1.0
   [v13.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v12.2.0...v13.0.0
   [v12.2.0]: https://github.com/nasa/cumulus-dashboard/compare/v12.1.0...v12.2.0
