@@ -7,8 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v13.2.0] - 2025-05-14
+
 ### Added
 
+- **CUMULUS-3849**
+  - Added a network error modal that pops up when the user is offline
 - **CUMULUS-4048**
   - Added a session timeout warning modal that pops up five minutes before the session expires
 - **CUMULUS-4088**
@@ -1475,7 +1479,8 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
-  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v13.1.0...HEAD
+  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v13.2.0...HEAD
+  [v13.2.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.1.0...v13.2.0
   [v13.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.0.0...v13.1.0
   [v13.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v12.2.0...v13.0.0
   [v12.2.0]: https://github.com/nasa/cumulus-dashboard/compare/v12.1.0...v12.2.0
