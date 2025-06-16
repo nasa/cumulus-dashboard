@@ -33,7 +33,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-4003**
   - Remove D3 and related libraries from dashboard.
-- **CUMULUS-4114**
 
 ### Fixed
 
