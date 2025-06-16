@@ -290,7 +290,7 @@ export const providerLink = (provider) => {
   return (
     <Link
       to={(location) => ({
-        pathname: `/providers/provider/${provider}`,
+        pathname: `/providers/provider/${encodeURIComponent(provider)}`,
         search: getPersistentQueryParams(location),
       })}
     >
@@ -393,7 +393,7 @@ export const getCollectionId = (collection) => {
 
 export const getEncodedCollectionId = (collection) => {
   if (collection && collection.name && collection.version) {
-    return constructCollectionId(collection.name, encodeURIComponent(collection.version));
+    return constructCollectionId(encodeURIComponent(collection.name), encodeURIComponent(collection.version));
   }
   return nullValue;
 };
@@ -415,12 +415,12 @@ export const collectionLink = (collectionId) => {
 export const collectionHrefFromId = (collectionId) => {
   if (!collectionId) return nullValue;
   const { name, version } = collectionNameVersion(collectionId);
-  return `/collections/collection/${name}/${encodeURIComponent(version)}`;
+  return `/collections/collection/${encodeURIComponent(name)}/${encodeURIComponent(version)}`;
 };
 
 export const collectionHrefFromNameVersion = ({ name, version } = {}) => {
   if (!name || !version) return nullValue;
-  return `/collections/collection/${name}/${encodeURIComponent(version)}`;
+  return `/collections/collection/${encodeURIComponent(name)}/${encodeURIComponent(version)}`;
 };
 
 /* Modal Text */
