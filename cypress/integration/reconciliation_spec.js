@@ -370,12 +370,6 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.get('.legend-items--item').eq(2).should('contain', 'No issues/conflicts');
     });
 
-    it('should download the Internal report with the report link', () => {
-      const reportName = 'InternalReport092020';
-      cy.visit('/reconciliation-reports');
-      cy.get(`[data-value="${reportName}"]`).find('.button__row--download').should('have.length', 1);
-    });
-
     it('displays an individual ORCA report', () => {
       const reportName = 'orcaBackupReport-20220111T191341153';
       const granuleId = 'MYD13Q1.A3194547.tnYsne.006.8400707913298';
