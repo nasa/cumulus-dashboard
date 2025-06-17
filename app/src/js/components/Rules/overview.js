@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
-  listRules,
+  allRules,
   searchRules,
   clearRulesSearch,
   filterRules,
@@ -34,7 +34,7 @@ class RulesOverview extends React.Component {
   }
 
   componentDidMount() {
-    this.props.dispatch(listRules);
+    this.props.dispatch(allRules);
   }
 
   generateBulkActions() {
@@ -74,7 +74,7 @@ class RulesOverview extends React.Component {
 
           <List
             list={list}
-            action={listRules}
+            action={allRules}
             tableColumns={tableColumns}
             query={{ ...queryParams }}
             initialSortId="updatedAt"
