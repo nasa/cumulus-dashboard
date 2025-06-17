@@ -96,7 +96,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
     it('should have a download button column', () => {
       cy.visit('/reconciliation-reports');
-      cy.get('.button__row--download').should('have.length', 6);
+      cy.get('.button__row--download').should('have.length', 5);
     });
 
     it('deletes a report when the Delete button is clicked', () => {
