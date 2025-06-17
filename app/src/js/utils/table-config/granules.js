@@ -88,6 +88,12 @@ export const tableColumns = [
     Cell: ({ cell: { value } }) => providerLink(value)
   },
   {
+    Header: 'Producer Granule ID',
+    accessor: (row) => row.producerGranuleId,
+    id: 'producerGranuleId',
+    width: 225
+  },
+  {
     Header: 'Recovery',
     accessor: (row) => (row.recoveryStatus ? displayCase(row.recoveryStatus) : row.recoveryStatus),
     id: 'recoveryStatus',
@@ -131,6 +137,12 @@ export const errorTableColumns = [
     accessor: 'granuleId',
     Cell: ({ cell: { value } }) => granuleLink(value),
     width: 200
+  },
+  {
+    Header: 'Producer Granule ID',
+    accessor: (row) => row.producerGranuleId,
+    id: 'producerGranuleId',
+    width: 225
   },
   {
     Header: 'Duration',
