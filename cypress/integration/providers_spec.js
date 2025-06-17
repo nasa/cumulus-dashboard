@@ -35,7 +35,7 @@ describe('Dashboard Providers Page', () => {
       cy.url().should('include', 'providers');
       cy.contains('.heading--xlarge', 'Providers');
 
-      cy.get('.table .tbody .tr').should('have.length', 2);
+      cy.get('.table .tbody .tr').should('have.length', 3);
     });
 
     describe('add a new provider', () => {
@@ -154,6 +154,7 @@ describe('Dashboard Providers Page', () => {
           cy.get('@providerInput').contains(field).should('not.exist');
         });
       });
+
       it('should display correct fields for an sftp provider', () => {
         const protocol = 'sftp';
         const expectedFields = [
@@ -178,6 +179,7 @@ describe('Dashboard Providers Page', () => {
           cy.get('@providerInput').contains(field).should('not.exist');
         });
       });
+
       it('should add a new provider', () => {
         const name = 'TEST_PROVIDER';
         const connectionLimit = 5;
@@ -219,9 +221,7 @@ describe('Dashboard Providers Page', () => {
           cy.contains('Host').next().should('have.text', host);
         });
 
-        // Verify the new provider is added to the providers list, after allowing
-        // ES indexing to finish (hopefully), so that the new provider is part
-        // of the query results.
+        // Verify the new provider is added to the providers list
         cy.wait(1000);
         cy.contains('a', 'Back to Providers').click();
         cy.wait('@getProviders');
@@ -312,6 +312,145 @@ describe('Dashboard Providers Page', () => {
       cy.contains('a', 'Back to Providers').click();
       cy.contains('.heading--xlarge', 'Providers');
       cy.contains('.table .tbody .tr a', name);
+    });
+
+    describe('Encoded provider', () => {
+      it ('should properly encode provider path in the providers table', () =>  {
+        const name = 'NASA/JPL/PO.DAAC';
+        const encodedName = encodeURIComponent(name);
+        const urlRegex = new RegExp(`providers/provider/${encodedName}`);
+        cy.visit('/providers');
+        cy.get('.table .tbody .tr').should('have.length', 3); // 2 -> replace; 3 -> add
+        cy.contains('.table .tbody .tr', name).as('testProvider');
+        cy.get('@testProvider').find('a').should('have.attr', 'href').and('match', urlRegex);
+        cy.get('@testProvider').find('a').click();
+        cy.url().should('match', urlRegex);
+        cy.contains('.heading--large', `${name}`);
+        cy.get('.heading--large').should('not.contain', encodedName);
+      });
+
+      it('should edit a provider', () => {
+        const name = 'NASA/JPL/PO.DAAC';
+        const encodedName = encodeURIComponent(name);
+        const connectionLimit = 12;
+        const host = 'test-host-new';
+        const port = 3000;
+
+        cy.visit(`/providers/provider/${encodedName}`);
+        cy.contains('.heading--large', name);
+        cy.get('.heading--large').should('not.contain', encodedName);
+        cy.contains('a', 'Edit').as('editProvider');
+        cy.get('@editProvider')
+          .should('have.attr', 'href')
+          .and('include', `/providers/edit/${encodedName}`);
+        cy.get('@editProvider').click();
+
+        cy.contains('.heading--large', `Edit provider: ${name}`);
+        cy.get('.heading--large').should('not.contain', encodedName);
+
+        cy.get('form div ul').as('providerInput');
+        cy.get('@providerInput')
+          .contains('Concurrent Connection Limit')
+          .siblings('input')
+          .clear()
+          .type(connectionLimit);
+        cy.get('@providerInput')
+          .contains('Host')
+          .siblings('input')
+          .clear()
+          .type(host);
+        cy.get('@providerInput')
+          .contains('Port')
+          .siblings('input')
+          .clear()
+          .type(port);
+
+        cy.get('form div button').contains('Submit').click();
+
+        // displays the updated provider
+        cy.contains('.heading--xlarge', 'Providers');
+        cy.contains('.heading--large', name);
+        cy.get('.heading--large').should('not.contain', encodedName);
+        cy.contains('.heading--medium', 'Provider Overview');
+        cy.get('.metadata__details').within(() => {
+          cy.contains('Global Connection Limit')
+            .next()
+            .should('have.text', connectionLimit);
+          cy.contains('Host').next().should('have.text', host);
+          cy.contains('Port').next().should('have.text', port);
+        });
+      });
+
+      it ('should add and delete a new provider', () => {
+        const newName = 'TEST/PROVIDER';
+        const newEncodedName = encodeURIComponent(newName);
+        const protocol = 's3';
+        const host = 'test-host';
+        const connectionLimit = 5;
+        cy.intercept('GET', '/providers/*').as('getNewProvider');
+
+        cy.visit('/providers/add');
+        // fill the form and submit
+        cy.get('form div ul').as('providerInput');
+        cy.get('@providerInput')
+          .contains('.dropdown__label', 'Protocol')
+          .siblings()
+          .find('.react-select__value-container')
+          .click();
+        cy.contains('div[id*="react-select"]', protocol).click();
+        cy.get('@providerInput')
+          .contains('Provider Name')
+          .siblings('input')
+          .type(newName);
+        cy.get('@providerInput')
+          .contains('Concurrent Connection Limit')
+          .siblings('input')
+          .clear()
+          .type(connectionLimit);
+        cy.get('@providerInput').contains('Host').siblings('input').type(host);
+
+        cy.get('form div button').contains('Submit').click();
+
+        cy.wait('@getProvider');
+        // url is generated from generic AddRecord, so we are avoiding trying to encode it
+        // but the routes for provider should then capture the slash and behave properly
+        cy.url().should('include', `providers/provider/${newName}`);
+
+        cy.contains('.heading--xlarge', 'Providers');
+        cy.contains('.heading--large', newName);
+        cy.contains('.heading--medium', 'Provider Overview');
+        cy.get('.metadata__details').within(() => {
+          cy.contains('Global Connection Limit')
+            .next()
+            .should('have.text', connectionLimit);
+          cy.contains('Protocol').next().should('have.text', protocol);
+          cy.contains('Host').next().should('have.text', host);
+        });
+
+        // Verify the new provider is added to the providers list
+        cy.wait(1000);
+        cy.contains('a', 'Back to Providers').click();
+        cy.wait('@getProviders');
+        cy.contains('.table .tbody .tr a', newName).should(
+          'have.attr',
+          'href',
+          `/providers/provider/${newEncodedName}`
+        );
+
+        cy.visit(`/providers/provider/${newEncodedName}`);
+        
+        cy.contains('.heading--large', newName);
+
+        // delete provider
+        cy.get('.button--delete').click();
+        cy.contains('button', 'Confirm').click();
+
+        // verify the provider is now gone
+        cy.url().should('include', 'providers');
+        cy.contains('.heading--xlarge', 'Providers');
+        cy.contains('.table .tbody .tr', newName).should('not.exist');
+
+      });
     });
   });
 });
