@@ -301,14 +301,14 @@ describe('Dashboard Granules Page', () => {
     });
 
     it('Should update URL and table when search filter is changed.', () => {
-      const infix = 'A0142558';
+      const prefix = 'A0142558';
       cy.visit('/granules');
       cy.get('.search').as('search');
-      cy.get('@search').click().type(infix);
-      cy.url().should('include', `search=${infix}`);
+      cy.get('@search').click().type(prefix);
+      cy.url().should('include', `search=${prefix}`);
       cy.get('.table .tbody .tr').should('have.length', 1);
       cy.get('.table .tbody .tr').eq(0).children('.td').eq(2)
-        .contains(infix);
+        .contains(prefix);
     });
 
     it('Should show Search and Dropdown filters in URL.', () => {
