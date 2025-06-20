@@ -301,7 +301,7 @@ describe('Dashboard Granules Page', () => {
     });
 
     it('Should update URL and table when search filter is changed.', () => {
-      const prefix = 'A0142558';
+      const prefix = 'MOD09GQ.A802';
       cy.visit('/granules');
       cy.get('.search').as('search');
       cy.get('@search').click().type(prefix);
