@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- **CUMULUS-3849**
+  - Added a network error modal that pops up when the user is offline
 - **CUMULUS-4048**
   - Added a session timeout warning modal that pops up five minutes before the session expires
 - **CUMULUS-4088**
@@ -40,6 +42,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Updated datestring format to show the correct hours
 - **CUMULUS-4008**
   - Updated the Dockerfile with improved NPM install command to prevent error messages.
+- **CUMULUS-4114**
+  - Updated the exports in index to be called in overview to allow the rules count to be affected by the datepicker while keeping the rules page unaffected. 
 
 ## [v13.0.0] - 2025-02-19
 This version of the dashboard requires Cumulus API >= v20.0.0
