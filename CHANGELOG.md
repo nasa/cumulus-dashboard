@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+- **CUMULUS-4039**
+  - Updated to allow slashes in provider name and collection name
+
 ## [v13.2.0] - 2025-05-14
 
 ### Added

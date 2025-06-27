@@ -23,6 +23,14 @@
       "globalConnectionLimit": 10,
       "host": "cumulus-test-sandbox-internal",
       "updatedAt": 1539104943690
+    },
+    {
+      "id": "NASA/JPL/PO.DAAC",
+      "createdAt": 1549504943690,
+      "protocol": "s3",
+      "globalConnectionLimit": 10,
+      "host": "cumulus-test-sandbox-internal",
+      "updatedAt": 1549504943690
     }
   ]
 }

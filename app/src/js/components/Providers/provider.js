@@ -18,10 +18,16 @@ import { metaAccessors } from '../../utils/table-config/providers';
 
 const ProviderOverview = ({ dispatch, match, providers }) => {
   const { providerId } = match.params;
-  const record = providers.map[providerId];
+
+  let decodedProviderId;
+  if (providerId !== decodeURIComponent(providerId)) {
+    decodedProviderId = decodeURIComponent(providerId);
+  }
+
+  const record = providers.map[decodeURIComponent(providerId)];
 
   useEffect(() => {
-    dispatch(getProvider(providerId));
+    dispatch(getProvider(decodeURIComponent(providerId)));
   }, [dispatch, providerId]);
 
   useEffect(() => {
@@ -29,7 +35,7 @@ const ProviderOverview = ({ dispatch, match, providers }) => {
       listCollections({
         limit: 100,
         fields: 'collectionName',
-        providers: providerId,
+        providers: decodeURIComponent(providerId),
       })
     );
   }, [dispatch, providerId]);
@@ -83,7 +89,7 @@ const ProviderOverview = ({ dispatch, match, providers }) => {
     <div className="page__component">
       <section className="page__section page__section__header-wrapper">
         <h1 className="heading--large heading--shared-content with-description">
-          Provider: {providerId}
+          Provider: {(decodedProviderId || providerId)}
         </h1>
         <div className="dropdown__options form-group__element--right">
           <ul>
