@@ -62,6 +62,7 @@ const AllGranules = ({
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const [selected, setSelected] = useState([]);
+  const [isPrefixSearch, setIsPrefixSearch] = useState(true);
   const { dropdowns } = collections;
   const { dropdowns: providerDropdowns } = providers;
   const { list } = granules;
@@ -183,14 +184,28 @@ const AllGranules = ({
           toggleColumnOptionsAction={toggleGranulesTableColumns}
           tableId="granules"
         >
+          <ListFilters>
+          <label htmlFor="chk_isprefixsearch"
+            className="checkmark--wrapper">Prefix Search
+            <input
+              id="chk_isprefixsearch"
+              type="checkbox"
+              checked={isPrefixSearch}
+              onChange={() => setIsPrefixSearch((v) => !v)}
+            />
+            <span className="checkmark"></span>
+          </label>
+          </ListFilters>
           <Search
             action={searchGranules}
             clear={clearGranulesSearch}
+            prefix={isPrefixSearch}
             label="Search"
             labelKey="granuleId"
             placeholder="Granule ID"
             searchKey="granules"
           />
+
           <ListFilters>
             <Dropdown
               getOptions={getOptionsCollectionName}

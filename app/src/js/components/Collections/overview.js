@@ -87,6 +87,7 @@ const CollectionOverview = ({
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const [selected, setSelected] = useState([]);
+  const [isPrefixSearch, setIsPrefixSearch] = useState(true);
 
   useEffect(() => {
     dispatch(listCollections());
@@ -314,10 +315,23 @@ const CollectionOverview = ({
           tableId={`collection-${collectionName}-${collectionVersion}`}
           onSelect={updateSelection}
         >
+          <ListFilters>
+          <label htmlFor="chk_isprefixsearch"
+            className="checkmark--wrapper">Prefix Search
+            <input
+              id="chk_isprefixsearch"
+              type="checkbox"
+              checked={isPrefixSearch}
+              onChange={() => setIsPrefixSearch((v) => !v)}
+            />
+            <span className="checkmark"></span>
+          </label>
+          </ListFilters>
           <Search
             action={searchGranules}
             clear={clearGranulesSearch}
             label="Search"
+            prefix={isPrefixSearch}
             labelKey="granuleId"
             placeholder="Granule ID"
             searchKey="granules"

@@ -57,6 +57,7 @@ const CollectionGranules = ({
   const [selected, setSelected] = useState([]);
   const query = generateQuery();
   const { dropdowns } = providers;
+  const [isPrefixSearch, setIsPrefixSearch] = useState(true);
 
   const breadcrumbConfig = [
     {
@@ -170,6 +171,18 @@ const CollectionGranules = ({
           onSelect={updateSelection}
           tableId="granules"
         >
+          <ListFilters>
+          <label htmlFor="chk_isprefixsearch"
+            className="checkmark--wrapper">Prefix Search
+            <input
+              id="chk_isprefixsearch"
+              type="checkbox"
+              checked={isPrefixSearch}
+              onChange={() => setIsPrefixSearch((v) => !v)}
+            />
+            <span className="checkmark"></span>
+          </label>
+          </ListFilters>
           <Search
             action={searchGranules}
             clear={clearGranulesSearch}
@@ -177,6 +190,7 @@ const CollectionGranules = ({
             labelKey="granuleId"
             placeholder="Granule ID"
             searchKey="granules"
+            prefix={isPrefixSearch}
           />
           <ListFilters>
             {!granuleStatus && (

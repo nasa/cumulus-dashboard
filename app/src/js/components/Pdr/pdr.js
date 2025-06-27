@@ -118,6 +118,9 @@ class PDR extends React.Component {
     this.navigateBack = this.navigateBack.bind(this);
     this.generateBulkActions = this.generateBulkActions.bind(this);
     this.renderProgress = this.renderProgress.bind(this);
+    this.state = {
+      isPrefixSearch: true,
+    };
   }
 
   componentDidMount() {
@@ -139,6 +142,10 @@ class PDR extends React.Component {
       pdrName,
     };
   }
+
+  setIsPrefixSearch = (value) => {
+    this.setState({ isPrefixSearch: value });
+  };
 
   navigateBack() {
     historyPushWithQueryParams('/pdrs');
@@ -167,6 +174,7 @@ class PDR extends React.Component {
     const { count, queriedAt } = list.meta;
     const deleteStatus = get(pdrs.deleted, [pdrName, 'status']);
     const { error } = record;
+    const { isPrefixSearch } = this.state;
 
     const granulesCount = get(record, 'data.stats', []);
     const granuleStatus = Object.keys(granulesCount).map((key) => ({
@@ -228,11 +236,24 @@ class PDR extends React.Component {
             rowId="granuleId"
             tableId={`pdr-${pdrName}`}
           >
+            <ListFilters>
+              <label htmlFor="chk_isprefixsearch"
+                className="checkmark--wrapper">Prefix Search
+                <input
+                  id="chk_isprefixsearch"
+                  type="checkbox"
+                  checked={isPrefixSearch}
+                  onChange={() => this.setIsPrefixSearch(!isPrefixSearch)}
+                />
+                <span className="checkmark"></span>
+              </label>
+            </ListFilters>
             <Search
               action={searchGranules}
               clear={clearGranulesSearch}
               labelKey="granuleId"
               searchKey="granules"
+              prefix={isPrefixSearch}
             />
             <ListFilters>
               <Dropdown

@@ -24,6 +24,7 @@ const Search = ({
   action,
   clear,
   dispatch,
+  prefix,
   inputProps = {
     className: 'search',
   },
@@ -54,19 +55,19 @@ const Search = ({
 
   useEffect(() => {
     if (initialValueRef.current) {
-      dispatch(action(initialValueRef.current));
+      dispatch(action({ search: initialValueRef.current, prefix }));
     }
-  }, [action, dispatch]);
+  }, [action, prefix, dispatch]);
 
   const handleSearch = useCallback((query) => {
-    if (query) dispatch(action(query));
+    if (query) dispatch(action({ search: query, prefix }));
     else dispatch(clear);
-  }, [action, clear, dispatch]);
+  }, [action, prefix, clear, dispatch]);
 
   function handleChange(selections) {
     if (selections && selections.length > 0) {
       const query = selections[0][labelKey];
-      dispatch(action(query));
+      dispatch(action({ search: query, prefix }));
       setQueryParams({ [paramKey]: query });
     } else {
       dispatch(clear());
@@ -129,6 +130,7 @@ Search.propTypes = {
   dispatch: PropTypes.func,
   action: PropTypes.func,
   clear: PropTypes.func,
+  prefix: PropTypes.bool,
   inputProps: PropTypes.object,
   paramKey: PropTypes.string,
   label: PropTypes.any,

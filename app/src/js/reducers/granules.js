@@ -150,10 +150,16 @@ export default createReducer(initialState, {
   [GRANULE_DELETE_CLEAR_ERROR]: createClearItemReducer('deleted'),
 
   [SEARCH_GRANULES]: (state, action) => {
-    state.list.params.prefix = action.prefix;
+    if (action.prefix) {
+      state.list.params.prefix = action.search;
+    } else {
+      state.list.params.infix = action.search;
+    }
   },
   [CLEAR_GRANULES_SEARCH]: (state) => {
+    // in general, we want to clear both prefix and infix
     state.list.params.prefix = null;
+    state.list.params.infix = null;
   },
   [FILTER_GRANULES]: (state, action) => {
     state.list.params[action.param.key] = action.param.value;

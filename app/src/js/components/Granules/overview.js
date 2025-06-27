@@ -66,6 +66,7 @@ class GranulesOverview extends React.Component {
       workflow: this.props.workflowOptions[0],
       workflowMeta: defaultWorkflowMeta,
       selected: [],
+      isPrefixSearch: true,
     };
   }
 
@@ -117,6 +118,10 @@ class GranulesOverview extends React.Component {
     this.setState({ workflowMeta });
   }
 
+  setIsPrefixSearch = (value) => {
+    this.setState({ isPrefixSearch: value });
+  };
+
   applyWorkflow(granuleId) {
     const { workflow, workflowMeta } = this.state;
     const { meta } = JSON.parse(workflowMeta);
@@ -154,6 +159,7 @@ class GranulesOverview extends React.Component {
     const { dropdowns } = collections;
     const { dropdowns: providerDropdowns } = providers;
     const { count, queriedAt } = list.meta;
+    const { isPrefixSearch } = this.state;
 
     return (
       <div className="page__component">
@@ -197,6 +203,18 @@ class GranulesOverview extends React.Component {
             toggleColumnOptionsAction={toggleGranulesTableColumns}
             tableId="granules-overview"
           >
+            <ListFilters>
+              <label htmlFor="chk_isprefixsearch"
+                className="checkmark--wrapper">Prefix Search
+                <input
+                  id="chk_isprefixsearch"
+                  type="checkbox"
+                  checked={isPrefixSearch}
+                  onChange={() => this.setIsPrefixSearch(!isPrefixSearch)}
+                />
+                <span className="checkmark"></span>
+              </label>
+            </ListFilters>
             <Search
               action={searchGranules}
               clear={clearGranulesSearch}
@@ -204,6 +222,7 @@ class GranulesOverview extends React.Component {
               labelKey="granuleId"
               placeholder="Granule ID"
               searchKey="granules"
+              prefix={isPrefixSearch}
             />
             <ListFilters>
               <Dropdown
