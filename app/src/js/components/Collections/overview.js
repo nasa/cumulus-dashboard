@@ -317,7 +317,7 @@ const CollectionOverview = ({
         >
           <ListFilters>
           <label htmlFor="chk_isprefixsearch"
-            className="checkmark--wrapper">Prefix Search
+            className="checkmark--wrapper">Search By Prefix
             <input
               id="chk_isprefixsearch"
               type="checkbox"
