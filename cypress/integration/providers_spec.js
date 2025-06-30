@@ -315,12 +315,12 @@ describe('Dashboard Providers Page', () => {
     });
 
     describe('Encoded provider', () => {
-      it ('should properly encode provider path in the providers table', () =>  {
+      it('should properly encode provider path in the providers table', () => {
         const name = 'NASA/JPL/PO.DAAC';
         const encodedName = encodeURIComponent(name);
         const urlRegex = new RegExp(`providers/provider/${encodedName}`);
         cy.visit('/providers');
-        cy.get('.table .tbody .tr').should('have.length', 3); // 2 -> replace; 3 -> add
+        cy.get('.table .tbody .tr').should('have.length', 3);
         cy.contains('.table .tbody .tr', name).as('testProvider');
         cy.get('@testProvider').find('a').should('have.attr', 'href').and('match', urlRegex);
         cy.get('@testProvider').find('a').click();
@@ -381,7 +381,7 @@ describe('Dashboard Providers Page', () => {
         });
       });
 
-      it ('should add and delete a new provider', () => {
+      it('should add and delete a new provider', () => {
         const newName = 'TEST/PROVIDER';
         const newEncodedName = encodeURIComponent(newName);
         const protocol = 's3';
@@ -438,7 +438,7 @@ describe('Dashboard Providers Page', () => {
         );
 
         cy.visit(`/providers/provider/${newEncodedName}`);
-        
+
         cy.contains('.heading--large', newName);
 
         // delete provider
@@ -449,7 +449,6 @@ describe('Dashboard Providers Page', () => {
         cy.url().should('include', 'providers');
         cy.contains('.heading--xlarge', 'Providers');
         cy.contains('.table .tbody .tr', newName).should('not.exist');
-
       });
     });
   });
