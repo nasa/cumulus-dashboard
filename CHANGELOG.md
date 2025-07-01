@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Fixed drop-down menus to include all collection and provider options .
   - Removed unnecessary API calls from Operations and Providers pages.
   - Fixed search on Operations overview page.
+- **CUMULUS-4094**
+  - Set the endDateTime to null for initial date range
 
 ## [v13.2.0] - 2025-05-14
 
