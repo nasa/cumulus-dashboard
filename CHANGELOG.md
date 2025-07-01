@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-4094**
   - Set the endDateTime to null for initial date range
 - **security vulnerabilities**
-  - Overrode pbkdf2 package to fix critical audit issue
+  - Overrode pbkdf2 package and upgraded related packages to fix critical audit issue
 
 ## [v13.2.0] - 2025-05-14
 
