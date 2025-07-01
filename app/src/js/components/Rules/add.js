@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import get from 'lodash/get';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -6,11 +7,11 @@ import { withRouter } from 'react-router-dom';
 import {
   createRule,
   listWorkflows,
-  listProviders,
-  listCollections
+  getOptionsProviderName,
+  getOptionsCollectionName
 } from '../../actions';
 import AddRecord from '../Add/add';
-import { getCollectionId, nullValue, collectionNameVersion } from '../../utils/format';
+import { asc, getCollectionId, nullValue, collectionNameVersion } from '../../utils/format';
 
 /**
  * Converts the Collection ID string associated with the `collection` property
@@ -49,21 +50,6 @@ const validate = (rule) => {
   }
   return true;
 };
-
-/**
- * Returns a number indicating the relative lexicographical, case-insensitive
- * ordering of the specified strings.  Returns a number less than 0 if the
- * first string occurs before the second string in ascending lexiographical
- * (and case-insensitive) order; 0 if they are equivalent; greater than zero if
- * the first occurs after the second.
- *
- * @param {string} a - first string to compare
- * @param {string} b - second string to compare
- * @param {number} a number less than 0 if `a` is "less than" `b`, 0 if they
- *    are "equal" (ignoring case), or a number greater than 0 if `a` is
- *    "greater than" `b`
- */
-const asc = (a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' });
 
 const initialRule = {
   name: '',
@@ -111,11 +97,11 @@ const AddRule = ({
   }, [name, rulesMap, isCopy]);
 
   useEffect(() => {
-    dispatch(listCollections({ listAll: true, getMMT: false }));
+    dispatch(getOptionsCollectionName());
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(listProviders());
+    dispatch(getOptionsProviderName());
   }, [dispatch]);
 
   useEffect(() => {
@@ -124,8 +110,8 @@ const AddRule = ({
 
   useEffect(() => {
     setEnums({
-      collection: collections.list.data.map(getCollectionId).sort(asc),
-      provider: providers.list.data.map(({ id }) => id).sort(asc),
+      collection: get(collections, 'dropdowns.collectionName.options', []).map(({ id }) => id).sort(asc),
+      provider: get(providers, 'dropdowns.provider.options', []).map(({ id }) => id).sort(asc),
       workflow: workflows.list.data.map(({ name: workflowName }) => workflowName).sort(asc)
     });
   }, [collections, providers, workflows]);

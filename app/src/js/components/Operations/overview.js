@@ -3,17 +3,12 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import cloneDeep from 'lodash/cloneDeep';
 import {
   clearOperationsFilter,
   filterOperations,
   searchOperations,
   clearOperationsSearch,
-  getCount,
-  getCumulusInstanceMetadata,
-  listCollections,
   listOperations,
-  listWorkflows,
 } from '../../actions';
 import { tally } from '../../utils/format';
 import List from '../Table/Table';
@@ -27,36 +22,12 @@ import { operationTypes } from '../../utils/type';
 class OperationOverview extends React.Component {
   constructor(props) {
     super(props);
-    this.queryMeta = this.queryMeta.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
     this.searchOperations = this.searchOperations.bind(this);
   }
 
-  componentDidMount() {
-    this.queryMeta();
-    this.props.dispatch(getCumulusInstanceMetadata());
-  }
-
   generateQuery() {
     return { ...this.props.queryParams };
-  }
-
-  queryMeta() {
-    const { dispatch, queryParams } = this.props;
-    dispatch(
-      listCollections({
-        limit: 100,
-        fields: 'name,version',
-      })
-    );
-    dispatch(listWorkflows());
-    dispatch(
-      getCount({
-        type: 'executions',
-        field: 'status',
-        ...queryParams,
-      })
-    );
   }
 
   searchOperations(list, infix) {
@@ -67,21 +38,6 @@ class OperationOverview extends React.Component {
     const { operations } = this.props;
     const { list } = operations;
     const { count } = list.meta;
-    const mutableList = cloneDeep(list);
-    //  This data munging should probably be handled in the reducer, but this is a workaround.
-    if (mutableList.internal.infix) {
-      if (mutableList.internal.infix.queryValue) {
-        mutableList.data = this.searchOperations(
-          mutableList.data,
-          mutableList.internal.infix.queryValue
-        );
-      } else if (typeof mutableList.internal.infix === 'string') {
-        mutableList.data = this.searchOperations(
-          mutableList.data,
-          mutableList.internal.infix
-        );
-      }
-    }
 
     return (
       <div className="page__component">
@@ -102,7 +58,7 @@ class OperationOverview extends React.Component {
             </h2>
           </div>
           <List
-            list={mutableList}
+            list={list}
             action={listOperations}
             tableColumns={tableColumns}
             query={this.generateQuery()}

@@ -12,6 +12,21 @@ import { getPersistentQueryParams } from './url-helper';
 import Tooltip from '../components/Tooltip/tooltip';
 import Popover from '../components/Popover/popover';
 
+/**
+ * Returns a number indicating the relative lexicographical, case-insensitive
+ * ordering of the specified strings.  Returns a number less than 0 if the
+ * first string occurs before the second string in ascending lexiographical
+ * (and case-insensitive) order; 0 if they are equivalent; greater than zero if
+ * the first occurs after the second.
+ *
+ * @param {string} a - first string to compare
+ * @param {string} b - second string to compare
+ * @param {number} a number less than 0 if `a` is "less than" `b`, 0 if they
+ *    are "equal" (ignoring case), or a number greater than 0 if `a` is
+ *    "greater than" `b`
+ */
+export const asc = (a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' });
+
 export const nullValue = '--';
 
 export const truthy = (value) => value || nullValue;

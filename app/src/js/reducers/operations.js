@@ -19,7 +19,6 @@ export const initialState = {
     count: {},
     meta: {},
     params: {},
-    internal: {},
     inflight: false,
     error: false,
   },
@@ -60,9 +59,9 @@ export default createReducer(initialState, {
     delete state.list.params[action.paramKey];
   },
   [SEARCH_OPERATIONS]: (state, action) => {
-    state.list.internal.infix = action.infix;
+    state.list.params.infix = action.infix;
   },
   [CLEAR_OPERATIONS_SEARCH]: (state) => {
-    delete state.list.internal.infix;
+    state.list.params.infix = null;
   },
 });

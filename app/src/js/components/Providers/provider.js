@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import { get } from 'object-path';
 import AsyncCommand from '../AsyncCommands/AsyncCommands';
-import { getProvider, deleteProvider, listCollections } from '../../actions';
+import { getProvider, deleteProvider } from '../../actions';
 import { lastUpdated, deleteText } from '../../utils/format';
 import Loading from '../LoadingIndicator/loading-indicator';
 import LogViewer from '../Logs/viewer';
@@ -22,16 +22,6 @@ const ProviderOverview = ({ dispatch, match, providers }) => {
 
   useEffect(() => {
     dispatch(getProvider(providerId));
-  }, [dispatch, providerId]);
-
-  useEffect(() => {
-    dispatch(
-      listCollections({
-        limit: 100,
-        fields: 'collectionName',
-        providers: providerId,
-      })
-    );
   }, [dispatch, providerId]);
 
   if (!record || (record.inflight && !record.data)) {

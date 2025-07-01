@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import get from 'lodash/get';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Helmet } from 'react-helmet';
@@ -9,8 +10,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import {
   createReconciliationReport,
-  listCollections,
-  listProviders,
+  getOptionsCollectionName,
+  getOptionsProviderName,
   listGranules,
 } from '../../actions';
 import { historyPushWithQueryParams } from '../../utils/url-helper';
@@ -20,7 +21,7 @@ import SimpleDropdown from '../DropDown/simple-dropdown';
 import Tooltip from '../Tooltip/tooltip';
 import Datepicker from '../Datepicker/Datepicker';
 import TextForm from '../TextAreaForm/text';
-import { displayCase, getCollectionId } from '../../utils/format';
+import { asc, displayCase } from '../../utils/format';
 
 const baseRoute = '/reconciliation-reports';
 const defaultReportType = 'Inventory';
@@ -71,25 +72,19 @@ const CreateReconciliationReport = ({
   providers,
 }) => {
   const {
-    list: { data: collectionData },
-  } = collections;
-  const {
     list: { data: granuleData },
   } = granules;
-  const {
-    list: { data: providerData },
-  } = providers;
 
-  const collectionOptions = collectionData.map(getCollectionId);
+  const collectionOptions = get(collections, 'dropdowns.collectionName.options', []).map(({ id }) => id).sort(asc);
   const granuleOptions = granuleData.map((granule) => granule.granuleId);
-  const providerOptions = providerData.map((provider) => provider.id);
+  const providerOptions = get(providers, 'dropdowns.provider.options', []).map(({ id }) => id).sort(asc);
 
   useEffect(() => {
-    dispatch(listCollections({ listAll: true, getMMT: false }));
+    dispatch(getOptionsCollectionName());
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(listProviders());
+    dispatch(getOptionsProviderName());
   }, [dispatch]);
 
   useEffect(() => {

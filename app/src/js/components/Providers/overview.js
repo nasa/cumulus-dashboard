@@ -2,12 +2,9 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
-import { get } from 'object-path';
-import cloneDeep from 'lodash/cloneDeep';
 import PropTypes from 'prop-types';
 import {
   listProviders,
-  getCount,
   filterProviders,
   clearProvidersFilter,
 } from '../../actions';
@@ -19,21 +16,7 @@ import { getPersistentQueryParams } from '../../utils/url-helper';
 class ProvidersOverview extends React.Component {
   constructor() {
     super();
-    this.queryStats = this.queryStats.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
-  }
-
-  componentDidMount() {
-    this.queryStats();
-  }
-
-  queryStats() {
-    this.props.dispatch(
-      getCount({
-        type: 'collections',
-        field: 'providers',
-      })
-    );
   }
 
   generateQuery() {
@@ -42,7 +25,7 @@ class ProvidersOverview extends React.Component {
   }
 
   render() {
-    const { providers, stats } = this.props;
+    const { providers } = this.props;
     const { list } = providers;
     const { count, queriedAt } = list.meta;
 
@@ -62,17 +45,6 @@ class ProvidersOverview extends React.Component {
       },
     ];
 
-    // Incorporate the collection counts into the `list`
-    const mutableList = cloneDeep(list);
-    const collectionCounts = get(stats.count, 'data.collections.count', []);
-
-    mutableList.data.forEach((d) => {
-      d.collections = get(
-        collectionCounts.find((c) => c.key === d.name),
-        'count',
-        0
-      );
-    });
     return (
       <div className="page__component">
         <Helmet>
@@ -92,7 +64,7 @@ class ProvidersOverview extends React.Component {
             </h2>
           </div>
           <List
-            list={mutableList}
+            list={list}
             action={listProviders}
             tableColumns={tableColumns}
             query={this.generateQuery()}
@@ -113,12 +85,10 @@ ProvidersOverview.propTypes = {
   dispatch: PropTypes.func,
   providers: PropTypes.object,
   queryParams: PropTypes.object,
-  stats: PropTypes.object,
 };
 
 export default withRouter(
   connect((state) => ({
     providers: state.providers,
-    stats: state.stats,
   }))(ProvidersOverview)
 );
