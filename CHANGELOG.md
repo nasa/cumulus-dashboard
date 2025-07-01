@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- **CUMULUS-3680**
+  - Fixed drop-down menus to include all collection and provider options.
+
 ## [v13.2.0] - 2025-05-14
 
 ### Added
