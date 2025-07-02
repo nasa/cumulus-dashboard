@@ -739,6 +739,15 @@ export const listRules = (options) => (dispatch, getState) => {
   });
 };
 
+export const allRules = (options) => ({
+  [CALL_API]: {
+    type: types.RULES,
+    method: 'GET',
+    url: new URL('rules', root).href,
+    params: { limit: defaultPageLimit, ...options }
+  }
+});
+
 export const getRule = (ruleName) => ({
   [CALL_API]: {
     id: ruleName,
