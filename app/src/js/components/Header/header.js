@@ -16,6 +16,7 @@ import { strings } from '../locale';
 import linkToKibana from '../../utils/kibana';
 import { getPersistentQueryParams } from '../../utils/url-helper';
 import SessionTimeoutModal from '../SessionTimeoutModal/session-timeout-modal';
+import InactivityModal from '../InactivtyModal/inactivity-modal';
 
 const paths = [
   [strings.collections, '/collections/all'],
@@ -124,6 +125,7 @@ const Header = ({
           </nav>
         </div>
         <div className="session-timeout-modal"><SessionTimeoutModal/></div>
+        <div className="inactivity-modal"><InactivityModal/></div>
       </div>
   );
 };
