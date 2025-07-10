@@ -204,5 +204,10 @@
   },
   "optionalDependencies": {
     "cypress": "9.7.0"
+  },
+  "overrides": {
+    "crypto-browserify": {
+      "pbkdf2": "^3.1.3"
+    }
   }
 }
