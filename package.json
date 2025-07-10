@@ -200,18 +200,9 @@
     "stubborn-queue": "^2.0.0",
     "url": "^0.11.0",
     "util": "^0.12.4",
-    "vm-browserify": "^1.1.2",
-    "pbkdf2": "^3.1.3"
+    "vm-browserify": "^1.1.2"
   },
   "optionalDependencies": {
     "cypress": "9.7.0"
-  },
-  "overrides": {
-    "crypto-browserify": {
-      "pbkdf2": "$pbkdf2"
-    },
-    "browserify-sign": {
-      "pbkdf2": "$pbkdf2"
-    }
   }
 }
