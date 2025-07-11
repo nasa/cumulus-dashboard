@@ -37,6 +37,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-4003**
   - Remove D3 and related libraries from dashboard.
+- **CUMULUS-4101**
+  - Removed the Internal Reconciliation Report reference from cumulus-dashboard and cumulus-api.
 
 ### Fixed
 
@@ -44,6 +46,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Updated datestring format to show the correct hours
 - **CUMULUS-4008**
   - Updated the Dockerfile with improved NPM install command to prevent error messages.
+- **CUMULUS-4114**
+  - Updated the exports in index to be called in overview to allow the rules count to be affected by the datepicker while keeping the rules page unaffected. 
 
 ## [v13.0.0] - 2025-02-19
 This version of the dashboard requires Cumulus API >= v20.0.0
