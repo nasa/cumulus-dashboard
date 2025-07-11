@@ -32,6 +32,7 @@ const CommonConfig = {
       fs: false,
       net: false,
       tls: false,
+      buffer: require.resolve('buffer'),
       console: require.resolve('console-browserify'),
       path: require.resolve('path-browserify'),
       stream: require.resolve('stream-browserify'),
@@ -149,6 +150,7 @@ const CommonConfig = {
       patterns: [{ from: './app/src/public', to: './' }],
     }),
     new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
       jQuery: 'jquery', // can use jquery anywhere in the app without having to require it
       $: 'jquery',
       process: 'process/browser',
