@@ -12,7 +12,6 @@ import { strings } from '../locale';
 import { historyPushWithQueryParams } from '../../utils/url-helper';
 
 const { updateDelay } = _config;
-// const objectPath = require('object-path');
 
 const EditRecord = ({
   attachMeta,
@@ -30,7 +29,7 @@ const EditRecord = ({
   validate,
   validationError,
 }) => {
-  // object-path `get` is somehow not accessing object keys with slashes
+  // object-path `get` was somehow not accessing object keys with slashes
   // so we need to grab it directly
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const record = state.map[pk] || {};
