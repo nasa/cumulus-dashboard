@@ -18,6 +18,11 @@ const EditProvider = ({
   providers,
 }) => {
   const { providerId } = match.params;
+  let decodedProviderId;
+  if (providerId !== decodeURIComponent(providerId)) {
+    decodedProviderId = decodeURIComponent(providerId);
+  }
+
   return (
     <div className = "edit_provider">
       <Helmet>
@@ -25,13 +30,13 @@ const EditProvider = ({
       </Helmet>
       <EditRecord
         merge={true}
-        pk={providerId}
+        pk={decodedProviderId || providerId}
         schemaKey={SCHEMA_KEY}
         state={providers}
         getRecord={getProvider}
         updateRecord={updateProvider}
         clearRecordUpdate={clearUpdateProvider}
-        backRoute={`/providers/provider/${providerId}`}
+        backRoute={`/providers/provider/${decodedProviderId || providerId}`}
         validate={isValidProvider}
         validationError={'Concurrent Connection Limit cannot be a negative value'}
       />

@@ -79,8 +79,12 @@ const CollectionOverview = ({
   const { list: granulesList } = granules;
   const { dropdowns } = providers;
   const { name: collectionName, version: collectionVersion } = params || {};
+  const decodedCollectionName = decodeURIComponent(collectionName);
   const decodedVersion = decodeURIComponent(collectionVersion);
-  const collectionId = getCollectionId({ name: collectionName, version: decodedVersion });
+  const collectionId = getCollectionId({
+    name: decodedCollectionName,
+    version: decodedVersion
+  });
   const record = collectionsMap[collectionId];
   const deleteStatus = get(deletedCollections, [collectionId, 'status']);
   const hasGranules = get(collectionsMap[collectionId], 'data.stats.total', 0) > 0;
@@ -91,8 +95,8 @@ const CollectionOverview = ({
   useEffect(() => {
     dispatch(listCollections());
     dispatch(getCumulusInstanceMetadata());
-    dispatch(getCollection(collectionName, decodedVersion));
-  }, [collectionName, datepicker, decodedVersion, dispatch]);
+    dispatch(getCollection(decodedCollectionName, decodedVersion));
+  }, [decodedCollectionName, datepicker, decodedVersion, dispatch]);
 
   function changeCollection(_, newCollectionId) {
     historyPushWithQueryParams(collectionHrefFromId(newCollectionId));
@@ -161,7 +165,7 @@ const CollectionOverview = ({
   }
 
   function deleteMe() {
-    dispatch(deleteCollection(collectionName, decodedVersion));
+    dispatch(deleteCollection(decodedCollectionName, decodedVersion));
   }
 
   function navigateBack() {
@@ -237,7 +241,7 @@ const CollectionOverview = ({
                   pathname: '/collections/add',
                   search: getPersistentQueryParams(location),
                   state: {
-                    name: collectionName,
+                    name: decodedCollectionName,
                     version: decodedVersion,
                   },
                 })}
