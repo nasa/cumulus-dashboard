@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- **CUMULUS-3680**
+  - Fixed drop-down menus to include all collection and provider options .
+  - Removed unnecessary API calls from Operations and Providers pages.
+  - Fixed search on Operations overview page and added cypress tests for Operations page.
+- **CUMULUS-4094**
+  - Set the endDateTime to null for initial date range
+- **security vulnerabilities**
+  - Overrode pbkdf2 package and upgraded related packages to fix critical audit issue
+
 ## [v13.2.0] - 2025-05-14
 
 ### Added
