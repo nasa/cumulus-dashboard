@@ -46,11 +46,11 @@ const Providers = ({
               />
               <Route path="/providers/add" component={AddProvider} />
               <Route
-                path="/providers/edit/:providerId"
+                path="/providers/edit/:providerId+"
                 component={EditProvider}
               />
               <Route
-                path="/providers/provider/:providerId"
+                path="/providers/provider/:providerId+"
                 component={ProviderOverview}
               />
             </Switch>
