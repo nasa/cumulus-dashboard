@@ -28,7 +28,7 @@ const initialState = {
   }
 };
 
-test('Header contains sessionTimeoutModal, networkErrorModal correct number of nav items and excludes PDRs and Logs', function (t) {
+test('Header contains sessionTimeoutModal, networkErrorModal, inactivityModal correct number of nav items and excludes PDRs and Logs', function (t) {
   const dispatch = () => {};
   const api = {
     authenticated: true
@@ -59,6 +59,9 @@ test('Header contains sessionTimeoutModal, networkErrorModal correct number of n
 
   const modalNetwork = container.querySelector('.network-error-modal');
   t.truthy(modalNetwork);
+
+  const modalInactivity = container.querySelector('.inactivity-modal');
+  t.truthy(modalInactivity);
 
   const navigation = container.querySelectorAll('nav li');
   t.is(navigation.length, 9);
