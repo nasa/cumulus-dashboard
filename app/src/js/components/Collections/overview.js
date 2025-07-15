@@ -48,6 +48,8 @@ import Overview from '../Overview/overview';
 import Search from '../Search/search';
 import List from '../Table/Table';
 import { workflowOptionNames } from '../../selectors';
+import Checkbox from '../Checkbox/Checkbox';
+import { set } from 'lodash';
 
 const breadcrumbConfig = [
   {
@@ -87,7 +89,7 @@ const CollectionOverview = ({
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const [selected, setSelected] = useState([]);
-  const [isPrefixSearch, setIsPrefixSearch] = useState(true);
+  const [isInfixSearch, setIsInfixSearch] = useState(false);
 
   useEffect(() => {
     dispatch(listCollections());
@@ -315,28 +317,23 @@ const CollectionOverview = ({
           tableId={`collection-${collectionName}-${collectionVersion}`}
           onSelect={updateSelection}
         >
-          <ListFilters>
-          <label htmlFor="chk_isprefixsearch"
-            className="checkmark--wrapper">Search By Prefix
-            <input
-              id="chk_isprefixsearch"
-              type="checkbox"
-              checked={isPrefixSearch}
-              onChange={() => setIsPrefixSearch((v) => !v)}
-            />
-            <span className="checkmark"></span>
-          </label>
-          </ListFilters>
           <Search
             action={searchGranules}
             clear={clearGranulesSearch}
             label="Search"
-            prefix={isPrefixSearch}
+            infix={isInfixSearch}
             labelKey="granuleId"
             placeholder="Granule ID"
             searchKey="granules"
           />
           <ListFilters>
+            <Checkbox
+              id="chk_isinfixsearch"
+              checked={isInfixSearch}
+              onChange={setIsInfixSearch}
+              label="Search By"
+              inputLabel="Infix"
+            />
             <Dropdown
               options={statusOptions}
               action={filterGranules}

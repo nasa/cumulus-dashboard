@@ -40,6 +40,7 @@ import GranulesProgress from '../Granules/progress';
 import { strings } from '../locale';
 import ListFilters from '../ListActions/ListFilters';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
+import Checkbox from '../Checkbox/Checkbox';
 
 const metaAccessors = [
   {
@@ -119,7 +120,7 @@ class PDR extends React.Component {
     this.generateBulkActions = this.generateBulkActions.bind(this);
     this.renderProgress = this.renderProgress.bind(this);
     this.state = {
-      isPrefixSearch: true,
+      isInfixSearch: false,
     };
   }
 
@@ -143,8 +144,8 @@ class PDR extends React.Component {
     };
   }
 
-  setIsPrefixSearch = (value) => {
-    this.setState({ isPrefixSearch: value });
+  setIsInfixSearch = (value) => {
+    this.setState({ isInfixSearch: value });
   };
 
   navigateBack() {
@@ -174,7 +175,7 @@ class PDR extends React.Component {
     const { count, queriedAt } = list.meta;
     const deleteStatus = get(pdrs.deleted, [pdrName, 'status']);
     const { error } = record;
-    const { isPrefixSearch } = this.state;
+    const { isInfixSearch } = this.state;
 
     const granulesCount = get(record, 'data.stats', []);
     const granuleStatus = Object.keys(granulesCount).map((key) => ({
@@ -236,26 +237,21 @@ class PDR extends React.Component {
             rowId="granuleId"
             tableId={`pdr-${pdrName}`}
           >
-            <ListFilters>
-              <label htmlFor="chk_isprefixsearch"
-                className="checkmark--wrapper">Search By Prefix
-                <input
-                  id="chk_isprefixsearch"
-                  type="checkbox"
-                  checked={isPrefixSearch}
-                  onChange={() => this.setIsPrefixSearch(!isPrefixSearch)}
-                />
-                <span className="checkmark"></span>
-              </label>
-            </ListFilters>
             <Search
               action={searchGranules}
               clear={clearGranulesSearch}
               labelKey="granuleId"
               searchKey="granules"
-              prefix={isPrefixSearch}
+              infix={isInfixSearch}
             />
             <ListFilters>
+              <Checkbox
+                id="chk_isinfixsearch"
+                checked={isInfixSearch}
+                onChange={this.setIsInfixSearch}
+                label="Search By"
+                inputLabel="Infix"
+              />
               <Dropdown
                 getOptions={getOptionsCollectionName}
                 options={get(dropdowns, ['collectionName', 'options']) || []}

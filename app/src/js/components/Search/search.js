@@ -1,4 +1,4 @@
-import React, { createRef, useCallback, useEffect, useRef } from 'react';
+import React, { createRef, useCallback, useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import withQueryParams from 'react-router-query-params';
@@ -24,7 +24,7 @@ const Search = ({
   action,
   clear,
   dispatch,
-  prefix,
+  infix,
   inputProps = {
     className: 'search',
   },
@@ -48,6 +48,7 @@ const Search = ({
   }));
   const searchList = get(rest[searchKey], 'list');
   const { data: searchOptions, inflight = false } = searchList || {};
+  const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
     dispatch(clear(paramKey));
@@ -55,19 +56,27 @@ const Search = ({
 
   useEffect(() => {
     if (initialValueRef.current) {
-      dispatch(action({ search: initialValueRef.current, prefix }));
+      dispatch(action({ search: initialValueRef.current, infix }));
     }
-  }, [action, prefix, dispatch]);
+  }, [action, infix, dispatch]);
 
   const handleSearch = useCallback((query) => {
-    if (query) dispatch(action({ search: query, prefix }));
+    setSearchValue(query);
+    if (query) dispatch(action({ search: query, infix }));
     else dispatch(clear);
-  }, [action, prefix, clear, dispatch]);
+  }, [action, infix, clear, dispatch]);
+
+  // If the search value changes, dispatch the action to update the search results
+  useEffect(() => {
+    if (searchValue) {
+      dispatch(action({ search: searchValue, infix }));
+    }
+  }, [action, searchValue, infix, dispatch]);
 
   function handleChange(selections) {
     if (selections && selections.length > 0) {
       const query = selections[0][labelKey];
-      dispatch(action({ search: query, prefix }));
+      dispatch(action({ search: query, infix }));
       setQueryParams({ [paramKey]: query });
     } else {
       dispatch(clear());
@@ -130,7 +139,7 @@ Search.propTypes = {
   dispatch: PropTypes.func,
   action: PropTypes.func,
   clear: PropTypes.func,
-  prefix: PropTypes.bool,
+  infix: PropTypes.bool,
   inputProps: PropTypes.object,
   paramKey: PropTypes.string,
   label: PropTypes.any,

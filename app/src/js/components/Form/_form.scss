@@ -91,6 +91,10 @@ input[type="checkbox"], input[type="radio"] {
   box-shadow: 1px 1px 5px rgba($color: #000000, $alpha: .5);
 }
 
+.checkmark--wrapper.input--label {
+  font-size: $base-font-size;
+}
+
 label, .label {
   display: block;
   font-weight: $base-font-semibold;

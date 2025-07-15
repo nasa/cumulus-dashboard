@@ -33,6 +33,7 @@ import Search from '../Search/search';
 import { workflowOptionNames } from '../../selectors';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ListFilters from '../ListActions/ListFilters';
+import Checkbox from '../Checkbox/Checkbox';
 
 const generateBreadcrumbConfig = (view) => [
   {
@@ -62,7 +63,7 @@ const AllGranules = ({
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const [selected, setSelected] = useState([]);
-  const [isPrefixSearch, setIsPrefixSearch] = useState(true);
+  const [isInfixSearch, setIsInfixSearch] = useState(false);
   const { dropdowns } = collections;
   const { dropdowns: providerDropdowns } = providers;
   const { list } = granules;
@@ -184,22 +185,10 @@ const AllGranules = ({
           toggleColumnOptionsAction={toggleGranulesTableColumns}
           tableId="granules"
         >
-          <ListFilters>
-          <label htmlFor="chk_isprefixsearch"
-            className="checkmark--wrapper">Search By Prefix
-            <input
-              id="chk_isprefixsearch"
-              type="checkbox"
-              checked={isPrefixSearch}
-              onChange={() => setIsPrefixSearch((v) => !v)}
-            />
-            <span className="checkmark"></span>
-          </label>
-          </ListFilters>
           <Search
             action={searchGranules}
             clear={clearGranulesSearch}
-            prefix={isPrefixSearch}
+            infix={isInfixSearch}
             label="Search"
             labelKey="granuleId"
             placeholder="Granule ID"
@@ -207,6 +196,13 @@ const AllGranules = ({
           />
 
           <ListFilters>
+            <Checkbox
+              id="chk_isinfixsearch"
+              checked={isInfixSearch}
+              onChange={setIsInfixSearch}
+              label="Search By"
+              inputLabel="Infix"
+            />
             <Dropdown
               getOptions={getOptionsCollectionName}
               options={get(dropdowns, ['collectionName', 'options']) || []}
