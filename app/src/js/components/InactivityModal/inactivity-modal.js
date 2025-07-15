@@ -10,7 +10,7 @@ const MODAL_TIMEOUT = 30000;
 
 const InactivityModal = ({
   title = 'Inactivity Warning',
-  children = 'You have been inactive for a while. Select dismiss to continue using the application. If no action is taken, you will be logged out.',
+  children = 'You have been inactive for a while. Move your cursor or press a key to continue using the application. If no action is taken, you will be logged out.',
   dispatch,
 }) => {
   const [hasModal, setHasModal] = useState(false);
@@ -68,8 +68,7 @@ const InactivityModal = ({
       onCloseModal={handleClose}
       showModal={hasModal}
       hasConfirmButton={false}
-      hasCancelButton={true}
-      cancelButtonText="Dismiss"
+      hasCancelButton={false}
       >
         {children}
         </DefaultModal>
