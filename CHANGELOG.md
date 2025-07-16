@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Overrode pbkdf2 package and upgraded related packages to fix critical audit issue
 - **CUMULUS-4039**
   - Updated to allow slashes in provider name and collection name 
+- **CUMULUS-4122**
+  - Change Granule ID search to be prefix by default. Added `Search by Infix` toggle option to Granule ID search.
 
 ## [v13.2.0] - 2025-05-14
 
@@ -32,8 +34,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Added sortKey=[-timestamp] and set no limit to queries to get collection and provider options
 - **CUMULUS-4094**
   - Added `INITIAL_DATE_RANGE_IN_DAYS` environment variable to allow control over how many days objects will be loaded at startup of the dashboard
-- **CUMULUS-4122**
-  - Added `Search by Prefix` toggle to Granule ID search and update Granule ID search to update display based on toggle action
 
 ## [v13.1.0] - 2025-03-25
 
