@@ -230,25 +230,25 @@ describe('Dashboard PDRs Page', () => {
           cy.get('.button--cancel').click();
         });
 
-      cy.getFakeApiFixture('granules').its('results')
-        .then((granules) => {
-          granules.filter((item) => item.pdrName === pdrName);
-          const prefix = 'MOD09GQ.A2016358.h13v04.006.2016360104606.hdf';
-          const infix = '.hdf';
-          cy.get('#chk_isinfixsearch').should('not.be.checked');
-          cy.get('.search').as('search');
-          cy.get('@search').click().type(prefix);
-          cy.get('.table .tbody .tr').should('have.length', 1);
-          cy.get('@search').click().type(infix);
-          cy.get('.table .tbody .tr').should('have.length', 0);
-          cy.get('#chk_isinfixsearch').click().should('not.be.checked');
-          cy.get('.table .tbody .tr').should('have.length.at.least', 1);
-          cy.get('.table .tbody .tr').eq(0).children('.td').eq(2)
-            .contains(infix);
-        });
-
       cy.url().should('include', `/pdrs/pdr/${pdrName}`);
       cy.get('.heading--large').should('have.text', `PDR: ${pdrName}`);
+    });
+
+    it('should display granules in the individual PDR page based on infix toggle', () => {
+      const pdrName = 'MOD09GQ_1granule_v3.PDR';
+      cy.visit(`/pdrs/pdr/${pdrName}`);
+      const prefix = 'MOD09GQ.A201';
+      const infix = 'A201';
+      cy.get('#chk_isinfixsearch').should('not.be.checked');
+      cy.get('#search').as('search');
+      cy.get('@search').click().type(prefix).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('@search').click().type(infix).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 0);
+      cy.get('#chk_isinfixsearch').click({ force: true }).should('be.checked');
+      cy.get('.table .tbody .tr').should('have.length.at.least', 1);
+      cy.get('.table .tbody .tr').eq(0).children('.td').eq(2)
+        .contains(infix);      
     });
 
     it('Should dynamically update menu, sidbar and breadcrumb /pdrs links with latest filter criteria', () => {
