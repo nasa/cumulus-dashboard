@@ -48,9 +48,10 @@ const CollectionGranules = ({
   const granuleStatus = status === 'processing' ? 'running' : status;
   const { list } = granules;
   const { meta } = list;
+  const decodedCollectionName = decodeURIComponent(collectionName);
   const decodedVersion = decodeURIComponent(collectionVersion);
   const collectionId = getCollectionId({
-    name: collectionName,
+    name: decodedCollectionName,
     version: decodedVersion,
   });
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
@@ -145,7 +146,7 @@ const CollectionGranules = ({
       </Helmet>
       <CollectionHeader
         breadcrumbConfig={breadcrumbConfig}
-        name={collectionName}
+        name={decodedCollectionName}
         queriedAt={meta.queriedAt}
         version={decodedVersion}
       />
