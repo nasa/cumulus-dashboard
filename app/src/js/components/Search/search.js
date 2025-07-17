@@ -56,27 +56,44 @@ const Search = ({
 
   useEffect(() => {
     if (initialValueRef.current) {
-      dispatch(action({ search: initialValueRef.current, infix }));
+      if (typeof infix === 'undefined') {
+        dispatch(action(initialValueRef.current));
+      } else {
+        dispatch(action({ search: initialValueRef.current, infix }));
+      }
     }
   }, [action, infix, dispatch]);
 
   const handleSearch = useCallback((query) => {
     setSearchValue(query);
-    if (query) dispatch(action({ search: query, infix }));
-    else dispatch(clear);
+    if (query) {
+      if (typeof infix === 'undefined') {
+        dispatch(action(query));
+      } else {
+        dispatch(action({ search: query, infix }));
+      }
+    } else dispatch(clear);
   }, [action, infix, clear, dispatch]);
 
   // If the search value changes, dispatch the action to update the search results
   useEffect(() => {
     if (searchValue) {
-      dispatch(action({ search: searchValue, infix }));
+      if (typeof infix === 'undefined') {
+        dispatch(action(searchValue));
+      } else {
+        dispatch(action({ search: searchValue, infix }));
+      }
     }
   }, [action, searchValue, infix, dispatch]);
 
   function handleChange(selections) {
     if (selections && selections.length > 0) {
       const query = selections[0][labelKey];
-      dispatch(action({ search: query, infix }));
+      if (typeof infix === 'undefined') {
+        dispatch(action(query));
+      } else {
+        dispatch(action({ search: query, infix }));
+      }
       setQueryParams({ [paramKey]: query });
     } else {
       dispatch(clear());
