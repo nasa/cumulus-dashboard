@@ -48,6 +48,7 @@ import Overview from '../Overview/overview';
 import Search from '../Search/search';
 import List from '../Table/Table';
 import { workflowOptionNames } from '../../selectors';
+import Checkbox from '../Checkbox/Checkbox';
 
 const breadcrumbConfig = [
   {
@@ -91,6 +92,7 @@ const CollectionOverview = ({
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const [selected, setSelected] = useState([]);
+  const [isInfixSearch, setIsInfixSearch] = useState(false);
 
   useEffect(() => {
     dispatch(listCollections());
@@ -322,11 +324,19 @@ const CollectionOverview = ({
             action={searchGranules}
             clear={clearGranulesSearch}
             label="Search"
+            infix={isInfixSearch}
             labelKey="granuleId"
             placeholder="Granule ID"
             searchKey="granules"
           />
           <ListFilters>
+            <Checkbox
+              id="chk_isinfixsearch"
+              checked={isInfixSearch}
+              onChange={setIsInfixSearch}
+              label="Search By"
+              inputLabel="Infix"
+            />
             <Dropdown
               options={statusOptions}
               action={filterGranules}

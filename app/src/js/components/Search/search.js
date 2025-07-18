@@ -1,4 +1,4 @@
-import React, { createRef, useCallback, useEffect, useRef } from 'react';
+import React, { createRef, useCallback, useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import withQueryParams from 'react-router-query-params';
@@ -24,6 +24,7 @@ const Search = ({
   action,
   clear,
   dispatch,
+  infix,
   inputProps = {
     className: 'search',
   },
@@ -47,6 +48,7 @@ const Search = ({
   }));
   const searchList = get(rest[searchKey], 'list');
   const { data: searchOptions, inflight = false } = searchList || {};
+  const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
     dispatch(clear(paramKey));
@@ -54,19 +56,44 @@ const Search = ({
 
   useEffect(() => {
     if (initialValueRef.current) {
-      dispatch(action(initialValueRef.current));
+      if (typeof infix === 'undefined') {
+        dispatch(action(initialValueRef.current));
+      } else {
+        dispatch(action({ search: initialValueRef.current, infix }));
+      }
     }
-  }, [action, dispatch]);
+  }, [action, infix, dispatch]);
 
   const handleSearch = useCallback((query) => {
-    if (query) dispatch(action(query));
-    else dispatch(clear);
-  }, [action, clear, dispatch]);
+    setSearchValue(query);
+    if (query) {
+      if (typeof infix === 'undefined') {
+        dispatch(action(query));
+      } else {
+        dispatch(action({ search: query, infix }));
+      }
+    } else dispatch(clear);
+  }, [action, infix, clear, dispatch]);
+
+  // If the search value changes, dispatch the action to update the search results
+  useEffect(() => {
+    if (searchValue) {
+      if (typeof infix === 'undefined') {
+        dispatch(action(searchValue));
+      } else {
+        dispatch(action({ search: searchValue, infix }));
+      }
+    }
+  }, [action, searchValue, infix, dispatch]);
 
   function handleChange(selections) {
     if (selections && selections.length > 0) {
       const query = selections[0][labelKey];
-      dispatch(action(query));
+      if (typeof infix === 'undefined') {
+        dispatch(action(query));
+      } else {
+        dispatch(action({ search: query, infix }));
+      }
       setQueryParams({ [paramKey]: query });
     } else {
       dispatch(clear());
@@ -129,6 +156,7 @@ Search.propTypes = {
   dispatch: PropTypes.func,
   action: PropTypes.func,
   clear: PropTypes.func,
+  infix: PropTypes.bool,
   inputProps: PropTypes.object,
   paramKey: PropTypes.string,
   label: PropTypes.any,

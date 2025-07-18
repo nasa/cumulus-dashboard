@@ -33,6 +33,7 @@ import { granuleStatus as statusOptions } from '../../utils/status';
 import { workflowOptionNames } from '../../selectors';
 import ListFilters from '../ListActions/ListFilters';
 import CollectionHeader from './collection-header';
+import Checkbox from '../Checkbox/Checkbox';
 
 const CollectionGranules = ({
   dispatch,
@@ -58,6 +59,7 @@ const CollectionGranules = ({
   const [selected, setSelected] = useState([]);
   const query = generateQuery();
   const { dropdowns } = providers;
+  const [isInfixSearch, setIsInfixSearch] = useState(false);
 
   const breadcrumbConfig = [
     {
@@ -178,8 +180,16 @@ const CollectionGranules = ({
             labelKey="granuleId"
             placeholder="Granule ID"
             searchKey="granules"
+            infix={isInfixSearch}
           />
           <ListFilters>
+            <Checkbox
+              id="chk_isinfixsearch"
+              checked={isInfixSearch}
+              onChange={setIsInfixSearch}
+              label="Search By"
+              inputLabel="Infix"
+            />
             {!granuleStatus && (
               <Dropdown
                 options={statusOptions}

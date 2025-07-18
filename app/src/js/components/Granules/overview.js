@@ -38,6 +38,7 @@ import Search from '../Search/search';
 import Overview from '../Overview/overview';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import Checkbox from '../Checkbox/Checkbox';
 
 const breadcrumbConfig = [
   {
@@ -66,6 +67,7 @@ class GranulesOverview extends React.Component {
       workflow: this.props.workflowOptions[0],
       workflowMeta: defaultWorkflowMeta,
       selected: [],
+      isInfixSearch: false,
     };
   }
 
@@ -117,6 +119,10 @@ class GranulesOverview extends React.Component {
     this.setState({ workflowMeta });
   }
 
+  setIsInfixSearch = (value) => {
+    this.setState({ isInfixSearch: value });
+  };
+
   applyWorkflow(granuleId) {
     const { workflow, workflowMeta } = this.state;
     const { meta } = JSON.parse(workflowMeta);
@@ -154,6 +160,7 @@ class GranulesOverview extends React.Component {
     const { dropdowns } = collections;
     const { dropdowns: providerDropdowns } = providers;
     const { count, queriedAt } = list.meta;
+    const { isInfixSearch } = this.state;
 
     return (
       <div className="page__component">
@@ -204,8 +211,16 @@ class GranulesOverview extends React.Component {
               labelKey="granuleId"
               placeholder="Granule ID"
               searchKey="granules"
+              infix={isInfixSearch}
             />
             <ListFilters>
+              <Checkbox
+                id="chk_isinfixsearch"
+                checked={isInfixSearch}
+                onChange={this.setIsInfixSearch}
+                label="Search By"
+                inputLabel="Infix"
+              />
               <Dropdown
                 options={statusOptions}
                 action={filterGranules}

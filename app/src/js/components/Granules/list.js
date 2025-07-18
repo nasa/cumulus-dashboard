@@ -33,6 +33,7 @@ import Search from '../Search/search';
 import { workflowOptionNames } from '../../selectors';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ListFilters from '../ListActions/ListFilters';
+import Checkbox from '../Checkbox/Checkbox';
 
 const generateBreadcrumbConfig = (view) => [
   {
@@ -62,6 +63,7 @@ const AllGranules = ({
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const [selected, setSelected] = useState([]);
+  const [isInfixSearch, setIsInfixSearch] = useState(false);
   const { dropdowns } = collections;
   const { dropdowns: providerDropdowns } = providers;
   const { list } = granules;
@@ -186,12 +188,21 @@ const AllGranules = ({
           <Search
             action={searchGranules}
             clear={clearGranulesSearch}
+            infix={isInfixSearch}
             label="Search"
             labelKey="granuleId"
             placeholder="Granule ID"
             searchKey="granules"
           />
+
           <ListFilters>
+            <Checkbox
+              id="chk_isinfixsearch"
+              checked={isInfixSearch}
+              onChange={setIsInfixSearch}
+              label="Search By"
+              inputLabel="Infix"
+            />
             <Dropdown
               getOptions={getOptionsCollectionName}
               options={get(dropdowns, ['collectionName', 'options']) || []}
