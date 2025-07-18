@@ -49,7 +49,6 @@ import Search from '../Search/search';
 import List from '../Table/Table';
 import { workflowOptionNames } from '../../selectors';
 import Checkbox from '../Checkbox/Checkbox';
-import { set } from 'lodash';
 
 const breadcrumbConfig = [
   {
