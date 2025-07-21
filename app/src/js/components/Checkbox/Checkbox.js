@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import Tooltip from '../Tooltip/tooltip';
 
 const Checkbox = ({
   id,
@@ -7,10 +10,25 @@ const Checkbox = ({
   onChange,
   label,
   inputLabel,
-  className
+  className,
+  tip = '',
 }) => (
   <div className={`list__filters--item form-group__element filter-${className}`}>
-    <div className="label">{label}</div>
+    <div className="label" style={{ display: 'inline-block', marginRight: '10px' }}>{label}</div>
+    {tip && (
+      <Tooltip
+        className="tooltip--light"
+        id={`${id}-tooltip`}
+        placement={'right'}
+        target={
+          <FontAwesomeIcon
+            className="button__icon--animation"
+            icon={faInfoCircle}
+          />
+        }
+        tip={tip}
+      />
+    )}
     <label htmlFor={id}>
       <div className="checkmark--wrapper input--label">
         <input id={id}
@@ -31,6 +49,7 @@ Checkbox.propTypes = {
   inputLabel: PropTypes.string,
   label: PropTypes.string,
   className: PropTypes.string,
+  tip: PropTypes.string
 };
 
 export default Checkbox;

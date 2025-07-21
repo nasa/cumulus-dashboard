@@ -220,6 +220,8 @@ class GranulesOverview extends React.Component {
                 onChange={this.setIsInfixSearch}
                 label="Search By"
                 inputLabel="Infix"
+                className="infix-search"
+                tip="Toggle between prefix and infix search. When enabled, the search field matches substrings instead of prefixes."
               />
               <Dropdown
                 options={statusOptions}
