@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - **CUMULUS-3624**
-  - Added an inactivity modal to prompt inactive users and to logout after a period of no user interactions
+  - Added an inactivity modal to prompt inactive users and to logout after a period of no user interactions after the modal appears
 - **CUMULUS-3849**
   - Added a network error modal that pops up when the user is offline
 - **CUMULUS-4048**
