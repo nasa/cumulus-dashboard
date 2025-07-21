@@ -6,7 +6,10 @@ import configureMockStore from 'redux-mock-store';
 import { requestMiddleware } from '../../../app/src/js/middleware/request';
 import thunk from 'redux-thunk';
 import sinon from 'sinon';
-import InactivityModal, { INACTIVITY_LIMIT, MODAL_TIMEOUT } from '../../../app/src/js/components/InactivityModal/inactivity-modal';
+import InactivityModal from '../../../app/src/js/components/InactivityModal/inactivity-modal';
+
+const INACTIVITY_LIMIT = 300000; // 5 minutes in milliseconds
+const MODAL_TIMEOUT = 120000; // 2 minutes in milliseconds
 
 const middlewares = [requestMiddleware, thunk];
 const mockStore = configureMockStore(middlewares);
@@ -34,7 +37,7 @@ test('modal is displayed after inactivity timeout', async (t) => {
   t.falsy(screen.queryByText(/You have been inactive for a while/));
 
   await act(async () => {
-    clock.tick(INACTIVITY_LIMIT); // fast-forward to inactivity limit
+    clock.tick(INACTIVITY_LIMIT-1000); // fast-forward to just before inactivity limit
     await Promise.resolve();
   });
 
@@ -51,7 +54,7 @@ test('modal closes on user activity', async (t) => {
   );
 
   await act(async () => {
-    clock.tick(INACTIVITY_LIMIT); // fast-forward to inactivity limit
+    clock.tick(INACTIVITY_LIMIT-1000); // fast-forward to inactivity limit
     await Promise.resolve();
   });
 
@@ -77,12 +80,12 @@ test('modal hides as logout runs after modal timeout', async (t) => {
     </Provider>
   );
   await act(async () => {
-    clock.tick(INACTIVITY_LIMIT); // fast-forward to inactivity limit
+    clock.tick(INACTIVITY_LIMIT-1000); // fast-forward to inactivity limit
     await Promise.resolve();
   });
   t.truthy(screen.queryByText(/You have been inactive for a while/));
   await act(async () => {
-    clock.tick(MODAL_TIMEOUT); // fast-forward to modal timeout
+    clock.tick(MODAL_TIMEOUT-1000); // fast-forward to modal timeout
     await Promise.resolve();
   });
   t.falsy(screen.queryByTestId('inactivity-modal'));
