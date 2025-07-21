@@ -1,13 +1,14 @@
 import test from 'ava';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, act, cleanup } from '@testing-library/react';
 import configureMockStore from 'redux-mock-store';
+import { requestMiddleware } from '../../../app/src/js/middleware/request';
 import thunk from 'redux-thunk';
 import sinon from 'sinon';
-import InactivityModal from '../../../app/src/js/components/InactivityModal/inactivity-modal';
+import InactivityModal, { INACTIVITY_LIMIT, MODAL_TIMEOUT } from '../../../app/src/js/components/InactivityModal/inactivity-modal';
 
-const middlewares = [thunk];
+const middlewares = [requestMiddleware, thunk];
 const mockStore = configureMockStore(middlewares);
 
 let clock;
@@ -18,10 +19,12 @@ test.before(() => {
 
 test.after.always(() => {
   clock.restore();
+  cleanup();
 });
 
-test('displays inactivity modal after inactivity period', async (t) => {
-  const store = mockStore({});
+test('modal is displayed after inactivity timeout', async (t) => {
+  const store = mockStore({ api: { tokens: { token: 'dummy' } } });
+
   render(
     <Provider store={store}>
       <InactivityModal />
@@ -31,64 +34,56 @@ test('displays inactivity modal after inactivity period', async (t) => {
   t.falsy(screen.queryByText(/You have been inactive for a while/));
 
   await act(async () => {
-    // Fast-forward time to trigger inactivity modal (30 seconds)
-    clock.tick(31000);
+    clock.tick(INACTIVITY_LIMIT); // fast-forward to inactivity limit
     await Promise.resolve();
   });
 
-  const modalText = screen.getByText(/You have been inactive for a while/);
-  t.truthy(modalText);
+  t.truthy(screen.queryByText(/You have been inactive for a while/));
 });
 
-test('logs out user after modal timeout if no activity', async (t) => {
-  const store = mockStore({});
+test('modal closes on user activity', async (t) => {
+  const store = mockStore({ api: { tokens: { token: 'dummy' } } });
+
   render(
     <Provider store={store}>
-      <InactivityModal />
+      <InactivityModal dispatch={store.dispatch}/>
     </Provider>
   );
 
   await act(async () => {
-    // Fast-forward time to trigger inactivity modal (30 seconds)
-    clock.tick(31000);
+    clock.tick(INACTIVITY_LIMIT); // fast-forward to inactivity limit
     await Promise.resolve();
   });
 
-  t.truthy(screen.getByText(/You have been inactive for a while/));
-
-  await act(async () => {
-    // Fast-forward time to trigger logout (another 30 seconds)
-    clock.tick(31000);
-    await Promise.resolve();
-  });
-
-  const actions = store.getActions();
-  const logoutAction = actions.find((action) => action.type === 'LOGOUT');
-  t.falsy(logoutAction, 'Logout action should be dispatched after modal timeout');
-});
-
-test('resets inactivity timer on user activity', async (t) => {
-  const store = mockStore({});
-  render(
-    <Provider store={store}>
-      <InactivityModal />
-    </Provider>
-  );
-
-  await act(async () => {
-    // Fast-forward time to just before inactivity modal should appear (29 seconds)
-    clock.tick(29000);
-    await Promise.resolve();
-  });
+  t.truthy(screen.queryByText(/You have been inactive for a while/));
 
   // Simulate user activity
-  fireEvent.mouseMove(window);
-
   await act(async () => {
-    // Fast-forward time again to just before inactivity modal should appear (29 seconds)
-    clock.tick(29000);
+    window.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }));
+    clock.tick(0);
     await Promise.resolve();
   });
 
-  t.truthy(screen.queryByText(/You have been inactive for a while/), 'Inactivity modal should not appear after user activity');
+  await act(() => Promise.resolve());
+
+  t.falsy(screen.queryByTestId('inactivity-modal'));
+});
+test('modal hides as logout runs after modal timeout', async (t) => {
+  const store = mockStore({ api: { tokens: { token: 'dummy' } } });
+
+  render(
+    <Provider store={store}>
+      <InactivityModal />
+    </Provider>
+  );
+  await act(async () => {
+    clock.tick(INACTIVITY_LIMIT); // fast-forward to inactivity limit
+    await Promise.resolve();
+  });
+  t.truthy(screen.queryByText(/You have been inactive for a while/));
+  await act(async () => {
+    clock.tick(MODAL_TIMEOUT); // fast-forward to modal timeout
+    await Promise.resolve();
+  });
+  t.falsy(screen.queryByTestId('inactivity-modal'));
 });

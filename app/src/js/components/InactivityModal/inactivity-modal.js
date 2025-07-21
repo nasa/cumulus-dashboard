@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import DefaultModal from '../Modal/modal';
 import { logout } from '../../actions';
 
-const INACTIVITY_LIMIT = 30000; // 5 minutes in milliseconds
-const MODAL_TIMEOUT = 30000;
+export const INACTIVITY_LIMIT = 300000; // 5 minutes in milliseconds
+export const MODAL_TIMEOUT = 120000; // 2 minutes in milliseconds
 
 const InactivityModal = ({
   title = 'Inactivity Warning',
@@ -32,16 +32,16 @@ const InactivityModal = ({
   };
 
   const resetTimer = useCallback(() => {
+    setHasModal(false);
     clearTimeout(timerRef.current);
     clearTimeout(modalTimeoutRef.current);
-    setHasModal(false);
     timerRef.current = setTimeout(() => {
       setHasModal(true);
       modalTimeoutRef.current = setTimeout(() => {
         handleLogout();
       }, MODAL_TIMEOUT); // Logout after modal timeout
     }, INACTIVITY_LIMIT); // Show modal after 5 minutes of inactivity
-  }, [timerRef, handleLogout]);
+  }, [handleLogout]);
 
   const handleActivity = useCallback(() => {
     resetTimer();
@@ -55,13 +55,14 @@ const InactivityModal = ({
 
     return () => {
       events.forEach((event) => window.removeEventListener(event, handleActivity));
-      clearTimeout(modalTimeoutRef.current);
       clearTimeout(timerRef.current);
+      clearTimeout(modalTimeoutRef.current);
     };
   }, [handleActivity, resetTimer]);
 
   return (
     <DefaultModal
+      data-Id="inactivity-modal"
       title={title}
       className="InactivityModal"
       onCancel={handleClose}
@@ -81,7 +82,6 @@ InactivityModal.propTypes = {
   dispatch: PropTypes.func,
 };
 
-export default connect((state) => {
-  const token = get(state, 'api.tokens.token');
-  return { token };
-})(InactivityModal);
+export default connect((state) => ({
+  token: get(state, 'api.tokens.token'),
+}))(InactivityModal);
