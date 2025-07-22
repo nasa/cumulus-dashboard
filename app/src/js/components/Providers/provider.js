@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import { get } from 'object-path';
 import AsyncCommand from '../AsyncCommands/AsyncCommands';
-import { getProvider, deleteProvider, listCollections } from '../../actions';
+import { getProvider, deleteProvider } from '../../actions';
 import { lastUpdated, deleteText } from '../../utils/format';
 import Loading from '../LoadingIndicator/loading-indicator';
 import LogViewer from '../Logs/viewer';
@@ -18,20 +18,16 @@ import { metaAccessors } from '../../utils/table-config/providers';
 
 const ProviderOverview = ({ dispatch, match, providers }) => {
   const { providerId } = match.params;
-  const record = providers.map[providerId];
+
+  let decodedProviderId;
+  if (providerId !== decodeURIComponent(providerId)) {
+    decodedProviderId = decodeURIComponent(providerId);
+  }
+
+  const record = providers.map[decodeURIComponent(providerId)];
 
   useEffect(() => {
-    dispatch(getProvider(providerId));
-  }, [dispatch, providerId]);
-
-  useEffect(() => {
-    dispatch(
-      listCollections({
-        limit: 100,
-        fields: 'collectionName',
-        providers: providerId,
-      })
-    );
+    dispatch(getProvider(decodeURIComponent(providerId)));
   }, [dispatch, providerId]);
 
   if (!record || (record.inflight && !record.data)) {
@@ -83,7 +79,7 @@ const ProviderOverview = ({ dispatch, match, providers }) => {
     <div className="page__component">
       <section className="page__section page__section__header-wrapper">
         <h1 className="heading--large heading--shared-content with-description">
-          Provider: {providerId}
+          Provider: {(decodedProviderId || providerId)}
         </h1>
         <div className="dropdown__options form-group__element--right">
           <ul>
