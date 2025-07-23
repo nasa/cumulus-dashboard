@@ -215,13 +215,13 @@
       "elliptic": "^6.6.1"
     },
     "axios": {
-      "form-data": "^4.0.4"
+      "form-data": "^2.5.4"
     },
     "cypress": {
-      "form-data": "^4.0.4"
+      "form-data": "^2.5.4"
     },
     "browser-env": {
-      "form-data": "^4.0.4"
+      "form-data": "^2.5.4"
     }
   }
 }
