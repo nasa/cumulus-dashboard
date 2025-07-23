@@ -213,15 +213,6 @@
     },
     "browserify-sign": {
       "elliptic": "^6.6.1"
-    },
-    "axios": {
-      "form-data": "^2.5.4"
-    },
-    "cypress": {
-      "form-data": "^2.5.4"
-    },
-    "browser-env": {
-      "form-data": "^2.5.4"
     }
   }
 }
