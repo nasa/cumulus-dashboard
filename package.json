@@ -204,7 +204,7 @@
     "vm-browserify": "^1.1.2"
   },
   "optionalDependencies": {
-    "cypress": "9.7.0"
+    "cypress": "12.0.0"
   },
   "overrides": {
     "crypto-browserify": {
@@ -213,6 +213,27 @@
     },
     "browserify-sign": {
       "elliptic": "^6.6.1"
+    },
+    "form-data": "^4.0.4",
+    "request": {
+      "form-data": "^4.0.4"
+    },
+    "request-promise-native": {
+      "request": {
+        "form-data": "^4.0.4"
+      }
+    },
+    "jsdom": {
+      "request": {
+        "form-data": "^4.0.4"
+      }
+    },
+    "window": {
+      "jsdom": {
+        "request": {
+          "form-data": "^4.0.4"
+        }
+      }
     }
   }
 }

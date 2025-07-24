@@ -1,6 +1,5 @@
 {
   "high": true,
   "pass-enoaudit": true,
-  "retry-count": 20,
-  "allowlist": ["form-data"]
+  "retry-count": 20
 }
