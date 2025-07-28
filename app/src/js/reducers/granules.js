@@ -151,6 +151,7 @@ export default createReducer(initialState, {
 
   [SEARCH_GRANULES]: (state, action) => {
     state.list.params.infix = action.infix;
+    state.list.params.archived = action.archived;
   },
   [CLEAR_GRANULES_SEARCH]: (state) => {
     state.list.params.infix = null;
