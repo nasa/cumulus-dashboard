@@ -150,7 +150,6 @@ export default createReducer(initialState, {
   [GRANULE_DELETE_CLEAR_ERROR]: createClearItemReducer('deleted'),
 
   [SEARCH_GRANULES]: (state, action) => {
-    console.log('in granuleSearch with ', action);
     if (action.infixBoolean) {
       state.list.params.prefix = null;
       state.list.params.infix = action.search;
