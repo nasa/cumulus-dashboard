@@ -24,7 +24,7 @@ const Search = ({
   action,
   clear,
   dispatch,
-  infix,
+  infixBoolean,
   inputProps = {
     className: 'search',
   },
@@ -56,44 +56,28 @@ const Search = ({
 
   useEffect(() => {
     if (initialValueRef.current) {
-      if (typeof infix === 'undefined') {
-        dispatch(action(initialValueRef.current));
-      } else {
-        dispatch(action({ search: initialValueRef.current, infix }));
-      }
+      dispatch(action(initialValueRef.current, infixBoolean));
     }
-  }, [action, infix, dispatch]);
+  }, [action, infixBoolean, dispatch]);
 
   const handleSearch = useCallback((query) => {
     setSearchValue(query);
     if (query) {
-      if (typeof infix === 'undefined') {
-        dispatch(action(query));
-      } else {
-        dispatch(action({ search: query, infix }));
-      }
+      dispatch(action(query, infixBoolean));
     } else dispatch(clear);
-  }, [action, infix, clear, dispatch]);
+  }, [action, infixBoolean, clear, dispatch]);
 
   // If the search value changes, dispatch the action to update the search results
   useEffect(() => {
     if (searchValue) {
-      if (typeof infix === 'undefined') {
-        dispatch(action(searchValue));
-      } else {
-        dispatch(action({ search: searchValue, infix }));
-      }
+      dispatch(action(searchValue, infixBoolean));
     }
-  }, [action, searchValue, infix, dispatch]);
+  }, [action, searchValue, infixBoolean, dispatch]);
 
   function handleChange(selections) {
     if (selections && selections.length > 0) {
       const query = selections[0][labelKey];
-      if (typeof infix === 'undefined') {
-        dispatch(action(query));
-      } else {
-        dispatch(action({ search: query, infix }));
-      }
+      dispatch(action(query, infixBoolean));
       setQueryParams({ [paramKey]: query });
     } else {
       dispatch(clear());
@@ -156,7 +140,7 @@ Search.propTypes = {
   dispatch: PropTypes.func,
   action: PropTypes.func,
   clear: PropTypes.func,
-  infix: PropTypes.bool,
+  infixBoolean: PropTypes.bool,
   inputProps: PropTypes.object,
   paramKey: PropTypes.string,
   label: PropTypes.any,
