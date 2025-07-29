@@ -412,7 +412,7 @@ export const removeAndDeleteGranule = (granuleId) => (dispatch, getState) => {
   return dispatch(deleteGranule(granuleId));
 };
 
-export const searchGranules = (search, infixBoolean) => ({ type: types.SEARCH_GRANULES, search, infixBoolean });
+export const searchGranules = (xfix, infixBoolean) => ({ type: types.SEARCH_GRANULES, xfix, infixBoolean });
 export const clearGranulesSearch = () => ({ type: types.CLEAR_GRANULES_SEARCH });
 export const filterGranules = (param) => ({ type: types.FILTER_GRANULES, param });
 export const clearGranulesFilter = (paramKey) => ({ type: types.CLEAR_GRANULES_FILTER, paramKey });

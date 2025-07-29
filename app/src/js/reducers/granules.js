@@ -152,9 +152,9 @@ export default createReducer(initialState, {
   [SEARCH_GRANULES]: (state, action) => {
     if (action.infixBoolean) {
       state.list.params.prefix = null;
-      state.list.params.infix = action.search;
+      state.list.params.infix = action.xfix;
     } else {
-      state.list.params.prefix = action.search;
+      state.list.params.prefix = action.xfix;
       state.list.params.infix = null;
     }
   },
