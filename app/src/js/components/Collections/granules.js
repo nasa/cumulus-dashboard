@@ -180,7 +180,7 @@ const CollectionGranules = ({
             labelKey="granuleId"
             placeholder="Granule ID"
             searchKey="granules"
-            infix={isInfixSearch}
+            infixBoolean={isInfixSearch}
           />
           <ListFilters>
             <Checkbox

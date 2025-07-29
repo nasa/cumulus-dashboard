@@ -242,7 +242,7 @@ class PDR extends React.Component {
               clear={clearGranulesSearch}
               labelKey="granuleId"
               searchKey="granules"
-              infix={isInfixSearch}
+              infixBoolean={isInfixSearch}
             />
             <ListFilters>
               <Checkbox

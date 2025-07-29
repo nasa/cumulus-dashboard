@@ -188,7 +188,7 @@ const AllGranules = ({
           <Search
             action={searchGranules}
             clear={clearGranulesSearch}
-            infix={isInfixSearch}
+            infixBoolean={isInfixSearch}
             label="Search"
             labelKey="granuleId"
             placeholder="Granule ID"

@@ -151,7 +151,7 @@ export default createReducer(initialState, {
 
   [SEARCH_GRANULES]: (state, action) => {
     console.log('in granuleSearch with ', action);
-    if (action.infix) {
+    if (action.infixBoolean) {
       state.list.params.prefix = null;
       state.list.params.infix = action.search;
     } else {

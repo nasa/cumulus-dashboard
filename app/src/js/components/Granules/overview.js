@@ -211,7 +211,7 @@ class GranulesOverview extends React.Component {
               labelKey="granuleId"
               placeholder="Granule ID"
               searchKey="granules"
-              infix={isInfixSearch}
+              infixBoolean={isInfixSearch}
             />
             <ListFilters>
               <Checkbox
