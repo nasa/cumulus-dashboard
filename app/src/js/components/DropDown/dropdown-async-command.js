@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import c from 'classnames';
+import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import { addGlobalListener } from '../../utils/browser';
@@ -9,14 +10,14 @@ const DropdownAsync = ({
 }) => {
   const [showActions, setShowActions] = useState(false);
   const dropdownRef = useRef(null);
-  const cleanup = useRef(null);
 
   const close = useCallback(() => {
     setShowActions(false);
   }, []);
 
   const onOutsideClick = useCallback((e) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+    const domNode = findDOMNode(dropdownRef.current);
+    if (domNode && !domNode.contains(e.target)) {
       close();
     }
   }, [close]);
@@ -38,16 +39,16 @@ const DropdownAsync = ({
   }, [close]);
 
   useEffect(() => {
-    cleanup.current = addGlobalListener('click', onOutsideClick);
+    const cleanup = addGlobalListener('click', onOutsideClick);
     return () => {
-      if (typeof cleanup.current === 'function') {
-        cleanup.current();
+      if (cleanup && typeof cleanup === 'function') {
+        cleanup();
       }
     };
   }, [onOutsideClick]);
 
   return (
-    <div className='dropdown__options form-group__element--right'>
+    <div className='dropdown__options form-group__element--right' ref={dropdownRef}>
         <button className='dropdown__options__btn button--green button button--small' onClick={toggleActions}><span>Options</span></button>
         <ul className={c('dropdown__menu', {
           'dropdown__menu--hidden': !showActions
