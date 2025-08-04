@@ -1,68 +1,62 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import c from 'classnames';
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import { addGlobalListener } from '../../utils/browser';
 
-class DropdownAsync extends React.Component {
-  constructor () {
-    super();
-    this.state = { showActions: false };
-    this.onOutsideClick = this.onOutsideClick.bind(this);
-    this.toggleActions = this.toggleActions.bind(this);
-    this.close = this.close.bind(this);
-    this.handleSuccess = this.handleSuccess.bind(this);
-    this.handleError = this.handleError.bind(this);
-  }
+const DropdownAsync = ({
+  config
+}) => {
+  const [showActions, setShowActions] = useState(false);
+  const dropdownRef = useRef(null);
 
-  componentDidMount () {
-    this.cleanup = addGlobalListener('click', this.onOutsideClick);
-  }
+  const close = useCallback(() => {
+    setShowActions(false);
+  }, []);
 
-  componentWillUnmount () {
-    if (this.cleanup && typeof this.cleanup === 'function') this.cleanup();
-  }
+  const onOutsideClick = useCallback((e) => {
+    const domNode = findDOMNode(dropdownRef.current);
+    if (domNode && !domNode.contains(e.target)) {
+      close();
+    }
+  }, [close]);
 
-  onOutsideClick (e) {
-    if (!findDOMNode(this).contains(e.target)) this.close();
-  }
-
-  toggleActions (e) {
+  const toggleActions = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
-    this.setState((prevState) => ({
-      showActions: !prevState.showActions
-    }));
-  }
+    setShowActions((prevState) => !prevState);
+  }, []);
 
-  close () {
-    this.setState({ showActions: false });
-  }
-
-  handleSuccess (onSuccess) {
-    this.close();
+  const handleSuccess = useCallback((onSuccess) => {
+    close();
     if (typeof onSuccess === 'function') onSuccess();
-  }
+  }, [close]);
 
-  handleError (onError) {
-    this.close();
+  const handleError = useCallback((onError) => {
+    close();
     if (typeof onError === 'function') onError();
-  }
+  }, [close]);
 
-  render () {
-    const { config } = this.props;
-    const { showActions } = this.state;
-    return (
-      <div className='dropdown__options form-group__element--right'>
-        <button className='dropdown__options__btn button--green button button--small' onClick={this.toggleActions}><span>Options</span></button>
+  useEffect(() => {
+    const cleanup = addGlobalListener('click', onOutsideClick);
+    return () => {
+      if (typeof cleanup === 'function') {
+        cleanup();
+      }
+    };
+  }, [onOutsideClick]);
+
+  return (
+    <div className='dropdown__options form-group__element--right'>
+        <button className='dropdown__options__btn button--green button button--small' onClick={toggleActions}><span>Options</span></button>
         <ul className={c('dropdown__menu', {
           'dropdown__menu--hidden': !showActions
         })}>
           {config.map((d) => <li key={d.text}>
             <AsyncCommand action={d.action}
-              success={() => this.handleSuccess(d.success)}
-              error={() => this.handleError(d.error)}
+              success={() => handleSuccess(d.success)}
+              error={() => handleError(d.error)}
               status={d.status}
               disabled={d.disabled}
               confirmAction={d.confirmAction}
@@ -76,9 +70,8 @@ class DropdownAsync extends React.Component {
           </li>)}
         </ul>
       </div>
-    );
-  }
-}
+  );
+};
 
 DropdownAsync.propTypes = {
   config: PropTypes.array
