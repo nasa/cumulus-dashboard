@@ -1,6 +1,5 @@
 /* eslint-disable import/no-cycle */
-import React from 'react';
-import { createNextState } from '@reduxjs/toolkit';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { generate } from 'shortid';
 import { set } from 'object-path';
 import slugify from 'slugify';
@@ -16,8 +15,8 @@ import SubForm from '../SubForm/sub-form';
 import t from '../../utils/strings';
 import { window } from '../../utils/browser';
 
-const scrollTo =
-  window && typeof window.scrollTo === 'function'
+const scrollToFn =
+  typeof window !== 'undefined' && typeof window.scrollTo === 'function'
     ? window.scrollTo
     : () => true;
 
@@ -95,135 +94,102 @@ const generateInputState = (inputMeta, id, oldInputState = {}) => {
  * @param {String} form.error text to display when a form doesn't pass validation.
  * @return {JSX}
  */
-export class Form extends React.Component {
-  constructor(props) {
-    super(props);
+export const Form = ({
+  id,
+  inputMeta,
+  submit,
+  cancel,
+  status,
+  nowrap,
+}) => {
+  const formId = useRef(generate());
+  const domElementRef = useRef(null);
+  const prevInputMetaRef = useRef(inputMeta);
 
-    // Generate ID for this form
-    this.id = generate();
-    this.onChange = this.onChange.bind(this);
-    this.onCancel = this.onCancel.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
+  const [inputs, setInputs] = useState(generateInputState(inputMeta, formId.current));
+  const [dirty, setDirty] = useState(generateDirty(inputs));
+  const [errors, setErrors] = useState([]);
+  const [submitted, setSubmitted] = useState(false);
 
-    const inputs = generateInputState(props.inputMeta, this.id);
-    const dirty = generateDirty(inputs);
+  const isInflight = () => status && status === 'inflight';
 
-    this.state = {
-      inputs,
-      dirty,
-      errors: [],
-      submitted: false,
-    };
-  }
+  const validateField = ({ field, inputId, stateInputs, stateDirty, stateErrors }) => {
+    let { value } = stateInputs[inputId] || {};
+    let updatedErrors = stateErrors;
 
-  isInflight() {
-    return this.props.status && this.props.status === 'inflight';
-  }
+    if (!stateDirty[inputId] && !field.required) return { stateInputs, stateErrors: updatedErrors };
 
-  onChange(inputId, value, handleChange) {
-    if (typeof handleChange === 'function') handleChange(value);
-    // Update the internal key/value store, in addition to marking as dirty
-    this.setState(
-      createNextState((state) => {
-        state.inputs[inputId].value = value;
-        state.dirty[inputId] = true;
-        // validate the field for live changes
-        this.validateField({
-          field: this.state.inputs[inputId],
-          inputId,
-          state,
-        });
-      })
-    );
-  }
-
-  validateField({ field, inputId, state }) {
-    const { dirty, inputs } = state;
-    let { value } = inputs[inputId] || {};
-
-    // don't set a value for values that haven't changed and aren't required
-    if (!dirty[inputId] && !field.required) return;
-
-    if (inputs[inputId].error) {
-      state.errors = state.errors.filter((item) => item !== field.labelText);
-      delete inputs[inputId].error;
+    if (stateInputs[inputId].error) {
+      updatedErrors = updatedErrors.filter((item) => item !== field.labelText);
+      delete stateInputs[inputId].error;
     }
 
-    const { errors } = state;
-
-    // if expected type is json, validate as json first
     if (field.type === formTypes.textArea && field.mode === 'json') {
       try {
         value = JSON.parse(value);
-      } catch (e) {
-        if (!errors.includes(field.labelText)) errors.push(field.labelText);
-        inputs[inputId].error = t.errors.json;
+      } catch {
+        if (!updatedErrors.includes(field.labelText)) updatedErrors.push(field.labelText);
+        stateInputs[inputId].error = t.errors.json;
       }
     } else if (field.type === formTypes.number) {
       try {
         value = parseInt(value, 10);
-      } catch (e) {
-        if (!errors.includes(field.labelText)) errors.push(field.labelText);
-        inputs[inputId].error = t.errors.integerRequired;
+      } catch {
+        if (!updatedErrors.includes(field.labelText)) updatedErrors.push(field.labelText);
+        stateInputs[inputId].error = t.errors.integerRequired;
       }
     }
 
     if (field.validate && !field.validate(value)) {
-      if (!errors.includes(field.labelText)) errors.push(field.labelText);
-      const error = field.error || field.validationError || t.errors.generic;
-      inputs[inputId].error = error;
+      if (!updatedErrors.includes(field.labelText)) updatedErrors.push(field.labelText);
+      const errorMsg = field.error || field.validationError || t.errors.generic;
+      stateInputs[inputId].error = errorMsg;
     }
-  }
 
-  onCancel(e) {
-    e.preventDefault();
+    return { stateInputs, stateErrors: updatedErrors };
+  };
 
-    if (!this.isInflight()) {
-      this.props.cancel(this.props.id);
+  const onChange = (inputId, value, handleChange) => {
+    if (typeof handleChange === 'function') handleChange(value);
+
+    setInputs((prevInputs) => {
+      const newInputs = { ...prevInputs, [inputId]: { ...prevInputs[inputId], value } };
+      const newDirty = { ...dirty, [inputId]: true };
+
+      const validated = validateField({
+        field: newInputs[inputId],
+        inputId,
+        stateInputs: { ...newInputs },
+        stateDirty: newDirty,
+        stateErrors: [...errors],
+      });
+
+      setDirty(newDirty);
+      setErrors(validated.stateErrors);
+      return validated.stateInputs;
+    });
+  };
+
+  const scrollToTop = () => {
+    if (domElementRef.current && typeof domElementRef.current.scrollIntoView === 'function') {
+      domElementRef.current.scrollIntoView(true);
+    } else {
+      scrollToFn(0, 0);
     }
-  }
+  };
 
-  onSubmit(e) {
-    if (e) e.preventDefault();
-    if (this.isInflight()) return;
-
-    // validate input values in the store
-
-    this.setState(
-      createNextState((state) => {
-        this.props.inputMeta.forEach((field) => {
-          const inputId = generateComponentId(field.schemaProperty, this.id);
-
-          this.validateField({
-            field,
-            inputId,
-            state,
-          });
-        });
-
-        state.submitted = true;
-      })
-    );
-  }
-
-  submitPayload() {
-    const { inputs, errors } = this.state;
-    const payload = {};
-
+  const submitPayload = useCallback(() => {
     if (errors.length === 0) {
-      Object.entries(inputs).forEach((entry) => {
-        const entryValue = entry[1];
+      const payload = {};
+      Object.entries(inputs).forEach(([_, entryValue]) => {
         const { value, required, schemaProperty, type, mode } = entryValue;
 
         if (
           required ||
-          // only add an optional array when it is not empty
           (Array.isArray(value) && value.length > 0) ||
-          // only add an optional value when it is not an empty string or will create an empty object
           (!Array.isArray(value) && value !== '' && value !== '{}')
         ) {
           let payloadValue = value;
-          // these should be safe since we've already validated at this point
           if (type === formTypes.textArea && mode === 'json') {
             payloadValue = JSON.parse(value);
           } else if (type === formTypes.number) {
@@ -232,67 +198,71 @@ export class Form extends React.Component {
           set(payload, schemaProperty, payloadValue);
         }
       });
-      this.props.submit(this.props.id, payload);
+      submit && submit(id, payload);
     } else {
-      this.scrollToTop();
+      scrollToTop();
     }
+    setSubmitted(false);
+  }, [errors, inputs, submit, id]);
 
-    this.setState({ submitted: false });
+  const onSubmit = (e) => {
+    if (e) e.preventDefault();
+    if (isInflight()) return;
+
+    let newInputs = { ...inputs };
+    let newErrors = [...errors];
+    inputMeta.forEach((field) => {
+      const inputId = generateComponentId(field.schemaProperty, formId.current);
+      const validated = validateField({
+        field,
+        inputId,
+        stateInputs: newInputs,
+        stateDirty: dirty,
+        stateErrors: newErrors,
+      });
+      newInputs = validated.stateInputs;
+      newErrors = validated.stateErrors;
+    });
+
+    setInputs(newInputs);
+    setErrors(newErrors);
+    setSubmitted(true);
+  };
+
+  const onCancel = (e) => {
+    e.preventDefault();
+    if (!isInflight()) cancel && cancel(id);
+  };
+
+  useEffect(() => {
+    if (prevInputMetaRef.current !== inputMeta) {
+      setInputs(generateInputState(inputMeta, formId.current, inputs));
+      setDirty(generateDirty(inputs));
+      prevInputMetaRef.current = inputMeta;
+    }
+  }, [inputMeta, inputs]);
+
+  useEffect(() => {
+    if (submitted) submitPayload();
+  }, [submitted, submitPayload]);
+
+  let submitButtonText = 'Submit';
+  if (isInflight()) {
+    submitButtonText = 'Loading...';
+  } else if (status === 'success') {
+    submitButtonText = 'Success';
   }
 
-  scrollToTop() {
-    if (
-      this.DOMElement &&
-      typeof this.DOMElement.scrollIntoView === 'function'
-    ) {
-      this.DOMElement.scrollIntoView(true);
-    } else {
-      scrollTo(0, 0);
-    }
-  }
+  const hasRequiredFields = inputMeta.filter((input) => input.required).length >= 0;
 
-  componentDidUpdate(prevProps) {
-    const { inputMeta } = this.props;
-
-    if (prevProps.inputMeta !== inputMeta) {
-      const inputs = generateInputState(inputMeta, this.id, this.state.inputs);
-      const dirty = generateDirty(inputs);
-      this.setState({ inputs, dirty });
-    }
-    if (this.state.submitted) {
-      this.submitPayload();
-    }
-  }
-
-  render() {
-    const inputState = this.state.inputs;
-    const { errors } = this.state;
-    const { status } = this.props;
-    let submitButtonText;
-
-    if (this.isInflight()) {
-      submitButtonText = 'Loading...';
-    } else if (status === 'success') {
-      submitButtonText = 'Success!';
-    } else {
-      submitButtonText = 'Submit';
-    }
-
-    const hasRequiredFields =
-      this.props.inputMeta.filter((input) => input.required).length >= 0;
-
-    const form = (
+  const formContent = (
       <div
-        className="container"
-        ref={(element) => {
-          this.DOMElement = element;
-        }}
-      >
+        className="container" ref={domElementRef}>
         {errors.length > 0 && (
           <ErrorReport report={errorMessage(errors)} disableScroll={true} />
         )}
         <ul>
-          {this.props.inputMeta.map((input) => {
+          {inputMeta.map((input) => {
             const { type, label, handleChange } = input;
             let element;
 
@@ -315,8 +285,8 @@ export class Form extends React.Component {
                 break;
             }
 
-            const inputId = generateComponentId(input.schemaProperty, this.id);
-            let { value, error } = inputState[inputId] || {};
+            const inputId = generateComponentId(input.schemaProperty, formId.current);
+            let { value, error } = inputs[inputId] || {};
 
             // coerce non-null values to string to simplify PropType warnings on numbers
             if (
@@ -363,7 +333,7 @@ export class Form extends React.Component {
               fieldset,
               type: textType,
               autoComplete,
-              onChange: (id, val) => this.onChange(id, val, handleChange),
+              onChange: (idParam, val) => onChange(idParam, val, handleChange),
               ...additionalConfig,
             });
 
@@ -384,44 +354,43 @@ export class Form extends React.Component {
           </div>
         )}
 
-        {this.props.submit && (
+        {submit && (
           <button
             className={`button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right button--submit${
-              this.isInflight() ? ' button--disabled' : ''
+              isInflight() ? ' button--disabled' : ''
             }`}
-            onClick={this.onSubmit}
+            onClick={onSubmit}
           >
             {submitButtonText}
           </button>
         )}
 
-        {this.props.cancel && (
+        {cancel && (
           <button
             className={`button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--right button--cancel${
-              this.isInflight() ? ' button--disabled' : ''
+              isInflight() ? ' button--disabled' : ''
             }`}
-            onClick={this.onCancel}
+            onClick={onCancel}
           >
             Cancel
           </button>
         )}
       </div>
-    );
+  );
 
-    return this.props.nowrap
-      ? (
-          form
-        )
-      : (
+  return nowrap
+    ? (
+        formContent
+      )
+    : (
       <form
         className="page__section--fullpage-form page__section--fullpage-form--internal"
-        id={`form-${this.id}`}
+        id={`form-${formId.current}`}
       >
-        {form}
+        {formContent}
       </form>
-        );
-  }
-}
+      );
+};
 
 Form.propTypes = {
   id: PropTypes.string,
