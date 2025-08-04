@@ -15,7 +15,7 @@ import SubForm from '../SubForm/sub-form';
 import t from '../../utils/strings';
 import { window } from '../../utils/browser';
 
-const scrollToFn =
+const scrollTo =
   typeof window !== 'undefined' && typeof window.scrollTo === 'function'
     ? window.scrollTo
     : () => true;
@@ -174,7 +174,7 @@ export const Form = ({
     if (domElementRef.current && typeof domElementRef.current.scrollIntoView === 'function') {
       domElementRef.current.scrollIntoView(true);
     } else {
-      scrollToFn(0, 0);
+      scrollTo(0, 0);
     }
   };
 
