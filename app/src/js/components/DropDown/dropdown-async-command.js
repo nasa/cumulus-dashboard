@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import c from 'classnames';
-import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import { addGlobalListener } from '../../utils/browser';
@@ -10,14 +9,14 @@ const DropdownAsync = ({
 }) => {
   const [showActions, setShowActions] = useState(false);
   const dropdownRef = useRef(null);
+  const cleanup = useRef(null);
 
   const close = useCallback(() => {
     setShowActions(false);
   }, []);
 
   const onOutsideClick = useCallback((e) => {
-    const domNode = findDOMNode(dropdownRef.current);
-    if (domNode && !domNode.contains(e.target)) {
+    if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
       close();
     }
   }, [close]);
@@ -39,10 +38,10 @@ const DropdownAsync = ({
   }, [close]);
 
   useEffect(() => {
-    const cleanup = addGlobalListener('click', onOutsideClick);
+    cleanup.current = addGlobalListener('click', onOutsideClick);
     return () => {
-      if (typeof cleanup === 'function') {
-        cleanup();
+      if (typeof cleanup.current === 'function') {
+        cleanup.current();
       }
     };
   }, [onOutsideClick]);
