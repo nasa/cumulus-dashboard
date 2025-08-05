@@ -203,13 +203,13 @@ describe('Dashboard PDRs Page', () => {
       cy.url().should('include', 'search=MOD');
       cy.get('.table .tbody .tr').as('list');
       cy.get('@list').should('have.length', 2);
-      cy.get('#chk_isinfixsearch').should('not.be.checked');
+      cy.get('#chk_isInfixSearch').should('not.be.checked');
       cy.get('@search').eq(0).should('be.visible').click()
         .type('GQ');
       cy.url().should('include', 'search=GQ');
       cy.get('.table .tbody .tr').as('list');
       cy.get('@list').should('have.length', 0);
-      cy.get('#chk_isinfixsearch').click({ force: true }).should('be.checked');
+      cy.get('#chk_isInfixSearch').click({ force: true }).should('be.checked');
       cy.get('.table .tbody .tr').as('list');
       cy.get('@list').should('have.length', 2);
 

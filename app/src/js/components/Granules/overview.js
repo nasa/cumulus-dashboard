@@ -215,7 +215,7 @@ class GranulesOverview extends React.Component {
             />
             <ListFilters>
               <Checkbox
-                id="chk_isinfixsearch"
+                id="chk_isInfixSearch"
                 checked={isInfixSearch}
                 onChange={this.setIsInfixSearch}
                 label="Search By"

@@ -331,7 +331,7 @@ const CollectionOverview = ({
           />
           <ListFilters>
             <Checkbox
-              id="chk_isinfixsearch"
+              id="chk_isInfixSearch"
               checked={isInfixSearch}
               onChange={setIsInfixSearch}
               label="Search By"

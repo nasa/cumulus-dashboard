@@ -29,15 +29,12 @@ const Checkbox = ({
         tip={tip}
       />
     )}
-    <label htmlFor={id}>
-      <div className="checkmark--wrapper input--label">
-        <input id={id}
-          type="checkbox" checked={checked}
-          onChange={(e) => { onChange(e.target.checked); }}
-          style={{ marginRight: '0.5em' }} />
-        <span className="checkmark"></span>
-        {inputLabel || label }
-      </div>
+    <label htmlFor={id} className="checkmark--wrapper">
+      {inputLabel || label }
+      <input id={id}
+        type="checkbox" checked={checked}
+        onChange={(e) => { onChange(e.target.checked); }} />
+      <span className="checkmark"></span>
     </label>
   </div>
 );
