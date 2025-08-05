@@ -155,7 +155,7 @@ export const deleteCollection = (name, version) => ({
   }
 });
 
-// infixBoolean is passed but ignore by searchCollections
+// infixBoolean is passed but ignored by searchCollections
 export const searchCollections = (infix) => ({ type: types.SEARCH_COLLECTIONS, infix });
 export const clearCollectionsSearch = () => ({ type: types.CLEAR_COLLECTIONS_SEARCH });
 export const filterCollections = (param) => ({ type: types.FILTER_COLLECTIONS, param });
@@ -496,7 +496,7 @@ export const getPdr = (pdrName) => ({
   }
 });
 
-// infixBoolean is passed but ignore by searchPdrs
+// infixBoolean is passed but ignored by searchPdrs
 export const searchPdrs = (infix) => ({ type: types.SEARCH_PDRS, infix });
 export const clearPdrsSearch = () => ({ type: types.CLEAR_PDRS_SEARCH });
 export const filterPdrs = (param) => ({ type: types.FILTER_PDRS, param });
@@ -560,7 +560,7 @@ export const deleteProvider = (providerId) => ({
   }
 });
 
-// infixBoolean is passed but ignore by searchProviders
+// infixBoolean is passed but ignored by searchProviders
 export const searchProviders = (infix) => ({ type: types.SEARCH_PROVIDERS, infix });
 export const clearProvidersSearch = () => ({ type: types.CLEAR_PROVIDERS_SEARCH });
 export const filterProviders = (param) => ({ type: types.FILTER_PROVIDERS, param });
@@ -687,7 +687,7 @@ export const listExecutionsByGranule = (granuleId, payload) => ({
 
 export const filterExecutions = (param) => ({ type: types.FILTER_EXECUTIONS, param });
 export const clearExecutionsFilter = (paramKey) => ({ type: types.CLEAR_EXECUTIONS_FILTER, paramKey });
-// infixBoolean is passed but ignore by searchExecutions
+// infixBoolean is passed but ignored by searchExecutions
 export const searchExecutions = (infix) => ({ type: types.SEARCH_EXECUTIONS, infix });
 export const clearExecutionsSearch = () => ({ type: types.CLEAR_EXECUTIONS_SEARCH });
 
@@ -726,7 +726,7 @@ export const getOperation = (operationId) => ({
   }
 });
 
-// infixBoolean is passed but ignore by searchOperations
+// infixBoolean is passed but ignored by searchOperations
 export const searchOperations = (infix) => ({ type: types.SEARCH_OPERATIONS, infix });
 export const clearOperationsSearch = () => ({ type: types.CLEAR_OPERATIONS_SEARCH });
 export const filterOperations = (param) => ({ type: types.FILTER_OPERATIONS, param });
@@ -852,7 +852,7 @@ export const rerunRule = (payload) => ({
   }
 });
 
-// infixBoolean is passed but ignore by searchRules
+// infixBoolean is passed but ignored by searchRules
 export const searchRules = (infix) => ({ type: types.SEARCH_RULES, infix });
 export const clearRulesSearch = () => ({ type: types.CLEAR_RULES_SEARCH });
 export const filterRules = (param) => ({ type: types.FILTER_RULES, param });
@@ -898,7 +898,7 @@ export const deleteReconciliationReport = (reconciliationName) => ({
   }
 });
 
-// infixBoolean is passed but ignore by searchReconciliationReports
+// infixBoolean is passed but ignored by searchReconciliationReports
 export const searchReconciliationReports = (infix) => ({ type: types.SEARCH_RECONCILIATIONS, infix });
 export const clearReconciliationReportSearch = () => ({ type: types.CLEAR_RECONCILIATIONS_SEARCH });
 export const filterReconciliationReports = (param) => ({ type: types.FILTER_RECONCILIATIONS, param });
