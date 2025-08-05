@@ -48,6 +48,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Renamed cumulus-dashboard package name to `@cumulus/cumulus-dashboard`
 - **security vulnerabilities**
   - Upgraded axios and xml-crypto packages to fix audit issue
+- **CUMULUS-3813**
+  - Refactored the following files from class to function components: text.js, text-area.js, sub-form.js, Form.js, dropdown-async-command.js
 
 ### Deleted
 
