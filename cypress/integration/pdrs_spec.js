@@ -207,8 +207,7 @@ describe('Dashboard PDRs Page', () => {
       cy.get('@search').eq(0).should('be.visible').click()
         .type('GQ');
       cy.url().should('include', 'search=GQ');
-      cy.get('.table .tbody .tr').as('list');
-      cy.get('@list').should('have.length', 0);
+      cy.get('.table .tbody .tr').should('have.length', 0);
       cy.get('#chk_isInfixSearch').click({ force: true }).should('be.checked');
       cy.get('.table .tbody .tr').as('list');
       cy.get('@list').should('have.length', 2);
