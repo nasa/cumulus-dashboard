@@ -86,7 +86,9 @@ const Search = ({
   }
 
   function handleInputChange(text) {
+    setSearchValue(text);
     if (text) {
+      dispatch(action(text, infixBoolean));
       setQueryParams({ [paramKey]: text });
     } else {
       dispatch(clear());
