@@ -68,8 +68,10 @@ const Search = ({
     });
     if (currentValue) {
       dispatch(action(currentValue, infixBoolean));
+    } else {
+      dispatch(clear(paramKey));
     }
-  }, [action, infixBoolean, dispatch, location, paramKey, queryParams]);
+  }, [action, infixBoolean, dispatch, location, paramKey, queryParams, clear]);
 
   const handleSearch = useCallback((query) => {
     if (query) dispatch(action(query, infixBoolean));
@@ -79,21 +81,14 @@ const Search = ({
   function handleChange(selections) {
     if (selections && selections.length > 0) {
       const query = selections[0][labelKey];
-      dispatch(action(query, infixBoolean));
       setQueryParams({ [paramKey]: query });
     } else {
-      dispatch(clear());
       setQueryParams({ [paramKey]: undefined });
     }
   }
 
   function handleInputChange(text) {
-    if (text) {
-      setQueryParams({ [paramKey]: text });
-    } else {
-      dispatch(clear());
-      setQueryParams({ [paramKey]: undefined });
-    }
+    setQueryParams({ [paramKey]: text || undefined });
   }
 
   function handleFocus(event) {
