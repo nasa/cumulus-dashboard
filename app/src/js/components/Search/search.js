@@ -1,4 +1,4 @@
-import React, { createRef, useCallback, useEffect, useRef, useState } from 'react';
+import React, { createRef, useCallback, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import withQueryParams from 'react-router-query-params';
@@ -48,7 +48,6 @@ const Search = ({
   }));
   const searchList = get(rest[searchKey], 'list');
   const { data: searchOptions, inflight = false } = searchList || {};
-  const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
     dispatch(clear(paramKey));
@@ -60,19 +59,22 @@ const Search = ({
     }
   }, [action, infixBoolean, dispatch]);
 
-  const handleSearch = useCallback((query) => {
-    setSearchValue(query);
-    if (query) {
-      dispatch(action(query, infixBoolean));
-    } else dispatch(clear);
-  }, [action, infixBoolean, clear, dispatch]);
-
-  // If the search value changes, dispatch the action to update the search results
   useEffect(() => {
-    if (searchValue) {
-      dispatch(action(searchValue, infixBoolean));
+    // Always get the latest value from the URL/queryParams
+    const currentValue = getInitialValueFromLocation({
+      location,
+      paramKey,
+      queryParams,
+    });
+    if (currentValue) {
+      dispatch(action(currentValue, infixBoolean));
     }
-  }, [action, searchValue, infixBoolean, dispatch]);
+  }, [action, infixBoolean, dispatch, location, paramKey, queryParams]);
+
+  const handleSearch = useCallback((query) => {
+    if (query) dispatch(action(query, infixBoolean));
+    else dispatch(clear);
+  }, [action, clear, infixBoolean, dispatch]);
 
   function handleChange(selections) {
     if (selections && selections.length > 0) {
@@ -86,9 +88,7 @@ const Search = ({
   }
 
   function handleInputChange(text) {
-    setSearchValue(text);
     if (text) {
-      dispatch(action(text, infixBoolean));
       setQueryParams({ [paramKey]: text });
     } else {
       dispatch(clear());
@@ -141,8 +141,8 @@ const Search = ({
 Search.propTypes = {
   dispatch: PropTypes.func,
   action: PropTypes.func,
-  clear: PropTypes.func,
   infixBoolean: PropTypes.bool,
+  clear: PropTypes.func,
   inputProps: PropTypes.object,
   paramKey: PropTypes.string,
   label: PropTypes.any,
