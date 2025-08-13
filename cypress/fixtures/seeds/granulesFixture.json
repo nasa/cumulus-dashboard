@@ -83,7 +83,7 @@
           "size" : 782
         }
       ],
-      "collectionId": "Test-L2-Coastal___Operational/Near-Real-Time",
+      "collectionId": "Test-L2/Coastal___Operational/Near-Real-Time",
       "producerGranuleId": "test_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl2",
       "status": "completed",
       "timestamp": 1537831783729,
@@ -167,7 +167,7 @@
           "size" : 782
         }
       ],
-      "collectionId": "Test-L2-Coastal___Operational/Near-Real-Time",
+      "collectionId": "Test-L2/Coastal___Operational/Near-Real-Time",
       "producerGranuleId": "MOD09GQ.A1657416.CbyoRi.006.9697917818587",
       "status": "completed",
       "timestamp": 1537831783729,
