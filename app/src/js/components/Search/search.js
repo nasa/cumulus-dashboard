@@ -74,9 +74,8 @@ const Search = ({
   }, [action, infixBoolean, dispatch, location, paramKey, queryParams, clear]);
 
   const handleSearch = useCallback((query) => {
-    if (query) dispatch(action(query, infixBoolean));
-    else dispatch(clear);
-  }, [action, clear, infixBoolean, dispatch]);
+    setQueryParams({ [paramKey]: query || undefined });
+  }, [paramKey, setQueryParams]);
 
   function handleChange(selections) {
     if (selections && selections.length > 0) {
