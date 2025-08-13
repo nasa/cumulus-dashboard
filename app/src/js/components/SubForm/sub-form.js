@@ -1,68 +1,73 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable import/no-cycle */
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { set } from 'object-path';
 import { Form, formTypes } from '../Form/Form';
 import { createFormConfig } from '../FormSchema/schema';
 import { isText } from '../../utils/validate';
 
-class SubForm extends React.Component {
-  constructor () {
-    super();
-    this.state = { expanded: {} };
-    this.renderFieldset = this.renderFieldset.bind(this);
-    this.renderExpandedField = this.renderExpandedField.bind(this);
-    this.toggleExpand = this.toggleExpand.bind(this);
-    this.hide = this.hide.bind(this);
-    this.remove = this.remove.bind(this);
-    this.update = this.update.bind(this);
-  }
+const SubForm = ({
+  label,
+  value,
+  fieldSet,
+  id,
+  error,
+  onChange
+}) => {
+  const [expanded, setExpanded] = useState({});
 
-  render () {
-    const {
-      label,
-      error,
-      id,
-      value,
-      fieldSet
-    } = this.props;
-
-    const fields = Object.keys(value).map((key) => ({
-      name: key,
-      fields: createFormConfig({ data: value[key], schema: fieldSet })
+  const hide = useCallback((targetId) => {
+    setExpanded((prev) => ({
+      ...prev,
+      [targetId]: false
     }));
+  }, []);
 
-    fields.push({
-      name: 'Add',
-      fields: createFormConfig({ data: {}, schema: fieldSet }),
-      isEmpty: true
-    });
+  const update = useCallback((targetId, payload) => {
+    setTimeout(() => hide(targetId), 200);
+    const updatedValue = { ...value };
+    if (!payload) {
+      delete updatedValue[targetId];
+    } else {
+      set(updatedValue, payload._id, payload);
+      if (targetId !== payload._id) {
+        delete updatedValue[targetId];
+      }
+    }
+    onChange(id, updatedValue);
+  }, [hide, id, onChange, value]);
 
-    // add a 'name' field for each item
-    fields.forEach((field) => field.fields.unshift({
-      value: field.isEmpty ? '' : field.name,
-      label: 'Name *',
-      schemaProperty: '_id',
-      type: formTypes.text,
-      validate: isText
-    }));
-
+  const renderExpandedField = useCallback((fieldset) => {
+    const { name, fields } = fieldset;
     return (
-      <div id={id} className={`subform${error ? ' form__error--wrapper' : ''}`}>
-        <label>{label}</label>
-        {error && <span className='form__error'>{error}</span>}
-        {fields.map(this.renderFieldset)}
+      <div className='subform__fields'>
+        <Form id={name} nowrap={true} inputMeta={fields} submit={update} cancel={hide}/>
       </div>
     );
-  }
+  }, [hide, update]);
 
-  renderFieldset (fieldset, index, fields) {
+  const toggleExpand = useCallback((e) => {
+    e.preventDefault();
+    const targetId = e.currentTarget.getAttribute('data-value');
+    setExpanded((prev) => ({
+      ...prev,
+      [targetId]: !prev[targetId]
+    }));
+  }, []);
+
+  const remove = useCallback((e) => {
+    e.preventDefault();
+    const targetId = e.currentTarget.getAttribute('data-value');
+    update(targetId, null);
+  }, [update]);
+
+  const renderFieldset = useCallback((fieldset, index, fields) => {
     const { name } = fieldset;
-    const isExpanded = this.state.expanded[name];
-    const expanded = isExpanded ? ' subform__item--expanded' : '';
+    const isExpanded = expanded[name];
+    const expandedClass = isExpanded ? ' subform__item--expanded' : '';
     const isLast = index === fields.length - 1;
-    const last = isLast ? ' subform__item--last' : '';
+    const lastClass = isLast ? ' subform__item--last' : '';
     let linkText;
 
     if (isExpanded) {
@@ -74,74 +79,54 @@ class SubForm extends React.Component {
     }
 
     return (
-      <div key={name} className={`subform__item${expanded}${last}`}>
+      <div key={name} className={`subform__item${expandedClass}${lastClass}`}>
         <div className='subform__ui'>
           <span className='subform__name'>{name}</span>
           <button
             className='subform__button'
-            onClick={this.toggleExpand}
+            onClick={toggleExpand}
             data-value={name}
           >{linkText}</button>
-          {isExpanded && !fieldset.isEmpty
-            ? (
+          {isExpanded && !fieldset.isEmpty && (
             <button
               className='subform__button link--secondary subform__remove'
-              onClick={this.remove}
+              onClick={remove}
               data-value={name}
             >✗ Remove</button>
-              )
-            : null}
-        </div>
-        { isExpanded ? this.renderExpandedField(fieldset) : null }
+          )}
+      </div>
+        {isExpanded && renderExpandedField(fieldset)}
       </div>
     );
-  }
+  }, [expanded, remove, renderExpandedField, toggleExpand]);
 
-  renderExpandedField (fieldset) {
-    const { name, fields } = fieldset;
-    return (
-      <div className='subform__fields'>
-        <Form id={name} nowrap={true} inputMeta={fields} submit={this.update} cancel={this.hide}/>
-      </div>
-    );
-  }
+  const fields = Object.keys(value).map((key) => ({
+    name: key,
+    fields: createFormConfig({ data: value[key], schema: fieldSet })
+  }));
 
-  toggleExpand (e) {
-    e.preventDefault();
-    const id = e.currentTarget.getAttribute('data-value');
-    const { expanded } = this.state;
-    expanded[id] = !expanded[id];
-    this.setState({ expanded });
-  }
+  fields.push({
+    name: 'Add',
+    fields: createFormConfig({ data: {}, schema: fieldSet }),
+    isEmpty: true
+  });
 
-  hide (id) {
-    const { expanded } = this.state;
-    expanded[id] = false;
-    this.setState({ expanded });
-  }
+  fields.forEach((field) => field.fields.unshift({
+    value: field.isEmpty ? '' : field.name,
+    label: 'Name *',
+    schemaProperty: '_id',
+    type: formTypes.text,
+    validate: isText
+  }));
 
-  remove (e) {
-    e.preventDefault();
-    const id = e.currentTarget.getAttribute('data-value');
-    this.update(id, null);
-  }
-
-  update (id, payload) {
-    setTimeout(() => this.hide(id), 200);
-    const { value } = this.props;
-    if (!payload) {
-      delete value[id];
-    } else {
-      // use the `_id` property to set the payload,
-      // to account for someone changing the name of the file.
-      set(value, payload._id, payload);
-      // if the old name doesn't match the new name,
-      // delete the old name to avoid duplication.
-      if (id !== payload._id) delete value[id];
-    }
-    this.props.onChange(this.props.id, value);
-  }
-}
+  return (
+  <div id={id} className={`subform${error ? ' form__error--wrapper' : ''}`}>
+    <label>{label}</label>
+    {error && <span className='form__error'>{error}</span>}
+    {fields.map(renderFieldset)}
+  </div>
+  );
+};
 
 SubForm.propTypes = {
   label: PropTypes.any,

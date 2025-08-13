@@ -19,10 +19,28 @@ This version of the dashboard requires Cumulus API >= feature/duplicate-granule-
 
 ## [Unreleased]
 
+### Fixed
+
+- **CUMULUS-3680**
+  - Fixed drop-down menus to include all collection and provider options .
+  - Removed unnecessary API calls from Operations and Providers pages.
+  - Fixed search on Operations overview page and added cypress tests for Operations page.
+- **CUMULUS-4094**
+  - Set the endDateTime to null for initial date range
+- **security vulnerabilities**
+  - Overrode pbkdf2 package and upgraded related packages to fix critical audit issue
+- **CUMULUS-4039**
+  - Updated to allow slashes in provider name and collection name 
+- **CUMULUS-4179**
+  - Updated cypress to a version which does not use deprecated `request` subdependency due to snyk failures
+  - Pinned `form-data` to ^4.0.4 and `elliptic` to ^6.6.1 to fix audit failures
+
 ## [v13.2.0] - 2025-05-14
 
 ### Added
 
+- **CUMULUS-3624**
+  - Added an inactivity modal to prompt inactive users and to logout after a period of no user interactions after the modal appears
 - **CUMULUS-3849**
   - Added a network error modal that pops up when the user is offline
 - **CUMULUS-4048**
@@ -40,11 +58,15 @@ This version of the dashboard requires Cumulus API >= feature/duplicate-granule-
   - Renamed cumulus-dashboard package name to `@cumulus/cumulus-dashboard`
 - **security vulnerabilities**
   - Upgraded axios and xml-crypto packages to fix audit issue
+- **CUMULUS-3813**
+  - Refactored the following files from class to function components: text.js, text-area.js, sub-form.js, Form.js, dropdown-async-command.js
 
 ### Deleted
 
 - **CUMULUS-4003**
   - Remove D3 and related libraries from dashboard.
+- **CUMULUS-4101**
+  - Removed the Internal Reconciliation Report reference from cumulus-dashboard and cumulus-api.
 
 ### Fixed
 

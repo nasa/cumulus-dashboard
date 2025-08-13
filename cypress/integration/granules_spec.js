@@ -901,7 +901,7 @@ describe('Dashboard Granules Page', () => {
     it('Should dynamically update menu, sidbar and breadcrumb /granules links with latest filter criteria', () => {
       const status = 'complete';
       const provider = 's3_provider';
-      const collectionId = 'Test-L2-Coastal___Operational/Near-Real-Time';
+      const collectionId = 'Test-L2/Coastal___Operational/Near-Real-Time';
       const searchShort = 'test';
       const search = 'test_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl2';
 
