@@ -5,6 +5,7 @@ import withQueryParams from 'react-router-query-params';
 import { withRouter } from 'react-router-dom';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { get } from 'object-path';
+import debounce from 'lodash/debounce';
 import { getInitialValueFromLocation } from '../../utils/url-helper';
 import {
   renderSearchInput,
@@ -66,11 +67,24 @@ const Search = ({
       paramKey,
       queryParams,
     });
-    if (currentValue) {
-      dispatch(action(currentValue, infixBoolean));
-    } else {
-      dispatch(clear(paramKey));
-    }
+
+    const debouncedDispatch = debounce((value) => {
+      if (value) {
+        dispatch(action(currentValue, infixBoolean));
+      } else {
+        dispatch(clear(paramKey));
+      }
+    }, 500);
+
+    debouncedDispatch(currentValue);
+    // if (currentValue) {
+    //   dispatch(action(currentValue, infixBoolean));
+    // } else {
+    //   dispatch(clear(paramKey));
+    // }
+    return () => {
+      debouncedDispatch.cancel();
+    };
   }, [action, infixBoolean, dispatch, location, paramKey, queryParams, clear]);
 
   const handleSearch = useCallback((query) => {
