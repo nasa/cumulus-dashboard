@@ -77,11 +77,6 @@ const Search = ({
     }, 500);
 
     debouncedDispatch(currentValue);
-    // if (currentValue) {
-    //   dispatch(action(currentValue, infixBoolean));
-    // } else {
-    //   dispatch(clear(paramKey));
-    // }
     return () => {
       debouncedDispatch.cancel();
     };
