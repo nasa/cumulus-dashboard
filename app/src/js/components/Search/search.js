@@ -77,6 +77,7 @@ const Search = ({
     }, 500);
 
     debouncedDispatch(currentValue);
+
     return () => {
       debouncedDispatch.cancel();
     };

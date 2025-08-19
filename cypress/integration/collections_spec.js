@@ -650,6 +650,8 @@ describe('Dashboard Collections Page', () => {
     });
 
     it('should dynamically update menu, sidbar and breadcrumb links with latest filter criteria', () => {
+      const providerString = 's3_provider';
+      const searchString = 'Test-L2%2FCoastal';
       cy.visit('/collections/all');
       cy.wait('@getCollections');
 
@@ -657,27 +659,28 @@ describe('Dashboard Collections Page', () => {
       cy.get('@provider-input').click().type('s3').type('{enter}');
       cy.wait(1000);
       cy.get('.search').as('search');
-      cy.get('@search').click().type('Test').type('{enter}');
+      cy.get('@search').click().type('Test');
       cy.wait(1000);
+      cy.get('@search').type('{enter}');
       cy.get('span > a', { timeout: 10000 }).click();
 
       // Breakcrumb <Link> contain correct query params
       cy.get('.breadcrumb > :nth-child(2) > a')
         .should('have.attr', 'href')
-        .and('include', 'provider=s3_provider')
-        .and('include', 'search=Test-L2%2FCoastal');
+        .and('include', `provider=${providerString}`)
+        .and('include', `search=${searchString}`);
 
       // Menu <Link>s contain correct query params
       cy.get('nav > ul > :nth-child(1) > a')
         .should('have.attr', 'href')
-        .and('include', 'provider=s3_provider')
-        .and('include', 'search=Test-L2%2FCoastal');
+        .and('include', `provider=${providerString}`)
+        .and('include', `search=${searchString}`);
 
       // Sidebar <Link>s contain correct query params
       cy.get('.sidebar__nav--back')
         .should('have.attr', 'href')
-        .and('include', 'provider=s3_provider')
-        .and('include', 'search=Test-L2%2FCoastal');
+        .and('include', `provider=${providerString}`)
+        .and('include', `search=${searchString}`);
     });
 
     describe('Encoded name and version', () => {
