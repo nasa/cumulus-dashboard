@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-4039**
   - Updated to allow slashes in provider name and collection name
 - **CUMULUS-4122**
-  - Improved granule search performance: Granule ID search now uses prefix matching by default.
+  - Improved granule search performance by using prefix matching by default.
   - Added a `Search by Infix` toggle to allow infix (contains) searches for Granule ID
 - **CUMULUS-4179**
   - Updated cypress to a version which does not use deprecated `request` subdependency due to snyk failures
