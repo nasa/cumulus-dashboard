@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+- **CUMULUS-CUMULUS-4171**
+  - Removed override of pbkdf2 ^3.1.3 for crypto-browserify since pbkdf2 ^3.1.3 will be pulled automatically
 - **CUMULUS-3680**
   - Fixed drop-down menus to include all collection and provider options .
   - Removed unnecessary API calls from Operations and Providers pages.
