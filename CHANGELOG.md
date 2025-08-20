@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-4193**
   - Removing dependency override of elliptic in the crypto-browserify and browserify-sign packages
+  - Regenerated package-lock.json and various packages have been updated
 - **CUMULUS-4171**
   - Removed override of pbkdf2 ^3.1.3 for crypto-browserify since pbkdf2 ^3.1.3 will be pulled automatically
 - **CUMULUS-3680**
