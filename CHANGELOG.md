@@ -20,7 +20,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **security vulnerabilities**
   - Overrode pbkdf2 package and upgraded related packages to fix critical audit issue
 - **CUMULUS-4039**
-  - Updated to allow slashes in provider name and collection name 
+  - Updated to allow slashes in provider name and collection name
+- **CUMULUS-4122**
+  - Improved granule search performance by using prefix matching by default.
+  - Added a `Search by Infix` toggle to allow infix (contains) searches for Granule ID
 - **CUMULUS-4179**
   - Updated cypress to a version which does not use deprecated `request` subdependency due to snyk failures
   - Pinned `form-data` to ^4.0.4 and `elliptic` to ^6.6.1 to fix audit failures
