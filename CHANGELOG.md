@@ -22,7 +22,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-4122**
   - Improved granule search performance by using prefix matching by default.
   - Added a `Search by Infix` toggle to allow infix (contains) searches for Granule ID
-  - Updated to allow slashes in provider name and collection name 
 - **CUMULUS-4171**
   - Removed override of pbkdf2 ^3.1.3 for crypto-browserify since pbkdf2 ^3.1.3 will be pulled automatically
 - **CUMULUS-4179**
