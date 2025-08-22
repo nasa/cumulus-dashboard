@@ -204,7 +204,7 @@
     "vm-browserify": "^1.1.2"
   },
   "optionalDependencies": {
-    "cypress": "12.0.0"
+    "cypress": "12.17.4"
   },
   "overrides": {
     "form-data": "^4.0.4",
