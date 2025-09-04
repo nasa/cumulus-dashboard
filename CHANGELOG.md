@@ -27,6 +27,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-4179**
   - Updated cypress to a version which does not use deprecated `request` subdependency due to snyk failures
   - Pinned `form-data` to ^4.0.4 and `elliptic` to ^6.6.1 to fix audit failures
+- **CUMULUS-4180**
+  - Upgraded cypress and cypress test specs to 12.17.4
 - **CUMULUS-4193**
   - Removing dependency override of elliptic in the crypto-browserify and browserify-sign packages
   - Regenerated package-lock.json and various packages have been updated
