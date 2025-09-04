@@ -9,7 +9,7 @@ describe('Dashboard Executions Page', () => {
     });
   });
 
-  describe('When logged in', {testIsolation: false}, () => {
+  describe('When logged in', { testIsolation: false }, () => {
     before(() => {
       cy.visit('/');
       cy.task('resetState');
@@ -93,7 +93,6 @@ describe('Dashboard Executions Page', () => {
       cy.url().should('include', 'executions');
       cy.contains('.heading--xlarge', 'Executions');
 
-      
       cy.get('.table .tbody .tr .td.table__main-asset')
         .find(`a[title="${executionName}"]`)
         .click({ force: true });

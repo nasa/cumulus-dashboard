@@ -52,7 +52,7 @@ describe('Dashboard Home Page', () => {
     shouldBeLoggedIn();
   });
 
-  describe('When logged in', {testIsolation: false}, () => {
+  describe('When logged in', { testIsolation: false }, () => {
     before(() => {
       cy.visit('/');
       cy.task('resetState');
@@ -84,7 +84,6 @@ describe('Dashboard Home Page', () => {
         cy.get('h3').should('have.text', 'Date and Time Range');
       });
       cy.get('.datetime__range').within(() => {
-        
         cy.setDatepickerDropdown('1 week');
 
         cy.get('[data-cy=endDateTime]').within(() => {

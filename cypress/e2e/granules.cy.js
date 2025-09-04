@@ -13,7 +13,7 @@ describe('Dashboard Granules Page', () => {
     });
   });
 
-  describe('When logged in', {testIsolation: false}, () => {
+  describe('When logged in', { testIsolation: false }, () => {
     before(() => {
       cy.visit('/');
       cy.task('resetState');

@@ -2,7 +2,7 @@ import { shouldBeRedirectedToLogin, shouldHaveDeletedToken } from '../support/as
 import { listGranules } from '../../app/src/js/actions';
 import { SET_TOKEN } from '../../app/src/js/actions/types';
 
-describe('Dashboard authentication', {testIsolation: false}, () => {
+describe('Dashboard authentication', { testIsolation: false }, () => {
   before(() => {
     // make sure to visit app before cy.login() so that reference to
     // data store exists on window.appStore

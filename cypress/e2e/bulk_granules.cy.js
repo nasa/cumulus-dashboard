@@ -1,4 +1,4 @@
-describe('Dashboard Bulk Granules', {testIsolation: false}, () => {
+describe('Dashboard Bulk Granules', { testIsolation: false }, () => {
   describe('When logged in', () => {
     before(() => {
       cy.visit('/');
@@ -304,7 +304,7 @@ describe('Dashboard Bulk Granules', {testIsolation: false}, () => {
 
         cy.contains('button', 'Run Bulk Granules').click({ force: true });
 
-        cy.get('.bulk_granules')  
+        cy.get('.bulk_granules')
           .first()
           .within(() => {
             cy.contains('button', 'Run Bulk Reingest').click({ force: true });
