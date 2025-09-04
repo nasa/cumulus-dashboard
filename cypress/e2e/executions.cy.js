@@ -9,7 +9,7 @@ describe('Dashboard Executions Page', () => {
     });
   });
 
-  describe('When logged in', () => {
+  describe('When logged in', {testIsolation: false}, () => {
     before(() => {
       cy.visit('/');
       cy.task('resetState');
@@ -92,9 +92,11 @@ describe('Dashboard Executions Page', () => {
 
       cy.url().should('include', 'executions');
       cy.contains('.heading--xlarge', 'Executions');
-      cy.get('.table .tbody .tr .td.table__main-asset').within(() => {
-        cy.get(`a[title=${executionName}]`).click({ force: true });
-      });
+
+      
+      cy.get('.table .tbody .tr .td.table__main-asset')
+        .find(`a[title="${executionName}"]`)
+        .click({ force: true });
 
       cy.contains('.heading--large', 'Execution');
       cy.get('.button--download').should('have.length', 1);

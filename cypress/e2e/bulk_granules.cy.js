@@ -1,4 +1,4 @@
-describe('Dashboard Bulk Granules', () => {
+describe('Dashboard Bulk Granules', {testIsolation: false}, () => {
   describe('When logged in', () => {
     before(() => {
       cy.visit('/');
@@ -16,6 +16,7 @@ describe('Dashboard Bulk Granules', () => {
       cy.contains('button', 'Run Bulk Granules').click();
 
       cy.get('.bulk_granules')
+        .first()
         .within(() => {
           cy.contains('button', 'Run Bulk Delete');
           cy.contains('button', 'Run Bulk Operations');
@@ -34,6 +35,7 @@ describe('Dashboard Bulk Granules', () => {
       cy.contains('button', 'Run Bulk Granules').click();
 
       cy.get('.bulk_granules')
+        .first()
         .within(() => {
           cy.contains('button', 'Run Bulk Operations').click();
         });
@@ -63,6 +65,7 @@ describe('Dashboard Bulk Granules', () => {
       cy.contains('button', 'Run Bulk Granules').click();
 
       cy.get('.bulk_granules')
+        .first()
         .within(() => {
           cy.contains('button', 'Run Bulk Operations').click();
         });
@@ -91,6 +94,7 @@ describe('Dashboard Bulk Granules', () => {
       cy.contains('button', 'Run Bulk Granules').click();
 
       cy.get('.bulk_granules')
+        .first()
         .within(() => {
           cy.contains('button', 'Run Bulk Delete').click();
         });
@@ -123,6 +127,7 @@ describe('Dashboard Bulk Granules', () => {
       cy.contains('button', 'Run Bulk Granules').click();
 
       cy.get('.bulk_granules')
+        .first()
         .within(() => {
           cy.contains('button', 'Run Bulk Reingest').click();
         });
@@ -152,6 +157,7 @@ describe('Dashboard Bulk Granules', () => {
       cy.contains('button', 'Run Bulk Granules').click();
 
       cy.get('.bulk_granules')
+        .first()
         .within(() => {
           cy.contains('button', 'Run Bulk Recovery').click();
         });
@@ -181,6 +187,7 @@ describe('Dashboard Bulk Granules', () => {
         cy.contains('button', 'Run Bulk Granules').click();
 
         cy.get('.bulk_granules')
+          .first()
           .within(() => {
             cy.contains('button', 'Run Bulk Operations').click();
           });
@@ -204,6 +211,7 @@ describe('Dashboard Bulk Granules', () => {
         cy.contains('button', 'Run Bulk Granules').click({ force: true });
 
         cy.get('.bulk_granules')
+          .first()
           .within(() => {
             cy.contains('button', 'Run Bulk Operations').click({ force: true });
           });
@@ -226,6 +234,7 @@ describe('Dashboard Bulk Granules', () => {
         cy.contains('button', 'Run Bulk Granules').click();
 
         cy.get('.bulk_granules')
+          .first()
           .within(() => {
             cy.contains('button', 'Run Bulk Delete').click();
           });
@@ -249,6 +258,7 @@ describe('Dashboard Bulk Granules', () => {
         cy.contains('button', 'Run Bulk Granules').click({ force: true });
 
         cy.get('.bulk_granules')
+          .first()
           .within(() => {
             cy.contains('button', 'Run Bulk Delete').click({ force: true });
           });
@@ -271,6 +281,7 @@ describe('Dashboard Bulk Granules', () => {
         cy.contains('button', 'Run Bulk Granules').click();
 
         cy.get('.bulk_granules')
+          .first()
           .within(() => {
             cy.contains('button', 'Run Bulk Reingest').click();
           });
@@ -293,7 +304,8 @@ describe('Dashboard Bulk Granules', () => {
 
         cy.contains('button', 'Run Bulk Granules').click({ force: true });
 
-        cy.get('.bulk_granules')
+        cy.get('.bulk_granules')  
+          .first()
           .within(() => {
             cy.contains('button', 'Run Bulk Reingest').click({ force: true });
           });
@@ -316,6 +328,7 @@ describe('Dashboard Bulk Granules', () => {
         cy.contains('button', 'Run Bulk Granules').click({ force: true });
 
         cy.get('.bulk_granules')
+          .first()
           .within(() => {
             cy.contains('button', 'Run Bulk Recovery').click({ force: true });
           });
@@ -339,6 +352,7 @@ describe('Dashboard Bulk Granules', () => {
         cy.contains('button', 'Run Bulk Granules').click({ force: true });
 
         cy.get('.bulk_granules')
+          .first()
           .within(() => {
             cy.contains('button', 'Run Bulk Recovery').click({ force: true });
           });

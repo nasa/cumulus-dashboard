@@ -8,7 +8,7 @@ describe('Dashboard Workflows Page', () => {
     });
   });
 
-  describe('When logged in', () => {
+  describe('When logged in', {testIsolation: false}, () => {
     before(() => {
       cy.task('resetState');
       cy.visit('/');

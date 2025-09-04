@@ -18,7 +18,7 @@ describe('Dashboard Collections Page', () => {
     });
   });
 
-  describe('When logged in', () => {
+  describe('When logged in', {testIsolation: false}, () => {
     before(() => {
       cy.visit('/');
       cy.task('resetState');

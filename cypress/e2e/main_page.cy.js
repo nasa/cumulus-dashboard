@@ -19,9 +19,11 @@ describe('Dashboard Home Page', () => {
 
   it('Logging in successfully redirects to the Dashboard main page', () => {
     cy.visit('/');
-    cy.get('div[class=modal-content]').within(() => {
-      cy.get('a').click();
-    });
+    cy.get('div[class=modal-content]')
+      .filter(':has(.oauth-modal__header)')
+      .within(() => {
+        cy.get('a').click();
+      });
 
     shouldBeLoggedIn();
     cy.get('nav')
@@ -41,14 +43,16 @@ describe('Dashboard Home Page', () => {
         window.location.search = 'token=failed-token';
       });
 
-    cy.get('div[class=modal-content]').within(() => {
-      cy.get('a').click({ force: true });
-    });
+    cy.get('div[class=modal-content]')
+      .filter(':has(.oauth-modal__header)')
+      .within(() => {
+        cy.get('a').click({ force: true });
+      });
 
     shouldBeLoggedIn();
   });
 
-  describe('When logged in', () => {
+  describe('When logged in', {testIsolation: false}, () => {
     before(() => {
       cy.visit('/');
       cy.task('resetState');
@@ -76,8 +80,11 @@ describe('Dashboard Home Page', () => {
     it('Updates start and end time components when dropdown is selected', () => {
       const now = Date.UTC(2009, 0, 5, 13, 35, 3); // 2009-01-05T13:35:03.000Z
       cy.clock(now);
-      cy.get('main[class=main] section').within(() => {
+      cy.get('.datetime__wrapper').within(() => {
         cy.get('h3').should('have.text', 'Date and Time Range');
+      });
+      cy.get('.datetime__range').within(() => {
+        
         cy.setDatepickerDropdown('1 week');
 
         cy.get('[data-cy=endDateTime]').within(() => {
@@ -115,8 +122,10 @@ describe('Dashboard Home Page', () => {
     it('should retain query parameters when moving between pages.', () => {
       const now = Date.UTC(2015, 2, 17, 16, 0, 0); // 2015-03-17T16:00:00.000Z
       cy.clock(now);
-      cy.get('main[class=main] section').within(() => {
+      cy.get('.datetime__wrapper').within(() => {
         cy.get('h3').should('have.text', 'Date and Time Range');
+      });
+      cy.get('.datetime__range').within(() => {
         cy.setDatepickerDropdown('1 hour');
 
         cy.url().should('include', 'startDateTime=201503171500');

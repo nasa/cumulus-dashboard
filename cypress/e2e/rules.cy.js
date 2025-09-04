@@ -7,7 +7,7 @@ describe('Rules page', () => {
     shouldBeRedirectedToLogin();
   });
 
-  describe('when logged in', () => {
+  describe('when logged in', {testIsolation: false}, () => {
     const testRuleName = 'MOD09GK_TEST_kinesisRule';
     const testProviderId = 'PODAAC_SWOT';
     const testCollectionId = 'MOD09GK / 006';
