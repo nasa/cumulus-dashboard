@@ -4,6 +4,9 @@
 
 set -e
 
+apt-get update -y
+apt-get install curl -y
+
 cmd="$@"
 
 until curl --connect-timeout 5 -sS http://localhost:5001/version 2> /dev/null | grep 'api_version' > /dev/null; do
