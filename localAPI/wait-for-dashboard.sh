@@ -4,19 +4,16 @@
 
 set -e
 
-apt-get update -y
-apt-get install curl -y
-
 cmd="$@"
 
-until curl --connect-timeout 5 -sS http://localhost:5001/version 2> /dev/null | grep 'api_version' > /dev/null; do
+until wget --connect-timeout=5 -q -O - http://localhost:5001/version | grep 'api_version' > /dev/null; do
   >&2 echo "Cumulus localAPI is unavailable - sleeping"
   sleep 2
 done
 
 >&2 echo "LocalAPI is up - checking Localstack"
 
-until curl --connect-timeout 5 -sS curl localhost:3000 2> /dev/null | grep "Cumulus Dashboard" > /dev/null; do
+until wget --connect-timeout=5 -q -O - http://localhost:3000 | grep "Cumulus Dashboard" > /dev/null; do
   >&2 echo "Dashboard is unavailable - sleeping"
   sleep 2
 done
