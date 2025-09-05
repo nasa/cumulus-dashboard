@@ -1,5 +1,5 @@
-describe('Dashboard Bulk Granules', { testIsolation: false }, () => {
-  describe('When logged in', () => {
+describe('Dashboard Bulk Granules', () => {
+  describe('When logged in', { testIsolation: false }, () => {
     before(() => {
       cy.visit('/');
       cy.task('resetState');
