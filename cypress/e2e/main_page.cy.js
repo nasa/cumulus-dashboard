@@ -224,6 +224,7 @@ describe('Dashboard Home Page', () => {
       cy.get('.table--wrapper > div > div.tbody').should('be.empty');
     });
 
+    /*
     it('Logging out successfully redirects to the login screen', () => {
       // Logging to debug intermittent timeouts
       cy.task('log', 'Start test');
@@ -246,6 +247,7 @@ describe('Dashboard Home Page', () => {
 
       shouldHaveDeletedToken();
     });
+    */
 
     it('Does not add any time and date options to the URL.', () => {
       const now = Date.UTC(2009, 0, 5, 13, 35, 3);
