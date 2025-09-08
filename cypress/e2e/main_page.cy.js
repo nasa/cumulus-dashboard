@@ -65,6 +65,7 @@ describe('Dashboard Home Page', () => {
 
     it('displays a compatible Cumulus API Version number', () => {
       const apiVersionNumber = 'a.b.c';
+      cy.wait(1000); // adding small delay so that webpage has time to rerender before cypress accesses the DOM
       cy.window().its('appStore').then((store) => {
         store.dispatch({
           type: API_VERSION,
@@ -224,29 +225,6 @@ describe('Dashboard Home Page', () => {
       cy.get('.table--wrapper > div > div.tbody').should('be.empty');
     });
 
-    it('Logging out successfully redirects to the login screen', () => {
-      // Logging to debug intermittent timeouts
-      cy.task('log', 'Start test');
-
-      cy.get('nav li').last().within(() => {
-        cy.get('button').should('have.text', 'Log out');
-      });
-
-      cy.task('log', 'Click');
-
-      cy.get('nav li').last().click();
-      cy.url().should('include', '/auth');
-
-      cy.task('log', 'Visit collections');
-
-      cy.visit('collections');
-
-      cy.url().should('not.include', '/collections');
-      cy.url().should('include', '/auth');
-
-      shouldHaveDeletedToken();
-    });
-
     it('Does not add any time and date options to the URL.', () => {
       const now = Date.UTC(2009, 0, 5, 13, 35, 3);
       cy.clock(now);
@@ -273,6 +251,29 @@ describe('Dashboard Home Page', () => {
         cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '1');
         cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '35');
       });
+    });
+
+    it('Logging out successfully redirects to the login screen', () => {
+      // Logging to debug intermittent timeouts
+      cy.task('log', 'Start test');
+
+      cy.get('nav li').last().within(() => {
+        cy.get('button').should('have.text', 'Log out');
+      });
+
+      cy.task('log', 'Click');
+
+      cy.get('nav li').last().click();
+      cy.url().should('include', '/auth');
+
+      cy.task('log', 'Visit collections');
+
+      cy.visit('collections');
+
+      cy.url().should('not.include', '/collections');
+      cy.url().should('include', '/auth');
+
+      shouldHaveDeletedToken();
     });
 
     describe('The Timer', () => {

@@ -49,7 +49,6 @@ Cypress.Commands.add('login', () => {
         token
       });
     });
-    cy.wait(1000); // adding small delay so that webpage has time to rerender before cypress accesses the DOM
   });
 });
 
