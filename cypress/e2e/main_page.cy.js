@@ -61,7 +61,6 @@ describe('Dashboard Home Page', () => {
     beforeEach(() => {
       cy.login();
       cy.visit('/');
-      cy.wait(2000); 
     });
 
     it('displays a compatible Cumulus API Version number', () => {

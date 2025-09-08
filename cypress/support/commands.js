@@ -41,12 +41,15 @@ Cypress.Commands.add('login', () => {
     const redirectUrl = redirectStr.split(': ')[1];
     const queryStr = redirectUrl.split('?')[1];
     const token = queryStr.split('=')[1];
+    cy.log(`Login Token: ${token}`);
+    console.log(`Login Token: ${token}`);
     cy.window().its('appStore').then((store) => {
       store.dispatch({
         type: SET_TOKEN,
         token
       });
     });
+    cy.wait(200) // adding small delay so that webpage has time to rerender before cypress accesses the DOM
   });
 });
 
