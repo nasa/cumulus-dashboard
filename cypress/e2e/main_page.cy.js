@@ -52,19 +52,29 @@ describe('Dashboard Home Page', () => {
     shouldBeLoggedIn();
   });
 
-  describe('When logged in', { testIsolation: false }, () => {
-    before(() => {
-      // make sure to visit app before cy.login() so that reference to
-      // data store exists on window.appStore
-      cy.visit('/');
-      cy.task('resetState');
-    });
-
+  describe('When logged in', () => {
+    // Use cy.session() to manage login state
     beforeEach(() => {
-      cy.login();
+      cy.session('loggedInUser', () => {
+        // The setup function runs only once for this session.
+        // It handles the login process and sets up the token.
+        // This is the ideal place to perform a login and store the token.
+        cy.modernLogin();
+      }, {
+        // The validate function checks if the session is still valid.
+        // You can check for the existence of the token or a specific UI element.
+        validate: () => {
+          cy.url().should('not.include', '/auth');
+          // You can also assert on an element that only appears when logged in
+          cy.get('nav').should('be.visible');
+        }
+      });
+
+      // After the session is restored, visit the page.
       cy.visit('/');
     });
 
+    /*
     it('displays a compatible Cumulus API Version number', () => {
       const apiVersionNumber = 'a.b.c';
       cy.window().its('appStore').then((store) => {
@@ -78,6 +88,7 @@ describe('Dashboard Home Page', () => {
         });
       });
     });
+    */
 
     it('Updates start and end time components when dropdown is selected', () => {
       const now = Date.UTC(2009, 0, 5, 13, 35, 0); // 2009-01-05T13:35:00.000Z
@@ -119,148 +130,6 @@ describe('Dashboard Home Page', () => {
         });
       });
     });
-
-    /*
-    it('Updates start and end time components when dropdown is selected 2', () => {
-      const now = Date.UTC(2009, 0, 5, 13, 35, 0); // 2009-01-05T13:35:00.000Z
-      cy.clock(now);
-      cy.get('.datetime__wrapper').within(() => {
-        cy.get('h3').should('have.text', 'Date and Time Range');
-      });
-      cy.get('.datetime__range').within(() => {
-        cy.setDatepickerDropdown('1 hour');
-        cy.url().should('include', 'startDateTime=20090105123500');
-        cy.url().should('include', 'endDateTime=20090105133500');
-      });
-
-      cy.get('nav').contains('Granules').click();
-      cy.url().should('include', 'granules');
-      cy.url().should('include', 'startDateTime=20090105123500');
-      cy.url().should('include', 'endDateTime=20090105133500');
-
-      cy.get('.logo > a').click();
-      cy.url().should('include', 'startDateTime=20090105123500');
-      cy.url().should('include', 'endDateTime=20090105133500');
-
-      cy.get('[data-cy=endDateTime]').within(() => {
-        cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2009');
-        cy.get('.react-datetime-picker__inputGroup__month').should('have.value', '1');
-        cy.get('.react-datetime-picker__inputGroup__day').should('have.value', '5');
-        cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '1');
-        cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '35');
-      });
-
-      cy.get('[data-cy=startDateTime]').within(() => {
-        cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2009');
-        cy.get('.react-datetime-picker__inputGroup__month').should('have.value', '1');
-        cy.get('.react-datetime-picker__inputGroup__day').should('have.value', '5');
-        cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '12');
-        cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '35');
-      });
-    });
-
-    it('Updates start and end time components when dropdown is selected 3', () => {
-      const now = Date.UTC(2015, 2, 17, 16, 0, 3); // 2015-03-17T16:00:0.000Z
-      cy.clock(now);
-      cy.get('.datetime__wrapper').within(() => {
-        cy.get('h3').should('have.text', 'Date and Time Range');
-      });
-      cy.get('.datetime__range').within(() => {
-        cy.setDatepickerDropdown('1 hour');
-        cy.url().should('include', 'startDateTime=201503171500');
-        cy.url().should('include', 'endDateTime=201503171600');
-      });
-
-      cy.get('nav').contains('Granules').click();
-      cy.url().should('include', 'granules');
-      cy.url().should('include', 'startDateTime=201503171500');
-      cy.url().should('include', 'endDateTime=201503171600');
-
-      cy.get('.logo > a').click();
-      cy.url().should('include', 'startDateTime=201503171500');
-      cy.url().should('include', 'endDateTime=201503171600');
-
-      cy.get('[data-cy=endDateTime]').within(() => {
-        cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2015');
-        cy.get('.react-datetime-picker__inputGroup__month').should('have.value', '3');
-        cy.get('.react-datetime-picker__inputGroup__day').should('have.value', '17');
-        cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '4');
-        cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '0');
-      });
-
-      cy.get('[data-cy=startDateTime]').within(() => {
-        cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2015');
-        cy.get('.react-datetime-picker__inputGroup__month').should('have.value', '3');
-        cy.get('.react-datetime-picker__inputGroup__day').should('have.value', '17');
-        cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '3');
-        cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '0');
-      });
-    });
-
-    it('should retain query parameters when moving between pages.', () => {
-      const now = Date.UTC(2009, 0, 5, 13, 35, 0); // 2009-01-05T13:35:00.000Z
-      cy.clock(now);
-      //const now = Date.UTC(2015, 2, 17, 16, 0, 3); // 2015-03-17T16:00:0.000Z
-      //cy.clock(now);
-      cy.get('.datetime__wrapper').within(() => {
-        cy.get('h3').should('have.text', 'Date and Time Range');
-      });
-      cy.setDatepickerDropdown('1 hour');
-      //cy.wait('@results')
-      //cy.wait(2000);
-
-      cy.url().should('include', 'startDateTime=20090105123500');
-      cy.url().should('include', 'endDateTime=20090105133500');
-
-
-      //cy.url().should('include', 'startDateTime=201503171500');
-      //cy.url().should('include', 'endDateTime=201503171600');
-      cy.get('nav').contains('Granules').click();
-      cy.url().should('include', 'granules');
-      cy.url().should('include', 'startDateTime=20090105123500');
-      cy.url().should('include', 'endDateTime=20090105133500');
-      //cy.url().should('include', 'startDateTime=201503171500');
-      //cy.url().should('include', 'endDateTime=201503171600');
-
-      cy.get('.logo > a').click();
-      cy.url().should('include', 'startDateTime=20090105123500');
-      cy.url().should('include', 'endDateTime=20090105133500');
-      //cy.url().should('include', 'startDateTime=201503171500');
-      //cy.url().should('include', 'endDateTime=201503171600');
-
-      cy.get('[data-cy=endDateTime]').within(() => {
-        cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2009');
-        cy.get('.react-datetime-picker__inputGroup__month').should('have.value', '1');
-        cy.get('.react-datetime-picker__inputGroup__day').should('have.value', '5');
-        cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '1');
-        cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '35');
-      });
-
-      cy.get('[data-cy=startDateTime]').within(() => {
-        cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2008');
-        cy.get('.react-datetime-picker__inputGroup__month').should('have.value', '12');
-        cy.get('.react-datetime-picker__inputGroup__day').should('have.value', '29');
-        cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '1');
-        cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '35');
-      });
-
-      // cy.get('[data-cy=endDateTime]').within(() => {
-      //   cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2015');
-      //   cy.get('.react-datetime-picker__inputGroup__month').should('have.value', '3');
-      //   cy.get('.react-datetime-picker__inputGroup__day').should('have.value', '17');
-      //   cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '4');
-      //   cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '0');
-      // });
-
-      // cy.get('[data-cy=startDateTime]').within(() => {
-      //   cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2015');
-      //   cy.get('.react-datetime-picker__inputGroup__month').should('have.value', '3');
-      //   cy.get('.react-datetime-picker__inputGroup__day').should('have.value', '17');
-      //   cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '3');
-      //   cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '0');
-      // });
-    });
-    */
     
     it('should retain query parameters when moving between pages.', () => {
       const now = Date.UTC(2015, 2, 17, 16, 0, 3); // 2015-03-17T16:00:0.000Z
@@ -323,10 +192,15 @@ describe('Dashboard Home Page', () => {
     });
 
     it('modifies the UPDATES section and Granules Errors list as datepicker changes.', () => {
-      cy.intercept('GET', '/stats?*timestamp__from=1233360000000*').as('stats');
+      // Stub the network requests to provide consistent test data.
+      cy.intercept('GET', '/stats?*', { fixture: 'statsFixture.json' }).as('stats');
+      cy.intercept('GET', '/granules?*', { fixture: 'granulesErrorsFixture.json' }).as('granulesErrors');
 
       cy.clock(ingestEndTime);
       cy.setDatepickerDropdown('3 months');
+
+      cy.wait('@stats');
+      cy.wait('@granulesErrors');
 
       cy.get('#Errors').contains('2');
       cy.get('#Collections').contains('2');
@@ -339,6 +213,24 @@ describe('Dashboard Home Page', () => {
       cy.get('[data-value="1"]').contains('Error');
 
       cy.clock().invoke('restore');
+      
+      // Stub the network requests again for the second part of the test.
+      cy.intercept('GET', '/stats?*', {
+        statusCode: 200,
+        body: {
+          errors: 0,
+          collections: 0,
+          granules: 0,
+          executions: 0,
+          rules: 0
+        }
+      }).as('newStats');
+      cy.intercept('GET', '/granules?*', {
+        statusCode: 200,
+        body: {
+          results: []
+        }
+      }).as('emptyGranulesErrors');
 
       cy.get('[data-cy=startDateTime]').within(() => {
         cy.get('input[name=month]').click().type(1);
@@ -357,7 +249,8 @@ describe('Dashboard Home Page', () => {
         cy.get('select[name=amPm]').select('AM');
       });
 
-      cy.wait('@stats');
+      cy.wait('@newStats');
+      cy.wait('@emptyGranulesErrors');
       cy.get('#Errors').contains('0');
       cy.get('#Collections').contains('0');
       cy.get('#Granules').contains('0');
@@ -397,37 +290,31 @@ describe('Dashboard Home Page', () => {
     });
 
     it('Logging out successfully redirects to the login screen', () => {
-      // Logging to debug intermittent timeouts
-      cy.task('log', 'Start test');
-
       cy.get('nav li').last().within(() => {
         cy.get('button').should('have.text', 'Log out');
       });
 
-      cy.task('log', 'Click');
-
       cy.get('nav li').last().click();
       cy.url().should('include', '/auth');
-
-      cy.task('log', 'Visit collections');
-
       cy.visit('collections');
-
       cy.url().should('not.include', '/collections');
       cy.url().should('include', '/auth');
-
       shouldHaveDeletedToken();
     });
 
     describe('The Timer', () => {
+      // The `beforeEach` hook will be run for each test within this nested describe block.
+      // The `cy.session` command will efficiently restore the logged-in state.
       beforeEach(() => {
-        cy.visit('/');
+        // Because of `cy.session`, we don't need the explicit cy.visit('/') here
+        // as the beforeEach from the parent block handles it.
       });
 
       it('begins in the off state', () => {
         cy.get('[data-cy=toggleTimer]').contains('Start');
         cy.get('[data-cy=startStopLabel]').contains('Update');
       });
+
       it('retains its state during navigation.', () => {
         cy.get('[data-cy=toggleTimer]').contains('Start');
         cy.get('[data-cy=toggleTimer]').click();

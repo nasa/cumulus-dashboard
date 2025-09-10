@@ -52,6 +52,26 @@ Cypress.Commands.add('login', () => {
   });
 });
 
+// this login command is intended to be used for tests that do not depend on .appStore
+// We should use this for tests using cy.sesssion with test isolation
+Cypress.Commands.add('modernLogin', () => {
+  const authUrl = `${Cypress.config('baseUrl')}/auth`;
+  cy.request({
+    url: `${Cypress.env('APIROOT')}/token?code=somecode`,
+    qs: { state: encodeURIComponent(authUrl) },
+    followRedirect: true
+  }).then((response) => {
+    const redirectStr = response.redirects[response.redirects.length - 1];
+    const redirectUrl = redirectStr.split(': ')[1];
+    const queryStr = redirectUrl.split('?')[1];
+    const token = queryStr.split('=')[1];
+    
+    // Only store the token in a Cypress environment variable for session reuse
+    Cypress.env('authToken', token);
+  });
+});
+
+
 Cypress.Commands.add('logout', () => {
   cy.window().its('appStore')
     .then((store) => {
@@ -59,6 +79,7 @@ Cypress.Commands.add('logout', () => {
         type: DELETE_TOKEN
       });
     });
+  Cypress.env('authToken', '');
   cy.reload();
 });
 

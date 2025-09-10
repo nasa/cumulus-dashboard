@@ -4,6 +4,7 @@ const plugins = require('./cypress/plugins/index');
 module.exports = defineConfig({
   env: {
     APIROOT: 'http://localhost:5001',
+    authToken: null,
   },
   retries: {
     runMode: 2,

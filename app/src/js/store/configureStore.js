@@ -57,7 +57,7 @@ export default function ourConfigureStore (preloadedState) {
   });
 
   if (window && window.Cypress && window.Cypress.env('TESTING') === true) {
-    window.appStore = store;
+    window.top.appStore = store; // make the store accessible across all tests in a test suite even when isolation is enabled. This persists between tests
   }
 
   return store;
