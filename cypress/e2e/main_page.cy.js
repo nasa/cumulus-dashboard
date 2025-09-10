@@ -54,6 +54,8 @@ describe('Dashboard Home Page', () => {
 
   describe('When logged in', { testIsolation: false }, () => {
     before(() => {
+      // make sure to visit app before cy.login() so that reference to
+      // data store exists on window.appStore
       cy.visit('/');
       cy.task('resetState');
     });
@@ -118,6 +120,7 @@ describe('Dashboard Home Page', () => {
       });
     });
 
+    /*
     it('Updates start and end time components when dropdown is selected 2', () => {
       const now = Date.UTC(2009, 0, 5, 13, 35, 0); // 2009-01-05T13:35:00.000Z
       cy.clock(now);
@@ -241,7 +244,45 @@ describe('Dashboard Home Page', () => {
         cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '35');
       });
 
-      /*
+      // cy.get('[data-cy=endDateTime]').within(() => {
+      //   cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2015');
+      //   cy.get('.react-datetime-picker__inputGroup__month').should('have.value', '3');
+      //   cy.get('.react-datetime-picker__inputGroup__day').should('have.value', '17');
+      //   cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '4');
+      //   cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '0');
+      // });
+
+      // cy.get('[data-cy=startDateTime]').within(() => {
+      //   cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2015');
+      //   cy.get('.react-datetime-picker__inputGroup__month').should('have.value', '3');
+      //   cy.get('.react-datetime-picker__inputGroup__day').should('have.value', '17');
+      //   cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '3');
+      //   cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '0');
+      // });
+    });
+    */
+    
+    it('should retain query parameters when moving between pages.', () => {
+      const now = Date.UTC(2015, 2, 17, 16, 0, 3); // 2015-03-17T16:00:0.000Z
+      cy.clock(now);
+      cy.get('.datetime__wrapper').within(() => {
+        cy.get('h3').should('have.text', 'Date and Time Range');
+      });
+      cy.get('.datetime__range').within(() => {
+        cy.setDatepickerDropdown('1 hour');
+        cy.url().should('include', 'startDateTime=201503171500');
+        cy.url().should('include', 'endDateTime=201503171600');
+      });
+
+      cy.get('nav').contains('Granules').click();
+      cy.url().should('include', 'granules');
+      cy.url().should('include', 'startDateTime=201503171500');
+      cy.url().should('include', 'endDateTime=201503171600');
+
+      cy.get('.logo > a').click();
+      cy.url().should('include', 'startDateTime=201503171500');
+      cy.url().should('include', 'endDateTime=201503171600');
+
       cy.get('[data-cy=endDateTime]').within(() => {
         cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2015');
         cy.get('.react-datetime-picker__inputGroup__month').should('have.value', '3');
@@ -257,7 +298,6 @@ describe('Dashboard Home Page', () => {
         cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '3');
         cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '0');
       });
-      */
     });
 
     it('Accepts dates entered on the date picker.', () => {
