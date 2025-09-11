@@ -52,29 +52,18 @@ describe('Dashboard Home Page', () => {
     shouldBeLoggedIn();
   });
 
-  describe('When logged in', () => {
-    // Use cy.session() to manage login state
-    beforeEach(() => {
-      cy.session('loggedInUser', () => {
-        // The setup function runs only once for this session.
-        // It handles the login process and sets up the token.
-        // This is the ideal place to perform a login and store the token.
-        cy.modernLogin();
-      }, {
-        // The validate function checks if the session is still valid.
-        // You can check for the existence of the token or a specific UI element.
-        validate: () => {
-          cy.url().should('not.include', '/auth');
-          // You can also assert on an element that only appears when logged in
-          cy.get('nav').should('be.visible');
-        }
-      });
-
-      // After the session is restored, visit the page.
+  describe('When logged in', { testIsolation: false }, () => {
+    before(() => {
       cy.visit('/');
+      cy.task('resetState');
     });
 
-    /*
+    // Use cy.session() to manage login state
+    beforeEach(() => {
+      cy.login();
+      cy.visit('/');
+    });
+    
     it('displays a compatible Cumulus API Version number', () => {
       const apiVersionNumber = 'a.b.c';
       cy.window().its('appStore').then((store) => {
@@ -88,7 +77,6 @@ describe('Dashboard Home Page', () => {
         });
       });
     });
-    */
 
     it('Updates start and end time components when dropdown is selected', () => {
       const now = Date.UTC(2009, 0, 5, 13, 35, 0); // 2009-01-05T13:35:00.000Z
@@ -132,8 +120,9 @@ describe('Dashboard Home Page', () => {
     });
     
     it('should retain query parameters when moving between pages.', () => {
-      const now = Date.UTC(2015, 2, 17, 16, 0, 3); // 2015-03-17T16:00:0.000Z
+      const now = Date.UTC(2015, 2, 17, 16, 0, 0); // 2015-03-17T16:00:00.000Z
       cy.clock(now);
+
       cy.get('.datetime__wrapper').within(() => {
         cy.get('h3').should('have.text', 'Date and Time Range');
       });
