@@ -41,7 +41,7 @@ Cypress.Commands.add('login', () => {
     const redirectUrl = redirectStr.split(': ')[1];
     const queryStr = redirectUrl.split('?')[1];
     const token = queryStr.split('=')[1];
-    cy.window().its('appStore').then((store) => {
+    cy.window().its('top').its('appStore').then((store) => {
       store.dispatch({
         type: SET_TOKEN,
         token
@@ -51,12 +51,11 @@ Cypress.Commands.add('login', () => {
 });
 
 Cypress.Commands.add('logout', () => {
-  cy.window().its('appStore')
-    .then((store) => {
-      store.dispatch({
-        type: DELETE_TOKEN
-      });
+  cy.window().its('top').its('appStore').then((store) => {
+    store.dispatch({
+      type: DELETE_TOKEN
     });
+  });
   cy.reload();
 });
 

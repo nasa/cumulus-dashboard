@@ -13,7 +13,7 @@ exports.shouldBeRedirectedToLogin = () => {
 };
 
 exports.shouldHaveNoToken = () => {
-  cy.window().its('appStore').then((store) => {
+  cy.window().its('top').its('appStore').then((store) => {
     expect(store.getState().api.tokens.token).to.equal(null);
     cy.window().its('localStorage').invoke('getItem', 'auth-token').then((token) => {
       expect(token).to.equal(null);
@@ -22,7 +22,7 @@ exports.shouldHaveNoToken = () => {
 };
 
 exports.shouldHaveDeletedToken = () => {
-  cy.window().its('appStore').then((store) => {
+  cy.window().its('top').its('appStore').then((store) => {
     expect(store.getState().api.tokens.token).to.equal(null);
     cy.window().its('localStorage').invoke('getItem', 'auth-token').then((token) => {
       expect(token).to.eq('');

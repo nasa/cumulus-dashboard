@@ -66,7 +66,7 @@ describe('Dashboard Home Page', () => {
     
     it('displays a compatible Cumulus API Version number', () => {
       const apiVersionNumber = 'a.b.c';
-      cy.window().its('appStore').then((store) => {
+      cy.window().its('top').its('appStore').then((store) => {
         store.dispatch({
           type: API_VERSION,
           payload: { versionNumber: apiVersionNumber }
