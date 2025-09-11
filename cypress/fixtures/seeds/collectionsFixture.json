@@ -186,7 +186,7 @@
               "readDataFileForMetadata": true
           }
       },
-      "name": "Test-L2-Coastal",
+      "name": "Test-L2/Coastal",
       "sampleFileName": "test_20100818_002101_metopa_19866_eps_o_coa_1100_ovw.l2.nc",
       "url_path": "{cmrMetadata.CollectionReference.ShortName}",
       "version": "Operational/Near-Real-Time"

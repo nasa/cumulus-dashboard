@@ -34,7 +34,7 @@ describe('Dashboard Collections Page', () => {
       cy.intercept('GET', '/granules?limit=*').as('getGranules');
     });
 
-    it('should display a link to view collections', () => {
+    it('should have a filterable link to view collections', () => {
       cy.contains('nav li a', 'Collections').as('collections');
 
       cy.clock(ingestEndTime);
@@ -58,6 +58,8 @@ describe('Dashboard Collections Page', () => {
 
       cy.get('.table .tbody .tr').should('have.length', 6);
     });
+
+    // it('should display a link in the main table to view individual collections)
 
     it('should only display collections with active granules when time filter is applied', () => {
       cy.contains('nav li a', 'Collections').as('collections');
@@ -630,7 +632,26 @@ describe('Dashboard Collections Page', () => {
       });
     });
 
-    it('Should dynamically update menu, sidbar and breadcrumb links with latest filter criteria', () => {
+    it('Should display Granules based on toggling Search By infix', () => {
+      const prefix = 'MOD09GQ.A241';
+      const infix = 'A153';
+      cy.visit('/collections/collection/MOD09GQ/006');
+      cy.get('#chk_isInfixSearch').should('not.be.checked');
+      cy.get('.search').as('search');
+      cy.get('@search').click().type(prefix).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('@search').click().type(infix).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 0);
+      cy.get('#chk_isInfixSearch').check({ force: true });
+      cy.get('#chk_isInfixSearch').should('be.checked');
+      cy.get('.table .tbody .tr').should('have.length.at.least', 1);
+      cy.get('.table .tbody .tr').eq(0).children('.td').eq(2)
+        .contains(infix);
+    });
+
+    it('should dynamically update menu, sidbar and breadcrumb links with latest filter criteria', () => {
+      const providerString = 's3_provider';
+      const searchString = 'Test-L2%2FCoastal';
       cy.visit('/collections/all');
       cy.wait('@getCollections');
 
@@ -638,34 +659,36 @@ describe('Dashboard Collections Page', () => {
       cy.get('@provider-input').click().type('s3').type('{enter}');
       cy.wait(1000);
       cy.get('.search').as('search');
-      cy.get('@search').click().type('Test').type('{enter}');
+      cy.get('@search').click().type('Test');
       cy.wait(1000);
+      cy.get('@search').type('{enter}');
       cy.get('span > a', { timeout: 10000 }).click();
 
       // Breakcrumb <Link> contain correct query params
       cy.get('.breadcrumb > :nth-child(2) > a')
         .should('have.attr', 'href')
-        .and('include', 'provider=s3_provider')
-        .and('include', 'search=Test-L2-Coastal');
+        .and('include', `provider=${providerString}`)
+        .and('include', `search=${searchString}`);
 
       // Menu <Link>s contain correct query params
       cy.get('nav > ul > :nth-child(1) > a')
         .should('have.attr', 'href')
-        .and('include', 'provider=s3_provider')
-        .and('include', 'search=Test-L2-Coastal');
+        .and('include', `provider=${providerString}`)
+        .and('include', `search=${searchString}`);
 
       // Sidebar <Link>s contain correct query params
       cy.get('.sidebar__nav--back')
         .should('have.attr', 'href')
-        .and('include', 'provider=s3_provider')
-        .and('include', 'search=Test-L2-Coastal');
+        .and('include', `provider=${providerString}`)
+        .and('include', `search=${searchString}`);
     });
 
-    describe('Encoded version', () => {
-      const name = 'Test-L2-Coastal';
+    describe('Encoded name and version', () => {
+      const name = 'Test-L2/Coastal';
       const version = 'Operational/Near-Real-Time';
+      const encodedName = encodeURIComponent(name);
       const encodedVersion = encodeURIComponent(version);
-      const urlRegex = new RegExp(`collections/collection/${name}/${encodedVersion}`);
+      const urlRegex = new RegExp(`collections/collection/${encodedName}/${encodedVersion}`);
       it('should properly encode collections path', () => {
         cy.visit('/collections');
         cy.get('.table .tbody .tr').should('have.length', 6);
@@ -675,12 +698,13 @@ describe('Dashboard Collections Page', () => {
         cy.get('@testCollection').find('a').click();
         cy.url().should('match', urlRegex);
         cy.contains('.heading--large', `${name} / ${version}`);
+        cy.get('.heading--large').should('not.contain', encodedName);
         cy.get('.heading--large').should('not.contain', encodedVersion);
         cy.contains('.dropdown__collection', `${name}___${version}`);
       });
 
       it('should properly query sidebar pages', () => {
-        cy.visit(`/collections/collection/${name}/${encodedVersion}`);
+        cy.visit(`/collections/collection/${encodedName}/${encodedVersion}`);
         cy.contains('.sidebar a', 'Granules').click();
         cy.get('.table .tbody .tr').should('have.length', 1);
         cy.contains('.sidebar a', 'Completed').click();
@@ -692,12 +716,12 @@ describe('Dashboard Collections Page', () => {
       });
 
       it('should edit a collection', () => {
-        cy.visit(`/collections/collection/${name}/${encodedVersion}`);
+        cy.visit(`/collections/collection/${encodedName}/${encodedVersion}`);
         cy.wait('@getGranules');
         cy.contains('a', 'Edit').as('editCollection');
         cy.get('@editCollection')
           .should('have.attr', 'href')
-          .and('include', `/collections/edit/${name}/${encodedVersion}`);
+          .and('include', `/collections/edit/${encodedName}/${encodedVersion}`);
         cy.get('@editCollection').click();
         cy.contains('.heading--large', `${name}___${version}`);
 
@@ -727,10 +751,11 @@ describe('Dashboard Collections Page', () => {
       });
 
       it('should add and delete a new collection', () => {
-        const newName = 'TESTCOLLECTION';
+        const newName = 'TEST/COLLECTION';
         const newVersion = 'Test/006';
+        const newEncodedName = encodeURIComponent(newName);
         const newEncodedVersion = encodeURIComponent(newVersion);
-        cy.intercept('DELETE', `/collections/${newName}/${newEncodedVersion}`).as('deleteCollection');
+        cy.intercept('DELETE', `/collections/${newEncodedName}/${newEncodedVersion}`).as('deleteCollection');
         // Test collection loaded by cy.fixture
         let collection;
 
@@ -743,7 +768,7 @@ describe('Dashboard Collections Page', () => {
 
         // Fill the form with the test collection JSON and submit it
         cy.url().should('include', '/collections/add');
-        cy.fixture('TESTCOLLECTION___Test%2F006.json')
+        cy.fixture('TEST%2FCOLLECTION___Test%2F006.json')
           .then((json) => {
             cy.editJsonTextarea({ data: json });
             // Capture the test collection so we can confirm below that it was
@@ -756,7 +781,7 @@ describe('Dashboard Collections Page', () => {
         cy.wait('@postCollection')
           .then((interception) => cy.request({
             method: 'GET',
-            url: `${new URL(interception.request.url).origin}/collections/${newName}/${newEncodedVersion}`,
+            url: `${new URL(interception.request.url).origin}/collections/${newEncodedName}/${newEncodedVersion}`,
             headers: { Authorization: interception.request.headers.authorization },
           }))
           .then((response) => {
@@ -764,7 +789,7 @@ describe('Dashboard Collections Page', () => {
 
             // Display the new collection
             cy.wait('@getGranules');
-            cy.url().should('include', `/collections/collection/${newName}/${newEncodedVersion}`);
+            cy.url().should('include', `/collections/collection/${newEncodedName}/${newEncodedVersion}`);
             cy.contains('.heading--xlarge', 'Collections');
             cy.contains('.heading--large', `${newName} / ${newVersion}`);
 
@@ -776,9 +801,9 @@ describe('Dashboard Collections Page', () => {
             cy.wait('@getCollections');
             cy.url().should('contain', '/collections/all');
             cy.contains('.table .tbody .tr a', newName)
-              .should('have.attr', 'href', `/collections/collection/${newName}/${newEncodedVersion}`);
+              .should('have.attr', 'href', `/collections/collection/${newEncodedName}/${newEncodedVersion}`);
 
-            cy.visit(`/collections/collection/${newName}/${newEncodedVersion}`);
+            cy.visit(`/collections/collection/${newEncodedName}/${newEncodedVersion}`);
 
             // delete collection
             cy.get('.DeleteCollection > .button').click();

@@ -7,10 +7,40 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v13.3.0] - 2025-09-11
+
+### Fixed
+
+- **CUMULUS-3680**
+  - Fixed drop-down menus to include all collection and provider options .
+  - Removed unnecessary API calls from Operations and Providers pages.
+  - Fixed search on Operations overview page and added cypress tests for Operations page.
+- **CUMULUS-4094**
+  - Set the endDateTime to null for initial date range
+- **security vulnerabilities**
+  - Overrode pbkdf2 package and upgraded related packages to fix critical audit issue
+- **CUMULUS-4039**
+  - Updated to allow slashes in provider name and collection name
+- **CUMULUS-4122**
+  - Improved granule search performance by using prefix matching by default.
+  - Added a `Search by Infix` toggle to allow infix (contains) searches for Granule ID
+- **CUMULUS-4171**
+  - Removed override of pbkdf2 ^3.1.3 for crypto-browserify since pbkdf2 ^3.1.3 will be pulled automatically
+- **CUMULUS-4179**
+  - Updated cypress to a version which does not use deprecated `request` subdependency due to snyk failures
+  - Pinned `form-data` to ^4.0.4 and `elliptic` to ^6.6.1 to fix audit failures
+- **CUMULUS-4193**
+  - Removing dependency override of elliptic in the crypto-browserify and browserify-sign packages
+  - Regenerated package-lock.json and various packages have been updated
+
 ## [v13.2.0] - 2025-05-14
 
 ### Added
 
+- **CUMULUS-3624**
+  - Added an inactivity modal to prompt inactive users and to logout after a period of no user interactions after the modal appears
+- **CUMULUS-3849**
+  - Added a network error modal that pops up when the user is offline
 - **CUMULUS-4048**
   - Added a session timeout warning modal that pops up five minutes before the session expires
 - **CUMULUS-4088**
@@ -26,11 +56,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Renamed cumulus-dashboard package name to `@cumulus/cumulus-dashboard`
 - **security vulnerabilities**
   - Upgraded axios and xml-crypto packages to fix audit issue
+- **CUMULUS-3813**
+  - Refactored the following files from class to function components: text.js, text-area.js, sub-form.js, Form.js, dropdown-async-command.js
 
 ### Deleted
 
 - **CUMULUS-4003**
   - Remove D3 and related libraries from dashboard.
+- **CUMULUS-4101**
+  - Removed the Internal Reconciliation Report reference from cumulus-dashboard and cumulus-api.
 
 ### Fixed
 
@@ -38,6 +72,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Updated datestring format to show the correct hours
 - **CUMULUS-4008**
   - Updated the Dockerfile with improved NPM install command to prevent error messages.
+- **CUMULUS-4114**
+  - Updated the exports in index to be called in overview to allow the rules count to be affected by the datepicker while keeping the rules page unaffected. 
 
 ## [v13.0.0] - 2025-02-19
 This version of the dashboard requires Cumulus API >= v20.0.0
@@ -1477,7 +1513,8 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
-  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v13.2.0...HEAD
+  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v13.3.0...HEAD
+  [v13.3.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.2.0...v13.3.0
   [v13.2.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.1.0...v13.2.0
   [v13.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.0.0...v13.1.0
   [v13.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v12.2.0...v13.0.0
