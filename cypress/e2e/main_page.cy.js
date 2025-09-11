@@ -62,6 +62,7 @@ describe('Dashboard Home Page', () => {
     beforeEach(() => {
       cy.login();
       cy.visit('/');
+      cy.wait(1000);
     });
     
     it('displays a compatible Cumulus API Version number', () => {
@@ -71,10 +72,10 @@ describe('Dashboard Home Page', () => {
           type: API_VERSION,
           payload: { versionNumber: apiVersionNumber }
         });
+      });
 
-        cy.get('div[class=api__version]').should((apiVersionWrapper) => {
-          expect(apiVersionWrapper.first()).to.contain(apiVersionNumber);
-        });
+      cy.get('div[class=api__version]').should((apiVersionWrapper) => {
+        expect(apiVersionWrapper.first()).to.contain(apiVersionNumber);
       });
     });
 
@@ -128,9 +129,9 @@ describe('Dashboard Home Page', () => {
       });
       cy.get('.datetime__range').within(() => {
         cy.setDatepickerDropdown('1 hour');
-        cy.url().should('include', 'startDateTime=201503171500');
-        cy.url().should('include', 'endDateTime=201503171600');
       });
+      cy.url().should('include', 'startDateTime=201503171500');
+      cy.url().should('include', 'endDateTime=201503171600');
 
       cy.get('nav').contains('Granules').click();
       cy.url().should('include', 'granules');
@@ -181,15 +182,10 @@ describe('Dashboard Home Page', () => {
     });
 
     it('modifies the UPDATES section and Granules Errors list as datepicker changes.', () => {
-      // Stub the network requests to provide consistent test data.
-      cy.intercept('GET', '/stats?*', { fixture: 'statsFixture.json' }).as('stats');
-      cy.intercept('GET', '/granules?*', { fixture: 'granulesErrorsFixture.json' }).as('granulesErrors');
+      cy.intercept('GET', '/stats?*timestamp__from=1233360000000*').as('stats');
 
       cy.clock(ingestEndTime);
       cy.setDatepickerDropdown('3 months');
-
-      cy.wait('@stats');
-      cy.wait('@granulesErrors');
 
       cy.get('#Errors').contains('2');
       cy.get('#Collections').contains('2');
@@ -202,24 +198,6 @@ describe('Dashboard Home Page', () => {
       cy.get('[data-value="1"]').contains('Error');
 
       cy.clock().invoke('restore');
-      
-      // Stub the network requests again for the second part of the test.
-      cy.intercept('GET', '/stats?*', {
-        statusCode: 200,
-        body: {
-          errors: 0,
-          collections: 0,
-          granules: 0,
-          executions: 0,
-          rules: 0
-        }
-      }).as('newStats');
-      cy.intercept('GET', '/granules?*', {
-        statusCode: 200,
-        body: {
-          results: []
-        }
-      }).as('emptyGranulesErrors');
 
       cy.get('[data-cy=startDateTime]').within(() => {
         cy.get('input[name=month]').click().type(1);
@@ -238,8 +216,7 @@ describe('Dashboard Home Page', () => {
         cy.get('select[name=amPm]').select('AM');
       });
 
-      cy.wait('@newStats');
-      cy.wait('@emptyGranulesErrors');
+      cy.wait('@stats');
       cy.get('#Errors').contains('0');
       cy.get('#Collections').contains('0');
       cy.get('#Granules').contains('0');

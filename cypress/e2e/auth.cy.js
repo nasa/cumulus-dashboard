@@ -12,6 +12,7 @@ describe('Dashboard authentication', { testIsolation: false }, () => {
   beforeEach(() => {
     cy.login();
     cy.visit('/');
+    cy.wait(1000);
   });
 
   it('should not attempt refresh for non-JWT token', () => {
