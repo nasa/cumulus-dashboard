@@ -58,13 +58,12 @@ describe('Dashboard Home Page', () => {
       cy.task('resetState');
     });
 
-    // Use cy.session() to manage login state
     beforeEach(() => {
       cy.login();
       cy.visit('/');
       cy.wait(1000);
     });
-    
+
     it('displays a compatible Cumulus API Version number', () => {
       const apiVersionNumber = 'a.b.c';
       cy.window().its('top').its('appStore').then((store) => {
@@ -119,7 +118,7 @@ describe('Dashboard Home Page', () => {
         });
       });
     });
-    
+
     it('should retain query parameters when moving between pages.', () => {
       const now = Date.UTC(2015, 2, 17, 16, 0, 0); // 2015-03-17T16:00:00.000Z
       cy.clock(now);
@@ -269,11 +268,8 @@ describe('Dashboard Home Page', () => {
     });
 
     describe('The Timer', () => {
-      // The `beforeEach` hook will be run for each test within this nested describe block.
-      // The `cy.session` command will efficiently restore the logged-in state.
       beforeEach(() => {
-        // Because of `cy.session`, we don't need the explicit cy.visit('/') here
-        // as the beforeEach from the parent block handles it.
+        cy.visit('/');
       });
 
       it('begins in the off state', () => {
