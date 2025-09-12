@@ -47,7 +47,7 @@ const CollectionHeader = ({
         <Link
           className="button button--edit button--small form-group__element--right button--green"
           to={(location) => ({
-            pathname: `/collections/edit/${name}/${encodeURIComponent(version)}`,
+            pathname: `/collections/edit/${encodeURIComponent(name)}/${encodeURIComponent(version)}`,
             search: getPersistentQueryParams(location),
           })}
         >

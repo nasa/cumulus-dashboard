@@ -33,6 +33,7 @@ import { granuleStatus as statusOptions } from '../../utils/status';
 import { workflowOptionNames } from '../../selectors';
 import ListFilters from '../ListActions/ListFilters';
 import CollectionHeader from './collection-header';
+import Checkbox from '../Checkbox/Checkbox';
 
 const CollectionGranules = ({
   dispatch,
@@ -47,9 +48,10 @@ const CollectionGranules = ({
   const granuleStatus = status === 'processing' ? 'running' : status;
   const { list } = granules;
   const { meta } = list;
+  const decodedCollectionName = decodeURIComponent(collectionName);
   const decodedVersion = decodeURIComponent(collectionVersion);
   const collectionId = getCollectionId({
-    name: collectionName,
+    name: decodedCollectionName,
     version: decodedVersion,
   });
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
@@ -57,6 +59,7 @@ const CollectionGranules = ({
   const [selected, setSelected] = useState([]);
   const query = generateQuery();
   const { dropdowns } = providers;
+  const [isInfixSearch, setIsInfixSearch] = useState(false);
 
   const breadcrumbConfig = [
     {
@@ -143,7 +146,7 @@ const CollectionGranules = ({
       </Helmet>
       <CollectionHeader
         breadcrumbConfig={breadcrumbConfig}
-        name={collectionName}
+        name={decodedCollectionName}
         queriedAt={meta.queriedAt}
         version={decodedVersion}
       />
@@ -177,8 +180,18 @@ const CollectionGranules = ({
             labelKey="granuleId"
             placeholder="Granule ID"
             searchKey="granules"
+            infixBoolean={isInfixSearch}
           />
           <ListFilters>
+            <Checkbox
+              id="chk_isInfixSearch"
+              checked={isInfixSearch}
+              onChange={setIsInfixSearch}
+              label="Search By"
+              inputLabel="Infix"
+              className="infix-search"
+              tip="Toggle between prefix and infix search. When enabled, the search field matches substrings instead of prefixes."
+            />
             {!granuleStatus && (
               <Dropdown
                 options={statusOptions}

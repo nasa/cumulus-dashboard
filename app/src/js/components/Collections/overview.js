@@ -48,6 +48,7 @@ import Overview from '../Overview/overview';
 import Search from '../Search/search';
 import List from '../Table/Table';
 import { workflowOptionNames } from '../../selectors';
+import Checkbox from '../Checkbox/Checkbox';
 
 const breadcrumbConfig = [
   {
@@ -79,20 +80,25 @@ const CollectionOverview = ({
   const { list: granulesList } = granules;
   const { dropdowns } = providers;
   const { name: collectionName, version: collectionVersion } = params || {};
+  const decodedCollectionName = decodeURIComponent(collectionName);
   const decodedVersion = decodeURIComponent(collectionVersion);
-  const collectionId = getCollectionId({ name: collectionName, version: decodedVersion });
+  const collectionId = getCollectionId({
+    name: decodedCollectionName,
+    version: decodedVersion
+  });
   const record = collectionsMap[collectionId];
   const deleteStatus = get(deletedCollections, [collectionId, 'status']);
   const hasGranules = get(collectionsMap[collectionId], 'data.stats.total', 0) > 0;
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const [selected, setSelected] = useState([]);
+  const [isInfixSearch, setIsInfixSearch] = useState(false);
 
   useEffect(() => {
     dispatch(listCollections());
     dispatch(getCumulusInstanceMetadata());
-    dispatch(getCollection(collectionName, decodedVersion));
-  }, [collectionName, datepicker, decodedVersion, dispatch]);
+    dispatch(getCollection(decodedCollectionName, decodedVersion));
+  }, [decodedCollectionName, datepicker, decodedVersion, dispatch]);
 
   function changeCollection(_, newCollectionId) {
     historyPushWithQueryParams(collectionHrefFromId(newCollectionId));
@@ -161,7 +167,7 @@ const CollectionOverview = ({
   }
 
   function deleteMe() {
-    dispatch(deleteCollection(collectionName, decodedVersion));
+    dispatch(deleteCollection(decodedCollectionName, decodedVersion));
   }
 
   function navigateBack() {
@@ -237,7 +243,7 @@ const CollectionOverview = ({
                   pathname: '/collections/add',
                   search: getPersistentQueryParams(location),
                   state: {
-                    name: collectionName,
+                    name: decodedCollectionName,
                     version: decodedVersion,
                   },
                 })}
@@ -318,11 +324,21 @@ const CollectionOverview = ({
             action={searchGranules}
             clear={clearGranulesSearch}
             label="Search"
+            infixBoolean={isInfixSearch}
             labelKey="granuleId"
             placeholder="Granule ID"
             searchKey="granules"
           />
           <ListFilters>
+            <Checkbox
+              id="chk_isInfixSearch"
+              checked={isInfixSearch}
+              onChange={setIsInfixSearch}
+              label="Search By"
+              inputLabel="Infix"
+              className="infix-search"
+              tip="Toggle between prefix and infix search. When enabled, the search field matches substrings instead of prefixes."
+            />
             <Dropdown
               options={statusOptions}
               action={filterGranules}

@@ -14,62 +14,51 @@ import ErrorReport from '../Errors/report';
 const minLinesDefault = 8;
 const maxLinesDefault = 18;
 
-class TextAreaForm extends React.Component {
-  constructor () {
-    super();
-    this.onChange = this.onChange.bind(this);
-  }
+const TextAreaForm = ({
+  label,
+  value,
+  id,
+  error,
+  mode = 'json',
+  onChange,
+  minLines = minLinesDefault,
+  maxLines = maxLinesDefault
+}) => {
+  const handleChange = (newValue) => {
+    onChange(id, newValue);
+  };
 
-  onChange (value) {
-    this.props.onChange(this.props.id, value);
-  }
-
-  render () {
-    const {
-      label,
-      value,
-      id,
-      error,
-      mode
-    } = this.props;
-
-    const minLines = this.props.minLines || minLinesDefault;
-    const maxLines = this.props.maxLines || maxLinesDefault;
-
-    return (
-      <div className='form__textarea'>
-        <label>{label}
-          <ErrorReport report={error} />
-          <Ace
-            editorProps={{ $blockScrolling: Infinity }}
-            mode={mode}
-            theme={config.editorTheme}
-            onChange={this.onChange}
-            name={id}
-            value={value}
-            width='auto'
-            tabSize={config.tabSize}
-            showPrintMargin={false}
-            minLines={minLines}
-            maxLines={maxLines}
-            wrapEnabled={true}
-            ref={setWindowEditorRef}
-          />
-        </label>
-      </div>
-    );
-  }
-}
-
+  return (
+    <div className='form__textarea'>
+      <label>{label}
+        <ErrorReport report={error} />
+        <Ace
+          editorProps={{ $blockScrolling: Infinity }}
+          mode={mode}
+          theme={config.editorTheme}
+          onChange={handleChange}
+          name={id}
+          value={value}
+          width='auto'
+          tabSize={config.tabSize}
+          showPrintMargin={false}
+          minLines={minLines}
+          maxLines={maxLines}
+          wrapEnabled={true}
+          ref={setWindowEditorRef}
+        />
+      </label>
+    </div>
+  );
+};
 TextAreaForm.propTypes = {
-  label: PropTypes.any,
-  value: PropTypes.string,
-  id: PropTypes.string,
-  error: PropTypes.any,
+  label: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  error: PropTypes.string,
   mode: PropTypes.string,
-  onChange: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
   minLines: PropTypes.number,
   maxLines: PropTypes.number
 };
-
 export default connect((state) => state)(TextAreaForm);

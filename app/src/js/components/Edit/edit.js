@@ -29,7 +29,10 @@ const EditRecord = ({
   validate,
   validationError,
 }) => {
-  const record = get(state.map, pk, {});
+  // object-path `get` was somehow not accessing object keys with slashes
+  // so we need to grab it directly
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const record = state.map[pk] || {};
   const meta = get(state.updated, pk, {});
   const schema = schemaState[schemaKey];
   const [error, setError] = useState(record.error || meta.error);

@@ -17,20 +17,15 @@ export const reconciliationReportTypes = [
 ];
 
 export const operationTypes = [
-  {
-    id: 'Bulk Granules',
-    label: 'Bulk Granules',
-  },
-  {
-    id: 'ES Index',
-    label: 'ES Index',
-  },
-  {
-    id: 'Bulk Delete',
-    label: 'Bulk Delete',
-  },
-  {
-    id: 'Kinesis Replay',
-    label: 'Kinesis Replay',
-  },
-];
+  'Bulk Granule Delete',
+  'Bulk Granule Reingest',
+  'Bulk Granules',
+  'Bulk Execution Delete',
+  'Data Migration',
+  'Dead-Letter Processing',
+  'DLA Migration',
+  'ES Index',
+  'Kinesis Replay',
+  'Reconciliation Report',
+  'SQS Replay',
+].map((name) => ({ id: name, label: name }));

@@ -9,6 +9,7 @@ import {
 // Also becomes default props for Datepicker
 export const initialState = () => ({
   ...computeDateTimeDelta(config.initialDateRange),
+  endDateTime: null,
   dateRange: findDateRangeByValue('Custom'),
   hourFormat: '12HR'
 });
