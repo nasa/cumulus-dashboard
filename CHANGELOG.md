@@ -32,6 +32,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-4193**
   - Removing dependency override of elliptic in the crypto-browserify and browserify-sign packages
   - Regenerated package-lock.json and various packages have been updated
+- **security vulnerabilities**
+  - Upgraded `axios` to ^1.12.0 to fix audit issue
 
 ## [v13.2.0] - 2025-05-14
 
