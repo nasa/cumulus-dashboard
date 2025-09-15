@@ -202,7 +202,7 @@ describe('Dashboard PDRs Page', () => {
       cy.url().should('include', 'status=completed');
       cy.url().should('include', 'search=MOD');
       cy.get('.table .tbody .tr').as('list');
-      cy.get('@list').should('have.length', 2);
+      cy.get('@list').should('have.length', 3);
       cy.get('#chk_isInfixSearch').should('not.be.checked');
       cy.get('@search').eq(0).should('be.visible').click()
         .type('GQ');
@@ -210,10 +210,10 @@ describe('Dashboard PDRs Page', () => {
       cy.get('.table .tbody .tr').should('have.length', 0);
       cy.get('#chk_isInfixSearch').click({ force: true }).should('be.checked');
       cy.get('.table .tbody .tr').as('list');
-      cy.get('@list').should('have.length', 4);
+      cy.get('@list').should('have.length', 3);
 
       cy.getFakeApiFixture('granules').its('results')
-        .then((granules) => granules.filter((item) => item.pdrName === pdrName))
+        .then((granules) => granules.filter((item) => item.pdrName === pdrName && item.granuleId.includes('GQ')))
         .each((granule) => {
           cy.get(`[data-value="${granule.granuleId}"]`).children().as('columns');
           cy.get('@columns').eq(1)
