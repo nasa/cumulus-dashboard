@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Handle Granules with Identical producerGranuleId in Different Collections
-This version of the dashboard requires Cumulus API >= feature/duplicate-granule-924 release(TBD)
+This version of the dashboard requires Cumulus API >= v21.0.0
 
 - **CUMULUS-4063**
   - Visualized producerGranuleId on the Granules and PDRs pages where granules are displayed
