@@ -9,7 +9,7 @@ describe('Dashboard Executions Page', () => {
     });
   });
 
-  describe('When logged in', { testIsolation: false }, () => {
+  describe('When logged in', () => {
     before(() => {
       cy.visit('/');
       cy.task('resetState');

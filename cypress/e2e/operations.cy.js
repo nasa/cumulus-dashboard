@@ -6,7 +6,7 @@ describe('Operations page', () => {
     shouldBeRedirectedToLogin();
   });
 
-  describe('when logged in', { testIsolation: false }, () => {
+  describe('when logged in', () => {
     const testAsyncId = '452e8941-9d18-4c40-9962-2ff38c179a39';
     const testDescription = 'Bulk granule deletion';
     const testType = 'Bulk Granule Delete';
