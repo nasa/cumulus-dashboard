@@ -40,6 +40,7 @@ import GranulesProgress from '../Granules/progress';
 import { strings } from '../locale';
 import ListFilters from '../ListActions/ListFilters';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
+import Checkbox from '../Checkbox/Checkbox';
 
 const metaAccessors = [
   {
@@ -118,6 +119,9 @@ class PDR extends React.Component {
     this.navigateBack = this.navigateBack.bind(this);
     this.generateBulkActions = this.generateBulkActions.bind(this);
     this.renderProgress = this.renderProgress.bind(this);
+    this.state = {
+      isInfixSearch: false,
+    };
   }
 
   componentDidMount() {
@@ -139,6 +143,10 @@ class PDR extends React.Component {
       pdrName,
     };
   }
+
+  setIsInfixSearch = (value) => {
+    this.setState({ isInfixSearch: value });
+  };
 
   navigateBack() {
     historyPushWithQueryParams('/pdrs');
@@ -167,6 +175,7 @@ class PDR extends React.Component {
     const { count, queriedAt } = list.meta;
     const deleteStatus = get(pdrs.deleted, [pdrName, 'status']);
     const { error } = record;
+    const { isInfixSearch } = this.state;
 
     const granulesCount = get(record, 'data.stats', []);
     const granuleStatus = Object.keys(granulesCount).map((key) => ({
@@ -233,8 +242,18 @@ class PDR extends React.Component {
               clear={clearGranulesSearch}
               labelKey="granuleId"
               searchKey="granules"
+              infixBoolean={isInfixSearch}
             />
             <ListFilters>
+              <Checkbox
+                id="chk_isInfixSearch"
+                checked={isInfixSearch}
+                onChange={this.setIsInfixSearch}
+                label="Search By"
+                inputLabel="Infix"
+                className="infix-search"
+                tip="Toggle between prefix and infix search. When enabled, the search field matches substrings instead of prefixes."
+              />
               <Dropdown
                 getOptions={getOptionsCollectionName}
                 options={get(dropdowns, ['collectionName', 'options']) || []}

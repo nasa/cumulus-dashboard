@@ -185,7 +185,7 @@ describe('Dashboard PDRs Page', () => {
       });
     });
 
-    it('should display granules in the individual PDR page', () => {
+    it('should display granules in the individual PDR page and search based on infix toggle', () => {
       const pdrName = 'MOD09GQ_1granule_v3.PDR';
       cy.visit(`/pdrs/pdr/${pdrName}`);
       cy.contains('.heading--large', pdrName);
@@ -198,10 +198,17 @@ describe('Dashboard PDRs Page', () => {
         .type('{enter}');
       cy.get('.search').as('search');
       cy.get('@search').eq(0).should('be.visible').click()
-        .type('GQ');
+        .type('MOD');
       cy.url().should('include', 'status=completed');
+      cy.url().should('include', 'search=MOD');
+      cy.get('.table .tbody .tr').as('list');
+      cy.get('@list').should('have.length', 2);
+      cy.get('#chk_isInfixSearch').should('not.be.checked');
+      cy.get('@search').eq(0).should('be.visible').click()
+        .type('GQ');
       cy.url().should('include', 'search=GQ');
-
+      cy.get('.table .tbody .tr').should('have.length', 0);
+      cy.get('#chk_isInfixSearch').click({ force: true }).should('be.checked');
       cy.get('.table .tbody .tr').as('list');
       cy.get('@list').should('have.length', 4);
 
