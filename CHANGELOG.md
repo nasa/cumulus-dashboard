@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## Handle Granules with Identical producerGranuleId in Different Collections
+This version of the dashboard requires Cumulus API >= v21.0.0
+
+- **CUMULUS-4063**
+  - Visualized producerGranuleId on the Granules and PDRs pages where granules are displayed
+- **CUMULUS-4064**
+  - Populated producer ID in dash/db fixtures
+  - Updated the dashboard to use alpha version `@cumulus/api@20.1.3-alpha.2` and
+    `@cumulus/aws-client@20.1.3-alpha.2`
+- **CUMULUS-4086**
+  - Added fixture and cypress tests to verify that duplicate granules with the same producerGranuleIds will show in the Granules and PDRs pages
+
 ## [Unreleased]
 
 ## [v13.3.0] - 2025-09-11
