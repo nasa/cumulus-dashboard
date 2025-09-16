@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [v14.0.0] - 2025-09-16
+
 ## Handle Granules with Identical producerGranuleId in Different Collections
 This version of the dashboard requires Cumulus API >= v21.0.0
 
@@ -16,8 +20,6 @@ This version of the dashboard requires Cumulus API >= v21.0.0
     `@cumulus/aws-client@20.1.3-alpha.2`
 - **CUMULUS-4086**
   - Added fixture and cypress tests to verify that duplicate granules with the same producerGranuleIds will show in the Granules and PDRs pages
-
-## [Unreleased]
 
 ## [v13.3.0] - 2025-09-11
 
@@ -87,7 +89,7 @@ This version of the dashboard requires Cumulus API >= v21.0.0
 - **CUMULUS-4008**
   - Updated the Dockerfile with improved NPM install command to prevent error messages.
 - **CUMULUS-4114**
-  - Updated the exports in index to be called in overview to allow the rules count to be affected by the datepicker while keeping the rules page unaffected. 
+  - Updated the exports in index to be called in overview to allow the rules count to be affected by the datepicker while keeping the rules page unaffected.
 
 ## [v13.0.0] - 2025-02-19
 This version of the dashboard requires Cumulus API >= v20.0.0
@@ -101,7 +103,7 @@ This version of the dashboard requires Cumulus API >= v20.0.0
   - Added documentation for beginners starting from scratch.
 
 - **CUMULUS-3861**
-  - Updated React 17 to React 18  
+  - Updated React 17 to React 18
   - Removed test script references to Enzyme and replaced them with React compliant testing components
 
 - **CUMULUS-3860/3870**
@@ -156,7 +158,7 @@ This version of the dashboard requires Cumulus API >= v18.4.0
 - **Snyk Security Fix**
   - Upgraded axios from 1.6.0 to 1.6.8
 - **CUMULUS-3810**
-  - converted the following files from class to functional components: home.js, 
+  - converted the following files from class to functional components: home.js,
   header.js, index.js, oauth.js, app.js, and 404.js
 - **CUMULUS-2668**
   - Refactored DeleteCollectionModal and BatchAsyncCommands from class to function components.
@@ -1527,7 +1529,8 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
-  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v13.3.0...HEAD
+  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v14.0.0...HEAD
+  [v14.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.3.0...v14.0.0
   [v13.3.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.2.0...v13.3.0
   [v13.2.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.1.0...v13.2.0
   [v13.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.0.0...v13.1.0
