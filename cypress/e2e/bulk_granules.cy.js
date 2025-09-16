@@ -16,12 +16,12 @@ describe('Dashboard Bulk Granules', () => {
       cy.contains('button', 'Run Bulk Granules').click();
 
       cy.get('.modal-dialog')
-          .within(() => {
-            cy.contains('button', 'Run Bulk Delete');
-            cy.contains('button', 'Run Bulk Operations');
-            cy.contains('button', 'Run Bulk Reingest');
-            cy.contains('button', 'Run Bulk Recovery');
-          });
+        .within(() => {
+          cy.contains('button', 'Run Bulk Delete');
+          cy.contains('button', 'Run Bulk Operations');
+          cy.contains('button', 'Run Bulk Reingest');
+          cy.contains('button', 'Run Bulk Recovery');
+        });
     });
 
     it('handles a successful bulk granule operation request', () => {
