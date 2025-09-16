@@ -29,7 +29,7 @@
     "lint": "eslint . --ext .js",
     "lint-fix": "eslint --fix . --ext .js",
     "cypress": "LOCALSTACK_HOST=localhost CYPRESS_TESTING=true NODE_ENV=test cypress open",
-    "cypress-ci": "LOCALSTACK_HOST=localhost CYPRESS_TESTING=true NODE_ENV=test cypress run --spec 'cypress/integration/*' --config video=false",
+    "cypress-ci": "LOCALSTACK_HOST=localhost CYPRESS_TESTING=true NODE_ENV=test cypress run --spec 'cypress/e2e/*' --config video=false",
     "test": "npm run lint && ava && ava --config ava-conditional.config.cjs",
     "test-unit-only": "ava && ava --config ava-conditional.config.cjs",
     "seed-database": "LOCALSTACK_HOST=localhost NODE_ENV=test PG_HOST=localhost PG_USER=postgres PG_PASSWORD=password PG_DATABASE=postgres node ./localAPI/runSeedDatabase.js",
@@ -204,7 +204,7 @@
     "vm-browserify": "^1.1.2"
   },
   "optionalDependencies": {
-    "cypress": "12.0.0"
+    "cypress": "12.17.4"
   },
   "overrides": {
     "form-data": "^4.0.4",
