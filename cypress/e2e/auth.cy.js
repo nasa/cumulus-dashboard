@@ -12,10 +12,11 @@ describe('Dashboard authentication', () => {
   beforeEach(() => {
     cy.login();
     cy.visit('/');
+    cy.wait(1000);
   });
 
   it('should not attempt refresh for non-JWT token', () => {
-    cy.window().its('appStore').then((store) => {
+    cy.window().its('top').its('appStore').then((store) => {
       store.dispatch({
         type: SET_TOKEN,
         token: 'this-is-a-fake-token'
@@ -32,7 +33,7 @@ describe('Dashboard authentication', () => {
   });
 
   it('should logout user on invalid JWT token', () => {
-    cy.window().its('appStore').then((store) => {
+    cy.window().its('top').its('appStore').then((store) => {
       cy.task('generateJWT', { expirationTime: 0 }).then((invalidJwt) => {
         // Dispatch an action to set the token
         store.dispatch({
@@ -58,7 +59,7 @@ describe('Dashboard authentication', () => {
       { body: {}, statusCode: 500 }
     );
 
-    cy.window().its('appStore').then((store) => {
+    cy.window().its('top').its('appStore').then((store) => {
       const expirationTime = (new Date(Date.now() - 24 * 3600 * 1000)).valueOf() / 1000.0;
       cy.task('generateJWT', { expirationTime }).then((expiredJwt) => {
         store.dispatch({
