@@ -20,6 +20,8 @@ This version of the dashboard requires Cumulus API >= v21.0.0
     `@cumulus/aws-client@20.1.3-alpha.2`
 - **CUMULUS-4086**
   - Added fixture and cypress tests to verify that duplicate granules with the same producerGranuleIds will show in the Granules and PDRs pages
+- **CUMULUS-4223**
+  - Upgrade cypress docker image, folders, test specs, configs to v12.17.4
 
 ## [v13.3.0] - 2025-09-11
 
@@ -46,8 +48,6 @@ This version of the dashboard requires Cumulus API >= v21.0.0
 - **CUMULUS-4193**
   - Removing dependency override of elliptic in the crypto-browserify and browserify-sign packages
   - Regenerated package-lock.json and various packages have been updated
-- **CUMULUS-4223**
-  - Upgrade cypress docker image, folders, test specs, configs to v12.17.4
 - **security vulnerabilities**
   - Upgraded `axios` to ^1.12.0 to fix audit issue
 
