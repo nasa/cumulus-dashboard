@@ -963,7 +963,7 @@ describe('Dashboard Granules Page', () => {
         .and('include', `status=${status}`)
         .and('include', `provider=${provider}`)
         .and('include', `collectionId=${encodeURIComponent(collectionId)}`)
-        .and('include', `search=${search}`);
+        .and('include', `search=${searchShort}`);
 
       // Menu <Link>s contain correct query params
       cy.get('nav > ul > :nth-child(3) > a')
@@ -971,7 +971,7 @@ describe('Dashboard Granules Page', () => {
         .and('include', `status=${status}`)
         .and('include', `provider=${provider}`)
         .and('include', `collectionId=${encodeURIComponent(collectionId)}`)
-        .and('include', `search=${search}`);
+        .and('include', `search=${searchShort}`);
 
       // Sidebar <Link>s contain correct query params
       cy.get('.sidebar__nav--back')
@@ -979,7 +979,7 @@ describe('Dashboard Granules Page', () => {
         .and('include', `status=${status}`)
         .and('include', `provider=${provider}`)
         .and('include', `collectionId=${encodeURIComponent(collectionId)}`)
-        .and('include', `search=${search}`);
+        .and('include', `search=${searchShort}`);
     });
   });
 });

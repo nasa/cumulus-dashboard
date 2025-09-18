@@ -15,13 +15,10 @@ describe('Dashboard Bulk Granules', () => {
       cy.contains('button', 'Granule Actions').click();
       cy.contains('button', 'Run Bulk Granules').click();
 
-      cy.get('.bulk_granules')
-        .within(() => {
-          cy.contains('button', 'Run Bulk Delete');
-          cy.contains('button', 'Run Bulk Operations');
-          cy.contains('button', 'Run Bulk Reingest');
-          cy.contains('button', 'Run Bulk Recovery');
-        });
+      cy.get('.modal-body button').should('contain', 'Run Bulk Delete');
+      cy.get('.modal-body button').should('contain', 'Run Bulk Reingest');
+      cy.get('.modal-body button').should('contain', 'Run Bulk Recovery');
+      cy.get('.modal-body button').should('contain', 'Run Bulk Operations');
     });
 
     it('handles a successful bulk granule operation request', () => {
@@ -33,10 +30,7 @@ describe('Dashboard Bulk Granules', () => {
       cy.contains('button', 'Granule Actions').click();
       cy.contains('button', 'Run Bulk Granules').click();
 
-      cy.get('.bulk_granules')
-        .within(() => {
-          cy.contains('button', 'Run Bulk Operations').click();
-        });
+      cy.get('.modal-body').contains('button', 'Run Bulk Operations').click();
 
       cy.get('.bulk_granules--operations')
         .within(() => {
@@ -62,10 +56,7 @@ describe('Dashboard Bulk Granules', () => {
       cy.contains('button', 'Granule Actions').click();
       cy.contains('button', 'Run Bulk Granules').click();
 
-      cy.get('.bulk_granules')
-        .within(() => {
-          cy.contains('button', 'Run Bulk Operations').click();
-        });
+      cy.get('.modal-body').contains('button', 'Run Bulk Operations').click();
 
       cy.get('.bulk_granules--operations')
         .within(() => {
@@ -90,10 +81,7 @@ describe('Dashboard Bulk Granules', () => {
       cy.contains('button', 'Granule Actions').click();
       cy.contains('button', 'Run Bulk Granules').click();
 
-      cy.get('.bulk_granules')
-        .within(() => {
-          cy.contains('button', 'Run Bulk Delete').click();
-        });
+      cy.get('.modal-body').contains('button', 'Run Bulk Delete').click();
 
       cy.get('.bulk_granules--delete')
         .within(() => {
@@ -122,10 +110,7 @@ describe('Dashboard Bulk Granules', () => {
       cy.contains('button', 'Granule Actions').click();
       cy.contains('button', 'Run Bulk Granules').click();
 
-      cy.get('.bulk_granules')
-        .within(() => {
-          cy.contains('button', 'Run Bulk Reingest').click();
-        });
+      cy.get('.modal-body').contains('button', 'Run Bulk Reingest').click();
 
       cy.get('.bulk_granules--reingest')
         .within(() => {
@@ -151,10 +136,7 @@ describe('Dashboard Bulk Granules', () => {
       cy.contains('button', 'Granule Actions').click();
       cy.contains('button', 'Run Bulk Granules').click();
 
-      cy.get('.bulk_granules')
-        .within(() => {
-          cy.contains('button', 'Run Bulk Recovery').click();
-        });
+      cy.get('.modal-body').contains('button', 'Run Bulk Recovery').click();
 
       cy.get('.bulk_granules--recovery')
         .within(() => {
@@ -180,10 +162,7 @@ describe('Dashboard Bulk Granules', () => {
         cy.contains('button', 'Granule Actions').click();
         cy.contains('button', 'Run Bulk Granules').click();
 
-        cy.get('.bulk_granules')
-          .within(() => {
-            cy.contains('button', 'Run Bulk Operations').click();
-          });
+        cy.get('.modal-body').contains('button', 'Run Bulk Operations').click();
 
         cy.get('.bulk_granules--operations')
           .within(() => {
@@ -203,10 +182,7 @@ describe('Dashboard Bulk Granules', () => {
 
         cy.contains('button', 'Run Bulk Granules').click({ force: true });
 
-        cy.get('.bulk_granules')
-          .within(() => {
-            cy.contains('button', 'Run Bulk Operations').click({ force: true });
-          });
+        cy.get('.modal-body').contains('button', 'Run Bulk Operations').click({ force: true });
 
         cy.get('.error__report').should('not.exist');
       });
@@ -225,15 +201,9 @@ describe('Dashboard Bulk Granules', () => {
         cy.contains('button', 'Granule Actions').click();
         cy.contains('button', 'Run Bulk Granules').click();
 
-        cy.get('.bulk_granules')
-          .within(() => {
-            cy.contains('button', 'Run Bulk Delete').click();
-          });
+        cy.get('.modal-body').contains('button', 'Run Bulk Delete').click();
 
-        cy.get('.bulk_granules--delete')
-          .within(() => {
-            cy.contains('button', 'Run Bulk Delete').click();
-          });
+        cy.get('.bulk_granules--delete').contains('button', 'Run Bulk Delete').click();
 
         cy.wait('@postBulkDelete');
       });
@@ -248,10 +218,7 @@ describe('Dashboard Bulk Granules', () => {
 
         cy.contains('button', 'Run Bulk Granules').click({ force: true });
 
-        cy.get('.bulk_granules')
-          .within(() => {
-            cy.contains('button', 'Run Bulk Delete').click({ force: true });
-          });
+        cy.get('.modal-body').contains('button', 'Run Bulk Delete').click({ force: true });
 
         cy.get('.error__report').should('not.exist');
       });
@@ -270,15 +237,9 @@ describe('Dashboard Bulk Granules', () => {
         cy.contains('button', 'Granule Actions').click();
         cy.contains('button', 'Run Bulk Granules').click();
 
-        cy.get('.bulk_granules')
-          .within(() => {
-            cy.contains('button', 'Run Bulk Reingest').click();
-          });
+        cy.get('.modal-body').contains('button', 'Run Bulk Reingest').click();
 
-        cy.get('.bulk_granules--reingest')
-          .within(() => {
-            cy.contains('button', 'Run Bulk Reingest').click();
-          });
+        cy.get('.bulk_granules--reingest').contains('button', 'Run Bulk Reingest').click();
 
         cy.wait('@postBulkReingest');
       });
@@ -293,10 +254,7 @@ describe('Dashboard Bulk Granules', () => {
 
         cy.contains('button', 'Run Bulk Granules').click({ force: true });
 
-        cy.get('.bulk_granules')
-          .within(() => {
-            cy.contains('button', 'Run Bulk Reingest').click({ force: true });
-          });
+        cy.get('.modal-body').contains('button', 'Run Bulk Reingest').click({ force: true });
 
         cy.get('.error__report').should('not.exist');
       });
@@ -315,15 +273,9 @@ describe('Dashboard Bulk Granules', () => {
         cy.contains('button', 'Granule Actions').click();
         cy.contains('button', 'Run Bulk Granules').click({ force: true });
 
-        cy.get('.bulk_granules')
-          .within(() => {
-            cy.contains('button', 'Run Bulk Recovery').click({ force: true });
-          });
+        cy.get('.modal-body').contains('button', 'Run Bulk Recovery').click({ force: true });
 
-        cy.get('.bulk_granules--recovery')
-          .within(() => {
-            cy.contains('button', 'Run Bulk Recovery').click({ force: true });
-          });
+        cy.get('.bulk_granules--recovery').contains('button', 'Run Bulk Recovery').click({ force: true });
 
         cy.wait('@postBulkRecovery');
       });
@@ -338,10 +290,7 @@ describe('Dashboard Bulk Granules', () => {
 
         cy.contains('button', 'Run Bulk Granules').click({ force: true });
 
-        cy.get('.bulk_granules')
-          .within(() => {
-            cy.contains('button', 'Run Bulk Recovery').click({ force: true });
-          });
+        cy.get('.modal-body').contains('button', 'Run Bulk Recovery').click({ force: true });
 
         cy.get('.error__report').should('not.exist');
       });

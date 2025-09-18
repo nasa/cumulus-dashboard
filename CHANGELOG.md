@@ -20,6 +20,8 @@ This version of the dashboard requires Cumulus API >= v21.0.0
     `@cumulus/aws-client@20.1.3-alpha.2`
 - **CUMULUS-4086**
   - Added fixture and cypress tests to verify that duplicate granules with the same producerGranuleIds will show in the Granules and PDRs pages
+- **CUMULUS-4223**
+  - Upgrade cypress docker image, folders, test specs, configs to v12.17.4
 
 ## [v13.3.0] - 2025-09-11
 
