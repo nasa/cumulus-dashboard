@@ -9,6 +9,7 @@ app/src/js/config/local.js
 artifacts/
 cypress/screenshots/
 cypress/videos/
+cypress-dir/
 dist/
 docker/html/
 gulp-cache/
