@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useCallback } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Helmet } from 'react-helmet';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getExecutionLogs } from '../../actions';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ErrorReport from '../Errors/report';
@@ -9,7 +9,6 @@ import ErrorReport from '../Errors/report';
 const ExecutionLogs = () => {
   const { executionArn } = useParams();
   const dispatch = useDispatch();
-  const history = useHistory();
 
   const executionName = useMemo(
     () => (executionArn ? executionArn.split(':').pop() : ''),
@@ -23,10 +22,6 @@ const ExecutionLogs = () => {
       dispatch(getExecutionLogs(executionName));
     }
   }, [dispatch, executionName]);
-
-  const navigateBack = useCallback(() => {
-    history.push('/executions');
-  }, [history]);
 
   const errors = () => [];
 
