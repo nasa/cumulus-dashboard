@@ -32,9 +32,8 @@ const Operations = ({ dispatch, location, params, queryParams }) => {
             <Route
               exact
               path="/operations"
-              render={(props) => (
+              render={() => (
                 <OperationOverview
-                  {...props}
                   queryParams={filteredQueryParams}
                 />
               )}
