@@ -1,7 +1,7 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useMemo, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import { withRouter, Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { get } from 'object-path';
 import {
   displayCase,
@@ -51,183 +51,168 @@ const metaAccessors = [
   { label: 'Provider', property: 'provider', accessor: providerLink },
   { label: 'Provider Path', property: 'provider_path' },
   { label: 'Rule Type', property: 'rule.type' },
-  /* Why was this commented out? */
   // PGC { label: 'Collection', property: 'collection', accessor: d => collectionLink(getCollectionId(d)) },
 ];
 
-class Rule extends React.Component {
-  constructor () {
-    super();
-    this.load = this.load.bind(this);
-    this.delete = this.delete.bind(this);
-    this.enable = this.enable.bind(this);
-    this.disable = this.disable.bind(this);
-    this.rerun = this.rerun.bind(this);
-    this.navigateBack = this.navigateBack.bind(this);
-    this.reload = this.reload.bind(this);
-    this.errors = this.errors.bind(this);
-  }
+const Rule = () => {
+  const dispatch = useDispatch();
+  const { ruleName } = useParams();
 
-  componentDidMount () {
-    this.load(this.props.match.params.ruleName);
-  }
+  const load = useCallback((name) => {
+    dispatch(getRule(name));
+  }, [dispatch]);
 
-  componentDidUpdate (prevProps) {
-    if (this.props.match.params.ruleName !== prevProps.match.params.ruleName) {
-      this.load(this.props.match.params.ruleName);
+  useEffect(() => {
+    if (ruleName) {
+      load(ruleName);
     }
-  }
+  }, [ruleName, load]);
 
-  load (ruleName) {
-    this.props.dispatch(getRule(ruleName));
-  }
+  const rules = useSelector((state) => state.rules);
 
-  delete () {
-    const { ruleName } = this.props.match.params;
-    this.props.dispatch(deleteRule(ruleName));
-  }
-
-  enable () {
-    const { ruleName } = this.props.match.params;
-    this.props.dispatch(enableRule(this.props.rules.map[ruleName].data));
-  }
-
-  disable () {
-    const { ruleName } = this.props.match.params;
-    this.props.dispatch(disableRule(this.props.rules.map[ruleName].data));
-  }
-
-  rerun () {
-    const { ruleName } = this.props.match.params;
-    this.props.dispatch(rerunRule(this.props.rules.map[ruleName].data));
-  }
-
-  navigateBack () {
+  const navigateBack = useCallback(() => {
     historyPushWithQueryParams('/rules');
-  }
+  }, []);
 
-  reload () {
-    const { ruleName } = this.props.match.params;
-    this.load(ruleName);
-  }
+  const reload = useCallback(() => {
+    load(ruleName);
+  }, [ruleName, load]);
 
-  errors () {
-    const { ruleName } = this.props.match.params;
-    const { rules } = this.props;
-    return [
-      get(rules.map, [ruleName, 'error']),
-      get(rules.deleted, [ruleName, 'error']),
-      get(rules.enabled, [ruleName, 'error']),
-      get(rules.disabled, [ruleName, 'error']),
-      get(rules.rerun, [ruleName, 'error'])
-    ].filter(Boolean);
-  }
+  const remove = useCallback(() => {
+    dispatch(deleteRule(ruleName));
+  }, [ruleName, dispatch]);
 
-  render () {
-    const { match: { params: { ruleName } }, rules } = this.props;
-    const record = rules.map[ruleName];
-
-    if (!record || (record.inflight && !record.data)) {
-      return <Loading />;
+  const enable = useCallback(() => {
+    const ruleData = get(rules.map, [ruleName, 'data']);
+    if (ruleData) {
+      dispatch(enableRule(ruleData));
     }
-    const data = get(record, 'data', {});
+  }, [ruleName, rules.map, dispatch]);
 
-    const deleteStatus = get(rules, `deleted.${ruleName}.status`);
-    const enabledStatus = get(rules, `enabled.${ruleName}.status`);
-    const disabledStatus = get(rules, `disabled.${ruleName}.status`);
-    const rerunStatus = get(rules, `rerun.${ruleName}.status`);
-    const dropdownConfig = [{
-      text: 'Enable',
-      action: this.enable,
-      disabled: data.type === 'onetime',
-      status: enabledStatus,
-      confirmAction: true,
-      confirmText: enableText(ruleName),
-      postActionModal: true,
-      postActionText: enableConfirm(ruleName),
-      success: this.reload
-    }, {
-      text: 'Disable',
-      action: this.disable,
-      disabled: data.type === 'onetime',
-      status: disabledStatus,
-      confirmAction: true,
-      postActionModal: true,
-      confirmText: disableText(ruleName),
-      postActionText: disableConfirm(ruleName),
-      success: this.reload
-    }, {
-      text: 'Delete',
-      action: this.delete,
-      status: deleteStatus,
-      success: this.navigateBack,
-      confirmAction: true,
-      confirmText: deleteText(ruleName)
-    }, {
-      text: 'Rerun',
-      action: this.rerun,
-      status: rerunStatus,
-      success: this.reload,
-      confirmAction: true,
-      confirmText: rerunText(ruleName)
-    }];
+  const disable = useCallback(() => {
+    const ruleData = get(rules.map, [ruleName, 'data']);
+    if (ruleData) {
+      dispatch(disableRule(ruleData));
+    }
+  }, [ruleName, rules.map, dispatch]);
 
-    const errors = this.errors();
-    return (
-      <div className='page__component'>
-        <section className='page__section page__section__controls'>
-          <div className="options--top">
-            <Breadcrumbs config={breadcrumbConfig} />
-          </div>
-        </section>
-        <section className='page__section page__section__header-wrapper'>
-          <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content with-description'>Rule: {ruleName}</h1>
-            <DropdownAsync config={dropdownConfig}/>
+  const rerun = useCallback(() => {
+    const ruleData = get(rules.map, [ruleName, 'data']);
+    if (ruleData) {
+      dispatch(rerunRule(ruleData));
+    }
+  }, [ruleName, rules.map, dispatch]);
 
-            <Link
-              className='button button--copy button--small button--green form-group__element--right'
-              to={(location) => ({
-                pathname: '/rules/add',
-                search: getPersistentQueryParams(location),
-                state: {
-                  name: ruleName
-                }
-              })}>Copy Rule</Link>
-            <Link
-              className='button button--edit button--small button--green form-group__element--right'
-              to={(location) => ({ pathname: `/rules/edit/${ruleName}`, search: getPersistentQueryParams(location) })}>Edit Rule</Link>
-            {lastUpdated(data.timestamp || data.updatedAt)}
-          </div>
-        </section>
-        <section className='page__section'>
-          {errors.length > 0 && <ErrorReport report={errors} />}
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium with-description'>Rule Overview</h2>
-          </div>
-          <div className="rule__state">
-            {data.state && (
-              <dl className='status--process'>
-                <dt>State:</dt>
-                <dd className={`status__badge status__badge--${data.state.toLowerCase()}`}>{displayCase(data.state)}</dd>
-              </dl>
-            )}
-          </div>
-          <div className="rule__content">
-            <Metadata data={data} accessors={metaAccessors} />
-          </div>
-        </section>
-      </div>
-    );
+  const errors = useMemo(
+    () => (
+      [
+        get(rules.map, [ruleName, 'error']),
+        get(rules.deleted, [ruleName, 'error']),
+        get(rules.enabled, [ruleName, 'error']),
+        get(rules.disabled, [ruleName, 'error']),
+        get(rules.rerun, [ruleName, 'error'])
+      ].filter(Boolean)
+    ),
+    [ruleName, rules]
+  );
+
+  const record = rules.map[ruleName];
+
+  if (!record || (record.inflight && !record.data)) {
+    return <Loading />;
   }
-}
 
-Rule.propTypes = {
-  match: PropTypes.object,
-  dispatch: PropTypes.func,
-  rules: PropTypes.object
+  const data = get(record, 'data', {});
+
+  const deleteStatus = get(rules, `deleted.${ruleName}.status`);
+  const enabledStatus = get(rules, `enabled.${ruleName}.status`);
+  const disabledStatus = get(rules, `disabled.${ruleName}.status`);
+  const rerunStatus = get(rules, `rerun.${ruleName}.status`);
+
+  const dropdownConfig = [{
+    text: 'Enable',
+    action: enable,
+    disabled: data.type === 'onetime',
+    status: enabledStatus,
+    confirmAction: true,
+    confirmText: enableText(ruleName),
+    postActionModal: true,
+    postActionText: enableConfirm(ruleName),
+    success: reload
+  }, {
+    text: 'Disable',
+    action: disable,
+    disabled: data.type === 'onetime',
+    status: disabledStatus,
+    confirmAction: true,
+    postActionModal: true,
+    confirmText: disableText(ruleName),
+    postActionText: disableConfirm(ruleName),
+    success: reload
+  }, {
+    text: 'Delete',
+    action: remove,
+    status: deleteStatus,
+    success: navigateBack,
+    confirmAction: true,
+    confirmText: deleteText(ruleName)
+  }, {
+    text: 'Rerun',
+    action: rerun,
+    status: rerunStatus,
+    success: reload,
+    confirmAction: true,
+    confirmText: rerunText(ruleName)
+  }];
+
+  return (
+    <div className='page__component'>
+      <section className='page__section page__section__controls'>
+        <div className="options--top">
+          <Breadcrumbs config={breadcrumbConfig} />
+        </div>
+      </section>
+      <hr />
+      <section className='page__section page__section__header-wrapper'>
+        <div className='page__section__header'>
+          <h1 className='heading--large heading--shared-content with-description'>Rule: {ruleName}</h1>
+          <DropdownAsync config={dropdownConfig}/>
+
+          <Link
+            className='button button--copy button--small button--green form-group__element--right'
+            to={(location) => ({
+              pathname: '/rules/add',
+              search: getPersistentQueryParams(location),
+              state: {
+                name: ruleName
+              }
+            })}>Copy Rule</Link>
+          <Link
+            className='button button--edit button--small button--green form-group__element--right'
+            to={(location) => ({ pathname: `/rules/edit/${ruleName}`, search: getPersistentQueryParams(location) })}>Edit Rule</Link>
+          {lastUpdated(data.timestamp || data.updatedAt)}
+        </div>
+      </section>
+      <hr />
+      <section className='page__section'>
+        {errors.length > 0 && <ErrorReport report={errors} />}
+        <div className='heading__wrapper--border'>
+          <h2 className='heading--medium with-description'>Rule Overview</h2>
+        </div>
+        <div className="rule__state">
+          {data.state && (
+            <dl className='status--process'>
+              <dt>State:</dt>
+              <dd className={`status__badge status__badge--${data.state.toLowerCase()}`}>{displayCase(data.state)}</dd>
+            </dl>
+          )}
+        </div>
+        <div className="rule__content">
+          <Metadata data={data} accessors={metaAccessors} />
+        </div>
+      </section>
+    </div>
+  );
 };
 
-export default withRouter(connect((state) => ({
-  rules: state.rules
-}))(Rule));
+export default Rule;
