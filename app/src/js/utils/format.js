@@ -11,6 +11,7 @@ import { Alert } from 'react-bootstrap';
 import { getPersistentQueryParams } from './url-helper';
 import Tooltip from '../components/Tooltip/tooltip';
 import Popover from '../components/Popover/popover';
+import config from '../config';
 
 /**
  * Returns a number indicating the relative lexicographical, case-insensitive
@@ -35,14 +36,16 @@ export const fullDate = (datestring) => {
   if (!datestring) {
     return nullValue;
   }
-  return moment(datestring).format('HH:mm:ss MM/DD/YY');
+  const dateFormat = config.initialTimezoneFormat === 'UTC' ? moment.utc(datestring) : moment(datestring);
+  return dateFormat.format('HH:mm:ss MM/DD/YY');
 };
 
 export const dateOnly = (datestring) => {
   if (!datestring) {
     return nullValue;
   }
-  return moment(datestring).format('MM/DD/YYYY');
+  const dateFormat = config.initialTimezoneFormat === 'UTC' ? moment.utc(datestring) : moment(datestring);
+  return dateFormat.format('MM/DD/YYYY');
 };
 
 export const parseJson = (jsonString) => {

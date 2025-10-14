@@ -10,6 +10,7 @@ import {
   getEncodedCollectionId,
   deconstructCollectionId
 } from '../../app/src/js/utils/format.js';
+import config from '../../app/src/js/config.js';
 
 test('buildRedirectUrl() properly strips ?token query parameter', function (t) {
   const redirect = buildRedirectUrl({
@@ -151,11 +152,18 @@ test('collectionHrefFromNameVersion returns a nullValue collection if the collec
 });
 
 test('fullDate returns the properly formatted date', function (t) {
-  const date = '2025-04-13T01:15:32.567';
-  const date2 = '2025-04-13T04:15:32.567';
+  const date = '1744833161789';
+  const date2 = '1759434229834';
+
+  config.initialTimezoneFormat = 'UTC';
+  const formattedUTCDate = fullDate(date);
+  const formattedUTCDate2 = fullDate(date2);
+  t.is(formattedUTCDate, '19:52:41 04/14/25');
+  t.is(formattedUTCDate2, '19:43:49 10/02/25');
+
+  config.initialTimezoneFormat = '';
   const formattedDate = fullDate(date);
   const formattedDate2 = fullDate(date2);
-
-  t.is(formattedDate, '01:15:32 04/13/25');
-  t.is(formattedDate2, '04:15:32 04/13/25');
+  t.is(formattedDate, '12:52:41 04/16/25');
+  t.is(formattedDate2, '12:43:49 10/02/25');
 });

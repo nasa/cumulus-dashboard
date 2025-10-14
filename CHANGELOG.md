@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-4223**
   - Upgrade cypress docker image, folders, test specs, configs to v12.17.4
+- **CUMULUS-3627**
+  - Added `INITIAL_TIMEZONE_FORMAT` environment variable to allow control over table date/time column's timezone format 
 
 ## [v14.0.0] - 2025-09-16
 

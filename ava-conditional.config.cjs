@@ -10,6 +10,7 @@ module.exports = {
     INITIAL_DATE_RANGE_IN_DAYS: '',
     BUCKET: 'https://example.com/bucket',
     STAGE: 'production',
-    DAAC_NAME: 'Cumulus_Daac'
+    DAAC_NAME: 'Cumulus_Daac',
+    INITIAL_TIMEZONE_FORMAT: ''
   }
 };

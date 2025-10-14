@@ -37,6 +37,7 @@ Setting the following environment variables can override the default values.
 | STAGE | Identifier displayed at top of dashboard page: e.g. PROD, UAT | *development* |
 | KIBANAROOT | \<optional\>  Points to a Kibana endpoint. | |
 | INITIAL_DATE_RANGE_IN_DAYS| \<optional\> Number of days to load up before at start | |
+| INITIAL_TIMEZONE_FORMAT| \<optional\> Set option between local and UTC time | |
 
 
 ## Quick start
