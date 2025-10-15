@@ -76,7 +76,7 @@ const ExecutionsList = ({
           <List
             list={granuleExecutionslist}
             tableColumns={tableColumns}
-            action={() => listExecutionsByGranule(granuleId, payload)}
+            action={() => listExecutionsByGranule(granuleId, payload, false)}
             rowId='name'
             initialSortId='updatedAt'
             renderRowSubComponent={renderRowSubComponent}
