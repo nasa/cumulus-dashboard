@@ -4,18 +4,9 @@ import test from 'ava';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {
-  getExecutionLogs,
-  getLogs,
-  getStats,
-  listCollections,
   listExecutions,
   listExecutionsByGranule,
   listGranules,
-  listOperations,
-  listPdrs,
-  listReconciliationReports,
-  listRules,
-  listWorkflows
 } from '../../app/src/js/actions';
 import { requestMiddleware } from '../../app/src/js/middleware/request';
 import { initialState } from '../../app/src/js/reducers/datepicker';
