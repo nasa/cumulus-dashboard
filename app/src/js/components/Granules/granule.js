@@ -175,7 +175,7 @@ class GranuleOverview extends React.Component {
     dispatch(getGranule(granuleId))
       .then((granuleResponse) => {
         const payload = { granules: [pick(granuleResponse.data, ['granuleId', 'collectionId'])] };
-        dispatch(listExecutionsByGranule(granuleId, payload));
+        dispatch(listExecutionsByGranule(granuleId, payload, false));
       });
   }
 
