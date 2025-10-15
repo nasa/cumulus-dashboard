@@ -1,9 +1,8 @@
 import path from 'path';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import PropTypes from 'prop-types';
-import { withRouter, Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useRouteMatch, Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { get } from 'object-path';
 import {
   getPdr,
@@ -111,198 +110,166 @@ const metaAccessors = [
   },
 ];
 
-class PDR extends React.Component {
-  constructor() {
-    super();
-    this.deletePdr = this.deletePdr.bind(this);
-    this.generateQuery = this.generateQuery.bind(this);
-    this.navigateBack = this.navigateBack.bind(this);
-    this.generateBulkActions = this.generateBulkActions.bind(this);
-    this.renderProgress = this.renderProgress.bind(this);
-    this.state = {
-      isInfixSearch: false,
-    };
-  }
+const PDR = () => {
+  const dispatch = useDispatch();
 
-  componentDidMount() {
-    const { dispatch, match } = this.props;
-    const { pdrName } = match.params;
+  const collections = useSelector(state => state.collections);
+  const granules = useSelector(state => state.granules);
+  const logs = useSelector(state => state.logs);
+  const pdrs = useSelector(state => state.pdrs);
+  const queryParams = useSelector(state => state.router.params);
+
+  const routeMatch = useRouteMatch();
+  const { pdrName } = routeMatch.params;
+
+  const [isInfixSearch, setIsInfixSearch] = useState(false);
+
+  useEffect(() => {
     dispatch(getPdr(pdrName));
-  }
+  }, [dispatch, pdrName]);
 
-  deletePdr() {
-    const { pdrName } = this.props.match.params;
-    this.props.dispatch(deletePdr(pdrName));
-  }
-
-  generateQuery() {
-    const { queryParams } = this.props;
-    const pdrName = get(this.props, ['match', 'params', 'pdrName']);
-    return {
-      ...queryParams,
-      pdrName,
-    };
-  }
-
-  setIsInfixSearch = (value) => {
-    this.setState({ isInfixSearch: value });
+  const handleDeletePdr = () => {
+    dispatch(deletePdr(pdrName));
   };
 
-  navigateBack() {
+  const navigateBack = () => {
     historyPushWithQueryParams('/pdrs');
-  }
+  };
 
-  generateBulkActions() {
-    const { granules } = this.props;
+  const generateQuery = () => ({
+    ...queryParams,
+    pdrName,
+  });
+
+  const generateBulkActions = () => {
     return granuleBulkActions(granules);
+  };
+
+  const renderPdrProgress = (record) => (
+    <div className="pdr__progress">
+      {renderProgress(get(record, 'data', {}))}
+    </div>
+  );
+
+  const record = pdrs.map[pdrName];
+
+  if (!record || (record.inflight && !record.data)) {
+    return <Loading />;
   }
 
-  renderProgress(record) {
-    return (
-      <div className="pdr__progress">
-        {renderProgress(get(record, 'data', {}))}
-      </div>
-    );
-  }
+  const { dropdowns } = collections;
+  const { list } = granules;
+  const { count, queriedAt } = list.meta;
+  const deleteStatus = get(pdrs.deleted, [pdrName, 'status']);
+  const { error } = record;
 
-  render() {
-    const { match, granules, collections, pdrs } = this.props;
-    const { pdrName } = match.params;
-    const record = pdrs.map[pdrName];
-    if (!record || (record.inflight && !record.data)) return <Loading />;
-    const { dropdowns } = collections;
-    const { list } = granules;
-    const { count, queriedAt } = list.meta;
-    const deleteStatus = get(pdrs.deleted, [pdrName, 'status']);
-    const { error } = record;
-    const { isInfixSearch } = this.state;
+  const granulesCount = get(record, 'data.stats', []);
+  const granuleStatus = Object.keys(granulesCount).map((key) => ({
+    count: granulesCount[key],
+    key: (key === 'processing') ? 'running' : key
+  }));
 
-    const granulesCount = get(record, 'data.stats', []);
-    const granuleStatus = Object.keys(granulesCount).map((key) => ({
-      count: granulesCount[key],
-      key: (key === 'processing') ? 'running' : key
-    }));
+  return (
+    <div className="page__component">
+      <Helmet>
+        <title> Cumulus PDRs </title>
+      </Helmet>
+      <section className="page__section page__section__header-wrapper">
+        <div className="page__section__header">
+          <h1 className="heading--large heading--shared-content with-description ">
+            PDR: {pdrName}
+          </h1>
+          <AsyncCommand
+            action={handleDeletePdr}
+            success={navigateBack}
+            status={deleteStatus}
+            className={'form-group__element--right'}
+            confirmAction={true}
+            confirmText={deleteText(pdrName)}
+            text={deleteStatus === 'success' ? 'Deleted!' : 'Delete'}
+          />
+          {lastUpdated(queriedAt)}
+          {renderPdrProgress(record)}
+          {error && <ErrorReport report={error} />}
+        </div>
+      </section>
 
-    return (
-      <div className="page__component">
-        <Helmet>
-          <title> Cumulus PDRs </title>
-        </Helmet>
-        <section className="page__section page__section__header-wrapper">
-          <div className="page__section__header">
-            <h1 className="heading--large heading--shared-content with-description ">
-              PDR: {pdrName}
-            </h1>
-            <AsyncCommand
-              action={this.deletePdr}
-              success={this.navigateBack}
-              status={deleteStatus}
-              className={'form-group__element--right'}
-              confirmAction={true}
-              confirmText={deleteText(pdrName)}
-              text={deleteStatus === 'success' ? 'Deleted!' : 'Delete'}
+      <section className="page__section">
+        <div className="heading__wrapper--border">
+          <h2 className="heading--medium with-description">PDR Overview</h2>
+        </div>
+        <Metadata data={record.data} accessors={metaAccessors} />
+      </section>
+
+      <section className="page__section">
+        <div className="heading__wrapper--border">
+          <h2 className="heading--medium heading--shared-content with-description">
+            {strings.granules}{' '}
+            <span className="num-title">
+              {!Number.isNaN(+count) ? `(${count})` : 0}
+            </span>
+          </h2>
+        </div>
+        <div>
+          <GranulesProgress granules={granuleStatus} />
+        </div>
+
+        <List
+          list={list}
+          action={listGranules}
+          tableColumns={granuleTableColumns}
+          query={generateQuery()}
+          bulkActions={generateBulkActions()}
+          rowId="granuleId"
+          tableId={`pdr-${pdrName}`}
+        >
+          <Search
+            action={searchGranules}
+            clear={clearGranulesSearch}
+            labelKey="granuleId"
+            searchKey="granules"
+            infixBoolean={isInfixSearch}
+          />
+          <ListFilters>
+            <Checkbox
+              id="chk_isInfixSearch"
+              checked={isInfixSearch}
+              onChange={setIsInfixSearch}
+              label="Search By"
+              inputLabel="Infix"
+              className="infix-search"
+              tip="Toggle between prefix and infix search. When enabled, the search field matches substrings instead of prefixes."
             />
-            {lastUpdated(queriedAt)}
-            {this.renderProgress(record)}
-            {error && <ErrorReport report={error} />}
-          </div>
-        </section>
-
-        <section className="page__section">
-          <div className="heading__wrapper--border">
-            <h2 className="heading--medium with-description">PDR Overview</h2>
-          </div>
-          <Metadata data={record.data} accessors={metaAccessors} />
-        </section>
-
-        <section className="page__section">
-          <div className="heading__wrapper--border">
-            <h2 className="heading--medium heading--shared-content with-description">
-              {strings.granules}{' '}
-              <span className="num-title">
-                {!Number.isNaN(+count) ? `(${count})` : 0}
-              </span>
-            </h2>
-          </div>
-          <div>
-            <GranulesProgress granules={granuleStatus} />
-          </div>
-
-          <List
-            list={list}
-            action={listGranules}
-            tableColumns={granuleTableColumns}
-            query={this.generateQuery()}
-            bulkActions={this.generateBulkActions()}
-            rowId="granuleId"
-            tableId={`pdr-${pdrName}`}
-          >
-            <Search
-              action={searchGranules}
-              clear={clearGranulesSearch}
-              labelKey="granuleId"
-              searchKey="granules"
-              infixBoolean={isInfixSearch}
+            <Dropdown
+              getOptions={getOptionsCollectionName}
+              options={get(dropdowns, ['collectionName', 'options']) || []}
+              action={filterGranules}
+              clear={clearGranulesFilter}
+              paramKey={'collectionId'}
+              label={strings.collection}
+              inputProps={{
+                placeholder: 'All',
+                className: 'dropdown--large',
+              }}
             />
-            <ListFilters>
-              <Checkbox
-                id="chk_isInfixSearch"
-                checked={isInfixSearch}
-                onChange={this.setIsInfixSearch}
-                label="Search By"
-                inputLabel="Infix"
-                className="infix-search"
-                tip="Toggle between prefix and infix search. When enabled, the search field matches substrings instead of prefixes."
-              />
-              <Dropdown
-                getOptions={getOptionsCollectionName}
-                options={get(dropdowns, ['collectionName', 'options']) || []}
-                action={filterGranules}
-                clear={clearGranulesFilter}
-                paramKey={'collectionId'}
-                label={strings.collection}
-                inputProps={{
-                  placeholder: 'All',
-                  className: 'dropdown--large',
-                }}
-              />
-              <Dropdown
-                options={status}
-                action={filterGranules}
-                clear={clearGranulesFilter}
-                paramKey={'status'}
-                label={'Status'}
-              />
-            </ListFilters>
-          </List>
-        </section>
-        <LogViewer
-          query={{ q: pdrName }}
-          dispatch={this.props.dispatch}
-          logs={this.props.logs}
-          notFound={`No recent logs for ${pdrName}`}
-        />
-      </div>
-    );
-  }
-}
-
-PDR.propTypes = {
-  collections: PropTypes.object,
-  dispatch: PropTypes.func,
-  granules: PropTypes.object,
-  history: PropTypes.object,
-  logs: PropTypes.object,
-  match: PropTypes.object,
-  pdrs: PropTypes.object,
-  queryParams: PropTypes.object,
+            <Dropdown
+              options={status}
+              action={filterGranules}
+              clear={clearGranulesFilter}
+              paramKey={'status'}
+              label={'Status'}
+            />
+          </ListFilters>
+        </List>
+      </section>
+      <LogViewer
+        query={{ q: pdrName }}
+        dispatch={dispatch}
+        logs={logs}
+        notFound={`No recent logs for ${pdrName}`}
+      />
+    </div>
+  );
 };
 
-export default withRouter(
-  connect((state) => ({
-    collections: state.collections,
-    granules: state.granules,
-    logs: state.logs,
-    pdrs: state.pdrs,
-  }))(PDR)
-);
+export default PDR;
