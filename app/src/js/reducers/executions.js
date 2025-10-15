@@ -46,7 +46,6 @@ export default createReducer(initialState, {
   },
   [SEARCH_EXECUTIONS]: (state, action) => {
     state.list.params.infix = action.infix;
-    state.list.params.archived = action.archived;
   },
   [CLEAR_EXECUTIONS_SEARCH]: (state) => {
     state.list.params.infix = null;

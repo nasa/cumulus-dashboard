@@ -40,8 +40,7 @@ const Home = ({
   const generateQuery = () => ({
     error__exists: true,
     status: 'failed',
-    limit: 20,
-    archived: false,
+    limit: 20
   });
 
   const query = useCallback(() => {
@@ -49,14 +48,10 @@ const Home = ({
       timestamp__from: Date.now() - (24 * 60 * 60 * 1000),
       timestamp__to: Date.now()
     };
-    const defaultExecutionQuery = {
-      ...defaultTimeRange,
-      archived: false,
-    };
 
     dispatch(getStats());
     dispatch(getCount({ type: 'granules', field: 'status' }));
-    dispatch(listExecutions(defaultExecutionQuery));
+    dispatch(listExecutions(defaultTimeRange));
     dispatch(listGranules(generateQuery()));
     dispatch(listRules(defaultTimeRange));
   }, [dispatch]);
