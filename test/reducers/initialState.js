@@ -10,6 +10,7 @@ test.serial('initialState defaults to Custom if unset or unrecognized', (t) => {
   config.initialDateRange = 'All';
   let state = initialState();
   t.deepEqual(state, {
+    archived: false,
     dateRange: {
       value: 'Custom',
       label: 'Custom',
@@ -22,6 +23,7 @@ test.serial('initialState defaults to Custom if unset or unrecognized', (t) => {
   config.initialDateRange = 'skibidy toilet';
   state = initialState();
   t.deepEqual(state, {
+    archived: false,
     dateRange: {
       value: 'Custom',
       label: 'Custom',
@@ -36,6 +38,7 @@ test.serial('initialState is based on INITIAL_DATE_RANGE_IN_DAYS environment var
   config.initialDateRange = 'Custom';
   let state = initialState();
   t.deepEqual(state, {
+    archived: false,
     dateRange: {
       value: 'Custom',
       label: 'Custom',
