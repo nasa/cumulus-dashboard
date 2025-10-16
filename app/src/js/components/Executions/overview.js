@@ -91,7 +91,6 @@ const ExecutionOverview = ({
             labelKey="name"
             placeholder="Execution Name"
             searchKey="executions"
-            archived="false"
           />
           <ListFilters>
             <Dropdown

@@ -189,7 +189,6 @@ const AllGranules = ({
             action={searchGranules}
             clear={clearGranulesSearch}
             infixBoolean={isInfixSearch}
-            archived="false"
             label="Search"
             labelKey="granuleId"
             placeholder="Granule ID"

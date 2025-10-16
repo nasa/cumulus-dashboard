@@ -325,7 +325,6 @@ const CollectionOverview = ({
             clear={clearGranulesSearch}
             label="Search"
             infixBoolean={isInfixSearch}
-            archived="false"
             labelKey="granuleId"
             placeholder="Granule ID"
             searchKey="granules"

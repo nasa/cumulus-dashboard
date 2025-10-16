@@ -181,7 +181,6 @@ const CollectionGranules = ({
             placeholder="Granule ID"
             searchKey="granules"
             infixBoolean={isInfixSearch}
-            archived="false"
           />
           <ListFilters>
             <Checkbox

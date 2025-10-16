@@ -5,7 +5,6 @@ import axios from 'axios';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import cloneDeep from 'lodash/cloneDeep';
-import omit from 'lodash/omit';
 
 import { configureRequest } from './helpers';
 import _config from '../config';
@@ -206,7 +205,7 @@ export const listGranules = (options) => (dispatch, getState) => {
       method: 'GET',
       id: null,
       url: new URL('granules', root).href,
-      params: parseArchivedInListParams({ limit: defaultPageLimit, ...options, ...timeFilters })
+      params: { limit: defaultPageLimit, ...options, ...timeFilters }
     }
   });
 };
@@ -422,12 +421,7 @@ export const removeAndDeleteGranule = (granuleId) => (dispatch, getState) => {
   return dispatch(deleteGranule(granuleId));
 };
 
-export const searchGranules = (xfix, infixBoolean, archived = false) => ({
-  type: types.SEARCH_GRANULES,
-  xfix,
-  infixBoolean,
-  archived,
-});
+export const searchGranules = (xfix, infixBoolean) => ({ type: types.SEARCH_GRANULES, xfix, infixBoolean });
 export const clearGranulesSearch = () => ({ type: types.CLEAR_GRANULES_SEARCH });
 export const filterGranules = (param) => ({ type: types.FILTER_GRANULES, param });
 export const clearGranulesFilter = (paramKey) => ({ type: types.CLEAR_GRANULES_FILTER, paramKey });
@@ -678,24 +672,23 @@ export const getExecutionLogs = (executionName) => ({
 
 export const listExecutions = (options) => (dispatch, getState) => {
   const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-
   return dispatch({
     [CALL_API]: {
       type: types.EXECUTIONS,
       method: 'GET',
       url: new URL('executions', root).href,
-      params: parseArchivedInListParams({ limit: defaultPageLimit, ...options, ...timeFilters })
+      params: { limit: defaultPageLimit, ...options, ...timeFilters }
     }
   });
 };
 
-export const listExecutionsByGranule = (granuleId, payload, archived = false) => ({
+export const listExecutionsByGranule = (granuleId, payload) => ({
   [CALL_API]: {
     type: types.EXECUTIONS_LIST,
     method: 'POST',
     id: granuleId,
     path: 'executions/search-by-granules',
-    params: parseArchivedInListParams({ limit: defaultPageLimit, archived }),
+    params: { limit: defaultPageLimit },
     data: payload
   }
 });
@@ -703,7 +696,7 @@ export const listExecutionsByGranule = (granuleId, payload, archived = false) =>
 export const filterExecutions = (param) => ({ type: types.FILTER_EXECUTIONS, param });
 export const clearExecutionsFilter = (paramKey) => ({ type: types.CLEAR_EXECUTIONS_FILTER, paramKey });
 // infixBoolean is passed but ignored by searchExecutions
-export const searchExecutions = (infix, archived) => ({ type: types.SEARCH_EXECUTIONS, infix, archived });
+export const searchExecutions = (infix) => ({ type: types.SEARCH_EXECUTIONS, infix });
 export const clearExecutionsSearch = () => ({ type: types.CLEAR_EXECUTIONS_SEARCH });
 
 export const getGranulesWorkflows = (payload) => ({
