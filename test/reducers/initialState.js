@@ -23,6 +23,7 @@ test.serial('initialState defaults to Custom if unset or unrecognized', (t) => {
   config.initialDateRange = 'skibidy toilet';
   state = initialState();
   t.deepEqual(state, {
+    archived: false,
     dateRange: {
       value: 'Custom',
       label: 'Custom',
