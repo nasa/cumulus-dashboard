@@ -53,7 +53,7 @@ export const refreshAccessToken = (token) => (dispatch) => {
 export const setTokenState = (token) => ({ type: types.SET_TOKEN, token });
 
 const parseArchivedInListParams = (obj) => {
-  if (obj.archived === false) {
+  if (obj.archived === false || obj.archived === 'false') {
     return obj;
   }
   // if intention is to search archived records, we need to give no value for "archived"
