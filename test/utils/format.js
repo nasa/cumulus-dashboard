@@ -151,19 +151,31 @@ test('collectionHrefFromNameVersion returns a nullValue collection if the collec
   t.is('--', collectionHrefFromNameVersion());
 });
 
-test('fullDate returns the properly formatted date', function (t) {
-  const date = '1744833161789';
-  const date2 = '1759434229834';
+test('fullDate and dateOnly returns the properly formatted date', function (t) {
+  const fullDate = '1744833161789';
+  const fullDate2 = '1759434229834';
+  const dateOnly = '1744783161789';
+  const dateOnly2 = '1744683161789';
 
   config.initialTimezoneFormat = 'UTC';
-  const formattedUTCDate = fullDate(date);
-  const formattedUTCDate2 = fullDate(date2);
+  const formattedUTCDate = fullDate(fullDate);
+  const formattedUTCDate2 = fullDate(fullDate2);
   t.is(formattedUTCDate, '19:52:41 04/14/25');
   t.is(formattedUTCDate2, '19:43:49 10/02/25');
 
+  const formattedUTCDateOnly = dateOnly(dateOnly);
+  const formattedUTCDateOnly2 = dateOnly(dateOnly2);
+  t.is(formattedUTCDateOnly, '04/16/25');
+  t.is(formattedUTCDateOnly2, '04/15/25');
+
   config.initialTimezoneFormat = '';
-  const formattedDate = fullDate(date);
-  const formattedDate2 = fullDate(date2);
+  const formattedDate = fullDate(fullDate);
+  const formattedDate2 = fullDate(fullDate2);
   t.is(formattedDate, '12:52:41 04/16/25');
   t.is(formattedDate2, '12:43:49 10/02/25');
+
+  const formattedDateOnly = dateOnly(dateOnly);
+  const formattedDateOnly2 = dateOnly(dateOnly2);
+  t.is(formattedDateOnly, '04/15/25');
+  t.is(formattedDateOnly2, '04/14/25');
 });
