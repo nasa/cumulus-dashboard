@@ -5,12 +5,13 @@ import {
   getFormattedCollectionId,
   formatCollectionId,
   fullDate,
+  dateOnly,
   collectionHrefFromId,
   collectionHrefFromNameVersion,
   getEncodedCollectionId,
   deconstructCollectionId
 } from '../../app/src/js/utils/format.js';
-import config from '../../app/src/js/config.js';
+import config from '../../app/src/js/config';
 
 test('buildRedirectUrl() properly strips ?token query parameter', function (t) {
   const redirect = buildRedirectUrl({
@@ -152,30 +153,33 @@ test('collectionHrefFromNameVersion returns a nullValue collection if the collec
 });
 
 test('fullDate and dateOnly returns the properly formatted date', function (t) {
-  const fullDate = '1744833161789';
-  const fullDate2 = '1759434229834';
-  const dateOnly = '1744783161789';
-  const dateOnly2 = '1744683161789';
+  const date = '2025-04-13T01:15:32.567';
+  const date2 = '2025-01-13T04:15:32.567';
+
+  const formattedDate = fullDate(date);
+  const formattedDate2 = fullDate(date2);
+
+  t.is(formattedDate, '01:15:32 04/13/25');
+  t.is(formattedDate2, '04:15:32 01/13/25'); 
+
+  // test with UTC timezoneFormat using timestamp 
+  const timezoneFormatValue = config.initialTimezoneFormat;
+
+  const fullDateTimestamp = 1744833161789;
+  const fullDateTimestamp2 = 1759434229834;
+  const dateOnlyTimestamp = 1744783161789;
+  const dateOnlyTimestamp2 = 1744683161789;
 
   config.initialTimezoneFormat = 'UTC';
-  const formattedUTCDate = fullDate(fullDate);
-  const formattedUTCDate2 = fullDate(fullDate2);
-  t.is(formattedUTCDate, '19:52:41 04/14/25');
+  const formattedUTCDate = fullDate(fullDateTimestamp);
+  const formattedUTCDate2 = fullDate(fullDateTimestamp2);
+  t.is(formattedUTCDate, '19:52:41 04/16/25');
   t.is(formattedUTCDate2, '19:43:49 10/02/25');
 
-  const formattedUTCDateOnly = dateOnly(dateOnly);
-  const formattedUTCDateOnly2 = dateOnly(dateOnly2);
-  t.is(formattedUTCDateOnly, '04/16/25');
-  t.is(formattedUTCDateOnly2, '04/15/25');
+  const formattedUTCDateOnly = dateOnly(dateOnlyTimestamp);
+  const formattedUTCDateOnly2 = dateOnly(dateOnlyTimestamp2);
+  t.is(formattedUTCDateOnly, '04/16/2025');
+  t.is(formattedUTCDateOnly2, '04/15/2025');
 
-  config.initialTimezoneFormat = '';
-  const formattedDate = fullDate(fullDate);
-  const formattedDate2 = fullDate(fullDate2);
-  t.is(formattedDate, '12:52:41 04/16/25');
-  t.is(formattedDate2, '12:43:49 10/02/25');
-
-  const formattedDateOnly = dateOnly(dateOnly);
-  const formattedDateOnly2 = dateOnly(dateOnly2);
-  t.is(formattedDateOnly, '04/15/25');
-  t.is(formattedDateOnly2, '04/14/25');
+  config.initialTimezoneFormat = timezoneFormatValue;
 });
