@@ -163,14 +163,14 @@ test('fullDate and dateOnly returns the properly formatted date', function (t) {
   t.is(formattedDate2, '04:15:32 01/13/25'); 
 
   // test with UTC timezoneFormat using timestamp 
-  const timezoneFormatValue = config.initialTimezoneFormat;
+  const timezoneFormatValue = config.useUTCTimeFormat;
 
   const fullDateTimestamp = 1744833161789;
   const fullDateTimestamp2 = 1759434229834;
   const dateOnlyTimestamp = 1744783161789;
   const dateOnlyTimestamp2 = 1744683161789;
 
-  config.initialTimezoneFormat = 'UTC';
+  config.useUTCTimeFormat = 'UTC';
   const formattedUTCDate = fullDate(fullDateTimestamp);
   const formattedUTCDate2 = fullDate(fullDateTimestamp2);
   t.is(formattedUTCDate, '19:52:41 04/16/25');
@@ -181,5 +181,5 @@ test('fullDate and dateOnly returns the properly formatted date', function (t) {
   t.is(formattedUTCDateOnly, '04/16/2025');
   t.is(formattedUTCDateOnly2, '04/15/2025');
 
-  config.initialTimezoneFormat = timezoneFormatValue;
+  config.useUTCTimeFormat = timezoneFormatValue;
 });

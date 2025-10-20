@@ -36,7 +36,7 @@ export const fullDate = (datestring) => {
   if (!datestring) {
     return nullValue;
   }
-  const dateFormat = 'initialTimezoneFormat' in config && config.initialTimezoneFormat === 'UTC' ? moment.utc(datestring) : moment(datestring);
+  const dateFormat = 'useUTCTimeFormat' in config && config.useUTCTimeFormat === 'UTC' ? moment.utc(datestring) : moment(datestring);
   return dateFormat.format('HH:mm:ss MM/DD/YY');
 };
 
@@ -44,7 +44,7 @@ export const dateOnly = (datestring) => {
   if (!datestring) {
     return nullValue;
   }
-  const dateFormat = 'initialTimezoneFormat' in config && config.initialTimezoneFormat === 'UTC' ? moment.utc(datestring) : moment(datestring);
+  const dateFormat = 'useUTCTimeFormat' in config && config.useUTCTimeFormat === 'UTC' ? moment.utc(datestring) : moment(datestring);
   return dateFormat.format('MM/DD/YYYY');
 };
 

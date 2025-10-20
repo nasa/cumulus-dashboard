@@ -11,6 +11,6 @@ module.exports = {
     BUCKET: 'https://example.com/bucket',
     STAGE: 'production',
     DAAC_NAME: 'Cumulus_Daac',
-    INITIAL_TIMEZONE_FORMAT: ''
+    USE_UTC_TIME_FORMAT: ''
   }
 };

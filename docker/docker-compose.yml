@@ -17,7 +17,7 @@ services:
         - HIDE_PDR
         - KIBANAROOT
         - INITIAL_DATE_RANGE_IN_DAYS
-        - INITIAL_TIMEZONE_FORMAT
+        - USE_UTC_TIME_FORMAT
         - SERVED_BY_CUMULUS_API
         - STAGE
   dashboard:
@@ -35,6 +35,6 @@ services:
         - HIDE_PDR
         - KIBANAROOT
         - INITIAL_DATE_RANGE_IN_DAYS
-        - INITIAL_TIMEZONE_FORMAT
+        - USE_UTC_TIME_FORMAT
         - SERVED_BY_CUMULUS_API
         - STAGE
