@@ -190,6 +190,7 @@ const AllGranules = ({
             action={searchGranules}
             clear={clearGranulesSearch}
             infixBoolean={isInfixSearch}
+            archived={isArchivedSearch}
             label="Search"
             labelKey="granuleId"
             placeholder="Granule ID"
