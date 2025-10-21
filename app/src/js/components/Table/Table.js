@@ -65,6 +65,7 @@ const List = ({
 
   const [queryConfig, setQueryConfig] = useState({
     page: 1,
+    archived: false,
     sort_key: buildSortKey(sortBy || [{ id: initialSortId, desc: true }]),
     ...initialInfix.current ? { infix: initialInfix.current } : {},
     ...query,
