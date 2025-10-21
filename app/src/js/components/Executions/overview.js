@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { get } from 'object-path';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -22,6 +22,7 @@ import Search from '../Search/search';
 import Overview from '../Overview/overview';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import Checkbox from '../Checkbox/Checkbox';
 
 const breadcrumbConfig = [
   {
@@ -47,6 +48,7 @@ const ExecutionOverview = ({
   const { inflight, meta } = list;
   const { count, queriedAt } = meta;
   const tableColumnsArray = tableColumns({ dispatch });
+  const [isArchivedSearch, setIsArchivedSearch] = useState(false);
 
   useEffect(() => {
     dispatch(listWorkflows());
@@ -91,9 +93,18 @@ const ExecutionOverview = ({
             labelKey="name"
             placeholder="Execution Name"
             searchKey="executions"
+            archived={isArchivedSearch}
           />
-          
           <ListFilters>
+            <Checkbox
+              id="chk_isArchivedSearch"
+              checked={isArchivedSearch}
+              onChange={setIsArchivedSearch}
+              label="Include Archived?"
+              inputLabel="Archived"
+              className="archived-search"
+              tip="Toggle inclusion of archived records in search results"
+            />
             <Dropdown
               options={statusOptions}
               action={filterExecutions}
