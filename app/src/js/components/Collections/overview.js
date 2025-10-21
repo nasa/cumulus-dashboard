@@ -93,6 +93,7 @@ const CollectionOverview = ({
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const [selected, setSelected] = useState([]);
   const [isInfixSearch, setIsInfixSearch] = useState(false);
+  const [isArchivedSearch, setIsArchivedSearch] = useState(false);
 
   useEffect(() => {
     dispatch(listCollections());
@@ -325,6 +326,7 @@ const CollectionOverview = ({
             clear={clearGranulesSearch}
             label="Search"
             infixBoolean={isInfixSearch}
+            archived={isArchivedSearch}
             labelKey="granuleId"
             placeholder="Granule ID"
             searchKey="granules"
@@ -338,6 +340,15 @@ const CollectionOverview = ({
               inputLabel="Infix"
               className="infix-search"
               tip="Toggle between prefix and infix search. When enabled, the search field matches substrings instead of prefixes."
+            />
+            <Checkbox
+              id="chk_isArchivedSearch"
+              checked={isArchivedSearch}
+              onChange={setIsArchivedSearch}
+              label="Include Archived?"
+              inputLabel="Archived"
+              className="archived-search"
+              tip="Toggle inclusion of archived records in search results"
             />
             <Dropdown
               options={statusOptions}

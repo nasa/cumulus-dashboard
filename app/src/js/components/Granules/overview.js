@@ -68,6 +68,7 @@ class GranulesOverview extends React.Component {
       workflowMeta: defaultWorkflowMeta,
       selected: [],
       isInfixSearch: false,
+      isArchivedSearch: false,
     };
   }
 
@@ -123,6 +124,10 @@ class GranulesOverview extends React.Component {
     this.setState({ isInfixSearch: value });
   };
 
+  setIsArchivedSearch = (value) => {
+    this.setState({ isArchivedSearch: value });
+  };
+
   applyWorkflow(granuleId) {
     const { workflow, workflowMeta } = this.state;
     const { meta } = JSON.parse(workflowMeta);
@@ -160,7 +165,7 @@ class GranulesOverview extends React.Component {
     const { dropdowns } = collections;
     const { dropdowns: providerDropdowns } = providers;
     const { count, queriedAt } = list.meta;
-    const { isInfixSearch } = this.state;
+    const { isInfixSearch, isArchivedSearch } = this.state;
 
     return (
       <div className="page__component">
@@ -212,6 +217,7 @@ class GranulesOverview extends React.Component {
               placeholder="Granule ID"
               searchKey="granules"
               infixBoolean={isInfixSearch}
+              archived={isArchivedSearch}
             />
             <ListFilters>
               <Checkbox
@@ -222,6 +228,15 @@ class GranulesOverview extends React.Component {
                 inputLabel="Infix"
                 className="infix-search"
                 tip="Toggle between prefix and infix search. When enabled, the search field matches substrings instead of prefixes."
+              />
+              <Checkbox
+                id="chk_isArchivedSearch"
+                checked={isArchivedSearch}
+                onChange={this.setIsArchivedSearch}
+                label="Include Archived?"
+                inputLabel="Archived"
+                className="archived-search"
+                tip="Toggle inclusion of archived records in search results"
               />
               <Dropdown
                 options={statusOptions}
