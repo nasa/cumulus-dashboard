@@ -208,6 +208,7 @@ class GranulesOverview extends React.Component {
             onSelect={this.updateSelection}
             toggleColumnOptionsAction={toggleGranulesTableColumns}
             tableId="granules-overview"
+            archived={isArchivedSearch}
           >
             <Search
               action={searchGranules}

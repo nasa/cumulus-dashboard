@@ -85,6 +85,7 @@ const ExecutionOverview = ({
           filterAction={filterExecutions}
           filterClear={clearExecutionsFilter}
           tableId="executions"
+          archived={isArchivedSearch}
         >
           <Search
             action={searchExecutions}
