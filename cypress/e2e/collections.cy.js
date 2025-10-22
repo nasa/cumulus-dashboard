@@ -649,7 +649,7 @@ describe('Dashboard Collections Page', () => {
         .contains(infix);
     });
 
-    it('should dynamically update menu, sidbar and breadcrumb links with latest filter criteria', () => {
+    it('should dynamically update menu, sidebar and breadcrumb links with latest filter criteria', () => {
       const providerString = 's3_provider';
       const searchString = 'Test-L2%2FCoastal';
       cy.visit('/collections/all');

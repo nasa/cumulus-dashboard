@@ -335,6 +335,29 @@ describe('Dashboard Granules Page', () => {
         .contains(infix);
     });
 
+    it('should search by unarchived or both as toggled', () => {
+      const prefix_both = 'MOD09GQ.ARC';
+      const prefix_archived = 'MOD09GQ.ARCY';
+      const prefix_not_archived = 'MOD09GQ.ARCN';
+      cy.visit('/granules');
+      cy.get('#chk_isArchivedSearch').should('not.be.checked');
+      cy.get('.search').as('search');
+      cy.get('@search').click().type(prefix_both).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('@search').click().type(prefix_not_archived).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('@search').click().type(prefix_archived).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 0);
+
+      cy.get('#chk_isArchivedSearch').click({ force: true }).should('be.checked');
+      cy.get('@search').click().type(prefix_both).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 2);
+      cy.get('@search').click().type(prefix_not_archived).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('@search').click().type(prefix_archived).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+    })
+
     it('Should have search by infix input in granule status list view and update results when toggling search by infix', () => {
       const prefix = 'test_';
       const infix = 'A201';
