@@ -264,7 +264,7 @@ class PDR extends React.Component {
                 id="chk_isArchivedSearch"
                 checked={isArchivedSearch}
                 onChange={this.setIsArchivedSearch}
-                label="Include Archived?"
+                label="Include"
                 inputLabel="Archived"
                 className="archived-search"
                 tip="Toggle inclusion of archived records in search results"
