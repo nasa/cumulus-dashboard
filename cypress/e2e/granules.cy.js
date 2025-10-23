@@ -335,7 +335,7 @@ describe('Dashboard Granules Page', () => {
         .contains(infix);
     });
 
-    it('should search by unarchived or both as toggled', () => {
+    it('Should search by unarchived or both as toggled', () => {
       const prefixBoth = 'MOD09GQ.ARC';
       const prefixArchived = 'MOD09GQ.ARCY';
       const prefixNotArchived = 'MOD09GQ.ARCN';
@@ -356,7 +356,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('.table .tbody .tr').should('have.length', 1);
       cy.get('@search').click().type(prefixArchived).type('{enter}');
       cy.get('.table .tbody .tr').should('have.length', 1);
-    })
+    });
 
     it('Should have search by infix input in granule status list view and update results when toggling search by infix', () => {
       const prefix = 'test_';
