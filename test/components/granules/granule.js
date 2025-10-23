@@ -16,7 +16,6 @@ import { GranuleOverview } from '../../../app/src/js/components/Granules/granule
 
 const logs = { items: [''] };
 
-const match = { params: { granuleId: 'my-granule-id' } };
 const granules = {
   map: {
     'my-granule-id': {
@@ -37,6 +36,7 @@ const granules = {
     }
   }
 };
+const locationQueryParams = {search: {} }
 const executions = {
   map: {
     'my-granule-id': {
@@ -57,7 +57,7 @@ const someStore = mockStore({
   subscribe: () => {},
   timer: { running: false, seconds: -1 },
   datepicker: initialState(),
-  locationQueryParams,
+  locationQueryParams: locationQueryParams,
   granules: granules,
   executions: executions,
   logs: logs,
