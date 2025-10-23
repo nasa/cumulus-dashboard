@@ -17,7 +17,6 @@ import { GranuleOverview } from '../../../app/src/js/components/Granules/granule
 const logs = { items: [''] };
 
 const match = { params: { granuleId: 'my-granule-id' } };
-const dispatch = () => {};
 const granules = {
   map: {
     'my-granule-id': {
@@ -38,13 +37,20 @@ const granules = {
     }
   }
 };
-
-const locationQueryParams = {
-  search: {}
+const executions = {
+  map: {
+    'my-granule-id': {
+      data: [],
+      error: null,
+    }
+  }
 };
+const recoveryStatus = { map: {} };
+const workflowOptions = [];
 
 const middlewares = [requestMiddleware, thunk];
 const mockStore = configureMockStore(middlewares);
+
 const someStore = mockStore({
   getState: () => {},
   dispatch,
@@ -52,7 +58,11 @@ const someStore = mockStore({
   timer: { running: false, seconds: -1 },
   datepicker: initialState(),
   locationQueryParams,
-  logs,
+  granules: granules,
+  executions: executions,
+  logs: logs,
+  recoveryStatus: recoveryStatus,
+  workflowOptions: workflowOptions
 });
 
 test.beforeEach((t) => {
@@ -68,16 +78,9 @@ test.serial('CUMULUS-336 Granule file links use the correct URL', function (t) {
 
   const { container } = render(
     <Provider store={someStore}>
-    <MemoryRouter>
+    <MemoryRouter initialEntries={['/granules/granule/my-granule-id']}>
     <GranuleOverview
-      dispatch={dispatch}
-      match={match}
-      executions={{}}
-      granules={granules}
-      logs={logs}
-      recoveryStatus={{}}
       skipReloadOnMount={true}
-      workflowOptions={[]}
     />
     </MemoryRouter>
     </Provider>
@@ -94,16 +97,9 @@ test.serial('CUMULUS-336 Granule file links use the correct URL', function (t) {
 test.serial('Checking granule for size prop', function (t) {
   const { container } = render(
     <Provider store={someStore}>
-    <MemoryRouter>
+    <MemoryRouter initialEntries={['/granules/granule/my-granule-id']}>
     <GranuleOverview
-      dispatch={dispatch}
-      match={match}
-      executions={{}}
-      granules={granules}
-      logs={logs}
-      recoveryStatus={{}}
       skipReloadOnMount={true}
-      workflowOptions={[]}
     />
     </MemoryRouter>
     </Provider>
