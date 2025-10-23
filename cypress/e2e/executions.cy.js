@@ -301,13 +301,13 @@ describe('Dashboard Executions Page', () => {
       );
 
       cy.intercept(
-        'GET', 
+        'GET',
         `http://localhost:5001/executions/status/${executionArn}`
       ).as('getExecutionStatus');
 
       cy.visit(`/executions/execution/${executionArn}`);
-      cy.wait('@getExecutionStatus'); 
-      cy.contains('.heading--large', `Execution: ${executionName}`); 
+      cy.wait('@getExecutionStatus');
+      cy.contains('.heading--large', `Execution: ${executionName}`);
 
       const startMatch = fullDate('2018-12-06T19:18:11.174Z');
       const endMatch = fullDate('2018-12-06T19:18:41.145Z');

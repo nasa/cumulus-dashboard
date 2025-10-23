@@ -96,7 +96,7 @@ describe('Dashboard PDRs Page', () => {
       cy.intercept('GET', '**/pdrs?*').as('listPdrs');
       cy.intercept('GET', '**/stats/aggregate*').as('getPdrCounts');
       cy.visit('/pdrs');
-      cy.wait('@listPdrs'); 
+      cy.wait('@listPdrs');
       cy.wait('@getPdrCounts');
 
       cy.contains('.sidebar__row ul li a', 'Running 4')
@@ -106,7 +106,7 @@ describe('Dashboard PDRs Page', () => {
       cy.contains('.heading--xlarge', 'Pdrs');
       cy.contains('.heading--large', 'Active PDRs')
         .find('.num-title')
-        .should('contain', 4);   
+        .should('contain', 4);
 
       cy.get('.table .tbody .tr').as('list');
       cy.get('@list').should('have.length', 4);
