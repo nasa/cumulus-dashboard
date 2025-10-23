@@ -54,10 +54,8 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
               <Route
                 exact
                 path="/granules"
-                render={(props) => (
-                  <GranulesOverview
-                    {...props}
-                  />
+                render={() => (
+                  <GranulesOverview/>
                 )}
               />
               <Route
