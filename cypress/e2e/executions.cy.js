@@ -300,9 +300,14 @@ describe('Dashboard Executions Page', () => {
         { fixture: 'logs-success.json', statusCode: 200 }
       );
 
-      cy.visit(`/executions/execution/${executionArn}`);
+      cy.intercept(
+        'GET', 
+        `http://localhost:5001/executions/status/${executionArn}`
+      ).as('getExecutionStatus');
 
-      cy.contains('.heading--large', 'Execution');
+      cy.visit(`/executions/execution/${executionArn}`);
+      cy.wait('@getExecutionStatus'); 
+      cy.contains('.heading--large', `Execution: ${executionName}`); 
 
       const startMatch = fullDate('2018-12-06T19:18:11.174Z');
       const endMatch = fullDate('2018-12-06T19:18:41.145Z');
