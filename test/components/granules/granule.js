@@ -12,7 +12,7 @@ import thunk from 'redux-thunk';
 import { initialState } from '../../../app/src/js/reducers/datepicker';
 import { Provider } from 'react-redux';
 
-import { GranuleOverview } from '../../../app/src/js/components/Granules/granule.js';
+import GranuleOverview from '../../../app/src/js/components/Granules/granule.js';
 
 const logs = { items: [''] };
 
