@@ -45,6 +45,7 @@ const collections = {};
 const providers = {};
 const stats = { count: 0, stats: {} };
 const dispatch = () => {};
+const locationQueryParams = {search: {} }
 const granulesExecutions = {
   workflows: {
     data: ['fakeworkflow1', 'fakeworkflow2']
@@ -59,6 +60,7 @@ test('GranulesOverview generates bulkAction for recovery button', function (t) {
     sorts: {},
     timer: { running: false, seconds: -1 },
     datepicker: initialState(),
+    locationQueryParams: locationQueryParams,
     subscribe: () => {},
     dispatch: dispatch,
     getState: () => {},
@@ -94,6 +96,7 @@ test('GranulesOverview does not generate bulkAction for recovery button', functi
     sorts: {},
     timer: { running: false, seconds: -1 },
     datepicker: initialState(),
+    locationQueryParams: locationQueryParams,
     subscribe: () => {},
     dispatch: dispatch,
     getState: () => {},
@@ -127,6 +130,7 @@ test('GranulesOverview generates Granule Inventory List button', function (t) {
     sorts: {},
     timer: { running: false, seconds: -1 },
     datepicker: initialState(),
+    locationQueryParams: locationQueryParams,
     subscribe: () => {},
     dispatch: dispatch,
     getState: () => {},
