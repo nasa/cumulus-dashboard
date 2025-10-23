@@ -47,10 +47,10 @@ describe('Dashboard Collections Page', () => {
       cy.contains('.heading--xlarge', 'Collections');
 
       cy.get('.table .tbody .tr', { timeout: 10000 }).should('have.length', 2);
-      cy.get('.tbody > .tr > :nth-child(4)').should('contain', '12');
+      cy.get('.tbody > .tr > :nth-child(4)').should('contain', '14');
       cy.get('.tbody > .tr > :nth-child(5)').should('contain', '7');
       cy.get('.tbody > .tr > :nth-child(6)').should('contain', '2');
-      cy.get('.tbody > .tr > :nth-child(7)').should('contain', '2');
+      cy.get('.tbody > .tr > :nth-child(7)').should('contain', '4');
       cy.get('.tbody > .tr > :nth-child(8)').should('contain', '1');
 
       cy.clearStartDateTime();
@@ -571,7 +571,7 @@ describe('Dashboard Collections Page', () => {
         cy.get('li')
           .first().should('contain', 7).and('contain', 'Completed')
           .next()
-          .should('contain', 2)
+          .should('contain', 4)
           .and('contain', 'Failed')
           .next()
           .should('contain', 2)
@@ -589,7 +589,7 @@ describe('Dashboard Collections Page', () => {
         cy.get('li')
           .first().should('contain', 7).and('contain', 'Completed')
           .next()
-          .should('contain', 2)
+          .should('contain', 4)
           .and('contain', 'Failed')
           .next()
           .should('contain', 2)
@@ -607,7 +607,7 @@ describe('Dashboard Collections Page', () => {
         cy.get('li')
           .first().should('contain', 0).and('contain', 'Completed')
           .next()
-          .should('contain', 2)
+          .should('contain', 4)
           .and('contain', 'Failed')
           .next()
           .should('contain', 0)
@@ -647,6 +647,30 @@ describe('Dashboard Collections Page', () => {
       cy.get('.table .tbody .tr').should('have.length.at.least', 1);
       cy.get('.table .tbody .tr').eq(0).children('.td').eq(2)
         .contains(infix);
+    });
+
+    it('Should search by unarchived or both as toggled', () => {
+      const prefixBoth = 'MOD09GQ.ARC';
+      const prefixArchived = 'MOD09GQ.ARCY';
+      const prefixNotArchived = 'MOD09GQ.ARCN';
+
+      cy.visit('/collections/collection/MOD09GQ/006');
+      cy.get('#chk_isArchivedSearch').should('not.be.checked');
+      cy.get('.search').as('search');
+      cy.get('@search').click().type(prefixBoth).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('@search').click().type(prefixNotArchived).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('@search').click().type(prefixArchived).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 0);
+
+      cy.get('#chk_isArchivedSearch').click({ force: true }).should('be.checked');
+      cy.get('@search').click().type(prefixBoth).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 2);
+      cy.get('@search').click().type(prefixNotArchived).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('@search').click().type(prefixArchived).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 1);
     });
 
     it('should dynamically update menu, sidebar and breadcrumb links with latest filter criteria', () => {
