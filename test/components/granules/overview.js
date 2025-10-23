@@ -44,7 +44,6 @@ const workflowOptions = [];
 const collections = {};
 const providers = {};
 const stats = { count: 0, stats: {} };
-const location = { pathname: 'granules' };
 const dispatch = () => {};
 const granulesExecutions = {
   workflows: {
@@ -76,8 +75,8 @@ test('GranulesOverview generates bulkAction for recovery button', function (t) {
 
   const { container } = render(
     <Provider store={someStore}>
-      <MemoryRouter>
-      <GranulesOverview/>
+      <MemoryRouter initialEntries={['/granules']}>
+        <GranulesOverview/>
       </MemoryRouter>
     </Provider>);
 
@@ -111,8 +110,8 @@ test('GranulesOverview does not generate bulkAction for recovery button', functi
 
   const { container } = render(
     <Provider store={someStore}>
-      <MemoryRouter>
-      <GranulesOverview/>
+      <MemoryRouter initialEntries={['/granules']}>
+        <GranulesOverview/>
       </MemoryRouter>
     </Provider>);
 
@@ -144,8 +143,8 @@ test('GranulesOverview generates Granule Inventory List button', function (t) {
 
   const { container } = render(
     <Provider store={someStore}>
-      <MemoryRouter>
-      <GranulesOverview/>
+      <MemoryRouter initialEntries={['/granules']}>
+        <GranulesOverview/>
       </MemoryRouter>
     </Provider>);
 
