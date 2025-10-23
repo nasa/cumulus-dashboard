@@ -56,7 +56,6 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
                 path="/granules"
                 render={(props) => (
                   <GranulesOverview
-                    queryParams={filteredQueryParams}
                     {...props}
                   />
                 )}
