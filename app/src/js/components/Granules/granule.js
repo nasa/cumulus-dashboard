@@ -1,11 +1,10 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
 import path from 'path';
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import PropTypes from 'prop-types';
-import { Link, useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import get from 'object-path';
+import React, { useEffect, useState, useCallback } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { get } from 'object-path';
 import pick from 'lodash/pick';
 import {
   getGranule,
@@ -68,7 +67,6 @@ const tableColumns = [
     Header: 'File Size (bytes)',
     accessor: (row) => row.size || '(No Size Found)',
     id: 'size'
-
   },
   {
     Header: 'Bucket',
@@ -109,10 +107,10 @@ const metaAccessors = [
     label: 'Executions List',
     accessor: (row) => (row.granuleId && row.collectionId
       ? (
-      <Link to={() => ({ pathname: `/executions/executions-list/${encodeURIComponent(row.collectionId)}/${encodeURIComponent(path.basename(row.granuleId))}` })}>link</Link>
+        <Link to={`/executions/executions-list/${encodeURIComponent(row.collectionId)}/${encodeURIComponent(path.basename(row.granuleId))}`}>link</Link>
         )
       : (
-          nullValue
+        nullValue
         )),
   },
   {
@@ -131,98 +129,87 @@ const metaAccessors = [
   },
 ];
 
-const GranuleOverview = ({ skipReloadOnMount = false }) => {
+function GranuleOverview({ skipReloadOnMount = false }) {
   const { granuleId } = useParams();
   const dispatch = useDispatch();
-
-  const {
-    config,
-    granules,
-    executions,
-    recoveryStatus,
-    workflowOptions,
-  } = useSelector((state) => ({
-    config: state.config,
-    granules: state.granules,
-    executions: state.executions,
-    recoveryStatus: state.recoveryStatus,
-    workflowOptions: workflowOptionNames(state),
-  }));
 
   const [showRecoveryStatus, setShowRecoveryStatus] = useState(false);
   const [reingestWorkflow, setReingestWorkflow] = useState({});
   const [workflow, setWorkflow] = useState(undefined);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
 
-  const record = useMemo(() => granules.map[granuleId], [granules.map, granuleId]);
+  const granules = useSelector((state) => state.granules);
+  const executions = useSelector((state) => state.executions);
+  const config = useSelector((state) => state.config);
+  const recoveryStatusMap = useSelector((state) => state.recoveryStatus.map);
+  const workflowOptions = useSelector(workflowOptionNames);
 
-  const isPublished = useMemo(() => !!get(record, 'data.published'), [record]);
-
-  const loadGranule = useCallback(() => {
-    dispatch(getGranule(granuleId)).then((granuleResponse) => {
-      const payload = {
-        granules: [pick(granuleResponse.data, ['granuleId', 'collectionId'])],
-      };
-      dispatch(listExecutionsByGranule(granuleId, payload));
-    });
-  }, [dispatch, granuleId]);
+  const granuleRecord = granules.map[granuleId];
+  const granule = granuleRecord?.data;
 
   useEffect(() => {
     dispatch(listWorkflows());
     if (!skipReloadOnMount) {
       loadGranule();
     }
-  }, [dispatch, skipReloadOnMount, loadGranule]);
+  }, [dispatch, skipReloadOnMount]);
 
   useEffect(() => {
-    if (workflowOptions && workflowOptions.length && typeof workflow === 'undefined') {
+    if (workflowOptions?.length) {
       setWorkflow(workflowOptions[0]);
     }
-  }, [workflowOptions, workflow]);
+  }, [workflowOptions]);
 
-  const navigateBack = useCallback(() => historyPushWithQueryParams('/granules'), []);
-
-  const applyWorkflow = useCallback(() => {
-    const { meta } = JSON.parse(workflowMeta);
-    setWorkflowMeta(defaultWorkflowMeta);
-    dispatch(applyWorkflowToGranule(granuleId, workflow, meta));
-  }, [dispatch, granuleId, workflow, workflowMeta]);
-
-  const deleteGranuleAction = useCallback(() => {
-    dispatch(deleteGranule(granuleId));
+  const loadGranule = useCallback(() => {
+    dispatch(getGranule(granuleId)).then((granuleResponse) => {
+      const payload = { granules: [pick(granuleResponse.data, ['granuleId', 'collectionId'])] };
+      dispatch(listExecutionsByGranule(granuleId, payload, false));
+    });
   }, [dispatch, granuleId]);
 
-  const reingest = useCallback(() => {
-    dispatch(reingestGranule(granuleId, { executionArn: reingestWorkflow.value }));
-  }, [dispatch, granuleId, reingestWorkflow]);
+  const navigateBack = () => {
+    historyPushWithQueryParams('/granules');
+  };
 
-  const removeGranuleAction = useCallback(() => {
-    dispatch(removeGranule(granuleId));
-  }, [dispatch, granuleId]);
-
-  const toggleShowRecoveryStatus = useCallback(() => {
-    const collectionId = record?.data?.collectionId;
-    console.log('Record:', record);
-    console.log('Collection ID:', collectionId);
+  const toggleShowRecoveryStatus = () => {
+    const collectionId = get(granules.map, [granuleId, 'data', 'collectionId']);
     const newState = !showRecoveryStatus;
     setShowRecoveryStatus(newState);
     if (newState) {
       dispatch(getGranuleRecoveryStatus(granuleId, collectionId));
     }
-  }, [dispatch, granuleId, record, showRecoveryStatus]);
+  };
 
-  const getExecuteOptions = useMemo(() => [
+  const reingest = () => {
+    dispatch(reingestGranule(granuleId, { executionArn: reingestWorkflow.value }));
+  };
+
+  const applyWorkflow = () => {
+    const { meta } = JSON.parse(workflowMeta);
+    setWorkflowMeta(defaultWorkflowMeta);
+    dispatch(applyWorkflowToGranule(granuleId, workflow, meta));
+  };
+
+  const remove = () => {
+    dispatch(removeGranule(granuleId));
+  };
+
+  const deleteGranuleFn = () => {
+    dispatch(deleteGranule(granuleId));
+  };
+
+  const getExecuteOptions = () => [
     executeDialog({
-      selectHandler: (selector, newWorkflow) => setWorkflow(newWorkflow),
+      selectHandler: setWorkflow,
       label: 'workflow',
       value: workflow,
       options: workflowOptions,
       initialMeta: workflowMeta,
       metaHandler: setWorkflowMeta,
     }),
-  ], [workflow, workflowOptions, workflowMeta]);
+  ];
 
-  const getReingestOptions = useMemo(() => {
+  const getReingestOptions = () => {
     const granuleExecutions = executions.map?.[granuleId] || {};
     const { data: granuleExecutionsList = [], error } = granuleExecutions;
     const reingestExecutionOptions = granuleExecutionsList.map((execution) => ({
@@ -230,52 +217,59 @@ const GranuleOverview = ({ skipReloadOnMount = false }) => {
       value: execution.arn,
     }));
 
-    return [
-      <div key="reingest-options-content">
+    return [(
+      <>
         <div className="granule--reingest">
           <p>Selected Granule: <strong>{granuleId}</strong></p>
           <p><strong>To complete your granule reingest requests:</strong></p>
           <p>
             Below you can select a specific workflow to apply to this selected granule.
-            <strong>Note: The default is the latest workflow.</strong>
+            <strong> Note: The default is the latest workflow.</strong>
           </p>
-          {error &&
-            <ErrorReport report={`Failed to get granule executions: ${error}`} />}
+          {error && <ErrorReport report={`Failed to get granule executions: ${error}`} />}
         </div>
         <div>
-        <SimpleDropdown
-          isClearable={true}
-          key={'workflow-dropdown'}
-          label={'Select Workflow'}
-          value={reingestWorkflow.label}
-          options={reingestExecutionOptions}
-          id='workflow-dropdown'
-          onChange={(selector, value, option) => setReingestWorkflow(option || {})}
-          placeholder="Workflow Name"
-        />
+          <SimpleDropdown
+            isClearable
+            key='workflow-dropdown'
+            label='Select Workflow'
+            value={reingestWorkflow.label}
+            options={reingestExecutionOptions}
+            id='workflow-dropdown'
+            onChange={(selector, value, option) => setReingestWorkflow(option || {})}
+            placeholder='Workflow Name'
+          />
         </div>
-      </div>
-    ];
-  }, [executions.map, granuleId, reingestWorkflow.label]);
+      </>
+    )];
+  };
 
-  const errors = useMemo(() => [
+  const errors = [
     get(granules.map, [granuleId, 'error']),
     get(granules.reprocessed, [granuleId, 'error']),
     get(granules.reingested, [granuleId, 'error']),
     get(granules.executed, [granuleId, 'error']),
     get(granules.removed, [granuleId, 'error']),
     get(granules.deleted, [granuleId, 'error']),
-    get(recoveryStatus.map, [granuleId, 'error']),
-  ].filter(Boolean), [granules, recoveryStatus, granuleId]);
+    get(recoveryStatusMap, [granuleId, 'error']),
+  ].filter(Boolean);
 
-  const dropdownConfig = useMemo(() => [
+  if (!granuleRecord || (granuleRecord.inflight && !granule)) return <Loading />;
+  if (granuleRecord.error) return <ErrorReport report={granuleRecord.error} />;
+
+  const files = Object.values(granule?.files || {});
+  const enableRecovery = get(config, 'enableRecovery', false);
+  const showHideRecoveryStatusText = showRecoveryStatus ? 'Hide Recovery Status' : 'Show Recovery Status';
+  const recoveryStatus = getGranuleRecoveryJobStatusFromRecord(get(recoveryStatusMap, [granuleId, 'data']));
+
+  const dropdownConfig = [
     {
       text: 'Reingest',
       action: reingest,
       status: get(granules.reingested, [granuleId, 'status']),
       success: loadGranule,
       confirmAction: true,
-      confirmOptions: getReingestOptions,
+      confirmOptions: getReingestOptions(),
     },
     {
       text: 'Execute',
@@ -284,11 +278,11 @@ const GranuleOverview = ({ skipReloadOnMount = false }) => {
       success: loadGranule,
       confirmAction: true,
       confirmText: `Execute on ${granuleId}?`,
-      confirmOptions: getExecuteOptions,
+      confirmOptions: getExecuteOptions(),
     },
     {
       text: strings.remove_from_cmr,
-      action: removeGranuleAction,
+      action: remove,
       status: get(granules.removed, [granuleId, 'status']),
       success: loadGranule,
       confirmAction: true,
@@ -296,30 +290,14 @@ const GranuleOverview = ({ skipReloadOnMount = false }) => {
     },
     {
       text: 'Delete',
-      action: deleteGranuleAction,
-      disabled: isPublished,
+      action: deleteGranuleFn,
+      disabled: !!granule.published,
       status: get(granules.deleted, [granuleId, 'status']),
       success: navigateBack,
       confirmAction: true,
       confirmText: deleteText(granuleId),
     },
-  ], [
-    reingest, granules, granuleId, loadGranule, getReingestOptions, applyWorkflow,
-    getExecuteOptions, removeGranuleAction, deleteGranuleAction, isPublished, navigateBack,
-  ]);
-
-  if (!record || (record.inflight && !record.data)) {
-    return <Loading />;
-  }
-  if (record.error) {
-    return <ErrorReport report={record.error} />;
-  }
-
-  const granule = record.data;
-  const files = granule.files ? Object.values(granule.files) : [];
-  const enableRecovery = get(config, 'enableRecovery', false);
-  const showHideRecoveryStatusText = showRecoveryStatus ? 'Hide Recovery Status' : 'Show Recovery Status';
-  const recoveryJobStatus = getGranuleRecoveryJobStatusFromRecord(get(recoveryStatus.map, [granuleId, 'data']));
+  ];
 
   const breadcrumbConfig = [
     { label: 'Dashboard Home', href: '/' },
@@ -345,12 +323,12 @@ const GranuleOverview = ({ skipReloadOnMount = false }) => {
               <span>Ingest</span>
               <IndicatorWithTooltip granuleId={granuleId} repo='ingest' value={displayCase(granule.status)} className='status-indicator--granule' />
             </dd>
-            {(showRecoveryStatus && recoveryJobStatus)
+            {(showRecoveryStatus && recoveryStatus)
               ? (
-                  <dd>
-                    <span>Recovery</span>
-                    <IndicatorWithTooltip granuleId={granuleId} repo='recovery' value={displayCase(recoveryJobStatus)} className='status-indicator--granule' />
-                  </dd>
+                <dd>
+                  <span>Recovery</span>
+                  <IndicatorWithTooltip granuleId={granuleId} repo="recovery" value={displayCase(recoveryStatus)} className="status-indicator--granule" />
+                </dd>
                 )
               : null
             }
@@ -396,13 +374,6 @@ const GranuleOverview = ({ skipReloadOnMount = false }) => {
       </section>
     </div>
   );
-};
+}
 
-GranuleOverview.propTypes = {
-  skipReloadOnMount: PropTypes.bool,
-};
-
-GranuleOverview.displayName = strings.granule;
-
-export { GranuleOverview };
 export default GranuleOverview;
