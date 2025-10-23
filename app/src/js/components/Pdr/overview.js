@@ -27,7 +27,7 @@ const breadcrumbConfig = [
 ];
 
 const PdrOverview = ({ queryParams }) => {
-  const dispatch = useDispatch(); 
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const queryStats = () => {
@@ -46,7 +46,7 @@ const PdrOverview = ({ queryParams }) => {
     { ...queryParams }
   );
 
-  const pdrs = useSelector(state => state.pdrs);
+  const pdrs = useSelector((state) => state.pdrs);
 
   const generateBulkActions = () => bulkActions(pdrs);
 

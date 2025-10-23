@@ -19,7 +19,7 @@ import { operationStatus } from '../../utils/status';
 import { operationTypes } from '../../utils/type';
 
 const OperationOverview = ({ queryParams }) => {
-  const operations = useSelector(state => state.operations);
+  const operations = useSelector((state) => state.operations);
 
   const { list } = operations;
   const { count } = list.meta;

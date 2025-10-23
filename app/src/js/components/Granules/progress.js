@@ -11,9 +11,7 @@ const granuleMeta = [
 ];
 
 const Progress = ({ granules }) => {
-  const getItem = (key) => {
-    return granules.find((count) => count.key === key);
-  };
+  const getItem = (key) => granules.find((count) => count.key === key);
 
   const tallyDisplay = (type, item) => {
     if (type[1] === 'Failed' && item > 0) {
@@ -31,7 +29,7 @@ const Progress = ({ granules }) => {
         <span className='num--medium'>{item}</span>
       );
     }
-  }
+  };
 
   return (
     <ul className='timeline--processing--overall'>

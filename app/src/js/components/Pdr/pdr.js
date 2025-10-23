@@ -113,11 +113,11 @@ const metaAccessors = [
 const PDR = () => {
   const dispatch = useDispatch();
 
-  const collections = useSelector(state => state.collections);
-  const granules = useSelector(state => state.granules);
-  const logs = useSelector(state => state.logs);
-  const pdrs = useSelector(state => state.pdrs);
-  const queryParams = useSelector(state => state.router.params);
+  const collections = useSelector((state) => state.collections);
+  const granules = useSelector((state) => state.granules);
+  const logs = useSelector((state) => state.logs);
+  const pdrs = useSelector((state) => state.pdrs);
+  const queryParams = useSelector((state) => state.router.params);
 
   const routeMatch = useRouteMatch();
   const { pdrName } = routeMatch.params;
@@ -141,9 +141,7 @@ const PDR = () => {
     pdrName,
   });
 
-  const generateBulkActions = () => {
-    return granuleBulkActions(granules);
-  };
+  const generateBulkActions = () => granuleBulkActions(granules);
 
   const renderPdrProgress = (record) => (
     <div className="pdr__progress">

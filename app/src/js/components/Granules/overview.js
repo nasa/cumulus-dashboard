@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Helmet } from 'react-helmet';
-import { useLocation, withRouter } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { get } from 'object-path';
 import {
@@ -52,10 +52,10 @@ const GranulesOverview = () => {
   const dispatch = useDispatch();
   const location = useLocation();
 
-  const collections = useSelector(state => state.collections);
-  const config = useSelector(state => state.config);
-  const granules = useSelector(state => state.granules);
-  const providers = useSelector(state => state.providers);
+  const collections = useSelector((state) => state.collections);
+  const config = useSelector((state) => state.config);
+  const granules = useSelector((state) => state.granules);
+  const providers = useSelector((state) => state.providers);
   const workflowOptions = useSelector(workflowOptionNames);
 
   const queryParams = Object.fromEntries(new URLSearchParams(location.search));
@@ -89,9 +89,7 @@ const GranulesOverview = () => {
     return applyWorkflowToGranule(granuleId, workflow, meta);
   }, [workflow, workflowMeta]);
 
-  const applyRecoveryWorkflow = useCallback((granuleId) => {
-    return applyRecoveryWorkflowToGranule(granuleId);
-  }, []);
+  const applyRecoveryWorkflow = useCallback((granuleId) => applyRecoveryWorkflowToGranule(granuleId), []);
 
   const getExecuteOptions = useCallback(() => [
     executeDialog({
@@ -100,7 +98,7 @@ const GranulesOverview = () => {
       value: workflow,
       options: workflowOptions,
       initialMeta: workflowMeta,
-      metaHandler: metaHandler,
+      metaHandler,
     }),
   ], [workflow, workflowOptions, workflowMeta, selectWorkflow, metaHandler]);
 

@@ -2,6 +2,7 @@
 /* eslint-disable guard-for-in */
 import path from 'path';
 import React, { useEffect, useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { useParams, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { get } from 'object-path';
@@ -110,7 +111,7 @@ const metaAccessors = [
         <Link to={`/executions/executions-list/${encodeURIComponent(row.collectionId)}/${encodeURIComponent(path.basename(row.granuleId))}`}>link</Link>
         )
       : (
-        nullValue
+          nullValue
         )),
   },
   {
@@ -375,5 +376,9 @@ function GranuleOverview({ skipReloadOnMount = false }) {
     </div>
   );
 }
+
+GranuleOverview.propTypes = {
+  skipReloadOnMount: PropTypes.bool
+};
 
 export default GranuleOverview;

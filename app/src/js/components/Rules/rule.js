@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import PropTypes from 'prop-types';
 import { Link, useParams } from 'react-router-dom';
 import { get } from 'object-path';
 import {

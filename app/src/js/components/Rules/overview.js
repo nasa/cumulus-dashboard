@@ -33,7 +33,7 @@ const RulesOverview = ({ queryParams }) => {
     dispatch(allRules());
   }, [dispatch]);
 
-  const rules = useSelector(state => state.rules);
+  const rules = useSelector((state) => state.rules);
 
   const generateBulkActions = useCallback(() => bulkActions(rules), [rules]);
 
