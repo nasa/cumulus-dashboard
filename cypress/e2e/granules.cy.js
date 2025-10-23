@@ -34,7 +34,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('.table .thead .tr .th').should('contain.text', 'Recovery');
 
       cy.get('.table .tbody .tr').as('list');
-      cy.get('@list').should('have.length', 14);
+      cy.get('@list').should('have.length', 16);
 
       cy.contains('.table__filters--filter label', 'Recovery').find('span').click();
       cy.get('.button__apply-filter').click();
@@ -88,7 +88,7 @@ describe('Dashboard Granules Page', () => {
         .first().contains('li', 'Completed').contains('li', 9)
         .next()
         .contains('li', 'Failed')
-        .contains('li', 2)
+        .contains('li', 4)
         .next()
         .contains('li', 'Running')
         .contains('li', 2)
@@ -193,7 +193,7 @@ describe('Dashboard Granules Page', () => {
         });
 
       cy.get('.table .tbody .tr').as('list');
-      cy.get('@list').should('have.length', 14);
+      cy.get('@list').should('have.length', 16);
       cy.get('@granulesListFixture').its('results').then((results) => {
         const duplicateGranules = results.filter((g) => g.producerGranuleId === 'MOD09GQ.A1657416.CbyoRi.006.9697917818587');
         expect(duplicateGranules.length).to.equal(3);
@@ -226,7 +226,7 @@ describe('Dashboard Granules Page', () => {
               granules.push(granule);
             })
             .then(() => (
-              granules.length === 14 &&
+              granules.length === 16 &&
               Cypress._.isEqual(granules, Cypress._.orderBy(granules, ['collectionId', 'status', 'name'], ['desc', 'asc', 'asc']))
             ));
         },
@@ -300,7 +300,7 @@ describe('Dashboard Granules Page', () => {
         cy.get('li')
           .first().should('contain', 0).and('contain', 'Completed')
           .next()
-          .should('contain', 2)
+          .should('contain', 4)
           .and('contain', 'Failed')
           .next()
           .should('contain', 0)
@@ -339,6 +339,8 @@ describe('Dashboard Granules Page', () => {
       const prefixBoth = 'MOD09GQ.ARC';
       const prefixArchived = 'MOD09GQ.ARCY';
       const prefixNotArchived = 'MOD09GQ.ARCN';
+
+      // cy.task('resetState');
       cy.visit('/granules');
       cy.get('#chk_isArchivedSearch').should('not.be.checked');
       cy.get('.search').as('search');
@@ -404,7 +406,7 @@ describe('Dashboard Granules Page', () => {
         .first().contains('li', 'Completed').contains('li', 9)
         .next()
         .contains('li', 'Failed')
-        .contains('li', 2)
+        .contains('li', 4)
         .next()
         .contains('li', 'Running')
         .contains('li', 2)
@@ -418,7 +420,7 @@ describe('Dashboard Granules Page', () => {
         .first().contains('li', 'Completed').contains('li', 9)
         .next()
         .contains('li', 'Failed')
-        .contains('li', 2)
+        .contains('li', 4)
         .next()
         .contains('li', 'Running')
         .contains('li', 2)
@@ -454,7 +456,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('.table__header .filter-page').as('page-input');
       cy.get('@page-input').should('be.visible').click({ force: true }).type('{backspace}2{enter}');
       cy.url().should('include', 'page=2');
-      cy.get('.table .tbody .tr').should('have.length', 4);
+      cy.get('.table .tbody .tr').should('have.length', 6);
     });
 
     it('Should show or hide granule recovery status on the granule detail page.', () => {
@@ -678,7 +680,7 @@ describe('Dashboard Granules Page', () => {
       cy.visit('/granules/failed');
 
       // Get initial table size
-      cy.get('.table .tbody .tr').should('have.length', 2);
+      cy.get('.table .tbody .tr').should('have.length', 4);
 
       // Filter the results by an error type
       cy.get('.filter-error .rbt-input-main').as('error-input');
@@ -694,10 +696,10 @@ describe('Dashboard Granules Page', () => {
       cy.get('.table .thead input[type="checkbox"]').as('select-all');
       cy.get('.table .tbody .tr').as('list');
 
-      cy.get('@list').should('have.length', 14);
+      cy.get('@list').should('have.length', 16);
       cy.get('@select-all').check(clickOptions);
       cy.get('@select-all').should('be.checked');
-      cy.contains('.table__header', '(14 selected)');
+      cy.contains('.table__header', '(16 selected)');
     });
 
     it('should clear the selection when a filter is applied', () => {
@@ -711,7 +713,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('.table .tbody .tr').as('list');
       cy.get('.filter-status .rbt-input-main').as('status-input');
 
-      cy.get('@list').should('have.length', 14);
+      cy.get('@list').should('have.length', 16);
       cy.get('@table-body').contains('.td', granuleIds[0]).as('granule1');
       cy.get('@granule1').siblings().contains('.td', 'Completed');
       cy.get('@granule1').siblings().find('input[type="checkbox"]').check();
@@ -730,7 +732,7 @@ describe('Dashboard Granules Page', () => {
 
       // verify items still not selected when filter is cleared
       cy.get('@status-input').clear();
-      cy.get('@list').should('have.length', 14);
+      cy.get('@list').should('have.length', 16);
       cy.get('.table__header').should('not.contain.text', 'selected');
     });
 
@@ -759,7 +761,7 @@ describe('Dashboard Granules Page', () => {
         cy.get('li')
           .first().should('contain', 9).and('contain', 'Completed')
           .next()
-          .should('contain', 2)
+          .should('contain', 4)
           .and('contain', 'Failed')
           .next()
           .should('contain', 2)
