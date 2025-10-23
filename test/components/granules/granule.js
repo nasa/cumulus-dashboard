@@ -53,7 +53,6 @@ const mockStore = configureMockStore(middlewares);
 
 const someStore = mockStore({
   getState: () => {},
-  dispatch,
   subscribe: () => {},
   timer: { running: false, seconds: -1 },
   datepicker: initialState(),
