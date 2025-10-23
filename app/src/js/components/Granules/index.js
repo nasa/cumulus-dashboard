@@ -25,6 +25,7 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
   const filteredQueryParams = filterQueryParams(queryParams);
 
   function query() {
+    console.log('calling the Granules query function');
     dispatch(listGranules(filteredQueryParams));
   }
 

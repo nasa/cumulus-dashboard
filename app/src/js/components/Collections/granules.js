@@ -93,6 +93,7 @@ const CollectionGranules = ({
     const options = {
       ...queryParams,
       collectionId,
+      archived: false,
     };
     if (granuleStatus) options.status = granuleStatus;
     return options;
@@ -173,6 +174,7 @@ const CollectionGranules = ({
           filterClear={clearGranulesFilter}
           onSelect={updateSelection}
           tableId="granules"
+          archived={isArchivedSearch}
         >
           <Search
             action={searchGranules}

@@ -586,6 +586,7 @@
       "createdAt": 1537830592105,
       "provider": "s3_provider",
       "timeToArchive": 0.043,
+      "pdrName": "MOD09GQ_1granule_v3.PDR",
       "files": [
         {
         }
@@ -612,6 +613,7 @@
       "createdAt": 1537830592105,
       "provider": "s3_provider",
       "timeToArchive": 0.043,
+      "pdrName": "MOD09GQ_1granule_v3.PDR",
       "files": [
         {
         }

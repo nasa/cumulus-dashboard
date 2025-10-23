@@ -102,6 +102,7 @@ const AllGranules = ({
   function generateQuery() {
     const options = { ...queryParams };
     options.status = status;
+    options.archived = false;
     return options;
   }
 
@@ -185,6 +186,7 @@ const AllGranules = ({
           onSelect={updateSelection}
           toggleColumnOptionsAction={toggleGranulesTableColumns}
           tableId="granules"
+          archived={isArchivedSearch}
         >
           <Search
             action={searchGranules}

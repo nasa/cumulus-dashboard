@@ -199,6 +199,7 @@ export const getGranuleRecoveryStatus = (granuleId, collectionId) => ({
 });
 
 export const listGranules = (options) => (dispatch, getState) => {
+  console.log('listGranulesArgs:', options);
   const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
   return dispatch({
     [CALL_API]: {

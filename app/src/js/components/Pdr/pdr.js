@@ -241,6 +241,7 @@ class PDR extends React.Component {
             bulkActions={this.generateBulkActions()}
             rowId="granuleId"
             tableId={`pdr-${pdrName}`}
+            archived={isArchivedSearch}
           >
             <Search
               action={searchGranules}
