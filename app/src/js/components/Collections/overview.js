@@ -118,6 +118,7 @@ const CollectionOverview = ({
     return {
       ...queryParams,
       collectionId,
+      archived: isArchivedSearch
     };
   }
 
@@ -320,7 +321,6 @@ const CollectionOverview = ({
           filterClear={clearGranulesFilter}
           tableId={`collection-${collectionName}-${collectionVersion}`}
           onSelect={updateSelection}
-          archived={isArchivedSearch}
         >
           <Search
             action={searchGranules}

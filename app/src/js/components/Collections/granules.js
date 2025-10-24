@@ -93,7 +93,7 @@ const CollectionGranules = ({
     const options = {
       ...queryParams,
       collectionId,
-      archived: false,
+      archived: isArchivedSearch,
     };
     if (granuleStatus) options.status = granuleStatus;
     return options;
