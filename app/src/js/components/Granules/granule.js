@@ -1,5 +1,3 @@
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable guard-for-in */
 import path from 'path';
 import React, { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
@@ -148,25 +146,25 @@ function GranuleOverview({ skipReloadOnMount = false }) {
   const granuleRecord = granules.map[granuleId];
   const granule = granuleRecord?.data;
 
-  useEffect(() => {
-    dispatch(listWorkflows());
-    if (!skipReloadOnMount) {
-      loadGranule();
-    }
-  }, [dispatch, skipReloadOnMount]);
-
-  useEffect(() => {
-    if (workflowOptions?.length) {
-      setWorkflow(workflowOptions[0]);
-    }
-  }, [workflowOptions]);
-
   const loadGranule = useCallback(() => {
     dispatch(getGranule(granuleId)).then((granuleResponse) => {
       const payload = { granules: [pick(granuleResponse.data, ['granuleId', 'collectionId'])] };
       dispatch(listExecutionsByGranule(granuleId, payload, false));
     });
   }, [dispatch, granuleId]);
+
+  useEffect(() => {
+    dispatch(listWorkflows());
+    if (!skipReloadOnMount) {
+      loadGranule();
+    }
+  }, [dispatch, skipReloadOnMount, loadGranule]);
+
+  useEffect(() => {
+    if (workflowOptions?.length) {
+      setWorkflow(workflowOptions[0]);
+    }
+  }, [workflowOptions]);
 
   const navigateBack = () => {
     historyPushWithQueryParams('/granules');
