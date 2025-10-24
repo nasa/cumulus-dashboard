@@ -89,7 +89,7 @@ class GranulesOverview extends React.Component {
 
   generateQuery() {
     const { queryParams } = this.props;
-    return { ...queryParams };
+    return { ...queryParams, archived: this.state.isArchivedSearch };
   }
 
   generateBulkActions() {
@@ -208,7 +208,6 @@ class GranulesOverview extends React.Component {
             onSelect={this.updateSelection}
             toggleColumnOptionsAction={toggleGranulesTableColumns}
             tableId="granules-overview"
-            archived={isArchivedSearch}
           >
             <Search
               action={searchGranules}

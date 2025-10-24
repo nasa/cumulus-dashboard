@@ -186,7 +186,6 @@ const AllGranules = ({
           onSelect={updateSelection}
           toggleColumnOptionsAction={toggleGranulesTableColumns}
           tableId="granules"
-          archived={isArchivedSearch}
         >
           <Search
             action={searchGranules}
