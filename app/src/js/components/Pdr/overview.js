@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { listPdrs, getCount, clearPdrsFilter, filterPdrs } from '../../actions';
 import { lastUpdated, tally } from '../../utils/format';
 import { bulkActions } from '../../utils/table-config/pdrs';
@@ -13,7 +12,7 @@ import Dropdown from '../DropDown/dropdown';
 import statusOptions from '../../utils/status';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import { getPersistentQueryParams } from '../../utils/url-helper';
+import { filterQueryParams, getPersistentQueryParams } from '../../utils/url-helper';
 
 const breadcrumbConfig = [
   {
@@ -26,8 +25,11 @@ const breadcrumbConfig = [
   },
 ];
 
-const PdrOverview = ({ queryParams }) => {
+const PdrOverview = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const queryParams = Object.fromEntries(new URLSearchParams(location.search));
+  const filteredQueryParams = filterQueryParams(queryParams);
 
   useEffect(() => {
     const queryStats = () => {
@@ -35,15 +37,15 @@ const PdrOverview = ({ queryParams }) => {
         getCount({
           type: 'pdrs',
           field: 'status',
-          ...queryParams,
+          ...filteredQueryParams,
         })
       );
     };
     queryStats();
-  }, [queryParams]);
+  }, [dispatch, filteredQueryParams]);
 
   const generateQuery = () => (
-    { ...queryParams }
+    { ...filteredQueryParams }
   );
 
   const pdrs = useSelector((state) => state.pdrs);
@@ -101,9 +103,9 @@ const PdrOverview = ({ queryParams }) => {
         </List>
         <Link
           className="link--secondary link--learn-more"
-          to={(location) => ({
+          to={(toLocation) => ({
             pathname: '/pdrs/active',
-            search: getPersistentQueryParams(location),
+            search: getPersistentQueryParams(toLocation),
           })}
         >
           View Currently Active PDRs
@@ -111,10 +113,6 @@ const PdrOverview = ({ queryParams }) => {
       </section>
     </div>
   );
-};
-
-PdrOverview.propTypes = {
-  queryParams: PropTypes.object,
 };
 
 export default PdrOverview;

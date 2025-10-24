@@ -1,7 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
+import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { filterQueryParams } from '../../utils/url-helper';
 import {
   clearOperationsFilter,
   filterOperations,
@@ -18,14 +19,17 @@ import ListFilters from '../ListActions/ListFilters';
 import { operationStatus } from '../../utils/status';
 import { operationTypes } from '../../utils/type';
 
-const OperationOverview = ({ queryParams }) => {
+const OperationOverview = () => {
+  const location = useLocation();
+  const queryParams = Object.fromEntries(new URLSearchParams(location.search));
+  const filteredQueryParams = filterQueryParams(queryParams);
   const operations = useSelector((state) => state.operations);
 
   const { list } = operations;
   const { count } = list.meta;
 
   const generateQuery = () => (
-    { ...queryParams }
+    { ...filteredQueryParams }
   );
 
   return (
@@ -93,10 +97,6 @@ const OperationOverview = ({ queryParams }) => {
       </section>
     </div>
   );
-};
-
-OperationOverview.propTypes = {
-  queryParams: PropTypes.object,
 };
 
 export default OperationOverview;

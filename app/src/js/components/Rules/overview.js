@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
 import {
   allRules,
   searchRules,
@@ -14,6 +14,7 @@ import List from '../Table/Table';
 import Search from '../Search/search';
 import { tableColumns, bulkActions } from '../../utils/table-config/rules';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import { filterQueryParams } from '../../utils/url-helper';
 
 const breadcrumbConfig = [
   {
@@ -26,7 +27,10 @@ const breadcrumbConfig = [
   },
 ];
 
-const RulesOverview = ({ queryParams }) => {
+const RulesOverview = () => {
+  const location = useLocation();
+  const queryParams = Object.fromEntries(new URLSearchParams(location.search));
+  const filteredQueryParams = filterQueryParams(queryParams);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -70,7 +74,7 @@ const RulesOverview = ({ queryParams }) => {
           list={list}
           action={allRules}
           tableColumns={tableColumns}
-          query={{ ...queryParams }}
+          query={{ ...filteredQueryParams }}
           initialSortId="updatedAt"
           bulkActions={generateBulkActions()}
           rowId="name"
@@ -90,10 +94,6 @@ const RulesOverview = ({ queryParams }) => {
       </section>
     </div>
   );
-};
-
-RulesOverview.propTypes = {
-  queryParams: PropTypes.object,
 };
 
 export default RulesOverview;

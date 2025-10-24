@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
 import { Helmet } from 'react-helmet';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { Link, useLocation } from 'react-router-dom';
 import {
   listProviders,
   filterProviders,
@@ -11,24 +10,27 @@ import {
 import { lastUpdated } from '../../utils/format';
 import { tableColumns } from '../../utils/table-config/providers';
 import List from '../Table/Table';
-import { getPersistentQueryParams } from '../../utils/url-helper';
+import { filterQueryParams, getPersistentQueryParams } from '../../utils/url-helper';
 
-const ProvidersOverview = ({ queryParams }) => {
+const ProvidersOverview = () => {
   const providers = useSelector((state) => state.providers);
+  const location = useLocation();
+  const queryParams = Object.fromEntries(new URLSearchParams(location.search));
+  const filteredQueryParams = filterQueryParams(queryParams);
 
   const { list } = providers;
   const { count, queriedAt } = list.meta;
 
-  const query = useMemo(() => ({ ...queryParams }), [queryParams]);
+  const query = useMemo(() => ({ ...filteredQueryParams }), [filteredQueryParams]);
 
   const bulkActions = useMemo(() => ([
     {
       Component: (
         <Link
           className="button button--green button--add button--small form-group__element"
-          to={(location) => ({
+          to={(toLocation) => ({
             pathname: '/providers/add',
-            search: getPersistentQueryParams(location),
+            search: getPersistentQueryParams(toLocation),
           })}
         >
           Add Provider
@@ -70,10 +72,6 @@ const ProvidersOverview = ({ queryParams }) => {
       </section>
     </div>
   );
-};
-
-ProvidersOverview.propTypes = {
-  queryParams: PropTypes.object,
 };
 
 export default ProvidersOverview;
