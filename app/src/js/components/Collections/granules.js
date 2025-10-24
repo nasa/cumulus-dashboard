@@ -174,7 +174,6 @@ const CollectionGranules = ({
           filterClear={clearGranulesFilter}
           onSelect={updateSelection}
           tableId="granules"
-          archived={isArchivedSearch}
         >
           <Search
             action={searchGranules}
