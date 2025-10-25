@@ -227,6 +227,7 @@ const PDR = () => {
             labelKey="granuleId"
             searchKey="granules"
             infixBoolean={isInfixSearch}
+            archived="false"
           />
           <ListFilters>
             <Checkbox

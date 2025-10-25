@@ -26,6 +26,7 @@ const Search = ({
   clear,
   dispatch,
   infixBoolean,
+  archived,
   inputProps = {
     className: 'search',
   },
@@ -56,9 +57,9 @@ const Search = ({
 
   useEffect(() => {
     if (initialValueRef.current) {
-      dispatch(action(initialValueRef.current, infixBoolean));
+      dispatch(action(initialValueRef.current, infixBoolean, archived));
     }
-  }, [action, infixBoolean, dispatch]);
+  }, [action, infixBoolean, archived, dispatch]);
 
   useEffect(() => {
     // Always get the latest value from the URL/queryParams
@@ -70,7 +71,7 @@ const Search = ({
 
     const debouncedDispatch = debounce((value) => {
       if (value) {
-        dispatch(action(currentValue, infixBoolean));
+        dispatch(action(currentValue, infixBoolean, archived));
       } else {
         dispatch(clear(paramKey));
       }
@@ -81,7 +82,7 @@ const Search = ({
     return () => {
       debouncedDispatch.cancel();
     };
-  }, [action, infixBoolean, dispatch, location, paramKey, queryParams, clear]);
+  }, [action, infixBoolean, archived, dispatch, location, paramKey, queryParams, clear]);
 
   const handleSearch = useCallback((query) => {
     setQueryParams({ [paramKey]: query || undefined });
@@ -158,6 +159,7 @@ Search.propTypes = {
   searchKey: PropTypes.string,
   setQueryParams: PropTypes.func,
   placeholder: PropTypes.string,
+  archived: PropTypes.bool,
 };
 
 export default withRouter(withQueryParams()(connect((state) => state)(Search)));
