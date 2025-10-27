@@ -217,8 +217,7 @@ describe('Dashboard PDRs Page', () => {
           item.pdrName === pdrName &&
           item.granuleId.includes('GQ') &&
           item.status === 'completed'
-        ))
-        )
+        )))
         .each((granule) => {
           if (granule.archived === true) {
             return;
