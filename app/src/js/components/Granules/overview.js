@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { filterQueryParams } from '../../utils/url-helper';
 import { Helmet } from 'react-helmet';
 import { useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -59,6 +60,7 @@ const GranulesOverview = () => {
   const workflowOptions = useSelector(workflowOptionNames);
 
   const queryParams = Object.fromEntries(new URLSearchParams(location.search));
+  const filteredQueryParams = filterQueryParams(queryParams);
 
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
@@ -120,7 +122,7 @@ const GranulesOverview = () => {
     return actions;
   }, [granules, config, selected, getExecuteOptions, applyWorkflow, applyRecoveryWorkflow]);
 
-  const generateQuery = useCallback(() => ({ ...queryParams }), [queryParams]);
+  const generateQuery = useCallback(() => ({ ...filteredQueryParams }), [filteredQueryParams]);
 
   const updateSelection = useCallback((selectedIds, currentSelectedRows) => {
     const allSelectedRows = [...selected, ...currentSelectedRows];
