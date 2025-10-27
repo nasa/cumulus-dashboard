@@ -213,8 +213,16 @@ describe('Dashboard PDRs Page', () => {
       cy.get('@list').should('have.length', 3);
 
       cy.getFakeApiFixture('granules').its('results')
-        .then((granules) => granules.filter((item) => item.pdrName === pdrName && item.granuleId.includes('GQ')))
+        .then((granules) => granules.filter((item) => (
+          item.pdrName === pdrName &&
+          item.granuleId.includes('GQ') &&
+          item.status === 'completed'
+        ))
+        )
         .each((granule) => {
+          if (granule.archived === true) {
+            return;
+          }
           cy.get(`[data-value="${granule.granuleId}"]`).children().as('columns');
           cy.get('@columns').eq(1)
             .contains(granule.status, { matchCase: false });

@@ -179,7 +179,7 @@
         "total": 0,
         "processing": 0,
         "completed": 0,
-        "failed": 0
+        "failed": 2
       },
       "progress": 0,
       "PANSent": false,
@@ -196,7 +196,7 @@
       "createdAt": 1596203522716,
       "provider": "s3_provider",
       "stats": {
-        "total": 4,
+        "total": 6,
         "processing": 0,
         "completed": 4,
         "failed": 0
