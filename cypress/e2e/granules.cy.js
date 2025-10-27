@@ -366,10 +366,10 @@ describe('Dashboard Granules Page', () => {
       cy.get('@search').click().type(prefixArchived).type('{enter}');
       cy.get('.table .tbody .tr').should('have.length', 0);
 
-      cy.get('#chk_isArchivedSearch').click({ force: true }).should('be.checked')
+      cy.get('#chk_isArchivedSearch').click({ force: true }).should('be.checked');
       cy.get('.table .tbody .tr').should('have.length', 1);
       cy.get('@search').click().type(prefixNotArchived).type('{enter}');
-      cy.get('.table .tbody .tr').should('have.length', 1); 
+      cy.get('.table .tbody .tr').should('have.length', 1);
       cy.get('@search').click().type(prefixArchived).type('{enter}');
       cy.get('.table .tbody .tr').should('have.length', 1);
     });

@@ -57,7 +57,6 @@ const CollectionGranules = ({
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const [selected, setSelected] = useState([]);
-  const query = generateQuery();
   const { dropdowns } = providers;
   const [isInfixSearch, setIsInfixSearch] = useState(false);
   const [isArchivedSearch, setIsArchivedSearch] = useState(false);
@@ -98,6 +97,8 @@ const CollectionGranules = ({
     if (granuleStatus) options.status = granuleStatus;
     return options;
   }
+
+  const query = generateQuery();
 
   function generateBulkActions() {
     const actionConfig = {
