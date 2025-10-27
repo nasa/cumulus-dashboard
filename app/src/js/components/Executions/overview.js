@@ -79,13 +79,12 @@ const ExecutionOverview = ({
           list={list}
           action={listExecutions}
           tableColumns={tableColumnsArray}
-          query={{ ...queryParams }}
+          query={{ ...queryParams, archived: isArchivedSearch }}
           rowId="name"
           initialSortId="updatedAt"
           filterAction={filterExecutions}
           filterClear={clearExecutionsFilter}
           tableId="executions"
-          archived={isArchivedSearch}
         >
           <Search
             action={searchExecutions}

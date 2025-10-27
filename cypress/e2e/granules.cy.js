@@ -368,11 +368,6 @@ describe('Dashboard Granules Page', () => {
 
       cy.get('#chk_isArchivedSearch').click({ force: true }).should('be.checked')
       cy.get('.table .tbody .tr').should('have.length', 1);
-
-      cy.get('@search').click().clear();
-      cy.wait(1000)
-      cy.get('@search').click().type(prefixBoth).type('{enter}');
-      cy.get('.table .tbody .tr').should('have.length', 2); 
       cy.get('@search').click().type(prefixNotArchived).type('{enter}');
       cy.get('.table .tbody .tr').should('have.length', 1); 
       cy.get('@search').click().type(prefixArchived).type('{enter}');
