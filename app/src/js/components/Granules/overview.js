@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { filterQueryParams } from '../../utils/url-helper';
 import { Helmet } from 'react-helmet';
 import { useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { get } from 'object-path';
+import { filterQueryParams } from '../../utils/url-helper';
 import {
   searchGranules,
   clearGranulesSearch,
