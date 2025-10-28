@@ -167,6 +167,7 @@ const CommonConfig = {
       BUCKET: config.graphicsPath,
       ENABLE_RECOVERY: config.enableRecovery,
       SERVED_BY_CUMULUS_API: config.servedByCumulusAPI,
+      USE_UTC_TIME_FORMAT: config.useUTCTimeFormat
     }),
   ],
 };
