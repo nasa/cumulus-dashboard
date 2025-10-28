@@ -51,7 +51,6 @@ const Home = ({
     };
     const defaultExecutionQuery = {
       ...defaultTimeRange,
-      archived: false,
     };
 
     dispatch(getStats());
