@@ -6,8 +6,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-- **CUMULUS_4182**
-  - executions and granules list calls updated to search un-archived records
+
+- **CUMULUS-4226**
+  - Executions and granules non-archived search is toggleable. Overview values are not affected, and show size of whole table.
+- **CUMULUS-4182**
+  - Executions and granules list calls updated to search un-archived records
 - **CUMULUS-4223**
   - Upgrade cypress docker image, folders, test specs, configs to v12.17.4
 - **CUMULUS-3627**

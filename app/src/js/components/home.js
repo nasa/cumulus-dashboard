@@ -51,7 +51,6 @@ const Home = ({
     };
     const defaultExecutionQuery = {
       ...defaultTimeRange,
-      archived: false,
     };
 
     dispatch(getStats());
@@ -199,6 +198,7 @@ const Home = ({
               tableColumns={errorTableColumns}
               initialSortId='updatedAt'
               query={generateQuery()}
+              archived="false"
             />
           )}
         </div>

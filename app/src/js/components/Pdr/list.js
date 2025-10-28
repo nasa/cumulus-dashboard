@@ -43,7 +43,6 @@ const ActivePdrs = ({ match, pdrs, queryParams }) => {
     params: { status: paramStatus },
   } = match;
   const status = paramStatus === 'active' ? 'running' : paramStatus;
-  const query = generateQuery();
   const displayCaseView = displayCase(paramStatus);
   const breadcrumbConfig = generateBreadcrumbConfig(displayCaseView);
 
@@ -52,6 +51,8 @@ const ActivePdrs = ({ match, pdrs, queryParams }) => {
     currentQuery.status = status;
     return currentQuery;
   }
+
+  const query = generateQuery();
 
   function generateBulkActions() {
     return bulkActions(pdrs);

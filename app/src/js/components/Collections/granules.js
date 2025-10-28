@@ -57,9 +57,9 @@ const CollectionGranules = ({
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const [selected, setSelected] = useState([]);
-  const query = generateQuery();
   const { dropdowns } = providers;
   const [isInfixSearch, setIsInfixSearch] = useState(false);
+  const [isArchivedSearch, setIsArchivedSearch] = useState(false);
 
   const breadcrumbConfig = [
     {
@@ -92,10 +92,13 @@ const CollectionGranules = ({
     const options = {
       ...queryParams,
       collectionId,
+      archived: isArchivedSearch,
     };
     if (granuleStatus) options.status = granuleStatus;
     return options;
   }
+
+  const query = generateQuery();
 
   function generateBulkActions() {
     const actionConfig = {
@@ -181,7 +184,7 @@ const CollectionGranules = ({
             placeholder="Granule ID"
             searchKey="granules"
             infixBoolean={isInfixSearch}
-            archived="false"
+            archived={isArchivedSearch}
           />
           <ListFilters>
             <Checkbox
@@ -192,6 +195,15 @@ const CollectionGranules = ({
               inputLabel="Infix"
               className="infix-search"
               tip="Toggle between prefix and infix search. When enabled, the search field matches substrings instead of prefixes."
+            />
+            <Checkbox
+              id="chk_isArchivedSearch"
+              checked={isArchivedSearch}
+              onChange={setIsArchivedSearch}
+              label="Include"
+              inputLabel="Archived"
+              className="archived-search"
+              tip="Toggle inclusion of archived records in search results"
             />
             {!granuleStatus && (
               <Dropdown

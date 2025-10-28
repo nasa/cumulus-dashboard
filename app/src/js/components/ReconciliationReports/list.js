@@ -60,8 +60,6 @@ const ReconciliationReportList = ({
   const isGranules = pathname.includes('granules');
   const { list } = reconciliationReports;
   const { queriedAt, count } = list.meta;
-  const query = generateQuery();
-  const tableColumnsArray = tableColumns({ dispatch, isGranules, query });
 
   function generateQuery() {
     return {
@@ -70,6 +68,8 @@ const ReconciliationReportList = ({
     };
   }
 
+  const query = generateQuery();
+  const tableColumnsArray = tableColumns({ dispatch, isGranules, query });
   function generateBulkActions() {
     return bulkActions(reconciliationReports);
   }

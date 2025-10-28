@@ -213,8 +213,15 @@ describe('Dashboard PDRs Page', () => {
       cy.get('@list').should('have.length', 3);
 
       cy.getFakeApiFixture('granules').its('results')
-        .then((granules) => granules.filter((item) => item.pdrName === pdrName && item.granuleId.includes('GQ')))
+        .then((granules) => granules.filter((item) => (
+          item.pdrName === pdrName &&
+          item.granuleId.includes('GQ') &&
+          item.status === 'completed'
+        )))
         .each((granule) => {
+          if (granule.archived === true) {
+            return;
+          }
           cy.get(`[data-value="${granule.granuleId}"]`).children().as('columns');
           cy.get('@columns').eq(1)
             .contains(granule.status, { matchCase: false });
@@ -248,7 +255,30 @@ describe('Dashboard PDRs Page', () => {
       });
     });
 
-    it('Should dynamically update menu, sidbar and breadcrumb /pdrs links with latest filter criteria', () => {
+    it('Should search by unarchived or both as toggled', () => {
+      const prefixBoth = 'MOD09GQ.ARC';
+      const prefixArchived = 'MOD09GQ.ARCY';
+      const prefixNotArchived = 'MOD09GQ.ARCN';
+      const pdrName = 'MOD09GQ_1granule_v3.PDR';
+      cy.visit(`/pdrs/pdr/${pdrName}`);
+      cy.get('#chk_isArchivedSearch').should('not.be.checked');
+      cy.get('.search').as('search');
+      cy.get('@search').click().type(prefixBoth).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('@search').click().type(prefixNotArchived).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('@search').click().type(prefixArchived).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 0);
+
+      cy.get('#chk_isArchivedSearch').click({ force: true }).should('be.checked');
+      cy.get('@search').click().type(prefixBoth).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 2);
+      cy.get('@search').click().type(prefixNotArchived).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('@search').click().type(prefixArchived).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+    });
+    it('Should dynamically update menu, sidebar and breadcrumb /pdrs links with latest filter criteria', () => {
       const status = 'running';
 
       cy.visit('/pdrs');

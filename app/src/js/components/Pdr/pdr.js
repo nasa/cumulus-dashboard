@@ -121,6 +121,7 @@ class PDR extends React.Component {
     this.renderProgress = this.renderProgress.bind(this);
     this.state = {
       isInfixSearch: false,
+      isArchivedSearch: false
     };
   }
 
@@ -146,6 +147,10 @@ class PDR extends React.Component {
 
   setIsInfixSearch = (value) => {
     this.setState({ isInfixSearch: value });
+  };
+
+  setIsArchivedSearch = (value) => {
+    this.setState({ isArchivedSearch: value });
   };
 
   navigateBack() {
@@ -175,7 +180,7 @@ class PDR extends React.Component {
     const { count, queriedAt } = list.meta;
     const deleteStatus = get(pdrs.deleted, [pdrName, 'status']);
     const { error } = record;
-    const { isInfixSearch } = this.state;
+    const { isInfixSearch, isArchivedSearch } = this.state;
 
     const granulesCount = get(record, 'data.stats', []);
     const granuleStatus = Object.keys(granulesCount).map((key) => ({
@@ -236,6 +241,7 @@ class PDR extends React.Component {
             bulkActions={this.generateBulkActions()}
             rowId="granuleId"
             tableId={`pdr-${pdrName}`}
+            archived={isArchivedSearch}
           >
             <Search
               action={searchGranules}
@@ -243,7 +249,7 @@ class PDR extends React.Component {
               labelKey="granuleId"
               searchKey="granules"
               infixBoolean={isInfixSearch}
-              archived="false"
+              archived={isArchivedSearch}
             />
             <ListFilters>
               <Checkbox
@@ -254,6 +260,15 @@ class PDR extends React.Component {
                 inputLabel="Infix"
                 className="infix-search"
                 tip="Toggle between prefix and infix search. When enabled, the search field matches substrings instead of prefixes."
+              />
+              <Checkbox
+                id="chk_isArchivedSearch"
+                checked={isArchivedSearch}
+                onChange={this.setIsArchivedSearch}
+                label="Include"
+                inputLabel="Archived"
+                className="archived-search"
+                tip="Toggle inclusion of archived records in search results"
               />
               <Dropdown
                 getOptions={getOptionsCollectionName}
