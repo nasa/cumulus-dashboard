@@ -7,14 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- **CUMULUS-3627**
+  - Added `USE_UTC_TIME_FORMAT` environment variable to allow control over the table's date/time timezone format
 - **CUMULUS-3811**
   - Refactor data management class components to functional components
 - **CUMULUS_4182**
   - executions and granules list calls updated to search un-archived records
 - **CUMULUS-4223**
   - Upgrade cypress docker image, folders, test specs, configs to v12.17.4
-- **CUMULUS-3627**
-  - Added `USE_UTC_TIME_FORMAT` environment variable to allow control over the table's date/time timezone format
 
 ## [v14.0.0] - 2025-09-16
 
