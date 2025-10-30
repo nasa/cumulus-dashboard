@@ -703,7 +703,7 @@ export const listExecutionsByGranule = (granuleId, payload, archived = false) =>
 export const filterExecutions = (param) => ({ type: types.FILTER_EXECUTIONS, param });
 export const clearExecutionsFilter = (paramKey) => ({ type: types.CLEAR_EXECUTIONS_FILTER, paramKey });
 // infixBoolean is passed but ignored by searchExecutions
-export const searchExecutions = (infix, archived) => ({ type: types.SEARCH_EXECUTIONS, infix, archived });
+export const searchExecutions = (infix, infixBoolean, archived) => ({ type: types.SEARCH_EXECUTIONS, infix, archived });
 export const clearExecutionsSearch = () => ({ type: types.CLEAR_EXECUTIONS_SEARCH });
 
 export const getGranulesWorkflows = (payload) => ({

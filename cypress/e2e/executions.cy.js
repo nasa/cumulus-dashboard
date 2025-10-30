@@ -31,7 +31,7 @@ describe('Dashboard Executions Page', () => {
 
       // shows a summary count of completed and failed executions
       cy.get('.overview-num__wrapper ul li')
-        .first().contains('li', 'Completed').contains('li', 6)
+        .first().contains('li', 'Completed').contains('li', 8)
         .next()
         .contains('li', 'Failed')
         .contains('li', 2)
@@ -45,7 +45,10 @@ describe('Dashboard Executions Page', () => {
       cy.getFakeApiFixture('executions').as('executionsFixture');
       cy.get('@executionsFixture').its('results')
         .each((execution) => {
-          const visiblePart = execution.name.split('-').slice(0, 3).join('-');
+          if (execution.archived) {
+            return;
+          }
+          const visiblePart = execution.name.split('-').slice(0, 2).join('-');
           cy.contains(visiblePart);
           cy.get(`[data-value="${execution.name}"]`).children().as('columns');
           cy.get('@columns').should('have.length', 7);
@@ -72,7 +75,7 @@ describe('Dashboard Executions Page', () => {
         });
 
       cy.get('.table .tbody .tr').as('list');
-      cy.get('@list').should('have.length', 9);
+      cy.get('@list').should('have.length', 10);
     });
 
     it('should show a single execution', () => {
@@ -396,7 +399,7 @@ describe('Dashboard Executions Page', () => {
       cy.get('@columns').eq(5).should('have.text', 'Failed Events Snapshot');
     });
 
-    it('Should dynamically update menu, sidbar and breadcrumb /executions links with latest filter criteria', () => {
+    it('Should dynamically update menu, sidebar and breadcrumb /executions links with latest filter criteria', () => {
       const status = 'complete';
       const type = 'HelloWorldWorkflow';
       const collectionId = 'MOD09GQ___006';
@@ -416,7 +419,7 @@ describe('Dashboard Executions Page', () => {
       cy.get('#search').as('search-input');
       cy.get('@search-input').click().type(search).type('{enter}');
 
-      cy.get('.table__main-asset > a').click({ force: true });
+      cy.get('.table__main-asset > a').first().click({ force: true });
 
       // Breakcrumb <Link> contain correct query params
       cy.get('.breadcrumb > :nth-child(2) > a')
@@ -441,6 +444,27 @@ describe('Dashboard Executions Page', () => {
         .and('include', 'type=HelloWorldWorkflow')
         .and('include', 'collectionId=MOD09GQ___006')
         .and('include', 'search=1a5aaf01-835b-431a-924f-96a7feb3a3fb');
+    });
+    it('Should search by unarchived or both as toggled', () => {
+      const infixboth = '1aa3fbaa';
+      const infixArchived = '1aa3fbaab';
+      const infixNotArchived = '1aa3fbaa';
+
+      cy.visit('/executions');
+      cy.get('#chk_isArchivedSearch').should('not.be.checked');
+      cy.get('.search').as('search');
+      cy.get('@search').click().type(infixboth).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('@search').click().type(infixNotArchived).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('@search').click().type(infixArchived).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 0);
+
+      cy.get('#chk_isArchivedSearch').click({ force: true }).should('be.checked');
+      cy.get('@search').click().type(infixNotArchived).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('@search').click().type(infixArchived).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 1);
     });
   });
 });

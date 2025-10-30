@@ -123,6 +123,7 @@ const PDR = () => {
   const { pdrName } = routeMatch.params;
 
   const [isInfixSearch, setIsInfixSearch] = useState(false);
+  const [isArchivedSearch, setIsArchivedSearch] = useState(false);
 
   useEffect(() => {
     dispatch(getPdr(pdrName));
@@ -220,6 +221,7 @@ const PDR = () => {
           bulkActions={generateBulkActions()}
           rowId="granuleId"
           tableId={`pdr-${pdrName}`}
+          archived={isArchivedSearch}
         >
           <Search
             action={searchGranules}
@@ -227,7 +229,7 @@ const PDR = () => {
             labelKey="granuleId"
             searchKey="granules"
             infixBoolean={isInfixSearch}
-            archived="false"
+            archived={isArchivedSearch}
           />
           <ListFilters>
             <Checkbox
@@ -238,6 +240,15 @@ const PDR = () => {
               inputLabel="Infix"
               className="infix-search"
               tip="Toggle between prefix and infix search. When enabled, the search field matches substrings instead of prefixes."
+            />
+            <Checkbox
+              id="chk_isArchivedSearch"
+              checked={isArchivedSearch}
+              onChange={() => setIsArchivedSearch(!isArchivedSearch)}
+              label="Include"
+              inputLabel="Archived"
+              className="archived-search"
+              tip="Toggle inclusion of archived records in search results"
             />
             <Dropdown
               getOptions={getOptionsCollectionName}

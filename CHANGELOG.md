@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - executions and granules list calls updated to search un-archived records
 - **CUMULUS-4223**
   - Upgrade cypress docker image, folders, test specs, configs to v12.17.4
+- **CUMULUS-4226**
+  - Executions and granules non-archived search is toggleable. Overview values are not affected, and show size of whole table.
 
 ## [v14.0.0] - 2025-09-16
 

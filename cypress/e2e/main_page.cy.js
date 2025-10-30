@@ -186,10 +186,10 @@ describe('Dashboard Home Page', () => {
       cy.clock(ingestEndTime);
       cy.setDatepickerDropdown('3 months');
 
-      cy.get('#Errors').contains('4');
+      cy.get('#Errors').contains('6');
       cy.get('#Collections').contains('2');
-      cy.get('#Granules').contains('14');
-      cy.get('#Executions').contains('9');
+      cy.get('#Granules').contains('16');
+      cy.get('#Executions').contains('11');
       cy.get('[id="Ingest Rules"]').contains('1');
 
       // Test there are values in Granule Error list

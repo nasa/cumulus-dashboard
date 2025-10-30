@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { withRouter, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -22,9 +22,9 @@ const Executions = ({
 }) => {
   const { pathname } = location;
   const showDatePicker = pathname === '/executions';
-  const filteredQueryParams = filterQueryParams(queryParams);
-
-  function query () {
+  const [isArchivedSearch] = useState(false);
+  const filteredQueryParams = filterQueryParams({ ...queryParams, archived: isArchivedSearch });
+  function query() {
     dispatch(getCount({
       type: 'executions',
       field: 'status',
