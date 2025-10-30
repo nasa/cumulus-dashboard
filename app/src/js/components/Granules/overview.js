@@ -123,7 +123,12 @@ const GranulesOverview = () => {
     return actions;
   }, [granules, config, selected, getExecuteOptions, applyWorkflow, applyRecoveryWorkflow]);
 
-  const generateQuery = useCallback(() => ({ ...filteredQueryParams, archived: isArchivedSearch }), [filteredQueryParams, isArchivedSearch]);
+  const generateQuery = useCallback(
+    () => (
+      { ...filteredQueryParams, archived: isArchivedSearch }
+    ),
+    [filteredQueryParams, isArchivedSearch]
+  );
 
   const updateSelection = useCallback((selectedIds, currentSelectedRows) => {
     const allSelectedRows = [...selected, ...currentSelectedRows];
