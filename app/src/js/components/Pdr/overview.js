@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import { Link, useLocation } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { Link, withRouter } from 'react-router-dom';
 import { listPdrs, getCount, clearPdrsFilter, filterPdrs } from '../../actions';
 import { lastUpdated, tally } from '../../utils/format';
 import { bulkActions } from '../../utils/table-config/pdrs';
@@ -12,7 +13,7 @@ import Dropdown from '../DropDown/dropdown';
 import statusOptions from '../../utils/status';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import { filterQueryParams, getPersistentQueryParams } from '../../utils/url-helper';
+import { getPersistentQueryParams } from '../../utils/url-helper';
 
 const breadcrumbConfig = [
   {
@@ -25,11 +26,8 @@ const breadcrumbConfig = [
   },
 ];
 
-const PdrOverview = () => {
+const PdrOverview = ({ queryParams }) => {
   const dispatch = useDispatch();
-  const location = useLocation();
-  const queryParams = Object.fromEntries(new URLSearchParams(location.search));
-  const filteredQueryParams = filterQueryParams(queryParams);
 
   useEffect(() => {
     const queryStats = () => {
@@ -37,15 +35,15 @@ const PdrOverview = () => {
         getCount({
           type: 'pdrs',
           field: 'status',
-          ...filteredQueryParams,
+          ...queryParams,
         })
       );
     };
     queryStats();
-  }, [dispatch, filteredQueryParams]);
+  }, [dispatch, queryParams]);
 
   const generateQuery = () => (
-    { ...filteredQueryParams }
+    { ...queryParams }
   );
 
   const pdrs = useSelector((state) => state.pdrs);
@@ -115,4 +113,10 @@ const PdrOverview = () => {
   );
 };
 
-export default PdrOverview;
+PdrOverview.propTypes = {
+  queryParams: PropTypes.object
+};
+
+export default withRouter(
+  (PdrOverview)
+);

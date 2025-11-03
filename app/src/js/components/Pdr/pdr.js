@@ -1,7 +1,8 @@
 import path from 'path';
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import { useRouteMatch, Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { withRouter, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { get } from 'object-path';
 import {
@@ -110,17 +111,14 @@ const metaAccessors = [
   },
 ];
 
-const PDR = () => {
+const PDR = ({ match, queryParams }) => {
   const dispatch = useDispatch();
 
   const collections = useSelector((state) => state.collections);
   const granules = useSelector((state) => state.granules);
   const logs = useSelector((state) => state.logs);
   const pdrs = useSelector((state) => state.pdrs);
-  const queryParams = useSelector((state) => state.router.params);
-
-  const routeMatch = useRouteMatch();
-  const { pdrName } = routeMatch.params;
+  const { pdrName } = match.params;
 
   const [isInfixSearch, setIsInfixSearch] = useState(false);
   const [isArchivedSearch, setIsArchivedSearch] = useState(false);
@@ -282,4 +280,11 @@ const PDR = () => {
   );
 };
 
-export default PDR;
+PDR.propTypes = {
+  match: PropTypes.object,
+  queryParams: PropTypes.object,
+};
+
+export default withRouter(
+  (PDR)
+);

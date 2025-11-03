@@ -53,8 +53,8 @@ const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
               />
               <Route
                 path="/pdrs/pdr/:pdrName"
-                render={() => (
-                  <Pdr/>
+                render={(props) => (
+                  <Pdr queryParams={filteredQueryParams} {...props} />
                 )}
               />
               <Route

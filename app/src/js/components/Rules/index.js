@@ -8,6 +8,7 @@ import RulesOverview from './overview';
 import Rule from './rule';
 import EditRule from './edit';
 import AddRule from './add';
+import { filterQueryParams } from '../../utils/url-helper';
 
 const Rules = ({
   location,
@@ -16,6 +17,7 @@ const Rules = ({
 }) => {
   const { pathname } = location;
   const showSidebar = pathname !== '/rules/add';
+  const filteredQueryParams = filterQueryParams(queryParams);
   return (
     <div className='page__rules'>
       <Helmet>
@@ -36,7 +38,7 @@ const Rules = ({
           )}
           <div className={showSidebar ? 'page__content--shortened' : 'page__content'}>
             <Switch>
-              <Route exact path='/rules' render={() => <RulesOverview />} />
+              <Route exact path='/rules' render={() => <RulesOverview queryParams={filteredQueryParams} />} />
               <Route path='/rules/rule/:ruleName' component={Rule} />
               <Route path='/rules/edit/:ruleName' component={EditRule} />
               <Route path='/rules/add' component={AddRule} />

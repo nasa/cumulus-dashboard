@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
 import { Helmet } from 'react-helmet';
 import { useSelector } from 'react-redux';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import {
   listProviders,
   filterProviders,
@@ -10,27 +11,24 @@ import {
 import { lastUpdated } from '../../utils/format';
 import { tableColumns } from '../../utils/table-config/providers';
 import List from '../Table/Table';
-import { filterQueryParams, getPersistentQueryParams } from '../../utils/url-helper';
+import { getPersistentQueryParams } from '../../utils/url-helper';
 
-const ProvidersOverview = () => {
+const ProvidersOverview = ({ queryParams }) => {
   const providers = useSelector((state) => state.providers);
-  const location = useLocation();
-  const queryParams = Object.fromEntries(new URLSearchParams(location.search));
-  const filteredQueryParams = filterQueryParams(queryParams);
 
   const { list } = providers;
   const { count, queriedAt } = list.meta;
 
-  const query = useMemo(() => ({ ...filteredQueryParams }), [filteredQueryParams]);
+  const generateQuery = () => ({ ...queryParams });
 
   const bulkActions = useMemo(() => ([
     {
       Component: (
         <Link
           className="button button--green button--add button--small form-group__element"
-          to={(toLocation) => ({
+          to={(location) => ({
             pathname: '/providers/add',
-            search: getPersistentQueryParams(toLocation),
+            search: getPersistentQueryParams(location),
           })}
         >
           Add Provider
@@ -61,7 +59,7 @@ const ProvidersOverview = () => {
           list={list}
           action={listProviders}
           tableColumns={tableColumns}
-          query={query}
+          query={generateQuery()}
           bulkActions={bulkActions}
           rowId="name"
           initialSortId="updatedAt"
@@ -74,4 +72,10 @@ const ProvidersOverview = () => {
   );
 };
 
-export default ProvidersOverview;
+ProvidersOverview.propTypes = {
+  queryParams: PropTypes.object,
+};
+
+export default withRouter(
+  (ProvidersOverview)
+);

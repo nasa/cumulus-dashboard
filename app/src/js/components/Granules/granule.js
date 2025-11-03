@@ -1,7 +1,7 @@
 import path from 'path';
 import React, { useEffect, useState, useCallback } from 'react';
+import { withRouter, Link, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { useParams, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { get } from 'object-path';
 import pick from 'lodash/pick';
@@ -379,4 +379,8 @@ GranuleOverview.propTypes = {
   skipReloadOnMount: PropTypes.bool
 };
 
-export default GranuleOverview;
+export { GranuleOverview };
+
+export default withRouter(
+  (GranuleOverview)
+);

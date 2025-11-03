@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Helmet } from 'react-helmet';
-import { useLocation } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import withQueryParams from 'react-router-query-params';
 import { get } from 'object-path';
-import { filterQueryParams } from '../../utils/url-helper';
+import PropTypes from 'prop-types';
 import {
   searchGranules,
   clearGranulesSearch,
@@ -49,18 +50,14 @@ const breadcrumbConfig = [
   },
 ];
 
-const GranulesOverview = () => {
+const GranulesOverview = ({ queryParams }) => {
   const dispatch = useDispatch();
-  const location = useLocation();
 
   const collections = useSelector((state) => state.collections);
   const config = useSelector((state) => state.config);
   const granules = useSelector((state) => state.granules);
   const providers = useSelector((state) => state.providers);
   const workflowOptions = useSelector(workflowOptionNames);
-
-  const queryParams = Object.fromEntries(new URLSearchParams(location.search));
-  const filteredQueryParams = filterQueryParams(queryParams);
 
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
@@ -124,10 +121,8 @@ const GranulesOverview = () => {
   }, [granules, config, selected, getExecuteOptions, applyWorkflow, applyRecoveryWorkflow]);
 
   const generateQuery = useCallback(
-    () => (
-      { ...filteredQueryParams, archived: isArchivedSearch }
-    ),
-    [filteredQueryParams, isArchivedSearch]
+    () => ({ ...(queryParams || {}), archived: isArchivedSearch }),
+    [queryParams, isArchivedSearch]
   );
 
   const updateSelection = useCallback((selectedIds, currentSelectedRows) => {
@@ -255,4 +250,14 @@ const GranulesOverview = () => {
   );
 };
 
-export default GranulesOverview;
+GranulesOverview.propTypes = {
+  queryParams: PropTypes.object,
+};
+
+export { GranulesOverview };
+
+export default withRouter(
+  withQueryParams()(
+    (GranulesOverview)
+  )
+);

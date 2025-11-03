@@ -39,7 +39,7 @@ const Providers = ({
                 exact
                 path="/providers"
                 render={() => (
-                  <ProvidersOverview />
+                  <ProvidersOverview queryParams={queryParams} />
                 )}
               />
               <Route path="/providers/add" component={AddProvider} />
