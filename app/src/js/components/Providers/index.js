@@ -8,6 +8,7 @@ import AddProvider from './add';
 import EditProvider from './edit';
 import ProvidersOverview from './overview';
 import ProviderOverview from './provider';
+import { filterQueryParams } from '../../utils/url-helper';
 
 const Providers = ({
   location,
@@ -16,6 +17,7 @@ const Providers = ({
 }) => {
   const { pathname } = location;
   const showSidebar = pathname !== '/providers/add';
+  const filteredQueryParams = filterQueryParams(queryParams);
   return (
     <div className="page__providers">
       <Helmet>
@@ -39,7 +41,7 @@ const Providers = ({
                 exact
                 path="/providers"
                 render={() => (
-                  <ProvidersOverview queryParams={queryParams} />
+                  <ProvidersOverview queryParams={filteredQueryParams} />
                 )}
               />
               <Route path="/providers/add" component={AddProvider} />
