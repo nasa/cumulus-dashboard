@@ -47,8 +47,8 @@ const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
               <Route
                 exact
                 path="/pdrs"
-                render={(props) => (
-                  <PdrOverview queryParams={filteredQueryParams} {...props} />
+                render={() => (
+                  <PdrOverview queryParams={filteredQueryParams} />
                 )}
               />
               <Route

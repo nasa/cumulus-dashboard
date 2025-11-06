@@ -93,14 +93,20 @@ describe('Dashboard PDRs Page', () => {
     });
 
     it('should display active PDRs', () => {
+      cy.intercept('GET', '**/pdrs?*').as('listPdrs');
+      cy.intercept('GET', '**/stats/aggregate*').as('getPdrCounts');
       cy.visit('/pdrs');
+      cy.wait('@listPdrs');
+      cy.wait('@getPdrCounts');
+
       cy.contains('.sidebar__row ul li a', 'Running 4')
         .should('have.attr', 'href', '/pdrs/active')
         .click();
 
       cy.contains('.heading--xlarge', 'Pdrs');
       cy.contains('.heading--large', 'Active PDRs')
-        .contains('.num-title', 4);
+        .find('.num-title')
+        .should('contain', 4);
 
       cy.get('.table .tbody .tr').as('list');
       cy.get('@list').should('have.length', 4);

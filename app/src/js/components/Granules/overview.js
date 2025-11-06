@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Helmet } from 'react-helmet';
-import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
 import { get } from 'object-path';
-import isEqual from 'lodash/isEqual';
+import PropTypes from 'prop-types';
 import {
   searchGranules,
   clearGranulesSearch,
@@ -51,255 +50,214 @@ const breadcrumbConfig = [
   },
 ];
 
-class GranulesOverview extends React.Component {
-  constructor(props) {
-    super(props);
-    this.generateQuery = this.generateQuery.bind(this);
-    this.generateBulkActions = this.generateBulkActions.bind(this);
-    this.queryMeta = this.queryMeta.bind(this);
-    this.selectWorkflow = this.selectWorkflow.bind(this);
-    this.applyWorkflow = this.applyWorkflow.bind(this);
-    this.getExecuteOptions = this.getExecuteOptions.bind(this);
-    this.setWorkflowMeta = this.setWorkflowMeta.bind(this);
-    this.applyRecoveryWorkflow = this.applyRecoveryWorkflow.bind(this);
-    this.updateSelection = this.updateSelection.bind(this);
-    this.state = {
-      workflow: this.props.workflowOptions[0],
-      workflowMeta: defaultWorkflowMeta,
-      selected: [],
-      isInfixSearch: false,
-      isArchivedSearch: false,
-    };
-  }
+const GranulesOverview = ({ queryParams }) => {
+  const dispatch = useDispatch();
 
-  componentDidMount() {
-    this.queryMeta();
-  }
+  const collections = useSelector((state) => state.collections);
+  const config = useSelector((state) => state.config);
+  const granules = useSelector((state) => state.granules);
+  const providers = useSelector((state) => state.providers);
+  const workflowOptions = useSelector(workflowOptionNames);
 
-  componentDidUpdate(prevProps) {
-    if (!isEqual(prevProps.workflowOptions, this.props.workflowOptions)) {
-      this.setState({ workflow: this.props.workflowOptions[0] });
-    }
-  }
+  const [workflow, setWorkflow] = useState(workflowOptions[0]);
+  const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
+  const [selected, setSelected] = useState([]);
+  const [isInfixSearch, setIsInfixSearch] = useState(false);
+  const [isArchivedSearch, setIsArchivedSearch] = useState(false);
 
-  queryMeta() {
-    const { dispatch } = this.props;
+  useEffect(() => {
     dispatch(listWorkflows());
-  }
+  }, [dispatch]);
 
-  generateQuery() {
-    const { queryParams } = this.props;
-    return { ...queryParams, archived: this.state.isArchivedSearch };
-  }
+  useEffect(() => {
+    if (workflowOptions && workflowOptions.length > 0) {
+      setWorkflow(workflowOptions[0]);
+    }
+  }, [workflowOptions]);
 
-  generateBulkActions() {
+  const selectWorkflow = useCallback((_selector, newWorkflow) => {
+    setWorkflow(newWorkflow);
+  }, []);
+
+  const metaHandler = useCallback((newWorkflowMeta) => {
+    setWorkflowMeta(newWorkflowMeta);
+  }, []);
+
+  const applyWorkflow = useCallback((granuleId) => {
+    const { meta } = JSON.parse(workflowMeta);
+    setWorkflowMeta(defaultWorkflowMeta);
+    return applyWorkflowToGranule(granuleId, workflow, meta);
+  }, [workflow, workflowMeta]);
+
+  const applyRecoveryWorkflow = useCallback((granuleId) => applyRecoveryWorkflowToGranule(granuleId), []);
+
+  const getExecuteOptions = useCallback(() => [
+    executeDialog({
+      selectHandler: selectWorkflow,
+      label: 'workflow',
+      value: workflow,
+      options: workflowOptions,
+      initialMeta: workflowMeta,
+      metaHandler,
+    }),
+  ], [workflow, workflowOptions, workflowMeta, selectWorkflow, metaHandler]);
+
+  const generateBulkActions = useCallback(() => {
     const actionConfig = {
       execute: {
-        options: this.getExecuteOptions(),
-        action: this.applyWorkflow,
+        options: getExecuteOptions(),
+        action: applyWorkflow,
       },
       recover: {
-        options: this.getExecuteOptions(),
-        action: this.applyRecoveryWorkflow,
+        options: getExecuteOptions(),
+        action: applyRecoveryWorkflow,
       },
     };
-    const { granules, config } = this.props;
-    const { selected } = this.state;
     let actions = bulkActions(granules, actionConfig, selected);
     if (config.enableRecovery) {
       actions = actions.concat(recoverAction(granules, actionConfig));
     }
     return actions;
-  }
+  }, [granules, config, selected, getExecuteOptions, applyWorkflow, applyRecoveryWorkflow]);
 
-  selectWorkflow(_selector, workflow) {
-    this.setState({ workflow });
-  }
+  const generateQuery = useCallback(
+    () => ({ ...(queryParams || {}), archived: isArchivedSearch }),
+    [queryParams, isArchivedSearch]
+  );
 
-  setWorkflowMeta(workflowMeta) {
-    this.setState({ workflowMeta });
-  }
+  const updateSelection = useCallback((selectedIds, currentSelectedRows) => {
+    const allSelectedRows = [...selected, ...currentSelectedRows];
+    const newSelected = selectedIds
+      .map((id) => allSelectedRows.find((g) => g.granuleId === id))
+      .filter(Boolean);
+    setSelected(newSelected);
+  }, [selected]);
 
-  setIsInfixSearch = (value) => {
-    this.setState({ isInfixSearch: value });
-  };
+  const { list } = granules;
+  const { dropdowns } = collections;
+  const { dropdowns: providerDropdowns } = providers;
+  const { count, queriedAt } = list.meta;
 
-  setIsArchivedSearch = (value) => {
-    this.setState({ isArchivedSearch: value });
-  };
-
-  applyWorkflow(granuleId) {
-    const { workflow, workflowMeta } = this.state;
-    const { meta } = JSON.parse(workflowMeta);
-    this.setState({ workflowMeta: defaultWorkflowMeta });
-    return applyWorkflowToGranule(granuleId, workflow, meta);
-  }
-
-  applyRecoveryWorkflow(granuleId) {
-    return applyRecoveryWorkflowToGranule(granuleId);
-  }
-
-  getExecuteOptions() {
-    return [
-      executeDialog({
-        selectHandler: this.selectWorkflow,
-        label: 'workflow',
-        value: this.state.workflow,
-        options: this.props.workflowOptions,
-        initialMeta: this.state.workflowMeta,
-        metaHandler: this.setWorkflowMeta,
-      }),
-    ];
-  }
-
-  updateSelection(selectedIds, currentSelectedRows) {
-    const allSelectedRows = this.state.selected.concat(currentSelectedRows);
-    const selected = selectedIds
-      .map((id) => allSelectedRows.find((g) => id === g.granuleId)).filter(Boolean);
-    this.setState({ selected });
-  }
-
-  render() {
-    const { collections, granules, providers } = this.props;
-    const { list } = granules;
-    const { dropdowns } = collections;
-    const { dropdowns: providerDropdowns } = providers;
-    const { count, queriedAt } = list.meta;
-    const { isInfixSearch, isArchivedSearch } = this.state;
-
-    return (
-      <div className="page__component">
-        <Helmet>
-          <title> Granules Overview </title>
-        </Helmet>
-        <section className="page__section page__section__controls">
-          <Breadcrumbs config={breadcrumbConfig} />
-        </section>
-        <section className="page__section page__section__header-wrapper">
-          <div className="page__section__header">
-            <h1 className="heading--large heading--shared-content with-description ">
-              Granule Overview
-            </h1>
-            {lastUpdated(queriedAt)}
-            <Overview type="granules" inflight={granules.list.inflight} />
-          </div>
-        </section>
-        <section className="page__section">
-          <div className="heading__wrapper--border">
-            <h2 className="heading--medium heading--shared-content with-description">
-              {strings.granules}{' '}
-              <span className="num-title">
-                {count ? ` ${tally(count)}` : 0}
-              </span>
-            </h2>
-          </div>
-          <List
-            list={list}
-            action={listGranules}
-            tableColumns={tableColumns}
-            query={this.generateQuery()}
-            bulkActions={this.generateBulkActions()}
-            groupAction={groupAction}
-            rowId="granuleId"
-            initialHiddenColumns={defaultHiddenColumns}
-            initialSortId="updatedAt"
-            filterAction={filterGranules}
-            filterClear={clearGranulesFilter}
-            onSelect={this.updateSelection}
-            toggleColumnOptionsAction={toggleGranulesTableColumns}
-            tableId="granules-overview"
-          >
-            <Search
-              action={searchGranules}
-              clear={clearGranulesSearch}
-              label="Search"
-              labelKey="granuleId"
-              placeholder="Granule ID"
-              searchKey="granules"
-              infixBoolean={isInfixSearch}
-              archived={isArchivedSearch}
+  return (
+    <div className="page__component">
+      <Helmet>
+        <title> Granules Overview </title>
+      </Helmet>
+      <section className="page__section page__section__controls">
+        <Breadcrumbs config={breadcrumbConfig} />
+      </section>
+      <section className="page__section page__section__header-wrapper">
+        <div className="page__section__header">
+          <h1 className="heading--large heading--shared-content with-description ">
+            Granule Overview
+          </h1>
+          {lastUpdated(queriedAt)}
+          <Overview type="granules" inflight={granules.list.inflight} />
+        </div>
+      </section>
+      <section className="page__section">
+        <div className="heading__wrapper--border">
+          <h2 className="heading--medium heading--shared-content with-description">
+            {strings.granules}{' '}
+            <span className="num-title">
+              {count ? ` ${tally(count)}` : 0}
+            </span>
+          </h2>
+        </div>
+        <List
+          list={list}
+          action={listGranules}
+          tableColumns={tableColumns}
+          query={generateQuery()}
+          bulkActions={generateBulkActions()}
+          groupAction={groupAction}
+          rowId="granuleId"
+          initialHiddenColumns={defaultHiddenColumns}
+          initialSortId="updatedAt"
+          filterAction={filterGranules}
+          filterClear={clearGranulesFilter}
+          onSelect={updateSelection}
+          toggleColumnOptionsAction={toggleGranulesTableColumns}
+          tableId="granules-overview"
+        >
+          <Search
+            action={searchGranules}
+            clear={clearGranulesSearch}
+            label="Search"
+            labelKey="granuleId"
+            placeholder="Granule ID"
+            searchKey="granules"
+            infixBoolean={isInfixSearch}
+            archived={isArchivedSearch}
+          />
+          <ListFilters>
+            <Checkbox
+              id="chk_isInfixSearch"
+              checked={isInfixSearch}
+              onChange={() => setIsInfixSearch(!isInfixSearch)}
+              label="Search By"
+              inputLabel="Infix"
+              className="infix-search"
+              tip="Toggle between prefix and infix search. When enabled, the search field matches substrings instead of prefixes."
             />
-            <ListFilters>
-              <Checkbox
-                id="chk_isInfixSearch"
-                checked={isInfixSearch}
-                onChange={this.setIsInfixSearch}
-                label="Search By"
-                inputLabel="Infix"
-                className="infix-search"
-                tip="Toggle between prefix and infix search. When enabled, the search field matches substrings instead of prefixes."
-              />
-              <Checkbox
-                id="chk_isArchivedSearch"
-                checked={isArchivedSearch}
-                onChange={this.setIsArchivedSearch}
-                label="Include"
-                inputLabel="Archived"
-                className="archived-search"
-                tip="Toggle inclusion of archived records in search results"
-              />
-              <Dropdown
-                options={statusOptions}
-                action={filterGranules}
-                clear={clearGranulesFilter}
-                paramKey="status"
-                label="Status"
-                inputProps={{
-                  placeholder: 'All',
-                }}
-              />
-              <Dropdown
-                getOptions={getOptionsCollectionName}
-                options={get(dropdowns, ['collectionName', 'options'])}
-                action={filterGranules}
-                clear={clearGranulesFilter}
-                paramKey="collectionId"
-                label={strings.collection}
-                inputProps={{
-                  placeholder: 'All',
-                  className: 'dropdown--large',
-                }}
-              />
-              <Dropdown
-                getOptions={getOptionsProviderName}
-                options={get(providerDropdowns, ['provider', 'options'])}
-                action={filterGranules}
-                clear={clearGranulesFilter}
-                paramKey="provider"
-                label="Provider"
-                inputProps={{
-                  placeholder: 'All',
-                  className: 'dropdown--medium',
-                }}
-              />
-            </ListFilters>
-          </List>
-        </section>
-      </div>
-    );
-  }
-}
+            <Checkbox
+              id="chk_isArchivedSearch"
+              checked={isArchivedSearch}
+              onChange={() => setIsArchivedSearch(!isArchivedSearch)}
+              label="Include"
+              inputLabel="Archived"
+              className="archived-search"
+              tip="Toggle inclusion of archived records in search results"
+            />
+            <Dropdown
+              options={statusOptions}
+              action={filterGranules}
+              clear={clearGranulesFilter}
+              paramKey="status"
+              label="Status"
+              inputProps={{
+                placeholder: 'All',
+              }}
+            />
+            <Dropdown
+              getOptions={getOptionsCollectionName}
+              options={get(dropdowns, ['collectionName', 'options'])}
+              action={filterGranules}
+              clear={clearGranulesFilter}
+              paramKey="collectionId"
+              label={strings.collection}
+              inputProps={{
+                placeholder: 'All',
+                className: 'dropdown--large',
+              }}
+            />
+            <Dropdown
+              getOptions={getOptionsProviderName}
+              options={get(providerDropdowns, ['provider', 'options'])}
+              action={filterGranules}
+              clear={clearGranulesFilter}
+              paramKey="provider"
+              label="Provider"
+              inputProps={{
+                placeholder: 'All',
+                className: 'dropdown--medium',
+              }}
+            />
+          </ListFilters>
+        </List>
+      </section>
+    </div>
+  );
+};
 
 GranulesOverview.propTypes = {
-  collections: PropTypes.object,
-  config: PropTypes.object,
-  dispatch: PropTypes.func,
-  granules: PropTypes.object,
   queryParams: PropTypes.object,
-  workflowOptions: PropTypes.array,
-  providers: PropTypes.object,
 };
 
 export { GranulesOverview };
 
 export default withRouter(
   withQueryParams()(
-    connect((state) => ({
-      collections: state.collections,
-      config: state.config,
-      granules: state.granules,
-      workflowOptions: workflowOptionNames(state),
-      providers: state.providers,
-    }))(GranulesOverview)
+    (GranulesOverview)
   )
 );

@@ -38,7 +38,7 @@ const Rules = ({
           )}
           <div className={showSidebar ? 'page__content--shortened' : 'page__content'}>
             <Switch>
-              <Route exact path='/rules' render={(props) => <RulesOverview {...props} queryParams={filteredQueryParams} />} />
+              <Route exact path='/rules' render={() => <RulesOverview queryParams={filteredQueryParams} />} />
               <Route path='/rules/rule/:ruleName' component={Rule} />
               <Route path='/rules/edit/:ruleName' component={EditRule} />
               <Route path='/rules/add' component={AddRule} />
