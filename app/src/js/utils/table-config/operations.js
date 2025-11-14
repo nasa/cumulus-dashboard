@@ -2,6 +2,8 @@ import React from 'react';
 import { get } from 'object-path';
 import { fromNowWithTooltip, displayCase } from '../format';
 import ErrorReport from '../../components/Errors/report';
+import ShowMoreOrLess from '../../components/Errors/show-more-or-less';
+import CopyToClipboard from '../../components/Errors/copy-to-clipboard';
 
 export const tableColumns = [
   {
@@ -42,13 +44,26 @@ export const tableColumns = [
         return <ErrorReport report={output} truncate={true} disableScroll={true} />;
       }
       
-      // Display as JSON output for succeeded or other statuses
+      // Display as JSON output for succeeded or other statuses with expand/collapse
       try {
         const parsedOutput = typeof output === 'string' ? JSON.parse(output) : output;
-        return <pre style={{ maxHeight: '200px', overflow: 'auto', whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>{JSON.stringify(parsedOutput, null, 2)}</pre>;
+        const jsonString = JSON.stringify(parsedOutput, null, 2);
+        
+        return (
+          <div>
+            <ShowMoreOrLess text={jsonString} truncate={true} />
+            <CopyToClipboard text={jsonString} />
+          </div>
+        );
       } catch (e) {
         // If JSON parsing fails, display as raw string
-        return <pre style={{ maxHeight: '200px', overflow: 'auto', whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>{String(output)}</pre>;
+        const stringOutput = String(output);
+        return (
+          <div>
+            <ShowMoreOrLess text={stringOutput} truncate={true} />
+            <CopyToClipboard text={stringOutput} />
+          </div>
+        );
       }
     },
     disableSortBy: true,
