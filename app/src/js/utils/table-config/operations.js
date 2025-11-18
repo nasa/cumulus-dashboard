@@ -45,26 +45,30 @@ export const tableColumns = [
       }
       
       // Display as JSON output for succeeded or other statuses with expand/collapse
-      try {
-        const parsedOutput = typeof output === 'string' ? JSON.parse(output) : output;
-        const jsonString = JSON.stringify(parsedOutput, null, 2);
-        
-        return (
-          <div>
-            <ShowMoreOrLess text={jsonString} truncate={true} />
-            <CopyToClipboard text={jsonString} />
-          </div>
-        );
-      } catch (e) {
-        // If JSON parsing fails, display as raw string
-        const stringOutput = String(output);
-        return (
-          <div>
-            <ShowMoreOrLess text={stringOutput} truncate={true} />
-            <CopyToClipboard text={stringOutput} />
-          </div>
-        );
+      let displayText = output;
+      
+      // Try to parse as JSON if it's a string
+      if (typeof output === 'string') {
+        try {
+          const parsed = JSON.parse(output);
+          // Only stringify if it's an object or array, not if it's a primitive string
+          if (typeof parsed === 'object' && parsed !== null) {
+            displayText = JSON.stringify(parsed, null, 2);
+          } else {
+            displayText = typeof parsed === 'string' ? parsed : String(parsed);
+          }
+        } catch (parseError) {
+          // If JSON parsing fails, display as raw string
+          displayText = output;
+        }
       }
+      
+      return (
+        <div>
+          <ShowMoreOrLess text={displayText} truncate={true} />
+          <CopyToClipboard text={displayText} />
+        </div>
+      );
     },
     disableSortBy: true,
     width: 200
