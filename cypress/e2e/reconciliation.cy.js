@@ -238,7 +238,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
       const cards = [
         {
-          title: 'DynamoDB',
+          title: 'DB',
           count: 35,
           firstColumn: 'GranuleId'
         },
@@ -483,7 +483,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
       const cards = [
         {
-          title: 'DynamoDB',
+          title: 'DB',
           count: 12
         },
         {
@@ -519,7 +519,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
       const cards = [
         {
-          title: 'DynamoDB',
+          title: 'DB',
           count: 10
         },
         {

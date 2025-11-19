@@ -36,7 +36,7 @@ const InventoryReport = ({
   reportName,
   reportUrl
 }) => {
-  const [activeId, setActiveId] = useState('dynamo');
+  const [activeId, setActiveId] = useState('db');
   const { reportStartTime = null, reportEndTime = null, error = null } =
     recordData || {};
   const {
@@ -128,7 +128,7 @@ const InventoryReport = ({
         </p>
         <div className="tablecard--wrapper">
           <TableCards
-            titleCaption="Cumulus (DynamoDB) versus S3"
+            titleCaption="Cumulus (DB) versus S3"
             config={internalComparison}
             onClick={handleCardClick}
             activeCard={activeId}
