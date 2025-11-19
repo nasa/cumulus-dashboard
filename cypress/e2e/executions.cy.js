@@ -467,8 +467,8 @@ describe('Dashboard Executions Page', () => {
       cy.get('.table .tbody .tr').should('have.length', 1);
     });
   });
-    
-  describe('when ESTIMATE_TABLE_ROW_COUNT is false', () =>{
+
+  describe('when ESTIMATE_TABLE_ROW_COUNT is false', () => {
     before(() => {
       Cypress.env('ESTIMATE_TABLE_ROW_COUNT', false);
       cy.login();
@@ -480,7 +480,7 @@ describe('Dashboard Executions Page', () => {
       cy.get('.num-title').invoke('text').then((executionCount) => {
         cy.get('.tbody .tr').should('have.length', Number(executionCount));
       });
-      cy.get('.checkmark--wrapper').contains("Archived").click();
+      cy.get('.checkmark--wrapper').contains('Archived').click();
       cy.wait(500);
       cy.get('.num-title').invoke('text').then((executionCount) => {
         cy.get('.tbody .tr').should('have.length', Number(executionCount));
