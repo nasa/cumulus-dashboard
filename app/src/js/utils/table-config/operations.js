@@ -1,9 +1,11 @@
 import React from 'react';
 import { get } from 'object-path';
+import { Link } from 'react-router-dom';
 import { fromNowWithTooltip, displayCase } from '../format';
 import ErrorReport from '../../components/Errors/report';
 import ShowMoreOrLess from '../../components/Errors/show-more-or-less';
 import CopyToClipboard from '../../components/Errors/copy-to-clipboard';
+import { getPersistentQueryParams } from '../url-helper';
 
 export const tableColumns = [
   {
@@ -13,7 +15,9 @@ export const tableColumns = [
   },
   {
     Header: 'Async ID',
-    accessor: 'id'
+    accessor: 'id',
+    Cell: ({ row: { original: { id } } }) => (
+      <Link to={(location) => ({ pathname: `/operations/operation/${id}`, search: getPersistentQueryParams(location) })} title={id}>{id}</Link>)
   },
   {
     Header: 'Description',
@@ -28,7 +32,7 @@ export const tableColumns = [
     Header: 'Output',
     accessor: (row) => get(row, 'output'),
     id: 'output',
-    Cell: ({ row: { original } }) => { // eslint-disable-line react/prop-types
+    Cell: ({ row: { original } }) => {
       const output = get(original, 'output');
       const status = get(original, 'status');
       
