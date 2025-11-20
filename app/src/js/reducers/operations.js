@@ -4,9 +4,6 @@ import {
   OPERATIONS,
   OPERATIONS_INFLIGHT,
   OPERATIONS_ERROR,
-  OPERATION,
-  OPERATION_INFLIGHT,
-  OPERATION_ERROR,
   FILTER_OPERATIONS,
   CLEAR_OPERATIONS_FILTER,
   SEARCH_OPERATIONS,
@@ -36,19 +33,6 @@ export default createReducer(initialState, {
     state.list.inflight = true;
   },
   [OPERATIONS_ERROR]: (state, action) => {
-    state.list.inflight = false;
-    state.list.error = action.error;
-  },
-  [OPERATION]: (state, action) => {
-    state.list.data = action.data.results;
-    state.list.meta = assignDate(action.data.meta);
-    state.list.inflight = false;
-    state.list.error = false;
-  },
-  [OPERATION_INFLIGHT]: (state) => {
-    state.list.inflight = true;
-  },
-  [OPERATION_ERROR]: (state, action) => {
     state.list.inflight = false;
     state.list.error = action.error;
   },
