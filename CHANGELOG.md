@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Added `USE_UTC_TIME_FORMAT` environment variable to allow control over the table's date/time timezone format
 - **CUMULUS-3811**
   - Refactor data management class components to functional components
+- **CUMULUS_4129**
+  - Added ESTIMATE_TABLE_ROW_COUNT env var to toggle estimated table row count for executions and granules
 - **CUMULUS_4182**
   - executions and granules list calls updated to search un-archived records
 - **CUMULUS-4223**
