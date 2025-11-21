@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- **CUMULUS-2956**
+  - Added the output of an operation to the overview page and a new page to view an individual operation
 - **CUMULUS-3627**
   - Added `USE_UTC_TIME_FORMAT` environment variable to allow control over the table's date/time timezone format
 - **CUMULUS-3811**
