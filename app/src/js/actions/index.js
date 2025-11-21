@@ -206,7 +206,12 @@ export const listGranules = (options) => (dispatch, getState) => {
       method: 'GET',
       id: null,
       url: new URL('granules', root).href,
-      params: parseArchivedInListParams({ limit: defaultPageLimit, ...options, ...timeFilters })
+      params: parseArchivedInListParams({
+        limit: defaultPageLimit,
+        estimateTableRowCount: _config.estimateTableRowCount,
+        ...options,
+        ...timeFilters
+      })
     }
   });
 };
@@ -684,7 +689,12 @@ export const listExecutions = (options) => (dispatch, getState) => {
       type: types.EXECUTIONS,
       method: 'GET',
       url: new URL('executions', root).href,
-      params: parseArchivedInListParams({ limit: defaultPageLimit, ...options, ...timeFilters })
+      params: parseArchivedInListParams({
+        limit: defaultPageLimit,
+        estimateTableRowCount: _config.estimateTableRowCount,
+        ...options,
+        ...timeFilters
+      })
     }
   });
 };
