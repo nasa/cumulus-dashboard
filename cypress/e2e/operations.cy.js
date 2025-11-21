@@ -94,7 +94,7 @@ describe('Operations page', () => {
       const taskArn = 'arn:aws:ecs:us-east-1:123456789012:task/a5bea509-a6d4-4bba-b64a-01477b413c5f';
 
       cy.fixture('seeds/asyncOperationsFixture.json').then((fixture) => {
-        const operation = fixture.results.find(op => op.id === operationId);
+        const operation = fixture.results.find((op) => op.id === operationId);
         cy.intercept(
           { method: 'GET', url: `http://localhost:5001/asyncOperations/${operationId}` },
           { body: operation, statusCode: 200 }
@@ -133,7 +133,7 @@ describe('Operations page', () => {
       };
 
       cy.fixture('seeds/asyncOperationsFixture.json').then((fixture) => {
-        const operation = fixture.results.find(op => op.id === operationId);
+        const operation = fixture.results.find((op) => op.id === operationId);
         cy.intercept(
           { method: 'GET', url: `http://localhost:5001/asyncOperations/${operationId}` },
           { body: operation, statusCode: 200 }
@@ -158,7 +158,7 @@ describe('Operations page', () => {
       const operationId = '17907019-81fb-464a-bc76-0ad0490fdeec';
 
       cy.fixture('seeds/asyncOperationsFixture.json').then((fixture) => {
-        const operation = fixture.results.find(op => op.id === operationId);
+        const operation = fixture.results.find((op) => op.id === operationId);
         cy.intercept(
           { method: 'GET', url: `http://localhost:5001/asyncOperations/${operationId}` },
           { body: operation, statusCode: 200 }
@@ -181,7 +181,7 @@ describe('Operations page', () => {
       const operationId = '17907019-81fb-464a-bc76-0ad0490fdeec';
 
       cy.fixture('seeds/asyncOperationsFixture.json').then((fixture) => {
-        const operation = fixture.results.find(op => op.id === operationId);
+        const operation = fixture.results.find((op) => op.id === operationId);
         cy.intercept(
           { method: 'GET', url: `http://localhost:5001/asyncOperations/${operationId}` },
           { body: operation, statusCode: 200 }
@@ -200,7 +200,7 @@ describe('Operations page', () => {
       const operationId = '17907019-81fb-464a-bc76-0ad0490fdeec';
 
       cy.fixture('seeds/asyncOperationsFixture.json').then((fixture) => {
-        const operation = fixture.results.find(op => op.id === operationId);
+        const operation = fixture.results.find((op) => op.id === operationId);
         cy.intercept(
           { method: 'GET', url: `http://localhost:5001/asyncOperations/${operationId}` },
           { body: operation, statusCode: 200 }
