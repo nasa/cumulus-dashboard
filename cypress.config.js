@@ -5,6 +5,7 @@ module.exports = defineConfig({
   env: {
     APIROOT: 'http://localhost:5001',
     authToken: null,
+    ESTIMATE_TABLE_ROW_COUNT: true,
   },
   retries: {
     runMode: 2,
