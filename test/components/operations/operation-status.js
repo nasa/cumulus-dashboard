@@ -15,12 +15,10 @@ import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 
 test.beforeEach((t) => {
-  // Mock useDispatch hook
-  sinon.stub(redux, 'useDispatch').returns(sinon.spy());
-});
-
-test.afterEach.always(() => {
+  // Restore all stubs first to ensure clean state
   sinon.restore();
+  // Mock useDispatch hook (stubbed once for all tests)
+  sinon.stub(redux, 'useDispatch').returns(sinon.spy());
 });
 
 const testOperation = asyncOperationsFixture.results[1]; // Use the second operation (SUCCEEDED status)
@@ -44,6 +42,13 @@ test('Operation Status shows operation details', function (t) {
     error: false
   };
 
+  // Restore before stubbing to avoid double-wrapping
+  if (redux.useSelector.restore) {
+    redux.useSelector.restore();
+  }
+  if (router.useParams.restore) {
+    router.useParams.restore();
+  }
   // Mock useSelector to return operationStatus
   sinon.stub(redux, 'useSelector').returns(operationStatus);
   // Mock useParams to return operationId
@@ -82,6 +87,13 @@ test('Operation Status shows loading state when inflight', function (t) {
     error: false
   };
 
+  // Restore before stubbing to avoid double-wrapping
+  if (redux.useSelector.restore) {
+    redux.useSelector.restore();
+  }
+  if (router.useParams.restore) {
+    router.useParams.restore();
+  }
   sinon.stub(redux, 'useSelector').returns(operationStatus);
   sinon.stub(router, 'useParams').returns({ operationId });
 
@@ -105,6 +117,13 @@ test('Operation Status shows error when error is present', function (t) {
     error: 'Test error message'
   };
 
+  // Restore before stubbing to avoid double-wrapping
+  if (redux.useSelector.restore) {
+    redux.useSelector.restore();
+  }
+  if (router.useParams.restore) {
+    router.useParams.restore();
+  }
   sinon.stub(redux, 'useSelector').returns(operationStatus);
   sinon.stub(router, 'useParams').returns({ operationId });
 
