@@ -15,7 +15,22 @@ export const metaAccessors = ({
   {
     label: 'Status',
     property: 'status',
-    accessor: (value) => displayCase(value)
+    accessor: (d) => {
+      // Normalize status values for CSS class mapping
+      // Both RUNNER_FAILED and TASK_FAILED should map to 'failed' for red color
+      let statusClass = d.toLowerCase();
+      if (statusClass.includes('failed')) {
+        statusClass = 'failed';
+      }
+      
+      return (
+        <span
+          className={`status__badge--small status__badge--${statusClass}`}
+        >
+          {displayCase(d)}
+        </span>
+      );
+    }
   },
   {
     label: 'Operation Type',
