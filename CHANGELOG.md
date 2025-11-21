@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Upgrade cypress docker image, folders, test specs, configs to v12.17.4
 - **CUMULUS-4226**
   - Executions and granules non-archived search is toggleable. Overview values are not affected, and show size of whole table.
+- **CUMULUS-3342**
+  - Update dashboard and cypress test to remove all DynamoDB reference in Reconciliation reports.
 
 ## [v14.0.0] - 2025-09-16
 
