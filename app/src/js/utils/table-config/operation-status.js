@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import { displayCase } from '../format';
 import { window } from '../browser';
@@ -22,7 +21,7 @@ export const metaAccessors = ({
       if (statusClass.includes('failed')) {
         statusClass = 'failed';
       }
-      
+
       return (
         <span
           className={`status__badge--small status__badge--${statusClass}`}
@@ -107,4 +106,3 @@ export const metaAccessors = ({
 ];
 
 export default metaAccessors;
-
