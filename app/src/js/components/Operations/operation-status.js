@@ -3,13 +3,12 @@ import { Helmet } from 'react-helmet';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getOperation } from '../../actions';
-import { displayCase } from '../../utils/format';
+import { metaAccessors } from '../../utils/table-config/operation-status';
 import { window } from '../../utils/browser';
 import ErrorReport from '../Errors/report';
 import Metadata from '../Table/Metadata';
 import Loading from '../LoadingIndicator/loading-indicator';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import DefaultModal from '../Modal/modal';
 
 const breadcrumbConfig = [
   {
@@ -23,94 +22,6 @@ const breadcrumbConfig = [
   {
     label: 'Operation Details',
     active: true
-  }
-];
-
-const metaAccessors = ({
-  operation,
-  showOutputModal,
-  toggleModal
-}) => [
-  {
-    label: 'ID',
-    property: 'id'
-  },
-  {
-    label: 'Status',
-    property: 'status',
-    accessor: (value) => displayCase(value)
-  },
-  {
-    label: 'Operation Type',
-    property: 'operationType'
-  },
-  {
-    label: 'Description',
-    property: 'description'
-  },
-  {
-    label: 'Task ARN',
-    property: 'taskArn'
-  },
-  {
-    label: 'Output',
-    property: 'output',
-    accessor: (d) => {
-      if (d) {
-        const jsonData = typeof Blob !== 'undefined' ? new Blob([d], { type: 'text/json' }) : null;
-        const downloadUrl = typeof window.URL.createObjectURL === 'function' ? window.URL.createObjectURL(jsonData) : '';
-
-        let formattedOutput = d;
-        try {
-          // If it's a JSON string, parse and pretty print it
-          // If it's already an object, stringify it
-          // If it's a simple string, leave as is
-          if (typeof d === 'string') {
-            const parsed = JSON.parse(d);
-            formattedOutput = JSON.stringify(parsed, null, 2);
-          } else if (typeof d === 'object') {
-            formattedOutput = JSON.stringify(d, null, 2);
-          }
-        } catch (e) {
-          // Fallback to original value
-        }
-
-        return (
-          <>
-            <button
-              onClick={() => toggleModal('output')}
-              className="button button--small button--no-left-padding"
-            >
-              Show Output
-            </button>
-            <DefaultModal
-              showModal={showOutputModal}
-              title={
-                <>
-                  <span>Operation Output</span>
-                  <a
-                    className="button button--small button--download button--green form-group__element--right"
-                    id="download_link"
-                    download="output.json"
-                    href={downloadUrl}
-                  >
-                    Download File
-                  </a>
-                </>
-              }
-              onCloseModal={() => toggleModal('output')}
-              hasConfirmButton={false}
-              cancelButtonClass="button--close"
-              cancelButtonText="Close"
-              className="operation__modal"
-            >
-              <pre>{formattedOutput}</pre>
-            </DefaultModal>
-          </>
-        );
-      }
-      return 'N/A';
-    }
   }
 ];
 
@@ -177,7 +88,6 @@ const OperationStatus = () => {
           <Metadata
             data={operation}
             accessors={metaAccessors({
-              operation,
               showOutputModal,
               toggleModal
             })}
