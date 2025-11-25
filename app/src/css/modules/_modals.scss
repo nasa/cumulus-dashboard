@@ -299,4 +299,39 @@
       }
     }
   }
+
+  &.operation__modal {
+    max-width: 80%;
+
+    .modal-title {
+      padding: 0 3rem;
+
+      .button {
+        font-size: 0.86rem;
+      }
+    }
+
+    .modal-content,
+    .modal-body {
+      max-height: calc(100vh - 50px);
+      overflow-y: auto;
+    }
+
+    .modal-body {
+      padding: 1rem 3rem;
+      text-align: left;
+
+      pre {
+        border: 1px solid $lightest-grey;
+      }
+    }
+
+    .modal-footer {
+      padding: 1rem 3rem;
+
+      .button {
+        margin: 0;
+      }
+    }
+  }
 }
