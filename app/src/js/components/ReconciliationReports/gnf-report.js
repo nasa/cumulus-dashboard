@@ -30,7 +30,7 @@ const GnfReport = ({
     error = null
   } = recordData || {};
 
-  const { filesInDynamoDb } = getFilesSummary(filesInCumulus);
+  const { filesInDb } = getFilesSummary(filesInCumulus);
   const { granuleFilesOnlyInCumulus, granuleFilesOnlyInCmr } = getGranuleFilesSummary(filesInCumulusCmr);
 
   const { onlyInCmr = [], onlyInCumulus = [] } = granulesInCumulusCmr;
@@ -55,7 +55,7 @@ const GnfReport = ({
   }));
 
   const allGranules = [
-    ...filesInDynamoDb,
+    ...filesInDb,
     ...granuleFilesOnlyInCmr,
     ...granuleFilesOnlyInCumulus,
     ...cmrGranules,

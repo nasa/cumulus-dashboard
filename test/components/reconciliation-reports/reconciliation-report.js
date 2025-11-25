@@ -28,7 +28,7 @@ const reconciliationReports = {
               's3://some-bucket/path/to/key-1.hdf',
               's3://some-bucket/path/to/key-2.hdf'
             ],
-            onlyInDynamoDb: [
+            onlyInDb: [
               {
                 uri: 's3://some-bucket/path/to/key-123.hdf',
                 granuleId: 'g-123'
@@ -67,7 +67,7 @@ const reconciliationReports = {
               's3://some-bucket/path/to/key-1.hdf',
               's3://some-bucket/path/to/key-2.hdf'
             ],
-            onlyInDynamoDb: [
+            onlyInDb: [
               {
                 uri: 's3://some-bucket/path/to/key-123.hdf',
                 granuleId: 'g-123'

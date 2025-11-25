@@ -224,7 +224,7 @@
       "s3://mhs3-public/MOD09GQ___006/MOD/mhs3-IngestGranuleDuplicateHandling-1576249014314/MOD09GQ.A6210996.nHGu8O.006.3174297550568_ndvi.jpg",
       "s3://mhs3-public/MOD09GQ___006/MOD/mhs3-IngestGranuleDuplicateHandling-1576249970860/MOD09GQ.A8421402.t6nFKh.006.3037894989051_ndvi.jpg"
     ],
-    "onlyInDynamoDb": [
+    "onlyInDb": [
       {
         "uri": "s3://mhs3-private/MOD09GQ___006/MOD/MOD09GQ.A9218123.TJbx_C.006.7667598863143.hdf.met",
         "granuleId": "MOD09GQ.A9218123.TJbx_C.006.7667598863143"

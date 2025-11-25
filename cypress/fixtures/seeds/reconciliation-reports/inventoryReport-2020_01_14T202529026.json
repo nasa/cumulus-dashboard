@@ -7,7 +7,7 @@
   "filesInCumulus": {
     "okCount": 129,
     "onlyInS3": [ ],
-    "onlyInDynamoDb": [ ]
+    "onlyInDb": [ ]
   },
   "collectionsInCumulusCmr": {
     "okCount": 1,

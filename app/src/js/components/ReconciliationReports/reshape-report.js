@@ -9,7 +9,7 @@ import {
   tableColumnsS3Files,
 } from '../../utils/table-config/reconciliation-reports';
 
-export const getFilesSummary = ({ onlyInDynamoDb = [], onlyInS3 = [], okCountByGranule }) => {
+export const getFilesSummary = ({ onlyInDb = [], onlyInS3 = [], okCountByGranule }) => {
   const filesInS3 = onlyInS3.map((d) => {
     const parsed = url.parse(d);
     return {
@@ -19,7 +19,7 @@ export const getFilesSummary = ({ onlyInDynamoDb = [], onlyInS3 = [], okCountByG
     };
   });
 
-  const filesInDynamoDb = onlyInDynamoDb.map((file) => {
+  const filesInDb = onlyInDb.map((file) => {
     const parsedFile = parseFileObject(file);
     const { granuleId } = parsedFile;
     let s3 = false;
@@ -33,7 +33,7 @@ export const getFilesSummary = ({ onlyInDynamoDb = [], onlyInS3 = [], okCountByG
     };
   });
 
-  return { filesInS3, filesInDynamoDb };
+  return { filesInS3, filesInDb };
 };
 
 const getCollectionsSummary = ({ onlyInCumulus = [], onlyInCmr = [] }) => {
@@ -88,7 +88,7 @@ const parseFileObject = (d) => {
 
 export const reshapeReport = (recordData, filterString, filterBucket) => {
   let filesInS3 = [];
-  let filesInDynamoDb = [];
+  let filesInDb = [];
 
   let granuleFilesOnlyInCumulus = [];
   let granuleFilesOnlyInCmr = [];
@@ -107,7 +107,7 @@ export const reshapeReport = (recordData, filterString, filterBucket) => {
       granulesInCumulusCmr: compareGranules = {},
     } = recordData;
 
-    ({ filesInS3, filesInDynamoDb } = getFilesSummary(internalCompareFiles));
+    ({ filesInS3, filesInDb } = getFilesSummary(internalCompareFiles));
 
     ({ collectionsInCumulus, collectionsInCmr } = getCollectionsSummary(
       compareCollections
@@ -124,7 +124,7 @@ export const reshapeReport = (recordData, filterString, filterBucket) => {
   }
 
   if (filterString) {
-    filesInDynamoDb = filesInDynamoDb.filter((file) => file.granuleId.toLowerCase()
+    filesInDb = filesInDb.filter((file) => file.granuleId.toLowerCase()
       .includes(filterString.toLowerCase()));
     filesInS3 = filesInS3.filter((file) => file.filename.toLowerCase().includes(filterString.toLowerCase()));
 
@@ -147,7 +147,7 @@ export const reshapeReport = (recordData, filterString, filterBucket) => {
   const getBucket = (item) => (item.bucket);
   const allBuckets = [
     ...filesInS3.map(getBucket),
-    ...filesInDynamoDb.map(getBucket),
+    ...filesInDb.map(getBucket),
     ...granuleFilesOnlyInCumulus.map(getBucket),
     ...granuleFilesOnlyInCmr.map(getBucket),
   ];
@@ -156,7 +156,7 @@ export const reshapeReport = (recordData, filterString, filterBucket) => {
 
   if (filterBucket) {
     filesInS3 = filesInS3.filter(filterOnBucket);
-    filesInDynamoDb = filesInDynamoDb.filter(filterOnBucket);
+    filesInDb = filesInDb.filter(filterOnBucket);
     granuleFilesOnlyInCumulus = granuleFilesOnlyInCumulus.filter(filterOnBucket);
     granuleFilesOnlyInCmr = granuleFilesOnlyInCmr.filter(filterOnBucket);
   }
@@ -173,14 +173,14 @@ export const reshapeReport = (recordData, filterString, filterBucket) => {
    */
   const internalComparison = [
     {
-      id: 'dynamo',
-      name: 'DynamoDB',
+      id: 'db',
+      name: 'Db',
       tables: [
         {
-          id: 'dynamoNotS3',
-          name: 'Files in DynamoDb not found in S3',
+          id: 'DbNotS3',
+          name: 'Files in Db not found in S3',
           type: 'file',
-          data: filesInDynamoDb,
+          data: filesInDb,
           columns: tableColumnsFiles,
         },
       ],
@@ -190,8 +190,8 @@ export const reshapeReport = (recordData, filterString, filterBucket) => {
       name: 'S3',
       tables: [
         {
-          id: 's3NotDynamo',
-          name: 'Files in S3 not found in DynamoDb',
+          id: 's3NotDb',
+          name: 'Files in S3 not found in Db',
           type: 'file',
           data: filesInS3,
           columns: tableColumnsS3Files,
