@@ -15,7 +15,6 @@ import { window } from '../../utils/browser';
 import { strings } from '../locale';
 import linkToKibana from '../../utils/kibana';
 import { getPersistentQueryParams } from '../../utils/url-helper';
-import SessionTimeoutModal from '../SessionTimeoutModal/session-timeout-modal';
 import NetworkErrorModal from '../NetworkErrorModal/network-error-modal';
 import InactivityModal from '../InactivityModal/inactivity-modal';
 
@@ -125,7 +124,6 @@ const Header = ({
                 )}
           </nav>
         </div>
-        <div className="session-timeout-modal"><SessionTimeoutModal/></div>
         <div className="network-error-modal"><NetworkErrorModal/></div>
         <div className="inactivity-modal"><InactivityModal/></div>
       </div>

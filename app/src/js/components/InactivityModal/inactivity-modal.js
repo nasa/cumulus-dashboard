@@ -2,8 +2,9 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import { connect } from 'react-redux';
+import { decode as jwtDecode } from 'jsonwebtoken';
 import DefaultModal from '../Modal/modal';
-import { logout } from '../../actions';
+import { logout, refreshAccessToken } from '../../actions';
 
 export const INACTIVITY_LIMIT = 900000; // 15 minutes in milliseconds
 export const MODAL_TIMEOUT = 300000; // 5 minutes in milliseconds
@@ -72,6 +73,26 @@ const InactivityModal = ({
       clearTimers();
     };
   }, [handleActivity, resetTimer, token, clearTimers]);
+
+  useEffect(() => {
+    const checkTokenExpiration = () => {
+      if (!token || hasModal) return;
+
+      const jwtData = jwtDecode(token);
+      const tokenExpiration = get(jwtData, 'exp');
+      const currentTime = Math.ceil(Date.now() / 1000);
+
+      // Refresh if token expires in less than 25 minutes
+      if (tokenExpiration && (tokenExpiration - currentTime <= 1500)) {
+        dispatch(refreshAccessToken(token));
+      }
+    };
+
+    const interval = setInterval(checkTokenExpiration, 20 * 60 * 1000);
+    checkTokenExpiration();
+
+    return () => clearInterval(interval);
+  }, [token, hasModal, dispatch]);
 
   if (!token) return null;
 
