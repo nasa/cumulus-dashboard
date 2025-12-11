@@ -52,32 +52,19 @@ const Search = ({
   const searchList = get(rest[searchKey], 'list');
   const { data: searchOptions, inflight = false } = searchList || {};
 
-  useEffect(() => {
-    dispatch(clear(paramKey));
-  }, [clear, dispatch, paramKey]);
+  // Extract the current search value from queryParams
+  const currentSearchValue = queryParams?.[paramKey] || '';
 
+  // Sync Redux state when search value changes (handles both initial load and user input)
   useEffect(() => {
-    if (initialValueRef.current) {
-      dispatch(action(initialValueRef.current, infixBoolean));
-    }
-  }, [action, infixBoolean, dispatch]);
-
-  useEffect(() => {
-    // Sync Redux state when URL/queryParams change
-    const currentValue = getInitialValueFromLocation({
-      location,
-      paramKey,
-      queryParams,
-    });
-
-    if (currentValue) {
-      dispatch(action(currentValue, infixBoolean));
+    if (currentSearchValue) {
+      dispatch(action(currentSearchValue, infixBoolean));
     } else {
       dispatch(clear(paramKey));
     }
-  }, [action, infixBoolean, dispatch, location, paramKey, queryParams, clear]);
+  }, [currentSearchValue, action, infixBoolean, dispatch, clear, paramKey]);
 
-  // Shared helper to update URL params with deduplication
+  // Shared helper to update URL params only
   // Prevents pushing the same route multiple times (causes issues with hash history)
   const updateQueryParam = useCallback((value) => {
     const newValue = value || undefined;
