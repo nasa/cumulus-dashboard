@@ -5,7 +5,6 @@ import withQueryParams from 'react-router-query-params';
 import { withRouter } from 'react-router-dom';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { get } from 'object-path';
-import debounce from 'lodash/debounce';
 import { getInitialValueFromLocation } from '../../utils/url-helper';
 import {
   renderSearchInput,
@@ -40,6 +39,9 @@ const Search = ({
   setQueryParams,
   ...rest
 }) => {
+  // Track the last value we pushed to URL to prevent duplicate pushes
+  const lastPushedValueRef = useRef(null);
+
   const searchRef = createRef();
   const formID = `form-${label}-${paramKey}`;
   const initialValueRef = useRef(getInitialValueFromLocation({
@@ -61,44 +63,37 @@ const Search = ({
   }, [action, infixBoolean, dispatch]);
 
   useEffect(() => {
-    // Always get the latest value from the URL/queryParams
+    // Sync Redux state when URL/queryParams change
     const currentValue = getInitialValueFromLocation({
       location,
       paramKey,
       queryParams,
     });
 
-    const debouncedDispatch = debounce((value) => {
-      if (value) {
-        dispatch(action(currentValue, infixBoolean));
-      } else {
-        dispatch(clear(paramKey));
-      }
-    }, 500);
-
-    debouncedDispatch(currentValue);
-
-    return () => {
-      debouncedDispatch.cancel();
-    };
+    if (currentValue) {
+      dispatch(action(currentValue, infixBoolean));
+    } else {
+      dispatch(clear(paramKey));
+    }
   }, [action, infixBoolean, dispatch, location, paramKey, queryParams, clear]);
 
-  const handleSearch = useCallback((query) => {
-    setQueryParams({ [paramKey]: query || undefined });
+  // Shared helper to update URL params with deduplication
+  // Prevents pushing the same route multiple times (causes issues with hash history)
+  const updateQueryParam = useCallback((value) => {
+    const newValue = value || undefined;
+    if (lastPushedValueRef.current !== newValue) {
+      lastPushedValueRef.current = newValue;
+      setQueryParams({ [paramKey]: newValue });
+    }
   }, [paramKey, setQueryParams]);
 
-  function handleChange(selections) {
-    if (selections && selections.length > 0) {
-      const query = selections[0][labelKey];
-      setQueryParams({ [paramKey]: query });
-    } else {
-      setQueryParams({ [paramKey]: undefined });
-    }
-  }
+  // Called by AsyncTypeahead's onSearch (debounced internally)
+  const handleSearch = useCallback((query) => updateQueryParam(query), [updateQueryParam]);
 
-  function handleInputChange(text) {
-    setQueryParams({ [paramKey]: text || undefined });
-  }
+  // Called when user selects from dropdown
+  const handleChange = useCallback((selections) => {
+    updateQueryParam(selections?.[0]?.[labelKey]);
+  }, [labelKey, updateQueryParam]);
 
   function handleFocus(event) {
     event.target.select();
@@ -128,8 +123,8 @@ const Search = ({
           labelKey={labelKey}
           onChange={handleChange}
           onFocus={handleFocus}
-          onInputChange={handleInputChange}
           onKeyDown={handleKeyDown}
+          delay={500}
           onSearch={handleSearch}
           options={searchOptions || options}
           placeholder={placeholder}
