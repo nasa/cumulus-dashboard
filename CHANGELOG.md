@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Executions and granules non-archived search is toggleable. Overview values are not affected, and show size of whole table.
 - **CUMULUS-3342**
   - Update dashboard and cypress test to remove all DynamoDB reference in Reconciliation reports.
+- **CSD-72**
+  - Update collection edit to load collection data regardless of the time filters
 
 ## [v14.0.0] - 2025-09-16
 
