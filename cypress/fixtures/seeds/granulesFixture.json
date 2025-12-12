@@ -60,20 +60,20 @@
     {
       "granuleId": "test_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl2",
       "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:7a71f849-57a0-40e7-8fca-5cf796602a07",
-      "lastUpdateDateTime": "2018-04-25T21:45:45.524Z",
+      "lastUpdateDateTime": "2023-11-25T21:45:45.524Z",
       "published": true,
       "error": {
         "Cause": "\"None\"",
         "Error": "Unknown Error"
       },
       "productVolume": "17956339",
-      "endingDateTime": "2017-11-08T23:59:59.000Z",
+      "endingDateTime": "2023-11-08T23:59:59.000Z",
       "timeToPreprocess": 0.1,
       "duration": 26.966,
       "cmrLink": "https://cmr.uat.earthdata.nasa.gov/search/granules.json?concept_id=G1224020882-CUMULUS",
-      "createdAt": 1537831756154,
+      "createdAt": 1687831756154,
       "provider": "s3_provider",
-      "beginningDateTime": "2017-10-24T00:00:00.000Z",
+      "beginningDateTime": "2023-06-27T00:00:00.000Z",
       "timeToArchive": 0.01,
       "files": [
         {
@@ -86,8 +86,8 @@
       "collectionId": "Test-L2/Coastal___Operational/Near-Real-Time",
       "producerGranuleId": "test_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl2",
       "status": "completed",
-      "timestamp": 1537831783729,
-      "updatedAt": 1537831783389
+      "timestamp": 1687831783729,
+      "updatedAt": 1687831783389
     },
     {
       "granuleId": "MOD09GQ.A1657416.CbyoRi.006.9697917818587_e798fe37",
@@ -144,20 +144,20 @@
       "granuleId": "coastal_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl3",
       "pdrName": "MOD09GQ_1granule_v3.PDR",
       "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:7a71f849-57a0-40e7-8fca-5cf796602a07",
-      "lastUpdateDateTime": "2018-04-25T21:45:45.524Z",
+      "lastUpdateDateTime": "2023-11-09T21:45:45.524Z",
       "published": true,
       "error": {
         "Cause": "\"None\"",
         "Error": "Unknown Error"
       },
       "productVolume": "17956339",
-      "endingDateTime": "2017-11-08T23:59:59.000Z",
+      "endingDateTime": "2023-11-08T23:59:59.000Z",
       "timeToPreprocess": 0.1,
       "duration": 26.966,
       "cmrLink": "https://cmr.uat.earthdata.nasa.gov/search/granules.json?concept_id=G1224020882-CUMULUS",
-      "createdAt": 1537831756154,
+      "createdAt": 1687831756154,
       "provider": "s3_provider",
-      "beginningDateTime": "2017-10-24T00:00:00.000Z",
+      "beginningDateTime": "2023-06-27T00:00:00.000Z",
       "timeToArchive": 0.01,
       "files": [
         {
@@ -170,8 +170,8 @@
       "collectionId": "Test-L2/Coastal___Operational/Near-Real-Time",
       "producerGranuleId": "MOD09GQ.A1657416.CbyoRi.006.9697917818587",
       "status": "completed",
-      "timestamp": 1537831783729,
-      "updatedAt": 1537831783389
+      "timestamp": 1687831783729,
+      "updatedAt": 1687831783389
     },
     {
       "granuleId": "MOD09GQ.A1657416.CbyoRi.006.9697917818587_e798fe38",
