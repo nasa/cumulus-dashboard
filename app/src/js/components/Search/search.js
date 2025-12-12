@@ -1,4 +1,4 @@
-import React, { createRef, useCallback, useEffect, useRef } from 'react';
+import React, { createRef, useCallback, useEffect, useMemo, useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import withQueryParams from 'react-router-query-params';
@@ -6,11 +6,28 @@ import { withRouter } from 'react-router-dom';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { get } from 'object-path';
 import debounce from 'lodash/debounce';
-import { getInitialValueFromLocation } from '../../utils/url-helper';
+import noop from 'lodash/noop';
 import {
   renderSearchInput,
   renderSearchMenu,
 } from '../../utils/typeahead-helpers';
+
+/**
+ * Extract query param value from location (handles both browser and hash history)
+ * @param {Object} location - React Router location object
+ * @param {string} paramKey - The query param key to extract
+ * @returns {string} The query param value or empty string
+ */
+const getQueryParamFromLocation = (location, paramKey) => {
+  let queryStringSource = '';
+  if (location?.search) {
+    queryStringSource = location.search;
+  } else if (location?.hash?.includes('?')) {
+    queryStringSource = location.hash.substring(location.hash.indexOf('?'));
+  }
+  const params = new URLSearchParams(queryStringSource);
+  return params.get(paramKey) || '';
+};
 
 /**
  * Search
@@ -40,65 +57,74 @@ const Search = ({
   setQueryParams,
   ...rest
 }) => {
+  // Track the last value we pushed to URL to prevent duplicate pushes
+  const lastPushedValueRef = useRef(null);
+
   const searchRef = createRef();
   const formID = `form-${label}-${paramKey}`;
-  const initialValueRef = useRef(getInitialValueFromLocation({
-    location,
-    paramKey,
-    queryParams,
-  }));
+
+  // Get current search value from URL (recalculated when location changes)
+  const searchValueFromUrl = getQueryParamFromLocation(location, paramKey);
   const searchList = get(rest[searchKey], 'list');
   const { data: searchOptions, inflight = false } = searchList || {};
 
-  useEffect(() => {
-    dispatch(clear(paramKey));
-  }, [clear, dispatch, paramKey]);
+  // Core search function: updates URL params and dispatches action
+  const performSearch = useCallback((query, skipUrlUpdate = false) => {
+    const newValue = query || undefined;
 
-  useEffect(() => {
-    if (initialValueRef.current) {
-      dispatch(action(initialValueRef.current, infixBoolean));
+    // Skip if this value was already handled (prevents duplicate dispatches)
+    if (lastPushedValueRef.current === newValue) {
+      return;
     }
-  }, [action, infixBoolean, dispatch]);
+    lastPushedValueRef.current = newValue;
 
-  useEffect(() => {
-    // Always get the latest value from the URL/queryParams
-    const currentValue = getInitialValueFromLocation({
-      location,
-      paramKey,
-      queryParams,
-    });
+    // Update URL (unless skipped, e.g., on initial load from URL)
+    if (!skipUrlUpdate) {
+      setQueryParams({ [paramKey]: newValue });
+    }
 
-    const debouncedDispatch = debounce((value) => {
-      if (value) {
-        dispatch(action(currentValue, infixBoolean));
-      } else {
-        dispatch(clear(paramKey));
-      }
-    }, 500);
-
-    debouncedDispatch(currentValue);
-
-    return () => {
-      debouncedDispatch.cancel();
-    };
-  }, [action, infixBoolean, dispatch, location, paramKey, queryParams, clear]);
-
-  const handleSearch = useCallback((query) => {
-    setQueryParams({ [paramKey]: query || undefined });
-  }, [paramKey, setQueryParams]);
-
-  function handleChange(selections) {
-    if (selections && selections.length > 0) {
-      const query = selections[0][labelKey];
-      setQueryParams({ [paramKey]: query });
+    if (newValue) {
+      dispatch(action(newValue, infixBoolean));
     } else {
-      setQueryParams({ [paramKey]: undefined });
+      dispatch(clear(paramKey));
     }
-  }
+  }, [paramKey, setQueryParams, dispatch, action, infixBoolean, clear]);
 
-  function handleInputChange(text) {
-    setQueryParams({ [paramKey]: text || undefined });
-  }
+  // Debounced version of performSearch (500ms delay)
+  const debouncedSearch = useMemo(
+    () => debounce((query) => performSearch(query), 500),
+    [performSearch]
+  );
+
+  // Cleanup debounce on unmount
+  useEffect(() => () => debouncedSearch.cancel(), [debouncedSearch]);
+
+  // handleSearch: use debounced search for user input, use immediate search for initial load
+  const handleSearch = useCallback((query, skipUrlUpdate = false) => {
+    if (skipUrlUpdate) {
+      // Initial load - execute immediately without debounce
+      performSearch(query, true);
+    } else {
+      // User input - debounce
+      debouncedSearch(query);
+    }
+  }, [performSearch, debouncedSearch]);
+
+  // Sync search with URL when location changes (initial load or browser navigation)
+  // skipUrlUpdate=true because the URL already has the value
+  useEffect(() => {
+    performSearch(searchValueFromUrl, true);
+  }, [searchValueFromUrl, performSearch]);
+
+  // Called when user selects from dropdown
+  const handleChange = useCallback((selections) => {
+    handleSearch(selections?.[0]?.[labelKey]);
+  }, [labelKey, handleSearch]);
+
+  // Called on every input change - handler for all text changes (typing and deletions)
+  const handleInputChange = useCallback((text) => {
+    handleSearch(text || undefined);
+  }, [handleSearch]);
 
   function handleFocus(event) {
     event.target.select();
@@ -120,7 +146,8 @@ const Search = ({
       )}
       <form className="search__wrapper form-group__element">
         <AsyncTypeahead
-          defaultInputValue={initialValueRef.current}
+          key={searchValueFromUrl} // Remount when URL value changes (e.g., browser navigation)
+          defaultInputValue={searchValueFromUrl}
           highlightOnlyResult={true}
           id="search"
           inputProps={{ id: 'search', ...inputProps }}
@@ -130,7 +157,7 @@ const Search = ({
           onFocus={handleFocus}
           onInputChange={handleInputChange}
           onKeyDown={handleKeyDown}
-          onSearch={handleSearch}
+          onSearch={noop} // Required prop, but we handle search via onInputChange instead
           options={searchOptions || options}
           placeholder={placeholder}
           ref={searchRef}
