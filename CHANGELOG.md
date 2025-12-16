@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- **CUMULUS-4189**
+  - Added search button and removed  dispatching search/url update on every keystroke
 - **CUMULUS-2956**
   - Added the output of an operation to the overview page and a new page to view an individual operation
 - **CUMULUS-3627**
