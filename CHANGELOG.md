@@ -24,7 +24,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-3342**
   - Update dashboard and cypress test to remove all DynamoDB reference in Reconciliation reports.
 - **CSD-72**
-  - Update collection edit to load collection data regardless of the time filters. Update package-lock.json with audix fix for min-document, jws, js-yaml and node-forge.
+  - Update collection edit to load collection data regardless of the time filters. 
+  - Update package-lock.json with audix fix for min-document, jws, js-yaml and node-forge.
 
 ## [v14.0.0] - 2025-09-16
 
