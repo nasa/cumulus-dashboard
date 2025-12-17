@@ -31,7 +31,7 @@ const EditCollection = ({ match, collections }) => {
         schemaKey={SCHEMA_KEY}
         primaryProperty="name"
         state={collections}
-        getRecord={() => getCollection(name, version)}
+        getRecord={() => getCollection(name, version, false)}
         updateRecord={(payload) => updateCollection(payload, decodedName, decodedVersion)}
         backRoute={collectionHrefFromNameVersion({ name, version })}
         clearRecordUpdate={clearUpdateCollection}
