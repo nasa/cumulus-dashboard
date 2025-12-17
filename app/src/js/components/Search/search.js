@@ -12,17 +12,6 @@ import {
   renderSearchMenu,
 } from '../../utils/typeahead-helpers';
 
-const getQueryParamFromLocation = (location, paramKey) => {
-  let queryStringSource = '';
-  if (location?.search) {
-    queryStringSource = location.search;
-  } else if (location?.hash?.includes('?')) {
-    queryStringSource = location.hash.substring(location.hash.indexOf('?'));
-  }
-  const params = new URLSearchParams(queryStringSource);
-  return params.get(paramKey) || '';
-};
-
 /**
  * Search
  * @description Search component
@@ -75,7 +64,7 @@ const Search = ({
 
   useEffect(() => {
     // Always get the latest value from the URL/queryParams
-    const currentValue = getQueryParamFromLocation(location, paramKey);
+    const currentValue = getInitialValueFromLocation({ location, paramKey });
 
     const debouncedDispatch = debounce((value) => {
       if (value) {
