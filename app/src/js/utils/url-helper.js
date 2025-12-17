@@ -34,9 +34,9 @@ export function getInitialValueFromLocation(props) {
   const { location, paramKey, queryParams } = props;
 
   // First, try to parse from location.search or location.hash
-  const queryString = getQueryStringFromLocation(location);
-  if (queryString) {
-    const params = new URLSearchParams(queryString);
+  const urlQueryString = getQueryStringFromLocation(location);
+  if (urlQueryString) {
+    const params = new URLSearchParams(urlQueryString);
     const value = params.get(paramKey);
     if (value !== null) {
       return value;
@@ -44,7 +44,7 @@ export function getInitialValueFromLocation(props) {
   }
 
   // Fall back to location.query
-  const queryValue = get(location, ['query', paramKey]);
+  const queryValue = get(location, `query.${paramKey}`);
   if (queryValue !== undefined) {
     return queryValue;
   }
@@ -65,9 +65,9 @@ export function initialValuesFromLocation(location, paramKeys) {
   const initialValues = {};
 
   // First, try to parse from location.search or location.hash
-  const queryString = getQueryStringFromLocation(location);
-  if (queryString) {
-    const params = new URLSearchParams(queryString);
+  const urlQueryString = getQueryStringFromLocation(location);
+  if (urlQueryString) {
+    const params = new URLSearchParams(urlQueryString);
     paramKeys.forEach((paramKey) => {
       const paramValue = params.get(paramKey);
       if (paramValue !== null) {
