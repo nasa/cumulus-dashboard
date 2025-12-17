@@ -97,7 +97,7 @@ const CollectionOverview = ({
   useEffect(() => {
     dispatch(listCollections());
     dispatch(getCumulusInstanceMetadata());
-    dispatch(getCollection(decodedCollectionName, decodedVersion));
+    dispatch(getCollection(decodedCollectionName, decodedVersion, false));
   }, [decodedCollectionName, datepicker, decodedVersion, dispatch]);
 
   function changeCollection(_, newCollectionId) {
