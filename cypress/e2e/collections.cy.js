@@ -89,11 +89,11 @@ describe('Dashboard Collections Page', () => {
 
     it('should only filter by date when the date filter checkbox is checked', () => {
       cy.contains('nav li a', 'Collections').as('collections');
-      cy.clock(-2208988800); //set date to 01/01/1900
+      cy.clock(-2208988800); // set date to 01/01/1900
       cy.setDatepickerDropdown('Recent');
       cy.get('@collections').should('have.attr', 'href').and('match', /\/collections.*startDateTime/);
       cy.get('@collections').click();
-      cy.get('input[type="checkbox"]').uncheck({force: true});
+      cy.get('input[type="checkbox"]').uncheck({ force: true });
 
       cy.url().should('include', 'collections');
       cy.contains('.heading--xlarge', 'Collections');
