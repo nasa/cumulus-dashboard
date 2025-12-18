@@ -87,6 +87,32 @@ describe('Dashboard Collections Page', () => {
       cy.get('@listItems').contains('.td', /[0-9]{2}:[0-9]{2}:[0-9]{2}.+/);
     });
 
+    it('should only filter by date when the date filter checkbox is checked', () => {
+      cy.contains('nav li a', 'Collections').as('collections');
+      cy.clock(-2208988800); // set date to 01/01/1900
+      cy.setDatepickerDropdown('Recent');
+      cy.get('@collections').should('have.attr', 'href').and('match', /\/collections.*startDateTime/);
+      cy.get('@collections').click();
+      cy.get('input[type="checkbox"]').uncheck({ force: true });
+
+      cy.url().should('include', 'collections');
+      cy.contains('.heading--xlarge', 'Collections');
+
+      cy.get('.table .tbody .tr').as('listItems');
+
+      cy.get('@listItems').each(($row) => {
+        // verify granule column does not equal 0
+        cy.wrap($row).find('.td').eq(3).should('not.eq', '0');
+      });
+
+      cy.get('@listItems').find('.td a').eq(0).click();
+      cy.wait('@getGranules');
+
+      // verify there is a granule with a timestamp containing second or minute
+      // this would indicate it was updated within the default timeframe of 1 hour
+      cy.get('@listItems').contains('.td', /[0-9]{2}:[0-9]{2}:[0-9]{2}.+/);
+    });
+
     it('should search collections by name', () => {
       const infix = 'https';
       cy.visit('/collections');
