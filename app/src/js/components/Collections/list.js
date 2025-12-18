@@ -1,6 +1,6 @@
 // This is the main Collections Overview page
 import { get } from 'object-path';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -27,6 +27,7 @@ import List from '../Table/Table';
 import { strings } from '../locale';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ListFilters from '../ListActions/ListFilters';
+import Checkbox from '../Checkbox/Checkbox';
 
 const breadcrumbConfig = [
   {
@@ -51,8 +52,8 @@ const CollectionList = ({
   const { list } = collections;
   const { startDateTime, endDateTime } = datepicker || {};
   const hasTimeFilter = startDateTime || endDateTime;
-
   const { count, queriedAt } = list.meta;
+  const [dateFilter, setDateFilter] = useState(['true', undefined].includes(queryParams.dateFilter));
 
   useEffect(() => {
     dispatch(getCumulusInstanceMetadata());
@@ -134,6 +135,15 @@ const CollectionList = ({
                 className: 'dropdown--medium',
               }}
             />
+            <Checkbox
+              checked={dateFilter}
+              onChange={setDateFilter}
+              label="Date Filter"
+              inputLabel=" "
+              paramKey="dateFilter"
+              className="collection-date-filter"
+              tip="Toggles filtering Collections by date range."
+            />
           </ListFilters>
         </List>
       </section>
@@ -148,6 +158,7 @@ CollectionList.propTypes = {
   dispatch: PropTypes.func,
   providers: PropTypes.object,
   queryParams: PropTypes.object,
+  dateFilter: PropTypes.bool,
 };
 
 export { CollectionList };

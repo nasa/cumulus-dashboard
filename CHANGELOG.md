@@ -26,6 +26,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CSD-72**
   - Update collection edit to load collection data regardless of the time filters. 
   - Update package-lock.json with audix fix for min-document, jws, js-yaml and node-forge.
+- **CUMULUS-4298**
+  - Added checkbox to exclude collections from date filtering.
 
 ## [v14.0.0] - 2025-09-16
 
