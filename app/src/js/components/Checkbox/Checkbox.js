@@ -60,7 +60,6 @@ Checkbox.propTypes = {
   label: PropTypes.string,
   className: PropTypes.string,
   tip: PropTypes.string,
-  // paramKey: PropTypes.string,
   setQueryParams: PropTypes.func,
   paramKey: PropTypes.string,
 };
