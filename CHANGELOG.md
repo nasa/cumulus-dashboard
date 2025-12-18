@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- **CSD-77**
+  - Updated url-helper functions to extract query parameters correctly for both browser history and hash history. These updates fix the search functionality
+
 ## [v13.3.0] - 2025-09-11
 
 ### Fixed
