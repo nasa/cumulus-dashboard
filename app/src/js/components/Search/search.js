@@ -41,6 +41,7 @@ const Search = ({
   ...rest
 }) => {
   const searchRef = createRef();
+
   const formID = `form-${label}-${paramKey}`;
   const initialValueRef = useRef(getInitialValueFromLocation({
     location,
@@ -62,11 +63,7 @@ const Search = ({
 
   useEffect(() => {
     // Always get the latest value from the URL/queryParams
-    const currentValue = getInitialValueFromLocation({
-      location,
-      paramKey,
-      queryParams,
-    });
+    const currentValue = getInitialValueFromLocation({ location, paramKey });
 
     const debouncedDispatch = debounce((value) => {
       if (value) {

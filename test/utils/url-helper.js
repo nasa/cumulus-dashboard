@@ -64,6 +64,57 @@ test('getInitialValueFromLocation returns query initialValue if paramKey found',
   t.is(expectedInitialValue, actualInitialValue);
 });
 
+test('getInitialValueFromLocation returns value from location.search (browser history)', (t) => {
+  const testLocation = {
+    ...location,
+    search: '?status=completed&granuleId=test-granule',
+  };
+  const actualInitialValue = getInitialValueFromLocation({
+    location: testLocation,
+    paramKey: 'status',
+  });
+  t.is(actualInitialValue, 'completed');
+});
+
+test('getInitialValueFromLocation returns value from location.hash (hash history)', (t) => {
+  const testLocation = {
+    ...location,
+    search: '',
+    hash: '#/granules#/granules?status=completed&granuleId=hash-granule',
+  };
+  const actualInitialValue = getInitialValueFromLocation({
+    location: testLocation,
+    paramKey: 'status',
+  });
+  t.is(actualInitialValue, 'completed');
+});
+
+test('getInitialValueFromLocation prefers location.search over location.hash', (t) => {
+  const testLocation = {
+    ...location,
+    search: '?status=from-search',
+    hash: '#/granules#/granules?status=from-hash',
+  };
+  const actualInitialValue = getInitialValueFromLocation({
+    location: testLocation,
+    paramKey: 'status',
+  });
+  t.is(actualInitialValue, 'from-search');
+});
+
+test('getInitialValueFromLocation falls back to queryParams when param not in URL', (t) => {
+  const testLocation = {
+    ...location,
+    search: '?otherParam=value',
+  };
+  const actualInitialValue = getInitialValueFromLocation({
+    location: testLocation,
+    paramKey: 'status',
+    queryParams: { status: 'fallback-value' },
+  });
+  t.is(actualInitialValue, 'fallback-value');
+});
+
 test('initialValuesFromLocation returns object with keys and initial values', (t) => {
   const testLocation = { ...location };
   testLocation.query = {
@@ -83,6 +134,45 @@ test('initialValuesFromLocation returns object with keys and initial values', (t
     dateRange: '1 week',
     startDateTime: '2019-02-19T18:59:00Z',
     hourFormat: '12HR',
+  };
+
+  const actualResult = initialValuesFromLocation(testLocation, keys);
+  t.deepEqual(expectedResult, actualResult);
+});
+
+test('initialValuesFromLocation returns values from location.search (browser history)', (t) => {
+  const testLocation = {
+    ...location,
+    search: '?endDateTime=20251218171637&startDateTime=20251218161637',
+    otherKey: 'otherValue',
+  };
+  const keys = [
+    'startDateTime',
+    'endDateTime',
+  ];
+  const expectedResult = {
+    startDateTime: '20251218161637',
+    endDateTime: '20251218171637',
+  };
+
+  const actualResult = initialValuesFromLocation(testLocation, keys);
+  t.deepEqual(expectedResult, actualResult);
+});
+
+test('initialValuesFromLocation returns values from location.hash (hash history)', (t) => {
+  const testLocation = {
+    ...location,
+    search: '',
+    hash: '#/granules#/granules?endDateTime=20251218171637&startDateTime=20251218161637',
+    otherKey: 'otherValue',
+  };
+  const keys = [
+    'startDateTime',
+    'endDateTime',
+  ];
+  const expectedResult = {
+    startDateTime: '20251218161637',
+    endDateTime: '20251218171637',
   };
 
   const actualResult = initialValuesFromLocation(testLocation, keys);
@@ -111,6 +201,17 @@ test('getPersistentParams returns an query string with startDateTime and endDate
   };
   const persistentParams = getPersistentQueryParams(location);
   const expectedParams = 'endDateTime=2000000&startDateTime=1000000';
+
+  t.is(persistentParams, expectedParams);
+});
+
+test('getPersistentParams returns query string from hash history', (t) => {
+  const location = {
+    search: '',
+    hash: '#/granules#/granules?status=running&endDateTime=3000000&startDateTime=2000000',
+  };
+  const persistentParams = getPersistentQueryParams(location);
+  const expectedParams = 'endDateTime=3000000&startDateTime=2000000';
 
   t.is(persistentParams, expectedParams);
 });

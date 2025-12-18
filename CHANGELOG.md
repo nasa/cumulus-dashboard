@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CSD-72**
   - Update collection edit to load collection data regardless of the time filters. 
   - Update package-lock.json with audix fix for min-document, jws, js-yaml and node-forge.
+- **CSD-77**
+  - Updated url-helper functions to extract query parameters correctly for both browser history and hash history. These updates fix the search functionality
 
 ## [v13.3.0] - 2025-09-11
 
