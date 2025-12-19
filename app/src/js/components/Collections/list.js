@@ -53,7 +53,7 @@ const CollectionList = ({
   const { startDateTime, endDateTime } = datepicker || {};
   const hasTimeFilter = startDateTime || endDateTime;
   const { count, queriedAt } = list.meta;
-  const [dateFilter, setDateFilter] = useState(['true', undefined].includes(queryParams.dateFilter));
+  const [dateFilter, setDateFilter] = useState(['true', undefined].includes(queryParams?.dateFilter));
 
   useEffect(() => {
     dispatch(getCumulusInstanceMetadata());
@@ -138,7 +138,7 @@ const CollectionList = ({
             <Checkbox
               checked={dateFilter}
               onChange={setDateFilter}
-              label="Date Filter"
+              label="Apply Date Filter"
               inputLabel=" "
               paramKey="dateFilter"
               className="collection-date-filter"
