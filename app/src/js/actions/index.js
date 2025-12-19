@@ -68,8 +68,8 @@ export const interval = (action, wait, immediate) => {
   return () => clearInterval(intervalId);
 };
 
-export const getCollection = (name, version) => (dispatch, getState) => {
-  const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+export const getCollection = (name, version, useTimeFilters = true) => (dispatch, getState) => {
+  const timeFilters = useTimeFilters ? fetchCurrentTimeFilters(getState().datepicker) : {};
   return dispatch({
     [CALL_API]: {
       type: types.COLLECTION,

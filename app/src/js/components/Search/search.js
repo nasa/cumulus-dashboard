@@ -42,6 +42,7 @@ const Search = ({
   ...rest
 }) => {
   const searchRef = createRef();
+
   const formID = `form-${label}-${paramKey}`;
   const initialValueRef = useRef(getInitialValueFromLocation({
     location,
