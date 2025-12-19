@@ -5,7 +5,6 @@ import withQueryParams from 'react-router-query-params';
 import { withRouter } from 'react-router-dom';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { get } from 'object-path';
-// import debounce from 'lodash/debounce';
 import { getInitialValueFromLocation } from '../../utils/url-helper';
 import {
   renderSearchInput,
@@ -14,11 +13,11 @@ import {
 
 /**
  * Search
- * @description Search component
+ * @description Search component with explicit Search button
  * @param {string} labelKey The property of the search results that will be displayed in the dropdown menu
- * (ex: for a granule, this would be set to 'granuleId')
  * @param {string} paramKey The parameter that should be appended to the url when searching
  * @param {string} searchKey This defines what is being searched (ex: collections, granules, rules, etc)
+ * @param {boolean} archived Whether to include archived records in search
  */
 
 const Search = ({
@@ -26,6 +25,7 @@ const Search = ({
   clear,
   dispatch,
   infixBoolean,
+  archived = false,
   inputProps = {
     className: 'search',
   },
@@ -38,7 +38,7 @@ const Search = ({
   queryParams,
   searchKey = '',
   setQueryParams,
-  minSearchLength = 3,
+  minSearchLength = 2,
   ...rest
 }) => {
   const searchRef = createRef();
@@ -59,20 +59,12 @@ const Search = ({
     dispatch(clear(paramKey));
   }, [clear, dispatch, paramKey]);
 
-  // handleSearch is called by AsyncTypeahead on every keystroke
-  // We don't want to update URL or dispatch on every keystroke
-  // Only the Search button should trigger the actual search
-  // eslint-disable-next-line lodash/prefer-noop
-  const handleSearch = useCallback(() => {
-    // No-op: we control search via the Search button, not on every keystroke
-  }, []);
-
   // Handle initial value from URL on mount
   useEffect(() => {
     if (initialValueRef.current) {
-      dispatch(action(initialValueRef.current, infixBoolean));
+      dispatch(action(initialValueRef.current, infixBoolean, archived));
     }
-  }, [action, infixBoolean, dispatch]);
+  }, [action, infixBoolean, archived, dispatch]);
 
   useEffect(() => {
     const currentValue = getInitialValueFromLocation({
@@ -81,12 +73,10 @@ const Search = ({
       queryParams,
     });
     setInputValue(currentValue || '');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location, paramKey]);
+  }, [location, paramKey, queryParams]);
 
   // Handle infixBoolean toggle - retrigger search when it changes
   useEffect(() => {
-    // Only retrigger if infixBoolean actually changed
     if (prevInfixBoolean.current !== infixBoolean && prevInfixBoolean.current !== undefined) {
       const currentValue = getInitialValueFromLocation({
         location,
@@ -94,31 +84,35 @@ const Search = ({
         queryParams,
       });
 
-      // If there's a search value, retrigger the search with the new infix mode
       if (currentValue) {
         dispatch(action(currentValue, infixBoolean));
         // Reset to page 1 when changing search type, preserve other params
         setQueryParams({ ...queryParams, page: 1 });
       }
     }
-
-    // Update the previous value
     prevInfixBoolean.current = infixBoolean;
-  }, [infixBoolean, action, dispatch, location, paramKey, queryParams, setQueryParams]);
+  }, [infixBoolean, archived, action, dispatch, location, paramKey, queryParams, setQueryParams]);
+
+  // Re-execute search when other filters change (status, collection, etc)
+  useEffect(() => {
+    const currentUrlSearchValue = getInitialValueFromLocation({
+      location,
+      paramKey,
+      queryParams,
+    });
+
+    if (currentUrlSearchValue &&
+            currentUrlSearchValue === inputValue &&
+            inputValue.length >= minSearchLength) {
+      dispatch(action(inputValue, infixBoolean, archived));
+    }
+  }, [queryParams, inputValue, minSearchLength, dispatch, action, infixBoolean, archived, location, paramKey]);
 
   const validateSearchTerm = useCallback((term) => {
     const trimmedTerm = term.trim();
 
-    console.log('🔍 Search Validation:', {
-      original: term,
-      trimmed: trimmedTerm,
-      length: trimmedTerm.length,
-      minRequired: minSearchLength
-    });
-
     // Check minimum length
     if (minSearchLength && trimmedTerm.length < minSearchLength) {
-      console.log('BLOCKED: Too short');
       return {
         valid: false,
         error: `Please enter at least ${minSearchLength} characters to search`
@@ -126,31 +120,22 @@ const Search = ({
     }
 
     // Check for repeated characters (like "AAA")
-    // These often match too many records and cause timeouts
-    if (trimmedTerm.length <= 5) {
-      // If it's all the same character repeated
-      if (/^(.)\1+$/.test(trimmedTerm)) {
-        console.log('BLOCKED: Repeated characters');
-        return {
-          valid: false,
-          error: 'Please use a more specific search term (avoid repeated characters)'
-        };
-      }
+    if (trimmedTerm.length <= 5 && /^(.)\1+$/.test(trimmedTerm)) {
+      return {
+        valid: false,
+        error: 'Please use a more specific search term (avoid repeated characters)'
+      };
     }
 
-    console.log('VALID: Search will proceed');
     return { valid: true };
   }, [minSearchLength]);
 
   const handleSearchClick = useCallback(() => {
-    console.log('🔘 Search Button Clicked');
-
-    // Close the dropdown menu first
     if (searchRef.current) {
       searchRef.current.hideMenu();
     }
 
-    // Block handleChange from triggering for a brief moment
+    // Block handleChange from triggering
     blockHandleChange.current = true;
     setTimeout(() => {
       blockHandleChange.current = false;
@@ -161,52 +146,31 @@ const Search = ({
     const currentInputValue = inputElement ? inputElement.value : inputValue;
     const trimmedValue = currentInputValue.trim();
 
-    console.log('📝 Search Input:', {
-      fromDOM: currentInputValue,
-      fromState: inputValue,
-      trimmed: trimmedValue,
-      willUse: trimmedValue
-    });
-
-    // Update our state to match what we're searching for
     setInputValue(trimmedValue);
 
     if (trimmedValue) {
       // Validate search term
       const validation = validateSearchTerm(trimmedValue);
       if (!validation.valid) {
-        console.log('Validation FAILED, showing error');
         setValidationError(validation.error);
         return;
       }
 
-      // Clear any previous validation error
       setValidationError('');
-
-      console.log('Dispatching search action:', {
-        term: trimmedValue,
-        infixMode: infixBoolean,
-        paramKey
-      });
 
       // Dispatch action AND update URL, reset to page 1
-      dispatch(action(trimmedValue, infixBoolean));
+      dispatch(action(trimmedValue, infixBoolean, archived));
       setQueryParams({ ...queryParams, [paramKey]: trimmedValue, page: 1 });
     } else {
-      console.log('Empty search, clearing filter');
-
-      // Clear validation error for empty search
       setValidationError('');
-
-      // Empty search - clear the filter to show all results, reset to page 1
       dispatch(clear(paramKey));
       setQueryParams({ ...queryParams, [paramKey]: undefined, page: 1 });
     }
-  }, [searchRef, inputValue, validateSearchTerm, infixBoolean,
+  }, [searchRef, inputValue, validateSearchTerm, infixBoolean, archived,
     paramKey, dispatch, action, setQueryParams, queryParams, clear]);
 
   function handleChange(selections) {
-    // Don't process onChange if we just clicked search button/pressed Enter - prevents double trigger
+    // Don't process onChange if we just clicked search button - prevents double trigger
     if (blockHandleChange.current) {
       return;
     }
@@ -218,21 +182,16 @@ const Search = ({
       if (trimmedQuery) {
         setInputValue(trimmedQuery);
 
-        // Validate search term
         const validation = validateSearchTerm(trimmedQuery);
         if (!validation.valid) {
           setValidationError(validation.error);
           return;
         }
 
-        // Clear any previous validation error
         setValidationError('');
-
-        // Like Dropdown: dispatch action AND update URL, reset to page 1
-        dispatch(action(trimmedQuery, infixBoolean));
+        dispatch(action(trimmedQuery, infixBoolean, archived));
         setQueryParams({ ...queryParams, [paramKey]: trimmedQuery, page: 1 });
       } else {
-        // Selected item is empty/whitespace - clear search
         setInputValue('');
         setValidationError('');
         dispatch(clear(paramKey));
@@ -243,7 +202,6 @@ const Search = ({
 
   function handleInputChange(text) {
     setInputValue(text);
-    // Clear validation error when user starts typing
     if (validationError) {
       setValidationError('');
     }
@@ -268,20 +226,17 @@ const Search = ({
       // No highlighted item - treat Enter as clicking the Search button
       event.preventDefault();
 
-      // Get the actual current value from the input element
       const inputElement = event.target;
       const currentInputValue = inputElement ? inputElement.value : inputValue;
 
       searchRef.current.hideMenu();
 
-      // Block handleChange from triggering for a brief moment
       blockHandleChange.current = true;
       setTimeout(() => {
         blockHandleChange.current = false;
       }, 100);
 
       const trimmedValue = currentInputValue.trim();
-
       setInputValue(trimmedValue);
 
       if (trimmedValue) {
@@ -291,7 +246,7 @@ const Search = ({
           return;
         }
         setValidationError('');
-        dispatch(action(trimmedValue, infixBoolean));
+        dispatch(action(trimmedValue, infixBoolean, archived));
         setQueryParams({ ...queryParams, [paramKey]: trimmedValue, page: 1 });
       } else {
         setValidationError('');
@@ -300,6 +255,10 @@ const Search = ({
       }
     }
   }
+
+  // No-op: we control search via the Search button, not on every keystroke
+  // eslint-disable-next-line lodash/prefer-noop
+  const handleSearch = useCallback(() => {}, []);
 
   return (
     <div className="search__box">
@@ -370,6 +329,7 @@ Search.propTypes = {
   dispatch: PropTypes.func,
   action: PropTypes.func,
   infixBoolean: PropTypes.bool,
+  archived: PropTypes.bool,
   clear: PropTypes.func,
   inputProps: PropTypes.object,
   paramKey: PropTypes.string,
