@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [v13.3.1] - 2025-12-22
 
+### Fixed
+
 - **CSD-72**
   - Update collection edit to load collection data regardless of the time filters. 
   - Update package-lock.json with audix fix for min-document, jws, js-yaml and node-forge.
