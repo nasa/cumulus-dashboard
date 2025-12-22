@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v13.3.1] - 2025-12-22
+
 ### Fixed
 
 - **CSD-72**
@@ -1523,7 +1525,8 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
-  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v13.3.0...HEAD
+  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v13.3.1...HEAD
+  [v13.3.1]: https://github.com/nasa/cumulus-dashboard/compare/v13.3.0...v13.3.1
   [v13.3.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.2.0...v13.3.0
   [v13.2.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.1.0...v13.2.0
   [v13.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.0.0...v13.1.0
