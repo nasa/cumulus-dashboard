@@ -43,6 +43,16 @@ This version of the dashboard requires Cumulus API >= v21.0.0
 - **CUMULUS-4086**
   - Added fixture and cypress tests to verify that duplicate granules with the same producerGranuleIds will show in the Granules and PDRs pages
 
+## [v13.3.1] - 2025-12-22
+
+### Fixed
+
+- **CSD-72**
+  - Update collection edit to load collection data regardless of the time filters. 
+  - Update package-lock.json with audix fix for min-document, jws, js-yaml and node-forge.
+- **CSD-77**
+  - Updated url-helper functions to extract query parameters correctly for both browser history and hash history. These updates fix the search functionality
+
 ## [v13.3.0] - 2025-09-11
 
 ### Fixed
@@ -1552,7 +1562,8 @@ Fix for serving the dashboard through the Cumulus API.
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
   [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v14.0.0...HEAD
-  [v14.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.3.0...v14.0.0
+  [v14.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.3.1...v14.0.0
+  [v13.3.1]: https://github.com/nasa/cumulus-dashboard/compare/v13.3.0...v13.3.1
   [v13.3.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.2.0...v13.3.0
   [v13.2.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.1.0...v13.2.0
   [v13.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.0.0...v13.1.0
