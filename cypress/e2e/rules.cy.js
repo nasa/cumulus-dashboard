@@ -43,7 +43,7 @@ describe('Rules page', () => {
     it('Should update URL when search filter is changed.', () => {
       cy.visit('/rules');
       cy.get('.search').as('search');
-      cy.get('@search').click().type('L2');
+      cy.get('@search').click().type('L2{enter}');
       cy.url().should('include', 'search=L2');
     });
 

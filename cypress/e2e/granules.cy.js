@@ -312,7 +312,7 @@ describe('Dashboard Granules Page', () => {
       const prefix = 'test_';
       cy.visit('/granules');
       cy.get('.search').as('search');
-      cy.get('@search').click().type(prefix);
+      cy.get('@search').click().type(prefix).type('{enter}');
       cy.url().should('include', `search=${prefix}`);
       cy.get('.table .tbody .tr').should('have.length', 1);
       cy.get('.table .tbody .tr').eq(0).children('.td').eq(2)
@@ -377,7 +377,8 @@ describe('Dashboard Granules Page', () => {
     it('Should show Search and Dropdown filters in URL.', () => {
       cy.visit('/granules');
       cy.get('.search').as('search');
-      cy.get('@search').should('be.visible').click({ force: true }).type('L2');
+      cy.get('@search').should('be.visible').click({ force: true }).type('L2{enter}');
+      cy.url().should('include', 'search=L2');
       cy.get('.filter-status .rbt-input-main').as('status-input');
       cy.get('@status-input').should('be.visible').click({ force: true }).type('comp{enter}');
       cy.url().should('include', 'search=L2').and('include', 'status=completed');
@@ -387,7 +388,7 @@ describe('Dashboard Granules Page', () => {
       cy.visit('/granules');
       cy.setDatepickerDropdown('Recent');
       cy.get('.search').as('search');
-      cy.get('@search').should('be.visible').click({ force: true }).type('L2');
+      cy.get('@search').should('be.visible').click({ force: true }).type('L2{enter}');
       cy.get('.filter-status .rbt-input-main').as('status-input');
       cy.get('@status-input').should('be.visible').click({ force: true }).type('comp{enter}');
       cy.contains('.sidebar__row ul li a', 'Running').should('have.attr', 'href').and('match', /startDateTime/).and('not.match', /search|status/);
