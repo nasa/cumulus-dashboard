@@ -7,14 +7,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v14.1.0] - 2025-12-22
+
+### Added
+
 - **CUMULUS-2956**
   - Added the output of an operation to the overview page and a new page to view an individual operation
 - **CUMULUS-3627**
   - Added `USE_UTC_TIME_FORMAT` environment variable to allow control over the table's date/time timezone format
-- **CUMULUS-3811**
-  - Refactor data management class components to functional components
 - **CUMULUS_4129**
   - Added ESTIMATE_TABLE_ROW_COUNT env var to toggle estimated table row count for executions and granules
+
+### Changed
+
+- **CUMULUS-3811**
+  - Refactor data management class components to functional components
 - **CUMULUS_4182**
   - executions and granules list calls updated to search un-archived records
 - **CUMULUS-4223**
@@ -23,6 +30,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Executions and granules non-archived search is toggleable. Overview values are not affected, and show size of whole table.
 - **CUMULUS-3342**
   - Update dashboard and cypress test to remove all DynamoDB reference in Reconciliation reports.
+
+### Fixed
+
 - **CSD-72**
   - Update collection edit to load collection data regardless of the time filters. 
   - Update package-lock.json with audix fix for min-document, jws, js-yaml and node-forge.
@@ -1561,7 +1571,8 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
-  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v14.0.0...HEAD
+  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v14.1.0...HEAD
+  [v14.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v14.0.0...v14.1.0
   [v14.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.3.1...v14.0.0
   [v13.3.1]: https://github.com/nasa/cumulus-dashboard/compare/v13.3.0...v13.3.1
   [v13.3.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.2.0...v13.3.0
