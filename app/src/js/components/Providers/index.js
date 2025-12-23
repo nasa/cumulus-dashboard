@@ -40,8 +40,8 @@ const Providers = ({
               <Route
                 exact
                 path="/providers"
-                render={(props) => (
-                  <ProvidersOverview {...props} queryParams={filteredQueryParams} />
+                render={() => (
+                  <ProvidersOverview queryParams={filteredQueryParams} />
                 )}
               />
               <Route path="/providers/add" component={AddProvider} />

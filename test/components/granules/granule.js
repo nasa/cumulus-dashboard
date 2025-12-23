@@ -5,19 +5,17 @@ import React from 'react';
 import * as redux from 'react-redux';
 import sinon from 'sinon';
 import { render } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Route } from 'react-router-dom';
 import { requestMiddleware } from '../../../app/src/js/middleware/request';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { initialState } from '../../../app/src/js/reducers/datepicker';
 import { Provider } from 'react-redux';
 
-import { GranuleOverview } from '../../../app/src/js/components/Granules/granule.js';
+import GranuleOverview from '../../../app/src/js/components/Granules/granule.js';
 
 const logs = { items: [''] };
 
-const match = { params: { granuleId: 'my-granule-id' } };
-const dispatch = () => {};
 const granules = {
   map: {
     'my-granule-id': {
@@ -38,21 +36,32 @@ const granules = {
     }
   }
 };
-
-const locationQueryParams = {
-  search: {}
+const locationQueryParams = { search: {} }
+const executions = {
+  map: {
+    'my-granule-id': {
+      data: [],
+      error: null,
+    }
+  }
 };
+const recoveryStatus = { map: {} };
+const workflowOptions = [];
 
 const middlewares = [requestMiddleware, thunk];
 const mockStore = configureMockStore(middlewares);
+
 const someStore = mockStore({
   getState: () => {},
-  dispatch,
   subscribe: () => {},
   timer: { running: false, seconds: -1 },
   datepicker: initialState(),
-  locationQueryParams,
-  logs,
+  locationQueryParams: locationQueryParams,
+  granules: granules,
+  executions: executions,
+  logs: logs,
+  recoveryStatus: recoveryStatus,
+  workflowOptions: workflowOptions
 });
 
 test.beforeEach((t) => {
@@ -68,18 +77,11 @@ test.serial('CUMULUS-336 Granule file links use the correct URL', function (t) {
 
   const { container } = render(
     <Provider store={someStore}>
-    <MemoryRouter>
-    <GranuleOverview
-      dispatch={dispatch}
-      match={match}
-      executions={{}}
-      granules={granules}
-      logs={logs}
-      recoveryStatus={{}}
-      skipReloadOnMount={true}
-      workflowOptions={[]}
-    />
-    </MemoryRouter>
+      <MemoryRouter initialEntries={['/granules/granule/my-granule-id']}>
+        <Route path = "/granules/granule/:granuleId">
+          <GranuleOverview skipReloadOnMount={true}/>
+        </Route>
+      </MemoryRouter>
     </Provider>
   );
 
@@ -94,18 +96,11 @@ test.serial('CUMULUS-336 Granule file links use the correct URL', function (t) {
 test.serial('Checking granule for size prop', function (t) {
   const { container } = render(
     <Provider store={someStore}>
-    <MemoryRouter>
-    <GranuleOverview
-      dispatch={dispatch}
-      match={match}
-      executions={{}}
-      granules={granules}
-      logs={logs}
-      recoveryStatus={{}}
-      skipReloadOnMount={true}
-      workflowOptions={[]}
-    />
-    </MemoryRouter>
+      <MemoryRouter initialEntries={['/granules/granule/my-granule-id']}>
+        <Route path = "/granules/granule/:granuleId">
+          <GranuleOverview skipReloadOnMount={true}/>
+        </Route>
+      </MemoryRouter>
     </Provider>
   );
   

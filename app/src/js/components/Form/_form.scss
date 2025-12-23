@@ -640,7 +640,8 @@ select option{
 
 .rule__content,
 .execution__content,
-.provider__content {
+.provider__content,
+.operation__content {
   border: 1px solid $border-grey;
   box-shadow: $shadow__default;
   border-radius: 10px;

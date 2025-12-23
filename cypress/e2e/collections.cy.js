@@ -47,10 +47,10 @@ describe('Dashboard Collections Page', () => {
       cy.contains('.heading--xlarge', 'Collections');
 
       cy.get('.table .tbody .tr', { timeout: 10000 }).should('have.length', 2);
-      cy.get('.tbody > .tr > :nth-child(4)').should('contain', '12');
+      cy.get('.tbody > .tr > :nth-child(4)').should('contain', '14');
       cy.get('.tbody > .tr > :nth-child(5)').should('contain', '7');
       cy.get('.tbody > .tr > :nth-child(6)').should('contain', '2');
-      cy.get('.tbody > .tr > :nth-child(7)').should('contain', '2');
+      cy.get('.tbody > .tr > :nth-child(7)').should('contain', '4');
       cy.get('.tbody > .tr > :nth-child(8)').should('contain', '1');
 
       cy.clearStartDateTime();
@@ -313,6 +313,67 @@ describe('Dashboard Collections Page', () => {
       cy.contains('.heading--large', `${name} / ${version}`);
     });
 
+    it('should edit a collection outside time filters range', () => {
+      const startDateTime = '20221201000000';
+      const nameOutOfRange = 'MOD09GQ';
+      const versionOutOfRange = '006';
+
+      cy.visit(`/collections/collection/${nameOutOfRange}/${versionOutOfRange}?startDateTime=${startDateTime}`);
+      cy.wait('@getCollection');
+      cy.wait('@getGranules');
+      cy.contains('a', 'Edit').as('editCollection');
+      cy.get('@editCollection')
+        .should('have.attr', 'href')
+        .and('include', `/collections/edit/${nameOutOfRange}/${versionOutOfRange}?startDateTime=${startDateTime}`);
+      cy.get('@editCollection').click();
+
+      cy.contains('.heading--large', `${nameOutOfRange}___${versionOutOfRange}`);
+
+      // update collection and submit
+      const duplicateHandling = 'version';
+      const meta = { metaObj: 'metadata' };
+      cy.contains('.ace_variable', 'name', { timeout: 10000 });
+      cy.editJsonTextarea({ data: { duplicateHandling, meta }, update: true });
+      cy.contains('form button', 'Submit').click();
+      cy.contains('.default-modal .edit-collection__title', 'Edit Collection');
+      cy.contains('.default-modal .modal-body', `Collection ${nameOutOfRange}___${versionOutOfRange} has been updated`, { timeout: 10000 });
+      cy.contains('.modal-footer button', 'Close').click();
+
+      // displays the updated collection and its granules
+      cy.wait('@getCollection');
+      cy.contains('.heading--xlarge', 'Collections');
+      cy.contains('.heading--large', `${nameOutOfRange} / ${versionOutOfRange}`);
+
+      // verify the collection is updated by looking at the Edit page
+      cy.contains('a', 'Edit').click();
+
+      cy.contains('.ace_variable', 'name');
+      cy.getJsonTextareaValue().then((collectionJson) => {
+        expect(collectionJson.duplicateHandling).to.equal(duplicateHandling);
+        expect(collectionJson.meta).to.deep.equal(meta);
+      });
+      cy.contains('.heading--large', `${nameOutOfRange}___${versionOutOfRange}`);
+
+      // Test error flow
+      const sampleFileName = 'test';
+      cy.contains('.ace_variable', 'name');
+      cy.editJsonTextarea({ data: { sampleFileName }, update: true });
+
+      // Edit Collection should allow for continued editing
+      cy.contains('form button', 'Submit').click();
+      cy.contains('.default-modal .edit-collection__title', 'Edit Collection');
+      cy.contains('.default-modal .modal-body', `Collection ${nameOutOfRange}___${versionOutOfRange} has encountered an error.`);
+      cy.contains('.modal-footer button', 'Continue Editing Collection').click();
+      cy.url().should('include', `collections/edit/${nameOutOfRange}/${versionOutOfRange}?startDateTime=${startDateTime}`);
+
+      // Cancel Request should return to collection page
+      cy.contains('form button', 'Submit').click();
+      cy.contains('.modal-footer button', 'Cancel Request').click();
+      cy.wait('@getCollection');
+      cy.contains('.heading--xlarge', 'Collections');
+      cy.contains('.heading--large', `${nameOutOfRange} / ${versionOutOfRange}`);
+    });
+
     it('should display an error when attempting to edit a collection name or version', () => {
       const name = 'MOD09GQ';
       const version = '006';
@@ -571,7 +632,7 @@ describe('Dashboard Collections Page', () => {
         cy.get('li')
           .first().should('contain', 7).and('contain', 'Completed')
           .next()
-          .should('contain', 2)
+          .should('contain', 4)
           .and('contain', 'Failed')
           .next()
           .should('contain', 2)
@@ -589,7 +650,7 @@ describe('Dashboard Collections Page', () => {
         cy.get('li')
           .first().should('contain', 7).and('contain', 'Completed')
           .next()
-          .should('contain', 2)
+          .should('contain', 4)
           .and('contain', 'Failed')
           .next()
           .should('contain', 2)
@@ -607,7 +668,7 @@ describe('Dashboard Collections Page', () => {
         cy.get('li')
           .first().should('contain', 0).and('contain', 'Completed')
           .next()
-          .should('contain', 2)
+          .should('contain', 4)
           .and('contain', 'Failed')
           .next()
           .should('contain', 0)
@@ -649,7 +710,29 @@ describe('Dashboard Collections Page', () => {
         .contains(infix);
     });
 
-    it('should dynamically update menu, sidbar and breadcrumb links with latest filter criteria', () => {
+    it('Should search by unarchived or both as toggled', () => {
+      const prefixBoth = 'MOD09GQ.ARC';
+      const prefixArchived = 'MOD09GQ.ARCY';
+      const prefixNotArchived = 'MOD09GQ.ARCN';
+
+      cy.visit('/collections/collection/MOD09GQ/006');
+      cy.get('#chk_isArchivedSearch').should('not.be.checked');
+      cy.get('.search').as('search');
+      cy.get('@search').click().type(prefixBoth).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('@search').click().type(prefixNotArchived).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('@search').click().type(prefixArchived).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 0);
+
+      cy.get('#chk_isArchivedSearch').click({ force: true }).should('be.checked');
+      cy.get('@search').click().type(prefixNotArchived).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('@search').click().type(prefixArchived).type('{enter}');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+    });
+
+    it('should dynamically update menu, sidebar and breadcrumb links with latest filter criteria', () => {
       const providerString = 's3_provider';
       const searchString = 'Test-L2%2FCoastal';
       cy.visit('/collections/all');

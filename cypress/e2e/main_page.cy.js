@@ -19,9 +19,11 @@ describe('Dashboard Home Page', () => {
 
   it('Logging in successfully redirects to the Dashboard main page', () => {
     cy.visit('/');
-    cy.get('div[class=modal-content]').within(() => {
-      cy.get('a').click();
-    });
+    cy.get('div[class=modal-content]')
+      .filter(':has(.oauth-modal__header)')
+      .within(() => {
+        cy.get('a').click();
+      });
 
     shouldBeLoggedIn();
     cy.get('nav')
@@ -41,9 +43,11 @@ describe('Dashboard Home Page', () => {
         window.location.search = 'token=failed-token';
       });
 
-    cy.get('div[class=modal-content]').within(() => {
-      cy.get('a').click({ force: true });
-    });
+    cy.get('div[class=modal-content]')
+      .filter(':has(.oauth-modal__header)')
+      .within(() => {
+        cy.get('a').click({ force: true });
+      });
 
     shouldBeLoggedIn();
   });
@@ -57,27 +61,30 @@ describe('Dashboard Home Page', () => {
     beforeEach(() => {
       cy.login();
       cy.visit('/');
+      cy.wait(1000);
     });
 
     it('displays a compatible Cumulus API Version number', () => {
       const apiVersionNumber = 'a.b.c';
-      cy.window().its('appStore').then((store) => {
+      cy.window().its('top').its('appStore').then((store) => {
         store.dispatch({
           type: API_VERSION,
           payload: { versionNumber: apiVersionNumber }
         });
+      });
 
-        cy.get('div[class=api__version]').should((apiVersionWrapper) => {
-          expect(apiVersionWrapper.first()).to.contain(apiVersionNumber);
-        });
+      cy.get('div[class=api__version]').should((apiVersionWrapper) => {
+        expect(apiVersionWrapper.first()).to.contain(apiVersionNumber);
       });
     });
 
     it('Updates start and end time components when dropdown is selected', () => {
-      const now = Date.UTC(2009, 0, 5, 13, 35, 3); // 2009-01-05T13:35:03.000Z
+      const now = Date.UTC(2009, 0, 5, 13, 35, 0); // 2009-01-05T13:35:00.000Z
       cy.clock(now);
-      cy.get('main[class=main] section').within(() => {
+      cy.get('.datetime__wrapper').within(() => {
         cy.get('h3').should('have.text', 'Date and Time Range');
+      });
+      cy.get('.datetime__range').within(() => {
         cy.setDatepickerDropdown('1 week');
 
         cy.get('[data-cy=endDateTime]').within(() => {
@@ -115,13 +122,16 @@ describe('Dashboard Home Page', () => {
     it('should retain query parameters when moving between pages.', () => {
       const now = Date.UTC(2015, 2, 17, 16, 0, 0); // 2015-03-17T16:00:00.000Z
       cy.clock(now);
-      cy.get('main[class=main] section').within(() => {
-        cy.get('h3').should('have.text', 'Date and Time Range');
-        cy.setDatepickerDropdown('1 hour');
 
-        cy.url().should('include', 'startDateTime=201503171500');
-        cy.url().should('include', 'endDateTime=201503171600');
+      cy.get('.datetime__wrapper').within(() => {
+        cy.get('h3').should('have.text', 'Date and Time Range');
       });
+      cy.get('.datetime__range').within(() => {
+        cy.setDatepickerDropdown('1 hour');
+      });
+      cy.url().should('include', 'startDateTime=201503171500');
+      cy.url().should('include', 'endDateTime=201503171600');
+
       cy.get('nav').contains('Granules').click();
       cy.url().should('include', 'granules');
       cy.url().should('include', 'startDateTime=201503171500');
@@ -176,10 +186,10 @@ describe('Dashboard Home Page', () => {
       cy.clock(ingestEndTime);
       cy.setDatepickerDropdown('3 months');
 
-      cy.get('#Errors').contains('4');
+      cy.get('#Errors').contains('6');
       cy.get('#Collections').contains('2');
-      cy.get('#Granules').contains('14');
-      cy.get('#Executions').contains('9');
+      cy.get('#Granules').contains('16');
+      cy.get('#Executions').contains('11');
       cy.get('[id="Ingest Rules"]').contains('1');
 
       // Test there are values in Granule Error list
@@ -217,25 +227,15 @@ describe('Dashboard Home Page', () => {
     });
 
     it('Logging out successfully redirects to the login screen', () => {
-      // Logging to debug intermittent timeouts
-      cy.task('log', 'Start test');
-
       cy.get('nav li').last().within(() => {
         cy.get('button').should('have.text', 'Log out');
       });
 
-      cy.task('log', 'Click');
-
       cy.get('nav li').last().click();
       cy.url().should('include', '/auth');
-
-      cy.task('log', 'Visit collections');
-
       cy.visit('collections');
-
       cy.url().should('not.include', '/collections');
       cy.url().should('include', '/auth');
-
       shouldHaveDeletedToken();
     });
 
@@ -276,6 +276,7 @@ describe('Dashboard Home Page', () => {
         cy.get('[data-cy=toggleTimer]').contains('Start');
         cy.get('[data-cy=startStopLabel]').contains('Update');
       });
+
       it('retains its state during navigation.', () => {
         cy.get('[data-cy=toggleTimer]').contains('Start');
         cy.get('[data-cy=toggleTimer]').click();

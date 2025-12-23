@@ -37,7 +37,8 @@ Setting the following environment variables can override the default values.
 | STAGE | Identifier displayed at top of dashboard page: e.g. PROD, UAT | *development* |
 | KIBANAROOT | \<optional\>  Points to a Kibana endpoint. | |
 | INITIAL_DATE_RANGE_IN_DAYS| \<optional\> Number of days to load up before at start | |
-
+| USE_UTC_TIME_FORMAT| The table's timestamp column's time display format. Expected value is UTC. | |
+| ESTIMATE_TABLE_ROW_COUNT | \<optional\> Toggles estimated row count for Granule and Execution tables | true |
 
 ## Quick start
 

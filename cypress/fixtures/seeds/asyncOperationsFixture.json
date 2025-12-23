@@ -5,9 +5,20 @@
         "table": "asyncOperation",
         "limit": 10,
         "page": 1,
-        "count": 7
+        "count": 8
     },
     "results": [
+        {
+            "output": null,
+            "createdAt": 1600888600000,
+            "taskArn": "arn:aws:ecs:us-east-1:123456789012:task/running-task-1234567890",
+            "description": "Bulk granule reingest in progress",
+            "operationType": "Bulk Granule Reingest",
+            "id": "58397019-81fb-464a-bc76-0ad0490fdeec",
+            "status": "RUNNING",
+            "updatedAt": 1600888650000,
+            "timestamp": 1600888651000
+        },
         {
             "output": "{\"createdAt\":1600888528207,\"location\":\"s3://cumulus-test-sandbox-internal/test-source-integration/reconciliation-reports/InternalReportc89bf1d37c.json\",\"name\":\"InternalReportc89bf1d37c\",\"updatedAt\":1600888542261,\"type\":\"Internal\",\"status\":\"Generated\"}",
             "createdAt": 1600888510551,

@@ -29,6 +29,8 @@ const config = {
   initialDateRange: process.env.INITIAL_DATE_RANGE_IN_DAYS || 'All',
   enableRecovery: computeBool(process.env.ENABLE_RECOVERY, false),
   servedByCumulusAPI: computeBool(process.env.SERVED_BY_CUMULUS_API, ''),
+  useUTCTimeFormat: process.env.USE_UTC_TIME_FORMAT || '',
+  estimateTableRowCount: computeBool(process.env.ESTIMATE_TABLE_ROW_COUNT, true),
 };
 
 module.exports = config;

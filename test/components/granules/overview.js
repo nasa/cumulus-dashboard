@@ -3,7 +3,7 @@
 import test from 'ava';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { GranulesOverview } from '../../../app/src/js/components/Granules/overview';
+import GranulesOverview from '../../../app/src/js/components/Granules/overview';
 import { render } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom';
 import { requestMiddleware } from '../../../app/src/js/middleware/request';
@@ -44,11 +44,7 @@ const workflowOptions = [];
 const collections = {};
 const providers = {};
 const stats = { count: 0, stats: {} };
-const location = { pathname: 'granules' };
-const dispatch = () => {};
-const locationQueryParams = {
-  search: {}
-};
+const locationQueryParams = { search: {} }
 const granulesExecutions = {
   workflows: {
     data: ['fakeworkflow1', 'fakeworkflow2']
@@ -63,27 +59,24 @@ test('GranulesOverview generates bulkAction for recovery button', function (t) {
     sorts: {},
     timer: { running: false, seconds: -1 },
     datepicker: initialState(),
-    locationQueryParams,
+    locationQueryParams: locationQueryParams,
     subscribe: () => {},
-    dispatch: dispatch,
     getState: () => {},
     granules,
     config: configWithRecovery,
     granulesExecutions,
+    granules: granules,
+    stats: stats,
+    workflowOptions: workflowOptions,
+    collections: collections,
+    location: location,
+    providers: providers
   });
 
   const { container } = render(
     <Provider store={someStore}>
-      <MemoryRouter>
-      <GranulesOverview
-        granules = {granules}
-        stats = {stats}
-        dispatch = {dispatch}
-        workflowOptions = {workflowOptions}
-        collections = {collections}
-        location = {location}
-        config={configWithRecovery}
-        providers={providers}/>
+    <MemoryRouter initialEntries={[{ pathname: '/granules', search: '' }]}>
+        <GranulesOverview/>
       </MemoryRouter>
     </Provider>);
 
@@ -101,27 +94,24 @@ test('GranulesOverview does not generate bulkAction for recovery button', functi
     sorts: {},
     timer: { running: false, seconds: -1 },
     datepicker: initialState(),
-    locationQueryParams,
+    locationQueryParams: locationQueryParams,
     subscribe: () => {},
-    dispatch: dispatch,
     getState: () => {},
     granules,
     config,
     granulesExecutions,
+    granules: granules,
+    stats: stats,
+    workflowOptions: workflowOptions,
+    collections: collections,
+    location: location,
+    providers: providers
   });
 
   const { container } = render(
     <Provider store={someStore}>
-      <MemoryRouter>
-      <GranulesOverview
-        granules = {granules}
-        stats = {stats}
-        dispatch = {dispatch}
-        workflowOptions = {workflowOptions}
-        collections = {collections}
-        location = {location}
-        config={config}
-        providers={providers}/>
+    <MemoryRouter initialEntries={[{ pathname: '/granules', search: '' }]}>
+        <GranulesOverview/>
       </MemoryRouter>
     </Provider>);
 
@@ -137,27 +127,24 @@ test('GranulesOverview generates Granule Inventory List button', function (t) {
     sorts: {},
     timer: { running: false, seconds: -1 },
     datepicker: initialState(),
-    locationQueryParams,
+    locationQueryParams: locationQueryParams,
     subscribe: () => {},
-    dispatch: dispatch,
     getState: () => {},
     granules,
     config: { enableRecovery: true },
     granulesExecutions,
+    granules: granules,
+    stats: stats,
+    workflowOptions: workflowOptions,
+    collections: collections,
+    location: location,
+    providers: providers
   });
 
   const { container } = render(
     <Provider store={someStore}>
-      <MemoryRouter>
-      <GranulesOverview
-        granules = {granules}
-        stats = {stats}
-        dispatch = {dispatch}
-        workflowOptions = {workflowOptions}
-        collections = {collections}
-        location = {location}
-        config={{ enableRecovery: true }}
-        providers={providers}/>
+    <MemoryRouter initialEntries={[{ pathname: '/granules', search: '' }]}>
+        <GranulesOverview/>
       </MemoryRouter>
     </Provider>);
 

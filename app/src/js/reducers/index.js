@@ -20,6 +20,7 @@ import executions from './executions';
 import executionStatus from './execution-status';
 import executionLogs from './execution-logs';
 import operations from './operations';
+import operationStatus from './operation-status';
 import rules from './rules';
 import reconciliationReports from './reconciliation-reports';
 import recoveryStatus from './recovery-status';
@@ -53,6 +54,7 @@ export const reducers = {
   executionStatus,
   executionLogs,
   operations,
+  operationStatus,
   rules,
   reconciliationReports,
   recoveryStatus,

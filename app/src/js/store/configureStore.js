@@ -56,8 +56,10 @@ export default function ourConfigureStore (preloadedState) {
     preloadedState
   });
 
+  // make the store accessible across all tests for cypress and persist between tests
+  // attaching appStore to window.top avoids intermittent issues seen when reading appStore from the DOM between tests
   if (window && window.Cypress && window.Cypress.env('TESTING') === true) {
-    window.appStore = store;
+    window.top.appStore = store;
   }
 
   return store;
