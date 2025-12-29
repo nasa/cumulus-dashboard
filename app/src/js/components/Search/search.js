@@ -212,7 +212,9 @@ const Search = ({
       // No highlighted item - treat Enter as clicking the Search button
       event.preventDefault();
 
-      searchRef.current.hideMenu();
+      if (searchRef.current) {
+        searchRef.current.hideMenu();
+      }
 
       blockHandleChange.current = true;
       setTimeout(() => {
