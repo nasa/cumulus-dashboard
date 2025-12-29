@@ -131,26 +131,11 @@ const Search = ({
     return { valid: true };
   }, [minSearchLength]);
 
-  const handleSearchClick = useCallback(() => {
-    if (searchRef.current) {
-      searchRef.current.hideMenu();
-    }
-
-    // Block handleChange from triggering
-    blockHandleChange.current = true;
-    setTimeout(() => {
-      blockHandleChange.current = false;
-    }, 100);
-
-    // Get the actual value from the input element
-    const inputElement = searchRef.current?.inputNode;
-    const currentInputValue = inputElement ? inputElement.value : inputValue;
-    const trimmedValue = currentInputValue.trim();
-
+  const executeSearch = useCallback((value) => {
+    const trimmedValue = (value || '').trim();
     setInputValue(trimmedValue);
 
     if (trimmedValue) {
-      // Validate search term
       const validation = validateSearchTerm(trimmedValue);
       if (!validation.valid) {
         setValidationError(validation.error);
@@ -167,8 +152,24 @@ const Search = ({
       dispatch(clear(paramKey));
       setQueryParams({ ...queryParams, [paramKey]: undefined, page: 1 });
     }
-  }, [searchRef, inputValue, validateSearchTerm, infixBoolean, archived,
-    paramKey, dispatch, action, setQueryParams, queryParams, clear]);
+  }, [action, archived, clear, dispatch, infixBoolean, paramKey, queryParams, setQueryParams, validateSearchTerm]);
+
+  const handleSearchClick = useCallback(() => {
+    if (searchRef.current) {
+      searchRef.current.hideMenu();
+    }
+
+    // Block handleChange from triggering
+    blockHandleChange.current = true;
+    setTimeout(() => {
+      blockHandleChange.current = false;
+    }, 100);
+
+    // Get the actual value from the input element
+    const inputElement = searchRef.current?.getInput();
+    const currentInputValue = inputElement ? inputElement.value : inputValue;
+    executeSearch(currentInputValue);
+  }, [searchRef, inputValue, executeSearch]);
 
   function handleChange(selections) {
     // Don't process onChange if we just clicked search button - prevents double trigger
@@ -178,26 +179,10 @@ const Search = ({
 
     if (selections && selections.length > 0) {
       const query = selections[0][labelKey];
-      const trimmedQuery = query ? query.trim() : '';
-
-      if (trimmedQuery) {
-        setInputValue(trimmedQuery);
-
-        const validation = validateSearchTerm(trimmedQuery);
-        if (!validation.valid) {
-          setValidationError(validation.error);
-          return;
-        }
-
-        setValidationError('');
-        dispatch(action(trimmedQuery, infixBoolean, archived));
-        setQueryParams({ ...queryParams, [paramKey]: trimmedQuery, page: 1 });
-      } else {
-        setInputValue('');
-        setValidationError('');
-        dispatch(clear(paramKey));
-        setQueryParams({ ...queryParams, [paramKey]: undefined, page: 1 });
-      }
+      executeSearch(query);
+    } else if (inputValue === '') {
+      // If the input was cleared and selections are empty, clear the search
+      executeSearch('');
     }
   }
 
@@ -227,9 +212,6 @@ const Search = ({
       // No highlighted item - treat Enter as clicking the Search button
       event.preventDefault();
 
-      const inputElement = event.target;
-      const currentInputValue = inputElement ? inputElement.value : inputValue;
-
       searchRef.current.hideMenu();
 
       blockHandleChange.current = true;
@@ -237,23 +219,7 @@ const Search = ({
         blockHandleChange.current = false;
       }, 100);
 
-      const trimmedValue = currentInputValue.trim();
-      setInputValue(trimmedValue);
-
-      if (trimmedValue) {
-        const validation = validateSearchTerm(trimmedValue);
-        if (!validation.valid) {
-          setValidationError(validation.error);
-          return;
-        }
-        setValidationError('');
-        dispatch(action(trimmedValue, infixBoolean, archived));
-        setQueryParams({ ...queryParams, [paramKey]: trimmedValue, page: 1 });
-      } else {
-        setValidationError('');
-        dispatch(clear(paramKey));
-        setQueryParams({ ...queryParams, [paramKey]: undefined, page: 1 });
-      }
+      executeSearch(event.target.value);
     }
   }
 
