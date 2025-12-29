@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- **CUMULUS-4451**
+  - Disable sort executions by name to avoid slow query in Postgres
+  
 ## [v14.1.0] - 2025-12-22
 
 ### Added
