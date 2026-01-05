@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- **CUMULUS-4461**
+  - Address qs vulnerability by overriding its version to ^6.14.1
+
 ## [v14.1.0] - 2025-12-22
 
 ### Added
