@@ -60,13 +60,6 @@ const Search = ({
     dispatch(clear(paramKey));
   }, [clear, dispatch, paramKey]);
 
-  // Handle initial value from URL on mount
-  useEffect(() => {
-    if (initialValueRef.current) {
-      dispatch(action(initialValueRef.current, infixBoolean, archived));
-    }
-  }, [action, infixBoolean, archived, dispatch]);
-
   useEffect(() => {
     const currentValue = getInitialValueFromLocation({
       location,
@@ -76,7 +69,7 @@ const Search = ({
     setInputValue(currentValue || '');
   }, [location, paramKey, queryParams]);
 
-  // Handle infixBoolean toggle - retrigger search when it changes
+  // Handle infixBoolean toggle - reset pagination when it changes
   useEffect(() => {
     if (prevInfixBoolean.current !== infixBoolean && prevInfixBoolean.current !== undefined) {
       const currentValue = getInitialValueFromLocation({
@@ -86,15 +79,14 @@ const Search = ({
       });
 
       if (currentValue) {
-        dispatch(action(currentValue, infixBoolean));
         // Reset to page 1 when changing search type, preserve other params
         setQueryParams({ ...queryParams, page: 1 });
       }
     }
     prevInfixBoolean.current = infixBoolean;
-  }, [infixBoolean, archived, action, dispatch, location, paramKey, queryParams, setQueryParams]);
+  }, [infixBoolean, location, paramKey, queryParams, setQueryParams]);
 
-  // Re-execute search when other filters change (status, collection, etc)
+  // Handle URL sync and search execution
   useEffect(() => {
     const currentUrlSearchValue = getInitialValueFromLocation({
       location,
@@ -102,12 +94,12 @@ const Search = ({
       queryParams,
     });
 
-    if (currentUrlSearchValue &&
-            currentUrlSearchValue === inputValue &&
-            inputValue.length >= minSearchLength) {
-      dispatch(action(inputValue, infixBoolean, archived));
+    if (currentUrlSearchValue && currentUrlSearchValue.length >= minSearchLength) {
+      dispatch(action(currentUrlSearchValue, infixBoolean, archived));
+    } else if (!currentUrlSearchValue) {
+      dispatch(clear(paramKey));
     }
-  }, [queryParams, inputValue, minSearchLength, dispatch, action, infixBoolean, archived, location, paramKey]);
+  }, [queryParams, minSearchLength, dispatch, action, clear, infixBoolean, archived, location, paramKey]);
 
   const validateSearchTerm = useCallback((term) => {
     const trimmedTerm = term.trim();
@@ -131,29 +123,6 @@ const Search = ({
     return { valid: true };
   }, [minSearchLength]);
 
-  const executeSearch = useCallback((value) => {
-    const trimmedValue = (value || '').trim();
-    setInputValue(trimmedValue);
-
-    if (trimmedValue) {
-      const validation = validateSearchTerm(trimmedValue);
-      if (!validation.valid) {
-        setValidationError(validation.error);
-        return;
-      }
-
-      setValidationError('');
-
-      // Dispatch action AND update URL, reset to page 1
-      dispatch(action(trimmedValue, infixBoolean, archived));
-      setQueryParams({ ...queryParams, [paramKey]: trimmedValue, page: 1 });
-    } else {
-      setValidationError('');
-      dispatch(clear(paramKey));
-      setQueryParams({ ...queryParams, [paramKey]: undefined, page: 1 });
-    }
-  }, [action, archived, clear, dispatch, infixBoolean, paramKey, queryParams, setQueryParams, validateSearchTerm]);
-
   const handleSearchClick = useCallback(() => {
     if (searchRef.current) {
       searchRef.current.hideMenu();
@@ -168,8 +137,25 @@ const Search = ({
     // Get the actual value from the input element
     const inputElement = searchRef.current?.getInput();
     const currentInputValue = inputElement ? inputElement.value : inputValue;
-    executeSearch(currentInputValue);
-  }, [searchRef, inputValue, executeSearch]);
+    const trimmedValue = (currentInputValue || '').trim();
+
+    setInputValue(trimmedValue);
+
+    if (trimmedValue) {
+      const validation = validateSearchTerm(trimmedValue);
+      if (!validation.valid) {
+        setValidationError(validation.error);
+        return;
+      }
+
+      setValidationError('');
+      // Update URL, reset to page 1 - search execution is handled by useEffect
+      setQueryParams({ ...queryParams, [paramKey]: trimmedValue, page: 1 });
+    } else {
+      setValidationError('');
+      setQueryParams({ ...queryParams, [paramKey]: undefined, page: 1 });
+    }
+  }, [searchRef, inputValue, validateSearchTerm, paramKey, setQueryParams, queryParams]);
 
   function handleChange(selections) {
     // Don't process onChange if we just clicked search button - prevents double trigger
@@ -179,10 +165,28 @@ const Search = ({
 
     if (selections && selections.length > 0) {
       const query = selections[0][labelKey];
-      executeSearch(query);
+      const trimmedQuery = query ? query.trim() : '';
+
+      if (trimmedQuery) {
+        setInputValue(trimmedQuery);
+
+        const validation = validateSearchTerm(trimmedQuery);
+        if (!validation.valid) {
+          setValidationError(validation.error);
+          return;
+        }
+
+        setValidationError('');
+        setQueryParams({ ...queryParams, [paramKey]: trimmedQuery, page: 1 });
+      } else {
+        setInputValue('');
+        setValidationError('');
+        setQueryParams({ ...queryParams, [paramKey]: undefined, page: 1 });
+      }
     } else if (inputValue === '') {
       // If the input was cleared and selections are empty, clear the search
-      executeSearch('');
+      setValidationError('');
+      setQueryParams({ ...queryParams, [paramKey]: undefined, page: 1 });
     }
   }
 
@@ -221,7 +225,21 @@ const Search = ({
         blockHandleChange.current = false;
       }, 100);
 
-      executeSearch(event.target.value);
+      const trimmedValue = (event.target.value || '').trim();
+      setInputValue(trimmedValue);
+
+      if (trimmedValue) {
+        const validation = validateSearchTerm(trimmedValue);
+        if (!validation.valid) {
+          setValidationError(validation.error);
+          return;
+        }
+        setValidationError('');
+        setQueryParams({ ...queryParams, [paramKey]: trimmedValue, page: 1 });
+      } else {
+        setValidationError('');
+        setQueryParams({ ...queryParams, [paramKey]: undefined, page: 1 });
+      }
     }
   }
 
