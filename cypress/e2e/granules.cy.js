@@ -1026,4 +1026,125 @@ describe('Dashboard Granules Page', () => {
       });
     });
   });
+
+  describe('Search button functionality', () => {
+    beforeEach(() => {
+      cy.login();
+      cy.visit('/granules');
+      cy.get('.search').as('search');
+      cy.get('button.button--search').as('searchButton');
+    });
+
+    it('Should execute search when clicking the search button', () => {
+      const searchTerm = 'MOD09GQ';
+
+      cy.get('@search').click().type(searchTerm);
+      cy.get('@searchButton').click();
+
+      cy.url().should('include', `search=${searchTerm}`);
+      cy.get('.table .tbody .tr').should('have.length.at.least', 1);
+      cy.get('.table .tbody .tr').first().should('contain', searchTerm);
+    });
+
+    it('Should show validation error for search terms that are too short', () => {
+      cy.get('@search').click().type('M');
+      cy.get('@searchButton').click();
+
+      cy.get('.search__error').should('be.visible');
+      cy.get('.search__error').should('contain', 'Please enter at least 2 characters');
+      cy.url().should('not.include', 'search=M');
+    });
+
+    it('Should show validation error for repeated characters', () => {
+      cy.get('@search').click().type('AAA');
+      cy.get('@searchButton').click();
+
+      cy.get('.search__error').should('be.visible');
+      cy.get('.search__error').should('contain', 'more specific search term');
+      cy.url().should('not.include', 'search=AAA');
+    });
+
+    it('Should clear validation error when typing after error', () => {
+      // Trigger validation error
+      cy.get('@search').click().type('M');
+      cy.get('@searchButton').click();
+      cy.get('.search__error').should('be.visible');
+
+      // Start typing again - error should clear
+      cy.get('@search').click().type('O');
+      cy.get('.search__error').should('not.exist');
+    });
+
+    it('Should execute search with Enter key', () => {
+      const searchTerm = 'MOD09GQ';
+
+      cy.get('@search').click().type(searchTerm).type('{enter}');
+
+      cy.url().should('include', `search=${searchTerm}`);
+      cy.get('.table .tbody .tr').should('have.length.at.least', 1);
+    });
+
+    it('Should work with autocomplete dropdown selection', () => {
+      const searchTerm = 'MOD';
+
+      cy.get('@search').click().type(searchTerm);
+      cy.wait(500); // Wait for dropdown
+
+      // Click first autocomplete option
+      cy.get('.rbt-menu .dropdown-item').first().click();
+
+      cy.url().should('include', 'search=');
+      cy.get('.table .tbody .tr').should('have.length.at.least', 1);
+    });
+
+    it('Should clear search when clicking search with empty input', () => {
+      cy.get('@search').click().type('MOD09GQ');
+      cy.get('@searchButton').click();
+      cy.url().should('include', 'search=MOD09GQ');
+
+      // Clear the input
+      cy.get('@search').click().clear();
+      cy.get('@searchButton').click();
+
+      cy.url().should('not.include', 'search=');
+      cy.get('.table .tbody .tr').should('have.length', 15); // All granules
+    });
+
+    it('Should work with infix search toggle', () => {
+      const infix = 'A153';
+
+      cy.get('#chk_isInfixSearch').check({ force: true });
+      cy.get('@search').click().type(infix);
+      cy.get('@searchButton').click();
+
+      cy.url().should('include', `search=${infix}`);
+      cy.get('.table .tbody .tr').should('have.length.at.least', 1);
+      cy.get('.table .tbody .tr').first().should('contain', infix);
+    });
+
+    it('Should preserve other filters when searching', () => {
+      // Set a status filter
+      cy.get('.filter-status .rbt-input-main').click().type('comp').type('{enter}');
+      cy.url().should('include', 'status=completed');
+
+      // Search
+      cy.get('@search').click().type('MOD09GQ');
+      cy.get('@searchButton').click();
+
+      // Both params should be in URL
+      cy.url().should('include', 'status=completed');
+      cy.url().should('include', 'search=MOD09GQ');
+    });
+
+    it('Should show helpful tip message when no validation error', () => {
+      cy.get('.search__tip').should('be.visible');
+      cy.get('.search__tip').should('contain', 'Use specific terms');
+
+      // Tip should disappear when validation error shows
+      cy.get('@search').click().type('M');
+      cy.get('@searchButton').click();
+      cy.get('.search__tip').should('not.exist');
+      cy.get('.search__error').should('be.visible');
+    });
+  });
 });

@@ -236,34 +236,44 @@ const Search = ({
           {label}
         </label>
       )}
-      <form className="search__wrapper form-group__element">
-        <AsyncTypeahead
-          defaultInputValue={inputValue}
-          highlightOnlyResult={true}
-          id="search"
-          inputProps={{ id: 'search', ...inputProps }}
-          isLoading={inflight}
-          labelKey={labelKey}
-          onChange={handleChange}
-          onFocus={handleFocus}
-          onInputChange={handleInputChange}
-          onKeyDown={handleKeyDown}
-          onSearch={handleSearch}
-          options={searchOptions || options}
-          placeholder={placeholder}
-          ref={searchRef}
-          renderInput={renderSearchInput}
-          renderMenu={(results, menuProps) => renderSearchMenu(results, menuProps, labelKey)}
-          minLength={1}
-        />
-        <button
-          type="button"
-          className="button button--small button--search"
-          onClick={handleSearchClick}
-          aria-label="Search"
-        >
-          Search
-        </button>
+      <form className="search__wrapper form-group__element" style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
+          <div style={{ flex: 1 }}>
+              <AsyncTypeahead
+                  defaultInputValue={inputValue}
+                  highlightOnlyResult={true}
+                  id="search"
+                  inputProps={{ id: 'search', ...inputProps }}
+                  isLoading={inflight}
+                  labelKey={labelKey}
+                  onChange={handleChange}
+                  onFocus={handleFocus}
+                  onInputChange={handleInputChange}
+                  onKeyDown={handleKeyDown}
+                  onSearch={handleSearch}
+                  options={searchOptions || options}
+                  placeholder={placeholder}
+                  ref={searchRef}
+                  renderInput={renderSearchInput}
+                  renderMenu={(results, menuProps) => renderSearchMenu(results, menuProps, labelKey)}
+                  minLength={1}
+            />
+          </div>
+          <button
+              type="button"
+              className="button button--small button--search"
+              onClick={handleSearchClick}
+              aria-label="Search"
+              style={{
+                flexShrink: 0,
+                height: '28px',
+                padding: '0 1.5rem',
+                marginTop: 0,
+                marginLeft: '1rem',
+                alignSelf: 'flex-start',
+              }}
+          >
+              Search
+          </button>
       </form>
       {validationError
         ? (
