@@ -111,9 +111,8 @@ describe('Dashboard PDRs Page', () => {
       cy.get('.table .tbody .tr').as('list');
       cy.get('@list').should('have.length', 4);
 
-      cy.get('.search').as('search');
-      cy.get('@search').eq(0).should('be.visible').click()
-        .type('A03861');
+      cy.get('.search').first().as('search');
+      cy.get('@search').should('be.visible').click().type('A03861{enter}');
       cy.url().should('include', 'search=A0386');
 
       cy.get('.table .tbody .tr').as('list');
@@ -144,7 +143,7 @@ describe('Dashboard PDRs Page', () => {
 
       cy.get('.search').as('search');
       cy.get('@search').eq(0).should('be.visible').click()
-        .type('9272');
+        .type('9272{enter}');
       cy.url().should('include', 'search=9272');
 
       cy.get('.table .tbody .tr').as('list');
@@ -202,16 +201,15 @@ describe('Dashboard PDRs Page', () => {
 
       cy.get('@status-input').click().clear().type('comp')
         .type('{enter}');
-      cy.get('.search').as('search');
-      cy.get('@search').eq(0).should('be.visible').click()
-        .type('MOD');
+      cy.get('.search').first().as('search');
+      cy.get('@search').clear('be.visible').click().type('MOD{enter}');
       cy.url().should('include', 'status=completed');
       cy.url().should('include', 'search=MOD');
       cy.get('.table .tbody .tr').as('list');
       cy.get('@list').should('have.length', 3);
       cy.get('#chk_isInfixSearch').should('not.be.checked');
-      cy.get('@search').eq(0).should('be.visible').click()
-        .type('GQ');
+      cy.get('@search').should('be.visible').click().clear()
+        .type('GQ{enter}');
       cy.url().should('include', 'search=GQ');
       cy.get('.table .tbody .tr').should('have.length', 0);
       cy.get('#chk_isInfixSearch').click({ force: true }).should('be.checked');
@@ -268,7 +266,7 @@ describe('Dashboard PDRs Page', () => {
       const pdrName = 'MOD09GQ_1granule_v3.PDR';
       cy.visit(`/pdrs/pdr/${pdrName}`);
       cy.get('#chk_isArchivedSearch').should('not.be.checked');
-      cy.get('.search').as('search');
+      cy.get('.search').first().as('search');
       cy.get('@search').click().type(prefixBoth).type('{enter}');
       cy.get('.table .tbody .tr').should('have.length', 1);
       cy.get('@search').click().type(prefixNotArchived).type('{enter}');

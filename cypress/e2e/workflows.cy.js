@@ -63,7 +63,7 @@ describe('Dashboard Workflows Page', () => {
       cy.visit('/workflows');
       cy.get('.table .tbody .tr').should('have.length', 2);
       cy.get('.table .tbody .tr').first().contains('HelloWorldWorkflow');
-      cy.get('.search').click().type('condtes');
+      cy.get('.search').click().type('condtes{enter}');
       cy.get('.table .tbody .tr').should('have.length', 1);
       cy.get('.table .tbody .tr').first().contains('SecondTestWorkflow');
     });
