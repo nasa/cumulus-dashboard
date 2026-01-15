@@ -6,7 +6,6 @@ module.exports = defineConfig({
     APIROOT: 'http://localhost:5001',
     authToken: null,
     ESTIMATE_TABLE_ROW_COUNT: true,
-    INITIAL_DATE_RANGE_IN_DAYS: 'All',
   },
   retries: {
     runMode: 2,
