@@ -68,8 +68,8 @@ export const interval = (action, wait, immediate) => {
   return () => clearInterval(intervalId);
 };
 
-export const getCollection = (name, version) => (dispatch, getState) => {
-  const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+export const getCollection = (name, version, useTimeFilters = true) => (dispatch, getState) => {
+  const timeFilters = useTimeFilters ? fetchCurrentTimeFilters(getState().datepicker) : {};
   return dispatch({
     [CALL_API]: {
       type: types.COLLECTION,
@@ -683,18 +683,24 @@ export const getExecutionLogs = (executionName) => ({
 
 export const listExecutions = (options) => (dispatch, getState) => {
   const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+  const params = parseArchivedInListParams({
+    limit: defaultPageLimit,
+    estimateTableRowCount: _config.estimateTableRowCount,
+    ...options,
+    ...timeFilters
+  });
+
+  // If sort_key is missing OR explicitly an empty array, set default
+  if (!params.sort_key || (Array.isArray(params.sort_key) && params.sort_key.length === 0)) {
+    params.sort_key = ['-updatedAt'];
+  }
 
   return dispatch({
     [CALL_API]: {
       type: types.EXECUTIONS,
       method: 'GET',
       url: new URL('executions', root).href,
-      params: parseArchivedInListParams({
-        limit: defaultPageLimit,
-        estimateTableRowCount: _config.estimateTableRowCount,
-        ...options,
-        ...timeFilters
-      })
+      params
     }
   });
 };

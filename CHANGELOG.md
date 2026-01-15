@@ -7,14 +7,32 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- **CUMULUS-4484**
+  - Change INITIAL_DATE_RANGE_IN_DAYS default value to 1
+- **CUMULUS-4189**
+  - Added search button and removed  dispatching search/url update on every keystroke
+- **CUMULUS-4451**
+  - Disable sort executions by name to avoid slow query in Postgres
+  - Set default sort order for executions to -updatedAt to avoid slow query in Postgres
+  
+- **CUMULUS-4461**
+  - Address qs vulnerability by overriding its version to ^6.14.1
+
+## [v14.1.0] - 2025-12-22
+
+### Added
+
 - **CUMULUS-2956**
   - Added the output of an operation to the overview page and a new page to view an individual operation
 - **CUMULUS-3627**
   - Added `USE_UTC_TIME_FORMAT` environment variable to allow control over the table's date/time timezone format
-- **CUMULUS-3811**
-  - Refactor data management class components to functional components
 - **CUMULUS_4129**
   - Added ESTIMATE_TABLE_ROW_COUNT env var to toggle estimated table row count for executions and granules
+
+### Changed
+
+- **CUMULUS-3811**
+  - Refactor data management class components to functional components
 - **CUMULUS_4182**
   - executions and granules list calls updated to search un-archived records
 - **CUMULUS-4223**
@@ -23,6 +41,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Executions and granules non-archived search is toggleable. Overview values are not affected, and show size of whole table.
 - **CUMULUS-3342**
   - Update dashboard and cypress test to remove all DynamoDB reference in Reconciliation reports.
+
+### Fixed
+
+- **CSD-72**
+  - Update collection edit to load collection data regardless of the time filters. 
+  - Update package-lock.json with audix fix for min-document, jws, js-yaml and node-forge.
+- **CSD-77**
+  - Updated url-helper functions to extract query parameters correctly for both browser history and hash history. These updates fix the search functionality
 
 ## [v14.0.0] - 2025-09-16
 
@@ -37,6 +63,16 @@ This version of the dashboard requires Cumulus API >= v21.0.0
     `@cumulus/aws-client@20.1.3-alpha.2`
 - **CUMULUS-4086**
   - Added fixture and cypress tests to verify that duplicate granules with the same producerGranuleIds will show in the Granules and PDRs pages
+
+## [v13.3.1] - 2025-12-22
+
+### Fixed
+
+- **CSD-72**
+  - Update collection edit to load collection data regardless of the time filters. 
+  - Update package-lock.json with audix fix for min-document, jws, js-yaml and node-forge.
+- **CSD-77**
+  - Updated url-helper functions to extract query parameters correctly for both browser history and hash history. These updates fix the search functionality
 
 ## [v13.3.0] - 2025-09-11
 
@@ -1546,8 +1582,10 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
-  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v14.0.0...HEAD
-  [v14.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.3.0...v14.0.0
+  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v14.1.0...HEAD
+  [v14.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v14.0.0...v14.1.0
+  [v14.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.3.1...v14.0.0
+  [v13.3.1]: https://github.com/nasa/cumulus-dashboard/compare/v13.3.0...v13.3.1
   [v13.3.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.2.0...v13.3.0
   [v13.2.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.1.0...v13.2.0
   [v13.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.0.0...v13.1.0

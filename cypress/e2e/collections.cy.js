@@ -92,7 +92,7 @@ describe('Dashboard Collections Page', () => {
       cy.visit('/collections');
       cy.wait('@getCollections');
       cy.get('.search').as('search');
-      cy.get('@search').click().type(infix);
+      cy.get('@search').click().type(infix).type('{enter}');
       cy.url().should('include', `search=${infix}`);
       cy.get('.table .tbody .tr').should('have.length', 1);
       cy.get('.table .tbody .tr').eq(0).children('.td').eq(1)
@@ -311,6 +311,67 @@ describe('Dashboard Collections Page', () => {
       cy.wait('@getCollection');
       cy.contains('.heading--xlarge', 'Collections');
       cy.contains('.heading--large', `${name} / ${version}`);
+    });
+
+    it('should edit a collection outside time filters range', () => {
+      const startDateTime = '20221201000000';
+      const nameOutOfRange = 'MOD09GQ';
+      const versionOutOfRange = '006';
+
+      cy.visit(`/collections/collection/${nameOutOfRange}/${versionOutOfRange}?startDateTime=${startDateTime}`);
+      cy.wait('@getCollection');
+      cy.wait('@getGranules');
+      cy.contains('a', 'Edit').as('editCollection');
+      cy.get('@editCollection')
+        .should('have.attr', 'href')
+        .and('include', `/collections/edit/${nameOutOfRange}/${versionOutOfRange}?startDateTime=${startDateTime}`);
+      cy.get('@editCollection').click();
+
+      cy.contains('.heading--large', `${nameOutOfRange}___${versionOutOfRange}`);
+
+      // update collection and submit
+      const duplicateHandling = 'version';
+      const meta = { metaObj: 'metadata' };
+      cy.contains('.ace_variable', 'name', { timeout: 10000 });
+      cy.editJsonTextarea({ data: { duplicateHandling, meta }, update: true });
+      cy.contains('form button', 'Submit').click();
+      cy.contains('.default-modal .edit-collection__title', 'Edit Collection');
+      cy.contains('.default-modal .modal-body', `Collection ${nameOutOfRange}___${versionOutOfRange} has been updated`, { timeout: 10000 });
+      cy.contains('.modal-footer button', 'Close').click();
+
+      // displays the updated collection and its granules
+      cy.wait('@getCollection');
+      cy.contains('.heading--xlarge', 'Collections');
+      cy.contains('.heading--large', `${nameOutOfRange} / ${versionOutOfRange}`);
+
+      // verify the collection is updated by looking at the Edit page
+      cy.contains('a', 'Edit').click();
+
+      cy.contains('.ace_variable', 'name');
+      cy.getJsonTextareaValue().then((collectionJson) => {
+        expect(collectionJson.duplicateHandling).to.equal(duplicateHandling);
+        expect(collectionJson.meta).to.deep.equal(meta);
+      });
+      cy.contains('.heading--large', `${nameOutOfRange}___${versionOutOfRange}`);
+
+      // Test error flow
+      const sampleFileName = 'test';
+      cy.contains('.ace_variable', 'name');
+      cy.editJsonTextarea({ data: { sampleFileName }, update: true });
+
+      // Edit Collection should allow for continued editing
+      cy.contains('form button', 'Submit').click();
+      cy.contains('.default-modal .edit-collection__title', 'Edit Collection');
+      cy.contains('.default-modal .modal-body', `Collection ${nameOutOfRange}___${versionOutOfRange} has encountered an error.`);
+      cy.contains('.modal-footer button', 'Continue Editing Collection').click();
+      cy.url().should('include', `collections/edit/${nameOutOfRange}/${versionOutOfRange}?startDateTime=${startDateTime}`);
+
+      // Cancel Request should return to collection page
+      cy.contains('form button', 'Submit').click();
+      cy.contains('.modal-footer button', 'Cancel Request').click();
+      cy.wait('@getCollection');
+      cy.contains('.heading--xlarge', 'Collections');
+      cy.contains('.heading--large', `${nameOutOfRange} / ${versionOutOfRange}`);
     });
 
     it('should display an error when attempting to edit a collection name or version', () => {
@@ -673,7 +734,7 @@ describe('Dashboard Collections Page', () => {
 
     it('should dynamically update menu, sidebar and breadcrumb links with latest filter criteria', () => {
       const providerString = 's3_provider';
-      const searchString = 'Test-L2%2FCoastal';
+      const searchString = 'Test';
       cy.visit('/collections/all');
       cy.wait('@getCollections');
 
@@ -684,7 +745,7 @@ describe('Dashboard Collections Page', () => {
       cy.get('@search').click().type('Test');
       cy.wait(1000);
       cy.get('@search').type('{enter}');
-      cy.get('span > a', { timeout: 10000 }).click();
+      cy.get('span > a', { timeout: 10000 }).first().click();
 
       // Breakcrumb <Link> contain correct query params
       cy.get('.breadcrumb > :nth-child(2) > a')
