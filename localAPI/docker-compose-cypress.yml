@@ -14,3 +14,4 @@ services:
       - CYPRESS_TESTING=true
       - NODE_ENV=test
       - LOCALSTACK_HOST=localhost
+      - INITIAL_DATE_RANGE_IN_DAYS=All

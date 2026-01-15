@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- **CUMULUS-4484**
+  - Change INITIAL_DATE_RANGE_IN_DAYS default value to 1
 - **CUMULUS-4189**
   - Added search button and removed  dispatching search/url update on every keystroke
 - **CUMULUS-4451**
