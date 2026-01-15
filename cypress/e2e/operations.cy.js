@@ -44,7 +44,7 @@ describe('Operations page', () => {
       const search = '452e';
       cy.visit('/operations');
       cy.get('.search').as('search');
-      cy.get('@search').click().type(search);
+      cy.get('@search').click().type(search).type('{enter}');
       cy.url().should('include', `search=${search}`);
       cy.get('.table .tbody .tr').should('have.length', 1);
     });

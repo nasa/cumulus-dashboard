@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-4298**
   - Added checkbox to exclude collections from date filtering.
 
+- **CUMULUS-4484**
+  - Change INITIAL_DATE_RANGE_IN_DAYS default value to 1
+- **CUMULUS-4189**
+  - Added search button and removed  dispatching search/url update on every keystroke
+- **CUMULUS-4451**
+  - Disable sort executions by name to avoid slow query in Postgres
+  - Set default sort order for executions to -updatedAt to avoid slow query in Postgres
+  
+- **CUMULUS-4461**
+  - Address qs vulnerability by overriding its version to ^6.14.1
+
 ## [v14.1.0] - 2025-12-22
 
 ### Added

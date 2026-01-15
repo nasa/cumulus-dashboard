@@ -18,6 +18,7 @@ services:
       - DAAC_NAME=local
       - STAGE=LOCALHOST-Development
       - AUTH_METHOD=earthdata
+      - INITIAL_DATE_RANGE_IN_DAYS=All
   shim:   # empty container to open ports
     image: ${DOCKER_REPOSITORY}node:20.12.2
     command:
