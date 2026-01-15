@@ -92,7 +92,7 @@ describe('Dashboard Collections Page', () => {
       cy.visit('/collections');
       cy.wait('@getCollections');
       cy.get('.search').as('search');
-      cy.get('@search').click().type(infix);
+      cy.get('@search').click().type(infix).type('{enter}');
       cy.url().should('include', `search=${infix}`);
       cy.get('.table .tbody .tr').should('have.length', 1);
       cy.get('.table .tbody .tr').eq(0).children('.td').eq(1)
@@ -734,7 +734,7 @@ describe('Dashboard Collections Page', () => {
 
     it('should dynamically update menu, sidebar and breadcrumb links with latest filter criteria', () => {
       const providerString = 's3_provider';
-      const searchString = 'Test-L2%2FCoastal';
+      const searchString = 'Test';
       cy.visit('/collections/all');
       cy.wait('@getCollections');
 
@@ -745,7 +745,7 @@ describe('Dashboard Collections Page', () => {
       cy.get('@search').click().type('Test');
       cy.wait(1000);
       cy.get('@search').type('{enter}');
-      cy.get('span > a', { timeout: 10000 }).click();
+      cy.get('span > a', { timeout: 10000 }).first().click();
 
       // Breakcrumb <Link> contain correct query params
       cy.get('.breadcrumb > :nth-child(2) > a')
