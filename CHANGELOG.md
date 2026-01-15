@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-4484**
   - Change INITIAL_DATE_RANGE_IN_DAYS default value to 1
+- **CUMULUS-4189**
+  - Added search button and removed  dispatching search/url update on every keystroke
 - **CUMULUS-4451**
   - Disable sort executions by name to avoid slow query in Postgres
   - Set default sort order for executions to -updatedAt to avoid slow query in Postgres
