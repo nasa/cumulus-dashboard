@@ -117,7 +117,7 @@ export const checkApiVersion = () => (dispatch, getState) => {
 export const listCollections = (options = {}) => {
   const { listAll = false, getMMT = true, includeStats = true, ...queryOptions } = options;
   return (dispatch, getState) => {
-    const dateFilter = ['true', undefined].includes(queryOptions?.dateFilter);
+    const dateFilter = queryOptions?.dateFilter !== 'false';
     const timeFilters = (listAll || !dateFilter) ? {} : fetchCurrentTimeFilters(getState().datepicker);
     const providerFilter = get(queryOptions, 'provider');
     const urlPath = `collections${(isEmpty(timeFilters) && providerFilter === undefined) || listAll ? '' : '/active'}`;

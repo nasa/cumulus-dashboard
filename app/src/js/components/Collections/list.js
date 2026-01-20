@@ -53,7 +53,7 @@ const CollectionList = ({
   const { startDateTime, endDateTime } = datepicker || {};
   const hasTimeFilter = startDateTime || endDateTime;
   const { count, queriedAt } = list.meta;
-  const [dateFilter, setDateFilter] = useState(['true', undefined].includes(queryParams?.dateFilter));
+  const [dateFilter, setDateFilter] = useState(queryParams?.dateFilter !== 'false');
 
   useEffect(() => {
     dispatch(getCumulusInstanceMetadata());
