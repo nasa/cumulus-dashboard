@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Breaking Changes
+
+This version of the dashboard requires Cumulus API >= v21.4.0 (TBD)
+
+### Changed
+
+- **CUMULUS-4484**
+  - Updated bulk granule operation modal to:
+    - Support `granuleInventoryReportName` and `s3GranuleIdInputFile` in the request payload.
+    - Accept a list of granule IDs instead of granule objects in the request payload.
 - **CUMULUS-4484**
   - Change INITIAL_DATE_RANGE_IN_DAYS default value to 1
 - **CUMULUS-4189**

@@ -34,27 +34,38 @@ const bulkOperationsDefaultQuery = {
   index: '',
   query: '',
   granules: [],
-  meta: {}
+  granuleInventoryReportName: '',
+  s3GranuleIdInputFile: '',
+  meta: {},
+  queueUrl: '',
 };
 
 const bulkDeleteDefaultQuery = {
   index: '',
   query: '',
   granules: [],
+  granuleInventoryReportName: '',
+  s3GranuleIdInputFile: '',
   forceRemoveFromCmr: false
 };
 
 const bulkReingestDefaultQuery = {
   index: '',
   query: '',
-  granules: []
+  granules: [],
+  granuleInventoryReportName: '',
+  s3GranuleIdInputFile: '',
+  queueUrl: '',
 };
 
 const bulkRecoveryDefaultQuery = {
   workflowName: '',
   index: '',
   query: '',
-  granules: []
+  granules: [],
+  granuleInventoryReportName: '',
+  s3GranuleIdInputFile: '',
+  queueUrl: '',
 };
 
 const BulkGranule = ({

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
+import omitBy from 'lodash/omitBy';
+import isEmpty from 'lodash/isEmpty';
 
 import _config from '../../config';
 import DefaultModal from '../Modal/modal';
@@ -60,7 +62,7 @@ const BulkGranuleModal = ({
     let json;
     if (!inflight) {
       try {
-        json = JSON.parse(query);
+        json = omitBy(JSON.parse(query), isEmpty);
       } catch (jsonError) {
         return setErrorState(`Syntax error in JSON ${jsonError.message}`);
       }
@@ -154,7 +156,7 @@ const BulkGranuleModal = ({
           {selected &&
             <>
               <p>Selected granules:</p>
-              <p>[{selected.map((selection) => `{"granuleId": "${selection.granuleId}", "collectionId": "${selection.collectionId}"}`).join(', ')}]</p>
+              <p>[{selected.join(', ')}]</p>
             </>
           }
           <br/>

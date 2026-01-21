@@ -1,5 +1,4 @@
 import path from 'path';
-import pick from 'lodash/pick';
 import React from 'react';
 import { get } from 'object-path';
 import Collapsible from 'react-collapsible';
@@ -308,7 +307,7 @@ export const reingestAction = (granules, selectedGranules) => ({
   confirm: confirmReingest,
   className: 'button--reingest',
   getModalOptions: granuleModalJourney,
-  selected: selectedGranules.map((g) => pick(g, ['granuleId', 'collectionId']))
+  selected: selectedGranules.map((g) => g.granuleId)
 });
 
 export const bulkActions = (granules, config, selectedGranules) => [
@@ -344,7 +343,7 @@ export const bulkActions = (granules, config, selectedGranules) => [
         element='button'
         className='button button__bulkgranules button--green button--small form-group__element'
         confirmAction={true}
-        selected={selectedGranules.map((g) => pick(g, ['granuleId', 'collectionId']))}
+        selected={selectedGranules.map((g) => g.granuleId)}
       />
   },
   {
