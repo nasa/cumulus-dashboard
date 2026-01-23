@@ -173,7 +173,7 @@ const BulkGranuleModal = ({
           </form>
           {selectWorkflow &&
           <>
-            <h4 className="modal_subtitle">Then select workflow to rerun for all the selected granules.</h4>
+            <h4 className="modal_subtitle">Select a workflow to rerun for all selected granules. If no workflow is provided or selected, the latest workflow for each granule will be executed.</h4>
             {get(granulesExecutions, 'workflows.error') &&
               <ErrorReport report={`Failed to get workflows: ${get(granulesExecutions, 'workflows.error')}`}/>}
             <div className='modal__internal modal__formcenter'>
@@ -214,10 +214,7 @@ BulkGranuleModal.propTypes = {
   // whether query workflow options for the selected granule
   queryWorkflowOptions: PropTypes.bool,
   requestId: PropTypes.string,
-  selected: PropTypes.arrayOf(PropTypes.shape({
-    granuleId: PropTypes.string,
-    collectionId: PropTypes.string,
-  })),
+  selected: PropTypes.array,
   // whether select a workflow from dropdown
   selectWorkflow: PropTypes.bool,
   showModal: PropTypes.bool,
