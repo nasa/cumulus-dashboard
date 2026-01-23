@@ -342,7 +342,7 @@ const BulkGranule = ({
         >
           <h4 className="modal_subtitle">To run and complete your bulk reingest task:</h4>
           <ol>
-            <li>{granulesOrQueryText}.</li>
+            <li>{granulesOrQueryText}</li>
             <li>Then enter or select workflow to rerun for all the selected granules. The workflows listed are the
               intersection of the selected granules' workflows.</li>
             <li>Enter an optional queueUrl for the SQS queue used to schedule granule workflows.</li>

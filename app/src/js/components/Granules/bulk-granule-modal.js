@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 import omitBy from 'lodash/omitBy';
-import isEmpty from 'lodash/isEmpty';
 
 import _config from '../../config';
 import DefaultModal from '../Modal/modal';
@@ -62,7 +61,7 @@ const BulkGranuleModal = ({
     let json;
     if (!inflight) {
       try {
-        json = omitBy(JSON.parse(query), isEmpty);
+        json = omitBy(JSON.parse(query), (v) => v === '');
       } catch (jsonError) {
         return setErrorState(`Syntax error in JSON ${jsonError.message}`);
       }
