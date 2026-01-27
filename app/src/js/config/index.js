@@ -30,7 +30,14 @@ const baseConfig = {
   recent: moment().subtract(1, 'day').format(),
 
   // delay before UI/store updates after a successful command (ie PUT)
-  updateDelay: 1000
+  updateDelay: 1000,
+
+  // session duration limit
+  maxSessionDuration: 12 * 60 * 60 * 1000, // 12 hours in milliseconds
+
+  // inactivity limits
+  inactivityWarningLimit: 15 * 60 * 1000, // 15 minutes in milliseconds
+  inactivityLogoutLimit: 20 * 60 * 1000, // 20 minutes in milliseconds
 };
 
 // eslint-disable-next-line prefer-object-spread
