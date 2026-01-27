@@ -2,12 +2,10 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import { connect } from 'react-redux';
-import { decode as jwtDecode } from 'jsonwebtoken';
 import DefaultModal from '../Modal/modal';
-import { logout, refreshAccessToken } from '../../actions';
-
-export const INACTIVITY_LIMIT = 900000; // 15 minutes in milliseconds
-export const MODAL_TIMEOUT = 300000; // 5 minutes in milliseconds
+import { logout } from '../../actions';
+import { window } from '../../utils/browser';
+import _config from '../../config';
 
 const InactivityModal = ({
   title = 'Inactivity Warning',
@@ -15,84 +13,68 @@ const InactivityModal = ({
   dispatch,
   token,
 }) => {
-  const [hasModal, setHasModal] = useState(false);
+  const [isInactive, setIsInactive] = useState(false);
   const timerRef = useRef(null);
-  const modalTimeoutRef = useRef(null);
-
-  const clearTimers = useCallback(() => {
-    clearTimeout(timerRef.current);
-    clearTimeout(modalTimeoutRef.current);
-  }, []);
+  const logoutTimerRef = useRef(null);
 
   const handleLogout = useCallback(() => {
-    clearTimers();
     dispatch(logout()).then(() => {
       if (get(window, 'location.reload')) {
         window.location.reload();
       }
     });
-  }, [dispatch, clearTimers]);
+  }, [dispatch]);
 
-  const handleClose = useCallback(() => {
-    setHasModal(false);
-    clearTimers();
-  }, [clearTimers]);
+  const clearTimers = useCallback(() => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    if (logoutTimerRef.current) {
+      clearTimeout(logoutTimerRef.current);
+      logoutTimerRef.current = null;
+    }
+  }, []);
 
-  const resetTimer = useCallback(() => {
+  const resetActivity = useCallback(() => {
     if (!token) return;
 
-    setHasModal(false);
+    setIsInactive(false);
     clearTimers();
 
+    // Set timer for inactivity warning (15 minutes)
     timerRef.current = setTimeout(() => {
-      setHasModal(true);
-      modalTimeoutRef.current = setTimeout(() => {
-        handleLogout();
-      }, MODAL_TIMEOUT); // Logout after modal timeout
-    }, INACTIVITY_LIMIT); // Show modal after 5 minutes of inactivity
-  }, [handleLogout, clearTimers, token]);
+      setIsInactive(true);
 
-  const handleActivity = useCallback(() => {
-    resetTimer();
-  }, [resetTimer]);
+      // Set timer for logout (5 more minutes = 20 minutes total)
+      logoutTimerRef.current = setTimeout(() => {
+        handleLogout();
+      }, _config.inactivityLogoutLimit - _config.inactivityWarningLimit);
+    }, _config.inactivityWarningLimit);
+  }, [token, handleLogout, clearTimers]);
+
+  const handleClose = useCallback(() => {
+    resetActivity();
+  }, [resetActivity]);
 
   useEffect(() => {
     if (!token) {
       clearTimers();
-      setHasModal(false);
+      setIsInactive(false);
       return;
     }
 
     const events = ['mousemove', 'keydown', 'click', 'scroll'];
-    events.forEach((event) => window.addEventListener(event, handleActivity));
+    events.forEach((event) => window.addEventListener(event, resetActivity));
 
-    resetTimer();
+    // Start the timer initially
+    resetActivity();
 
     return () => {
-      events.forEach((event) => window.removeEventListener(event, handleActivity));
+      events.forEach((event) => window.removeEventListener(event, resetActivity));
       clearTimers();
     };
-  }, [handleActivity, resetTimer, token, clearTimers]);
-
-  useEffect(() => {
-    const checkTokenExpiration = () => {
-      if (!token || hasModal) return;
-
-      const jwtData = jwtDecode(token);
-      const tokenExpiration = get(jwtData, 'exp');
-      const currentTime = Math.ceil(Date.now() / 1000);
-
-      // Refresh if token expires in less than 25 minutes
-      if (tokenExpiration && (tokenExpiration - currentTime <= 1500)) {
-        dispatch(refreshAccessToken(token));
-      }
-    };
-
-    const interval = setInterval(checkTokenExpiration, 20 * 60 * 1000);
-    checkTokenExpiration();
-
-    return () => clearInterval(interval);
-  }, [token, hasModal, dispatch]);
+  }, [token, resetActivity, clearTimers]);
 
   if (!token) return null;
 
@@ -103,9 +85,10 @@ const InactivityModal = ({
       className="InactivityModal"
       onCancel={handleClose}
       onCloseModal={handleClose}
-      showModal={hasModal}
+      showModal={isInactive}
       hasConfirmButton={false}
-      hasCancelButton={false}
+      hasCancelButton={true}
+      cancelButtonText="Stay logged in"
       >
         {children}
         </DefaultModal>
