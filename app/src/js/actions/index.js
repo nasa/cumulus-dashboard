@@ -26,22 +26,13 @@ const {
 
 export const refreshAccessToken = (token) => (dispatch) => {
   const start = new Date();
-  log('REFRESH_TOKEN_INFLIGHT');
 
   // Check if session has exceeded 12-hour cap using token's iat claim
   const sessionStart = getSessionStart(token);
   const sessionDuration = sessionStart ? Date.now() - sessionStart : null;
-  console.log('[refreshAccessToken] Session check:', {
-    sessionStart,
-    sessionDuration,
-    maxSessionDuration,
-    exceededCap: sessionStart && sessionDuration > maxSessionDuration
-  });
 
   if (sessionStart && (Date.now() - sessionStart) > maxSessionDuration) {
     const error = new Error('Session has exceeded maximum duration of 12 hours');
-    log('REFRESH_TOKEN_ERROR', 'Session duration exceeded');
-    console.error('[refreshAccessToken] Session cap exceeded, rejecting refresh');
     dispatch({
       type: types.REFRESH_TOKEN_ERROR,
       error
@@ -57,22 +48,17 @@ export const refreshAccessToken = (token) => (dispatch) => {
     url: new URL('refresh', root).href,
     data: { token },
   });
-  console.log('[refreshAccessToken] Making refresh request to:', requestConfig.url);
 
   return axios(requestConfig)
     .then((response) => {
-      console.log('[refreshAccessToken] Refresh response:', response);
       const { body } = response;
       const duration = new Date() - start;
-      log('REFRESH_TOKEN', `${duration}ms`);
-      console.log('[refreshAccessToken] Success, new token:', body?.token ? 'present' : 'missing');
       return dispatch({
         type: types.REFRESH_TOKEN,
         token: body.token
       });
     })
     .catch(({ error }) => {
-      console.error('[refreshAccessToken] Refresh failed:', error);
       dispatch({
         type: types.REFRESH_TOKEN_ERROR,
         error
@@ -670,14 +656,11 @@ export const deleteToken = () => (dispatch, getState) => {
 };
 
 export const loginError = (error) => (dispatch) => {
-  console.error('[loginError] Login error occurred:', error);
   return dispatch(deleteToken())
     .then(() => {
-      console.log('[loginError] Token deleted, dispatching LOGIN_ERROR');
       return dispatch({ type: 'LOGIN_ERROR', error });
     })
     .then(() => {
-      console.log('[loginError] Redirecting to /auth');
       return historyPushWithQueryParams('/auth');
     });
 };
