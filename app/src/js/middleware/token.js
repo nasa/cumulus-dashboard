@@ -20,28 +20,48 @@ export const refreshTokenMiddleware = ({ dispatch, getState }) => (next) => (act
     // Bail out early if this is not a JWT value to preserve backwards
     // compatibility with API returning regular tokens
     if (!jwtData) {
+      console.log('[refreshTokenMiddleware] Not a JWT, skipping');
       return next(action);
     }
 
     const tokenExpiration = get(jwtData, 'exp');
     if (!tokenExpiration) {
+      console.error('[refreshTokenMiddleware] No expiration in token, logging out');
       return dispatch(loginError('Invalid token'));
     }
 
+    const currentTime = Math.ceil(Date.now() / 1000);
+    const timeLeft = tokenExpiration - currentTime;
+
+    console.log('[refreshTokenMiddleware] Token check:', {
+      tokenExpiration,
+      currentTime,
+      timeLeft,
+      refreshInterval,
+      needsRefresh: timeLeft <= refreshInterval
+    });
+
     // tokenExpiration = date seconds since epoch
     // Math.ceil(Date.now() / 1000) = now in seconds since epoch
-    if ((tokenExpiration - Math.ceil(Date.now() / 1000)) <= refreshInterval) {
+    if (timeLeft <= refreshInterval) {
+      console.log('[refreshTokenMiddleware] Token needs refresh');
       const inflight = get(getState(), 'api.tokens.inflight');
       if (!inflight) {
+        console.log('[refreshTokenMiddleware] Starting refresh');
         deferred = createDeferred();
         return dispatch(refreshAccessToken(token))
           .then(() => {
+            console.log('[refreshTokenMiddleware] Refresh completed successfully');
             deferred.resolve();
             return next(action);
           })
-          .catch(() => dispatch(loginError('Session expired')));
+          .catch((error) => {
+            console.error('[refreshTokenMiddleware] Refresh failed, logging out:', error);
+            return dispatch(loginError('Session expired'));
+          });
       }
 
+      console.log('[refreshTokenMiddleware] Refresh already in flight, waiting');
       return deferred.promise.then(() => next(action));
     }
   }
