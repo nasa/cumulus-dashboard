@@ -62,31 +62,14 @@ const SessionTimeoutModal = ({
       const sessionDuration = sessionStart ? Date.now() - sessionStart : 0;
       const sessionCapReached = sessionDuration > _config.maxSessionDuration;
 
-      console.log('[SessionTimeoutModal] Check:', {
-        secondsLeft,
-        sessionStart,
-        sessionDuration: sessionDuration / 1000 / 60 / 60, // in hours
-        maxDuration: _config.maxSessionDuration / 1000 / 60 / 60, // in hours
-        sessionCapReached,
-        hasModal,
-        modalClosed
-      });
-
       // If token has already expired and session cap reached, just log out
       if (secondsLeft <= 0 && sessionCapReached) {
-        console.log('[SessionTimeoutModal] Token expired + session cap reached, logging out');
         handleLogout();
         return;
       }
 
       // If token is expiring soon (but not expired yet)
       if (secondsLeft <= SESSION_WARNING_THRESHOLD && secondsLeft > 0) {
-        console.log('[SessionTimeoutModal] Token expiring soon:', {
-          secondsLeft,
-          sessionCapReached,
-          refreshAttemptedRef: refreshAttemptedRef.current,
-          hasModal
-        });
 
         // If session cap not reached, auto-refresh
         // Note: Inactivity is handled separately by InactivityModal
@@ -95,8 +78,6 @@ const SessionTimeoutModal = ({
           refreshAttemptedRef.current = true;
           dispatch(refreshAccessToken(token))
             .then(() => {
-              // Reset the flag after successful refresh
-              console.log('[SessionTimeoutModal] Auto-refresh succeeded');
               refreshAttemptedRef.current = false;
             })
             .catch((error) => {
@@ -106,7 +87,6 @@ const SessionTimeoutModal = ({
             });
         } else if (sessionCapReached && !hasModal) {
           // If session cap reached but token still valid, show modal to give user a chance to re-login
-          console.log('[SessionTimeoutModal] Session cap reached, showing modal');
           setHasModal(true);
         }
       }
