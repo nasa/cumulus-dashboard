@@ -42,9 +42,7 @@ export const refreshTokenMiddleware = ({ dispatch, getState }) => (next) => (act
             deferred.resolve();
             return next(action);
           })
-          .catch((error) => {
-            return dispatch(loginError('Session expired'));
-          });
+          .catch(() => dispatch(loginError('Session expired')));
       }
 
       return deferred.promise.then(() => next(action));

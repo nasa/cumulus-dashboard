@@ -70,7 +70,6 @@ const SessionTimeoutModal = ({
 
       // If token is expiring soon (but not expired yet)
       if (secondsLeft <= SESSION_WARNING_THRESHOLD && secondsLeft > 0) {
-
         // If session cap not reached, auto-refresh
         // Note: Inactivity is handled separately by InactivityModal
         if (!sessionCapReached && !refreshAttemptedRef.current && !hasModal) {
