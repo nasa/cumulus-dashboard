@@ -36,7 +36,7 @@ Setting the following environment variables can override the default values.
 | LABELS | Select `daac` localization. | *daac* |
 | STAGE | Identifier displayed at top of dashboard page: e.g. PROD, UAT | *development* |
 | KIBANAROOT | \<optional\>  Points to a Kibana endpoint. | |
-| INITIAL_DATE_RANGE_IN_DAYS| \<optional\> Number of days to load up before at start | |
+| INITIAL_DATE_RANGE_IN_DAYS| \<optional\> Number of days to load up before at start | *1* |
 | USE_UTC_TIME_FORMAT| The table's timestamp column's time display format. Expected value is UTC. | |
 | ESTIMATE_TABLE_ROW_COUNT | \<optional\> Toggles estimated row count for Granule and Execution tables | true |
 
@@ -216,7 +216,7 @@ Serve the cumulus API (separate terminal)
 
 Serve the dashboard web application (another terminal)
 ```bash
-  [HIDE_PDR=false ENABLE_RECOVERY=true APIROOT=http://localhost:5001] npm run serve
+  [HIDE_PDR=false ENABLE_RECOVERY=true INITIAL_DATE_RANGE_IN_DAYS=All APIROOT=http://localhost:5001] npm run serve
 ```
 
 If you're just testing dashboard code, you can generally run all of the above commands as a single docker-compose stack.

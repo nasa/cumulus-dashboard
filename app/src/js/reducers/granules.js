@@ -152,7 +152,7 @@ export default createReducer(initialState, {
   [SEARCH_GRANULES]: (state, action) => {
     state.list.params.prefix = action.infixBoolean ? null : action.xfix;
     state.list.params.infix = action.infixBoolean ? action.xfix : null;
-    state.list.params.archived = action.archived;
+    state.list.params.archived = action.archived === false ? 'false' : null;
   },
   [CLEAR_GRANULES_SEARCH]: (state) => {
     // in general, we want to clear both prefix and infix

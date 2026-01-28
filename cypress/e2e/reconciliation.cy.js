@@ -82,7 +82,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
     it('should show Search and Dropdown filters in URL', () => {
       cy.visit('/reconciliation-reports');
       cy.get('.search').as('search');
-      cy.get('@search').should('be.visible').click().type('inventoryReport-2020');
+      cy.get('@search').should('be.visible').click().type('inventoryReport-2020{enter}');
 
       cy.get('.filter-type .rbt-input-main').as('type-input');
       cy.get('@type-input').should('be.visible').click({ force: true }).type('invent{enter}');
@@ -103,7 +103,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.visit('/reconciliation-reports');
       cy.get('[data-value="inventoryReport-2020/01/14T202529026"]').find('.button__row--delete').click({ force: true });
 
-      cy.get('.table .tbody .tr').should('have.length', 5);
+      cy.get('.table .tbody .tr').should('have.length', 4);
       cy.get('[data-value="inventoryReport-2020/01/14T202529026"]')
         .should('not.exist');
     });
@@ -477,7 +477,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.visit('/reconciliation-reports/report/inventoryReport-20200114T205238781');
 
       cy.get('.search').as('search');
-      cy.get('@search').should('be.visible').click().type('MOD09GQ');
+      cy.get('@search').should('be.visible').click().type('MOD09GQ{enter}');
 
       /** Table Cards **/
 
