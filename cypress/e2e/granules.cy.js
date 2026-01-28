@@ -195,7 +195,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('.table .tbody .tr').as('list');
       cy.get('@list').should('have.length', 15);
       cy.get('@granulesListFixture').its('results').then((results) => {
-        const duplicateGranules = results.filter((g) => g.producerGranuleId === 'MOD09GQ.A1657416.CbyoRi.006.9697917818587');
+        const duplicateGranules = results.filter((g) => g.producerGranuleId === 'MOD09GQ.A1657416.CbyoRi.006.9697917818588');
         expect(duplicateGranules.length).to.equal(3);
       });
     });

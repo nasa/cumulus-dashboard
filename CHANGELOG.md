@@ -19,6 +19,7 @@ This version of the dashboard requires Cumulus API >= v21.4.0 (TBD)
     - Accept a list of granule IDs instead of granule objects in the request payload.
   - Updated the dashboard to use alpha version `@cumulus/api@21.3.1-alpha.0` and
     `@cumulus/aws-client@21.3.1-alpha.0`
+  - Updated the Cypress granules fixture due to the localApi update.
 - **CUMULUS-4484**
   - Change INITIAL_DATE_RANGE_IN_DAYS default value to 1
 - **CUMULUS-4189**

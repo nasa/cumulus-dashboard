@@ -387,7 +387,7 @@ Create a PR for the `release-vX.X.X` branch against the `develop` branch. Verify
 
 ### 9. Create a pull request against the master branch
 
-Create a PR for the `develop` branch against the `master` branch. Verify that the Earthdata Bamboo CI build for the PR succeeds and then merge to `master`.  Do not create a squash merge, but use a merge commit.
+Create a PR for the `develop` branch against the `master` branch. Verify that the Earthdata Bamboo CI build for the PR succeeds and then merge to `master`.  **Do not create a squash merge, but use a merge commit.**
 
 ### 10. Create a git tag for the release
 
