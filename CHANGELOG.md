@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- **CUMULUS-4087**
+  - Implemented automatic session extension for the Cumulus Dashboard. The JWT token and session will be automatically extended as long as the user is active. There is a corresponding CUMULUS-4087 PR for the Cumulus API to add support for this.
 - **CUMULUS-4484**
   - Change INITIAL_DATE_RANGE_IN_DAYS default value to 1
 - **CUMULUS-4189**
