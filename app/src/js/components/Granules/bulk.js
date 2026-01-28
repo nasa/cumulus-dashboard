@@ -390,10 +390,7 @@ BulkGranule.propTypes = {
   className: PropTypes.string,
   element: PropTypes.string,
   granules: PropTypes.object,
-  selected: PropTypes.arrayOf(PropTypes.shape({
-    granuleId: PropTypes.string,
-    collectionId: PropTypes.string,
-  }))
+  selected: PropTypes.array,
 };
 
 export { BulkGranule };
