@@ -26,6 +26,7 @@ const {
 export const refreshAccessToken = (token) => (dispatch) => {
   // Check if session has exceeded 12-hour cap using token's iat claim
   const sessionStart = getSessionStart(token);
+
   if (sessionStart && (Date.now() - sessionStart) > maxSessionDuration) {
     const error = new Error('Session has exceeded maximum duration of 12 hours');
     dispatch({
