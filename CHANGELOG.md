@@ -18,6 +18,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-4451**
   - Disable sort executions by name to avoid slow query in Postgres
   - Set default sort order for executions to -updatedAt to avoid slow query in Postgres
+
+### Fixed
+
 - **CUMULUS-4461**
   - Address qs vulnerability by overriding its version to ^6.14.1
 
