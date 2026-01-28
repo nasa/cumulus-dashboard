@@ -14,6 +14,7 @@ const webpack = require('@cypress/webpack-preprocessor');
 const cypressFailed = require('cypress-failed-log/src/failed');
 const { testUtils } = require('@cumulus/api');
 const { createJwtToken } = require('@cumulus/api/lib/token');
+const { sign: jwtSign } = require('jsonwebtoken');
 const webpackCommon = require('../../webpack.common');
 
 const { seedEverything } = require('./seedEverything');
@@ -45,6 +46,21 @@ module.exports = (on) => {
       });
     },
     generateJWT (options) {
+      // Use this method temporarily to generate JWTs with custom iat claims.
+      // The new createJwtToken method from Cumulus API has not been merged yet.
+      // once CUMULUS-4087 for the cumulus API has been merged, createJwtToken will support iat claims directly.
+      if (options.issuedAtTime !== undefined) {
+        const token = jwtSign({
+          exp: options.expirationTime,
+          iat: options.issuedAtTime,
+          accessToken: options.accessToken || 'fake-access-token',
+          username: options.username || 'testUser',
+        }, process.env.TOKEN_SECRET, {
+          algorithm: 'HS256',
+        });
+        return token;
+      }
+      // use the standard Cumulus function as a fallback
       return createJwtToken(options);
     },
     log (message) {
