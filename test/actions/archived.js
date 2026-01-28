@@ -97,3 +97,17 @@ test('listExecutionsByGranule calls the api with no archived element if archived
   const dispatchedAction = store.getActions()[0];
   t.false('archived' in dispatchedAction.config.params);
 });
+
+test('listExecutions calls the api with default sort_key ["-updatedAt"].', (t) => {
+  const testState = { ...initialState };
+  testState.startDateTime = null;
+  testState.endDateTime = null;
+
+  const store = mockStore({
+    datepicker: testState
+  });
+
+  store.dispatch(listExecutions({}));
+  const dispatchedAction = store.getActions()[0];
+  t.deepEqual(dispatchedAction.config.params.sort_key, ["-updatedAt"]);
+});

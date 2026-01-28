@@ -17,10 +17,13 @@ test('verify initial state', (t) => {
 });
 
 test('reducer sets initial state to have no set start/end times.', (t) => {
+  const now = Date.now();
   const actual = reducer(undefined, { type: 'ANY' });
   t.is(actual.dateRange.label, 'Custom');
   t.is(actual.dateRange.value, 'Custom');
-  t.is(actual.startDateTime, null);
+  // Check startDateTime is ~1 day ago
+  t.true(actual.startDateTime <= now && actual.startDateTime > now - msPerDay -1000, 
+    `startDateTime ${actual.startDateTime} should be within last 24 hours roughly`);
   t.is(actual.endDateTime, null);
   t.is(actual.hourFormat, '12HR');
 });

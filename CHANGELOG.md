@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v14.2.0] - 2026-01-27
+
+### Changed
+
+- **CUMULUS-4484**
+  - Change INITIAL_DATE_RANGE_IN_DAYS default value to 1
+- **CUMULUS-4189**
+  - Added search button and removed  dispatching search/url update on every keystroke
+- **CUMULUS-4451**
+  - Disable sort executions by name to avoid slow query in Postgres
+  - Set default sort order for executions to -updatedAt to avoid slow query in Postgres
+
+### Fixed
+
+- **CUMULUS-4461**
+  - Address qs vulnerability by overriding its version to ^6.14.1
+
 ## [v14.1.0] - 2025-12-22
 
 ### Added
@@ -1571,7 +1588,8 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
-  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v14.1.0...HEAD
+  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v14.2.0...HEAD
+  [v14.2.0]: https://github.com/nasa/cumulus-dashboard/compare/v14.1.0...v14.2.0
   [v14.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v14.0.0...v14.1.0
   [v14.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.3.1...v14.0.0
   [v13.3.1]: https://github.com/nasa/cumulus-dashboard/compare/v13.3.0...v13.3.1

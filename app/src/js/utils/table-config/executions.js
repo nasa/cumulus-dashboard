@@ -112,7 +112,8 @@ export const tableColumns = ({ dispatch }) => ([
     accessor: 'name',
     width: 150,
     Cell: ({ row: { original: { arn, name } } }) => ( // eslint-disable-line react/prop-types
-      <Link to={(location) => ({ pathname: `/executions/execution/${arn}`, search: getPersistentQueryParams(location) })} title={name}>{name}</Link>)
+      <Link to={(location) => ({ pathname: `/executions/execution/${arn}`, search: getPersistentQueryParams(location) })} title={name}>{name}</Link>),
+    disableSortBy: true
   },
   {
     Header: 'Progress',
