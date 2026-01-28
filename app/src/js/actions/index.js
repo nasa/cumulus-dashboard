@@ -11,7 +11,6 @@ import { configureRequest } from './helpers';
 import _config from '../config';
 import { getCollectionId, collectionNameVersion } from '../utils/format';
 import { fetchCurrentTimeFilters } from '../utils/datepicker';
-import log from '../utils/log';
 import * as types from './types';
 import { historyPushWithQueryParams } from '../utils/url-helper';
 import { getSessionStart } from '../utils/auth';
@@ -25,12 +24,8 @@ const {
 } = _config;
 
 export const refreshAccessToken = (token) => (dispatch) => {
-  const start = new Date();
-
   // Check if session has exceeded 12-hour cap using token's iat claim
   const sessionStart = getSessionStart(token);
-  const sessionDuration = sessionStart ? Date.now() - sessionStart : null;
-
   if (sessionStart && (Date.now() - sessionStart) > maxSessionDuration) {
     const error = new Error('Session has exceeded maximum duration of 12 hours');
     dispatch({
@@ -52,7 +47,6 @@ export const refreshAccessToken = (token) => (dispatch) => {
   return axios(requestConfig)
     .then((response) => {
       const { body } = response;
-      const duration = new Date() - start;
       return dispatch({
         type: types.REFRESH_TOKEN,
         token: body.token
@@ -655,15 +649,9 @@ export const deleteToken = () => (dispatch, getState) => {
     .catch(() => dispatch({ type: types.DELETE_TOKEN }));
 };
 
-export const loginError = (error) => (dispatch) => {
-  return dispatch(deleteToken())
-    .then(() => {
-      return dispatch({ type: 'LOGIN_ERROR', error });
-    })
-    .then(() => {
-      return historyPushWithQueryParams('/auth');
-    });
-};
+export const loginError = (error) => (dispatch) => dispatch(deleteToken())
+  .then(() => dispatch({ type: 'LOGIN_ERROR', error }))
+  .then(() => historyPushWithQueryParams('/auth'));
 
 export const getSchema = (type) => ({
   [CALL_API]: {
