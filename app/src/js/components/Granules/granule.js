@@ -251,6 +251,7 @@ function GranuleOverview({ skipReloadOnMount = false }) {
     get(granules.removed, [granuleId, 'error']),
     get(granules.deleted, [granuleId, 'error']),
     get(recoveryStatusMap, [granuleId, 'error']),
+    (get(granules.map, [granuleId, 'data', 'error', 'Cause']) !== '"None"') ? get(granules.map, [granuleId, 'data', 'error']) : undefined,
   ].filter(Boolean);
 
   if (!granuleRecord || (granuleRecord.inflight && !granule)) return <Loading />;
