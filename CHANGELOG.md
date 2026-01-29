@@ -20,6 +20,7 @@ This version of the dashboard requires Cumulus API >= v21.4.0 (TBD)
   - Updated the dashboard to use alpha version `@cumulus/api@21.3.1-alpha.0` and
     `@cumulus/aws-client@21.3.1-alpha.0`
   - Updated the Cypress granules fixture due to the localApi update.
+  - Updated the Cypress seed function to upload the reconciliation report in its original format.
 
 ## [v14.2.0] - 2026-01-27
 

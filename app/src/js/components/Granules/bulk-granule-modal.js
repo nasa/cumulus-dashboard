@@ -70,8 +70,8 @@ const BulkGranuleModal = ({
   }
 
   function queryGranulesWorkflows(queryParams) {
-    const { granules, index, query: esQuery } = queryParams;
-    if ((index && esQuery) || granules.length > 0) {
+    const { granules, index, query: esQuery, granuleInventoryReportName, s3GranuleIdInputFile } = queryParams;
+    if ((index && esQuery) || granules.length > 0 || granuleInventoryReportName || s3GranuleIdInputFile) {
       dispatch(getGranulesWorkflows(queryParams));
     }
   }
