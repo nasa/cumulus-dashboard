@@ -13,3 +13,8 @@ Addresses [CUMULUS-XX: Develop amazing new feature](https://bugs.earthdata.nasa.
 - [ ] Unit tests
 - [ ] Adhoc testing
 - [ ] Integration tests
+
+---
+📝 **Note:**
+For most pull requests, please **Squash and merge** to maintain a clean and readable commit history.
+For release PRs, a merge commit may be needed; please follow the release instructions.
