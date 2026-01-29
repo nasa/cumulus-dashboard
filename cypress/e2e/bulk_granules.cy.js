@@ -127,6 +127,40 @@ describe('Dashboard Bulk Granules', () => {
       cy.contains('button', 'Go To Operations');
     });
 
+    it('handles successful bulk granule reingest request with a granule inventory report', () => {
+      const asyncOperationId = Math.random().toString(36).substring(2, 15);
+
+      cy.intercept('POST', '/granules/bulkReingest', {
+        id: asyncOperationId
+      }).as('postBulkReingest');
+
+      cy.visit('/granules');
+
+      cy.contains('button', 'Granule Actions').click();
+      cy.contains('button', 'Run Bulk Granules').click();
+
+      cy.get('.modal-body').contains('button', 'Run Bulk Reingest').click();
+
+      cy.get('.bulk_granules--reingest')
+        .within(() => {
+          cy.get('.ace_editor[id^="run-bulk-granule"]', { timeout: 10000 });
+          cy.editJsonTextarea({ data: { granuleInventoryReportName: 'GranuleList100220' }, update: true });
+
+          cy.get('.form__dropdown .dropdown__element input').as('workflow-input');
+          cy.get('@workflow-input').click({ force: true }).type('IngestAndPublish', { force: true }).type('{enter}');
+          cy.contains('.dropdown__element', 'IngestAndPublishGranule', { timeout: 10000 }).click({ force: true });
+
+          cy.get('.form__dropdown .dropdown__element').should('contain.text', 'IngestAndPublishGranule');
+          cy.contains('button', 'Cancel Bulk Reingest');
+          cy.contains('button', 'Run Bulk Reingest').click();
+        });
+
+      cy.wait('@postBulkReingest');
+      cy.contains('p', asyncOperationId);
+      cy.contains('button', 'Close');
+      cy.contains('button', 'Go To Operations');
+    });
+
     it('handles a successful bulk granule recovery request', () => {
       const asyncOperationId = Math.random().toString(36).substring(2, 15);
 
