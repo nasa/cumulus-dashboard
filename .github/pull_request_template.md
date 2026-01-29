@@ -17,4 +17,4 @@ Addresses [CUMULUS-XX: Develop amazing new feature](https://bugs.earthdata.nasa.
 ---
 📝 **Note:**
 For most pull requests, please **Squash and merge** to maintain a clean and readable commit history.
-For release PRs, a merge commit may be needed; please follow the release instructions.
+For release pull requests, a merge commit may be needed; please follow the release instructions.
