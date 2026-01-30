@@ -29,18 +29,13 @@ const ExecutionsList = ({
   executions
 }) => {
   const { params } = match || {};
-  const { collectionId, granuleId } = params;
+  const { granuleId } = params;
   const { map } = executions || {};
   const granuleExecutionslist = map[granuleId] || {};
   const { meta } = granuleExecutionslist;
 
   const payload = {
-    granules: [
-      {
-        granuleId: decodeURIComponent(granuleId),
-        collectionId: decodeURIComponent(collectionId)
-      }
-    ],
+    granules: [decodeURIComponent(granuleId)],
   };
 
   function renderRowSubComponent(row) {

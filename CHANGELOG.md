@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-4298**
   - Added checkbox to exclude collections from date filtering.
 
+### Breaking Changes
+
+This version of the dashboard requires Cumulus API >= v21.4.0 (TBD)
+
+### Changed
+
+- **CUMULUS-4484**
+  - Updated bulk granule operation modal to:
+    - Support `granuleInventoryReportName` and `s3GranuleIdInputFile` in the request payload.
+    - Accept a list of granule IDs instead of granule objects in the request payload.
+  - Updated the dashboard to use alpha version `@cumulus/api@21.3.1-alpha.0` and
+    `@cumulus/aws-client@21.3.1-alpha.0`
+  - Updated the Cypress granules fixture due to the localApi update.
+  - Updated the Cypress seed function to upload the reconciliation report in its original format.
+
 ## [v14.2.0] - 2026-01-27
 
 ### Changed

@@ -17,10 +17,7 @@ const granulesExecutions = {
 const dispatch = () => {};
 
 test('Renders successful results with multiple granules', (t) => {
-  const selected = [
-    { granuleId: 'granule-a', collectionId: 'collection-a'},
-    { granuleId: 'granule-b', collectionId: 'collection-b'},
-  ];
+  const selected = ['granule-a', 'granule-b'];
 
   const { container } = render(
     <BatchReingestConfirmContent
@@ -37,9 +34,7 @@ test('Renders successful results with multiple granules', (t) => {
 
 
 test('Renders successful results with a single granule', (t) => {
-  const selected = [
-    { granuleId: 'granule-a', collectionId: 'collection-a'},
-  ];
+  const selected = ['granule-a'];
 
   const { container } = render(
     <BatchReingestConfirmContent
@@ -56,7 +51,7 @@ test('Renders successful results with a single granule', (t) => {
 
 test('Abbreviates when number selected is greater than the maxDisplayed', (t) => {
   const selected = Array.from(Array(maxDisplayed + 5).keys()).map(
-    (t) => ({ granuleId: `granule-${t}`, collectionId: `collection-${t}` })
+    (t) => (`granule-${t}`)
   );
 
   const { container } = render(
