@@ -1146,5 +1146,38 @@ describe('Dashboard Granules Page', () => {
       cy.get('.search__tip').should('not.exist');
       cy.get('.search__error').should('be.visible');
     });
+
+    it('Should have error and error type columns available to toggle and display correctly', () => {
+      cy.visit('/granules');
+      cy.contains('.table__filters .button__filter', 'Show/Hide Columns').click();
+      cy.get('.table__filters--collapse').should('be.visible');
+
+      cy.contains('.table__filters--filter label', /^Error Type$/).find('span').click();
+      cy.contains('.table__filters--filter label', /^Error$/).find('span').click();
+
+      cy.get('.button__apply-filter').click();
+
+      const noErrorGranuleID = 'MOD09GQ.A1530852.CljGDp.006.2163412421938';
+      const errorGranuleID = 'MOD09GQ.A2417309.YZ9tCV.006.4640974889044_ca2a8dfe';
+      cy.get(`[data-value="${noErrorGranuleID}"]`).children().as('noErrorColumns');
+      cy.get('@noErrorColumns').eq(4).invoke('text').should('be.eq', '--');
+      cy.get('@noErrorColumns').eq(5).invoke('text').should('be.eq', '--');
+      cy.get(`[data-value="${errorGranuleID}"]`).children().as('errorColumns');
+      cy.get('@errorColumns').eq(4).invoke('text').should('be.eq', 'UnexpectedFileSize');
+      cy.get('@errorColumns').eq(5).invoke('text').should('match', /errorMessage/);
+    });
+
+    it('Should display error if avaialbe in granule overview page', () => {
+      const noErrorGranuleID = 'MOD09GQ.A1530852.CljGDp.006.2163412421938';
+      const errorGranuleID = 'MOD09GQ.A2417309.YZ9tCV.006.4640974889044_ca2a8dfe';
+      cy.visit(`/granules/granule/${errorGranuleID}`);
+      cy.get('.heading--large').should('have.text', `Granule: ${errorGranuleID}`);
+      cy.get('.error__report').should('be.visible');
+      cy.get('.error__report').should('contain.text', 'errorMessage');
+
+      cy.visit(`/granules/granule/${noErrorGranuleID}`);
+      cy.get('.heading--large').should('have.text', `Granule: ${noErrorGranuleID}`);
+      cy.get('.error__report').should('not.exist');
+    });
   });
 });
