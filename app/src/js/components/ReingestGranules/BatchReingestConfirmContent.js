@@ -28,7 +28,7 @@ const BatchReingestConfirmContent = ({
   const displayedItems = () => {
     const items = [];
     for (let i = 0; i < Math.min(selected.length, maxDisplayed); i++) {
-      items.push(<li key={i}>{selected[i].granuleId}</li>);
+      items.push(<li key={i}>{selected[i]}</li>);
     }
     if (selected.length > maxDisplayed) {
       items.push(<li key={maxDisplayed}>and {selected.length - maxDisplayed} more.</li>);
@@ -90,10 +90,7 @@ BatchReingestConfirmContent.propTypes = {
   onChange: PropTypes.func,
   granulesExecutions: PropTypes.object,
   dispatch: PropTypes.func,
-  selected: PropTypes.arrayOf(PropTypes.shape({
-    granuleId: PropTypes.string,
-    collectionId: PropTypes.string,
-  })),
+  selected: PropTypes.array,
 };
 
 export { BatchReingestConfirmContent };
