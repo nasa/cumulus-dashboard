@@ -161,7 +161,7 @@
     "jquery": "^3.6.0",
     "jsonwebtoken": "^9.0.0",
     "localized-strings": "^0.2.4",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "moment": "^2.29.4",
     "normalize-opentype.css": "^0.2.4",
     "normalize.css": "^8.0.1",
