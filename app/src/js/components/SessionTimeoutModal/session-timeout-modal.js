@@ -22,12 +22,20 @@ const SessionTimeoutModal = ({
   const [modalClosed, setModalClosed] = useState(false);
   const refreshAttemptedRef = useRef(false);
 
-  const handleLogout = useCallback(() => {
-    dispatch(logout()).then(() => {
+  const handleLogout = useCallback(async () => {
+    console.log('[SessionTimeoutModal] handleLogout called');
+    try {
+      await dispatch(logout());
+    } catch (e) {
+      console.error('[SessionTimeoutModal] Logout error:', e);
+    }
+    try {
       if (get(window, 'location.reload')) {
         window.location.reload();
       }
-    });
+    } catch (e) {
+      // Ignore reload errors in test environments
+    }
   }, [dispatch]);
 
   const handleClose = () => {
@@ -44,7 +52,7 @@ const SessionTimeoutModal = ({
   }, [token]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const checkTimeout = () => {
       if (!tokenExpiration || !token || modalClosed) {
         return;
       }
@@ -89,7 +97,10 @@ const SessionTimeoutModal = ({
           setHasModal(true);
         }
       }
-    }, 1000);
+    };
+
+    checkTimeout();
+    const interval = setInterval(checkTimeout, 1000);
 
     return () => clearInterval(interval);
   }, [tokenExpiration, token, hasModal, modalClosed, dispatch, handleLogout]);
@@ -106,6 +117,7 @@ const SessionTimeoutModal = ({
       hasCancelButton={true}
       cancelButtonText="Dismiss"
       confirmButtonText="Re-login"
+      animation={process.env.NODE_ENV !== 'test'}
     >
       {children}
     </DefaultModal>
