@@ -47,10 +47,10 @@ export const refreshAccessToken = (token) => (dispatch) => {
 
   return axios(requestConfig)
     .then((response) => {
-      const { body } = response;
+      const { data } = response;
       return dispatch({
         type: types.REFRESH_TOKEN,
-        token: body.token
+        token: data.token
       });
     })
     .catch(({ error }) => {
