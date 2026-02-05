@@ -16,7 +16,8 @@ const DefaultModal = ({
   hasConfirmButton = true,
   confirmButtonClass = 'button--submit',
   cancelButtonClass = 'button--cancel',
-  size = 'md'
+  size = 'md',
+  animation = true
 }) => {
   function handleCloseModal (e) {
     if (typeof onCloseModal === 'function') {
@@ -46,6 +47,7 @@ const DefaultModal = ({
       centered
       size={size}
       aria-labelledby={`modal__${className}`}
+      animation={animation}
     >
       <Modal.Header className={`${className}__header`} closeButton></Modal.Header>
       <Modal.Title id={`modal__${className}`} className={`${className}__title`}>
