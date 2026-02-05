@@ -6,6 +6,27 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+- **CUMULUS-4298**
+  - Added checkbox to exclude collections from date filtering.
+
+### Breaking Changes
+
+This version of the dashboard requires Cumulus API >= v21.4.0 (TBD)
+
+### Changed
+
+- **CUMULUS-4484**
+  - Updated bulk granule operation modal to:
+    - Support `granuleInventoryReportName` and `s3GranuleIdInputFile` in the request payload.
+    - Accept a list of granule IDs instead of granule objects in the request payload.
+  - Updated the dashboard to use alpha version `@cumulus/api@21.3.1-alpha.0` and
+    `@cumulus/aws-client@21.3.1-alpha.0`
+  - Updated the Cypress granules fixture due to the localApi update.
+  - Updated the Cypress seed function to upload the reconciliation report in its original format.
+
+## [v14.2.0] - 2026-01-27
+
+### Changed
 
 - **CUMULUS-4087**
   - Implemented automatic session extension for the Cumulus Dashboard. The JWT token and session will be automatically extended as long as the user is active. There is a corresponding CUMULUS-4087 PR for the Cumulus API to add support for this.
@@ -16,7 +37,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-4451**
   - Disable sort executions by name to avoid slow query in Postgres
   - Set default sort order for executions to -updatedAt to avoid slow query in Postgres
-  
+
+### Fixed
+
 - **CUMULUS-4461**
   - Address qs vulnerability by overriding its version to ^6.14.1
 
@@ -1584,7 +1607,8 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
-  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v14.1.0...HEAD
+  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v14.2.0...HEAD
+  [v14.2.0]: https://github.com/nasa/cumulus-dashboard/compare/v14.1.0...v14.2.0
   [v14.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v14.0.0...v14.1.0
   [v14.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.3.1...v14.0.0
   [v13.3.1]: https://github.com/nasa/cumulus-dashboard/compare/v13.3.0...v13.3.1

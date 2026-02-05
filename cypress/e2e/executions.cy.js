@@ -448,7 +448,7 @@ describe('Dashboard Executions Page', () => {
     it('Should search by unarchived or both as toggled', () => {
       const infixboth = '1aa3fbaa';
       const infixArchived = '1aa3fbaab';
-      const infixNotArchived = '1aa3fbaa';
+      const infixNotArchived = '1aa3fbaaaf01';
 
       cy.visit('/executions');
       cy.get('#chk_isArchivedSearch').should('not.be.checked');

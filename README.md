@@ -216,7 +216,7 @@ Serve the cumulus API (separate terminal)
 
 Serve the dashboard web application (another terminal)
 ```bash
-  [HIDE_PDR=false ENABLE_RECOVERY=true APIROOT=http://localhost:5001] npm run serve
+  [HIDE_PDR=false ENABLE_RECOVERY=true INITIAL_DATE_RANGE_IN_DAYS=All APIROOT=http://localhost:5001] npm run serve
 ```
 
 If you're just testing dashboard code, you can generally run all of the above commands as a single docker-compose stack.
@@ -387,7 +387,7 @@ Create a PR for the `release-vX.X.X` branch against the `develop` branch. Verify
 
 ### 9. Create a pull request against the master branch
 
-Create a PR for the `develop` branch against the `master` branch. Verify that the Earthdata Bamboo CI build for the PR succeeds and then merge to `master`.  Do not create a squash merge, but use a merge commit.
+Create a PR for the `develop` branch against the `master` branch. Verify that the Earthdata Bamboo CI build for the PR succeeds and then merge to `master`.  **Do not create a squash merge, but use a merge commit.**
 
 ### 10. Create a git tag for the release
 
