@@ -59,7 +59,7 @@ describe('Dashboard authentication', () => {
             store.dispatch(listGranules());
           });
         });
-        
+
         // Wait for async middleware, deleteToken, and redirect to complete
         cy.url({ timeout: 10000 }).should('include', '/auth');
 
@@ -100,7 +100,7 @@ describe('Dashboard authentication', () => {
             store.dispatch(listGranules());
           });
         });
-        
+
         // Wait for the refresh request to be made and fail
         cy.wait('@failedRefresh');
 

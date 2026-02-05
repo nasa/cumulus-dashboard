@@ -89,6 +89,7 @@ DefaultModal.propTypes = {
   confirmButtonClass: PropTypes.string,
   cancelButtonClass: PropTypes.string,
   size: PropTypes.string,
+  animation: PropTypes.bool,
 };
 
 export default DefaultModal;
