@@ -4,6 +4,7 @@ import { withRouter, Link, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { get } from 'object-path';
+import isEmpty from 'lodash/isEmpty';
 import {
   getGranule,
   getGranuleRecoveryStatus,
@@ -250,7 +251,7 @@ function GranuleOverview({ skipReloadOnMount = false }) {
     get(granules.removed, [granuleId, 'error']),
     get(granules.deleted, [granuleId, 'error']),
     get(recoveryStatusMap, [granuleId, 'error']),
-    (get(granules.map, [granuleId, 'data', 'error', 'Cause']) !== '"None"') ? get(granules.map, [granuleId, 'data', 'error']) : undefined,
+    (isEmpty(get(granules.map, [granuleId, 'data', 'error'])) || get(granules.map, [granuleId, 'data', 'error', 'Cause']) === 'None') ? undefined : get(granules.map, [granuleId, 'data', 'error']),
   ].filter(Boolean);
 
   if (!granuleRecord || (granuleRecord.inflight && !granule)) return <Loading />;

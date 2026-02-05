@@ -4,6 +4,7 @@ import { get } from 'object-path';
 import Collapsible from 'react-collapsible';
 import { Link } from 'react-router-dom';
 import noop from 'lodash/noop';
+import isEmpty from 'lodash/isEmpty';
 import {
   seconds,
   bool,
@@ -69,7 +70,7 @@ export const tableColumns = [
     Header: 'Error Type',
     accessor: (row) => get(row, 'error.Error', nullValue),
     Cell: ({ row: { original: { error } } }) => (
-      error.Cause === '"None"' ? nullValue : error.Error
+      (isEmpty(error) || error.Cause === 'None') ? nullValue : error.Error
     ),
     id: 'errorType',
     width: 100
@@ -79,7 +80,7 @@ export const tableColumns = [
     accessor: (row) => get(row, 'error.Cause', nullValue),
     id: 'error',
     Cell: ({ row: { original } }) => ( // eslint-disable-line react/prop-types
-      get(original, 'error.Cause', nullValue) === '"None"' ? nullValue : <ErrorReport report={get(original, 'error.Cause', nullValue)} truncate={true} disableScroll={true} />
+      (isEmpty(get(original, ['error'])) || get(original, ['error', 'Cause']) === 'None') ? nullValue : <ErrorReport report={get(original, 'error', nullValue)} truncate={true} disableScroll={true} />
     ),
     disableSortBy: true,
     width: 175
