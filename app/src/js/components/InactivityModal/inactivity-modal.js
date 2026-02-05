@@ -4,8 +4,9 @@ import get from 'lodash/get';
 import { connect } from 'react-redux';
 import DefaultModal from '../Modal/modal';
 import { logout } from '../../actions';
-import { window } from '../../utils/browser';
-import _config from '../../config';
+
+export const INACTIVITY_LIMIT = 900000; // 15 minutes in milliseconds
+export const MODAL_TIMEOUT = 300000; // 5 minutes in milliseconds
 
 const InactivityModal = ({
   title = 'Inactivity Warning',
@@ -13,68 +14,64 @@ const InactivityModal = ({
   dispatch,
   token,
 }) => {
-  const [isInactive, setIsInactive] = useState(false);
+  const [hasModal, setHasModal] = useState(false);
   const timerRef = useRef(null);
-  const logoutTimerRef = useRef(null);
+  const modalTimeoutRef = useRef(null);
+
+  const clearTimers = useCallback(() => {
+    clearTimeout(timerRef.current);
+    clearTimeout(modalTimeoutRef.current);
+  }, []);
 
   const handleLogout = useCallback(() => {
+    clearTimers();
     dispatch(logout()).then(() => {
       if (get(window, 'location.reload')) {
         window.location.reload();
       }
     });
-  }, [dispatch]);
-
-  const clearTimers = useCallback(() => {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-      timerRef.current = null;
-    }
-    if (logoutTimerRef.current) {
-      clearTimeout(logoutTimerRef.current);
-      logoutTimerRef.current = null;
-    }
-  }, []);
-
-  const resetActivity = useCallback(() => {
-    if (!token) return;
-
-    setIsInactive(false);
-    clearTimers();
-
-    // Set timer for inactivity warning (15 minutes)
-    timerRef.current = setTimeout(() => {
-      setIsInactive(true);
-
-      // Set timer for logout (5 more minutes = 20 minutes total)
-      logoutTimerRef.current = setTimeout(() => {
-        handleLogout();
-      }, _config.inactivityLogoutLimit - _config.inactivityWarningLimit);
-    }, _config.inactivityWarningLimit);
-  }, [token, handleLogout, clearTimers]);
+  }, [dispatch, clearTimers]);
 
   const handleClose = useCallback(() => {
-    resetActivity();
-  }, [resetActivity]);
+    setHasModal(false);
+    clearTimers();
+  }, [clearTimers]);
+
+  const resetTimer = useCallback(() => {
+    if (!token) return;
+
+    setHasModal(false);
+    clearTimers();
+
+    timerRef.current = setTimeout(() => {
+      setHasModal(true);
+      modalTimeoutRef.current = setTimeout(() => {
+        handleLogout();
+      }, MODAL_TIMEOUT); // Logout after modal timeout
+    }, INACTIVITY_LIMIT); // Show modal after 5 minutes of inactivity
+  }, [handleLogout, clearTimers, token]);
+
+  const handleActivity = useCallback(() => {
+    resetTimer();
+  }, [resetTimer]);
 
   useEffect(() => {
     if (!token) {
       clearTimers();
-      setIsInactive(false);
+      setHasModal(false);
       return;
     }
 
     const events = ['mousemove', 'keydown', 'click', 'scroll'];
-    events.forEach((event) => window.addEventListener(event, resetActivity));
+    events.forEach((event) => window.addEventListener(event, handleActivity));
 
-    // Start the timer initially
-    resetActivity();
+    resetTimer();
 
     return () => {
-      events.forEach((event) => window.removeEventListener(event, resetActivity));
+      events.forEach((event) => window.removeEventListener(event, handleActivity));
       clearTimers();
     };
-  }, [token, resetActivity, clearTimers]);
+  }, [handleActivity, resetTimer, token, clearTimers]);
 
   if (!token) return null;
 
@@ -85,10 +82,9 @@ const InactivityModal = ({
       className="InactivityModal"
       onCancel={handleClose}
       onCloseModal={handleClose}
-      showModal={isInactive}
+      showModal={hasModal}
       hasConfirmButton={false}
-      hasCancelButton={true}
-      cancelButtonText="Stay logged in"
+      hasCancelButton={false}
       >
         {children}
         </DefaultModal>
