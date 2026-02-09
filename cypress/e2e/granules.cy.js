@@ -1167,7 +1167,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('@errorColumns').eq(5).invoke('text').should('match', /errorMessage/);
     });
 
-    it('Should display error if avaialbe in granule overview page', () => {
+    it('Should display error if available in granule overview page', () => {
       const noErrorGranuleID = 'MOD09GQ.A1530852.CljGDp.006.2163412421938';
       const errorGranuleID = 'MOD09GQ.A2417309.YZ9tCV.006.4640974889044_ca2a8dfe';
       cy.visit(`/granules/granule/${errorGranuleID}`);
