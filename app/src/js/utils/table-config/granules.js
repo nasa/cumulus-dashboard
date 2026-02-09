@@ -69,8 +69,8 @@ export const tableColumns = [
   {
     Header: 'Error Type',
     accessor: (row) => get(row, 'error.Error', nullValue),
-    Cell: ({ row: { original: { error } } }) => (
-      (isEmpty(error) || /^("?)(None)\1$/.test(error.Cause)) ? nullValue : error.Error
+    Cell: ({ row: { original } }) => (
+      (isEmpty(get(original, ['error'])) || /^("?)(None)\1$/.test(get(original, ['error', 'Cause']))) ? nullValue : get(original, 'error.Error', nullValue)
     ),
     id: 'errorType',
     width: 100
