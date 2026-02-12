@@ -4,6 +4,7 @@ import { get } from 'object-path';
 import Collapsible from 'react-collapsible';
 import { Link } from 'react-router-dom';
 import noop from 'lodash/noop';
+import isEmpty from 'lodash/isEmpty';
 import {
   seconds,
   bool,
@@ -66,6 +67,25 @@ export const tableColumns = [
     )
   },
   {
+    Header: 'Error Type',
+    accessor: (row) => get(row, 'error.Error', nullValue),
+    Cell: ({ row: { original } }) => (
+      (isEmpty(get(original, ['error'])) || /^("?)(None)\1$/.test(get(original, ['error', 'Cause']))) ? nullValue : get(original, 'error.Error', nullValue)
+    ),
+    id: 'errorType',
+    width: 100
+  },
+  {
+    Header: 'Error',
+    accessor: (row) => get(row, 'error.Cause', nullValue),
+    id: 'error',
+    Cell: ({ row: { original } }) => ( // eslint-disable-line react/prop-types
+      (isEmpty(get(original, ['error'])) || /^("?)(None)\1$/.test(get(original, ['error', 'Cause']))) ? nullValue : <ErrorReport report={get(original, 'error', nullValue)} truncate={true} disableScroll={true} />
+    ),
+    disableSortBy: true,
+    width: 175
+  },
+  {
     Header: strings.collection_id,
     accessor: 'collectionId',
     // eslint-disable-next-line react/prop-types
@@ -113,7 +133,7 @@ export const tableColumns = [
   }
 ];
 
-export const defaultHiddenColumns = ['recoveryStatus'];
+export const defaultHiddenColumns = ['recoveryStatus', 'errorType', 'error'];
 
 export const errorTableColumns = [
   {
