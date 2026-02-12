@@ -26,20 +26,26 @@ const OAuth = ({
   const [token, setToken] = useState(null);
 
   useEffect(() => {
+    console.log('[OAuth] effect triggered - api.authenticated:', api.authenticated, 'token:', token);
     if (api.authenticated) {
+      console.log('[OAuth] User authenticated, setting token state and redirecting');
       dispatch(setTokenState(token));
       const { pathname } = location;
       if (pathname !== '/auth' && get(window, 'location.reload')) {
+        console.log('[OAuth] Reloading page after auth at pathname:', pathname);
         setTimeout(() => window.location.reload(), updateDelay);
       } else if (pathname === '/auth') {
+        console.log('[OAuth] Redirecting to home after auth');
         setTimeout(() => historyPushWithQueryParams('/'), updateDelay); // react isn't seeing this a function
       }
     }
   }, [api.authenticated, dispatch, location, token]);
 
   useEffect(() => {
+    console.log('[OAuth] queryParams changed:', queryParams);
     const { token: queryToken } = queryParams;
     if (queryToken) {
+      console.log('[OAuth] Found token in query params, dispatching login');
       setToken(queryToken);
       dispatch(login(queryToken));
     }
