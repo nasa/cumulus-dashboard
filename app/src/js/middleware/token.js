@@ -6,43 +6,47 @@ import { loginError, refreshAccessToken } from '../actions';
 import config from '../config';
 import { isValidApiRequestAction } from './validate';
 
-const refreshInterval = Math.ceil((config.updateInterval + 1000) / 1000);
-
 let deferred;
 export const refreshTokenMiddleware = ({ dispatch, getState }) => (next) => (action) => {
   if (isValidApiRequestAction(action)) {
     const token = get(getState(), 'api.tokens.token');
     if (!token) {
+      console.log('[refreshTokenMiddleware] No token found, skipping refresh');
       return next(action);
     }
 
     const jwtData = jwtDecode(token);
-    // Bail out early if this is not a JWT value to preserve backwards
-    // compatibility with API returning regular tokens
     if (!jwtData) {
+      console.log('[refreshTokenMiddleware] Invalid JWT data, skipping refresh');
       return next(action);
     }
 
     const tokenExpiration = get(jwtData, 'exp');
     if (!tokenExpiration) {
+      console.error('[refreshTokenMiddleware] No expiration found in token');
       return dispatch(loginError('Invalid token'));
     }
 
     const currentTime = Math.ceil(Date.now() / 1000);
     const timeLeft = tokenExpiration - currentTime;
+    console.log('[refreshTokenMiddleware] Token check - timeLeft:', timeLeft, 'seconds, refreshThreshold:', config.tokenRefreshThreshold);
 
-    // tokenExpiration = date seconds since epoch
-    // Math.ceil(Date.now() / 1000) = now in seconds since epoch
-    if (timeLeft <= refreshInterval) {
+
+    if (timeLeft <= config.tokenRefreshThreshold) {
+      console.log('[refreshTokenMiddleware] Token expiring soon, attempting refresh');
       const inflight = get(getState(), 'api.tokens.inflight');
       if (!inflight) {
         deferred = createDeferred();
         return dispatch(refreshAccessToken(token))
           .then(() => {
+            console.log('[refreshTokenMiddleware] Token refresh successful, proceeding with action');
             deferred.resolve();
             return next(action);
           })
-          .catch(() => dispatch(loginError('Session expired')));
+          .catch((error) => {
+            console.error('[refreshTokenMiddleware] Token refresh failed:', error);
+            return dispatch(loginError('Session expired'));
+          });
       }
 
       return deferred.promise.then(() => next(action));
