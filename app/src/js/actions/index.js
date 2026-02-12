@@ -640,20 +640,40 @@ export const login = (token) => ({
 
 export const deleteToken = () => (dispatch, getState) => {
   const token = getProperty(getState(), 'api.tokens.token');
-  if (!token) return Promise.resolve();
+  console.log('[deleteToken] Attempting to delete token from backend');
+  if (!token) {
+    console.log('[deleteToken] No token found in state, skipping deletion');
+    return Promise.resolve();
+  }
 
   const requestConfig = configureRequest({
     method: 'DELETE',
     url: new URL(`tokenDelete/${token}`, root).href
   });
+  console.log('[deleteToken] Calling DELETE /tokenDelete with URL:', requestConfig.url);
   return axios(requestConfig)
-    .then(() => dispatch({ type: types.DELETE_TOKEN }))
-    .catch(() => dispatch({ type: types.DELETE_TOKEN }));
+    .then(() => {
+      console.log('[deleteToken] Successfully deleted token from backend');
+      return dispatch({ type: types.DELETE_TOKEN });
+    })
+    .catch((error) => {
+      console.error('[deleteToken] Failed to delete token:', error);
+      return dispatch({ type: types.DELETE_TOKEN });
+    });
 };
 
-export const loginError = (error) => (dispatch) => dispatch(deleteToken())
-  .then(() => dispatch({ type: 'LOGIN_ERROR', error }))
-  .then(() => historyPushWithQueryParams('/auth'));
+export const loginError = (error) => (dispatch) => {
+  console.error('[loginError] Login failed with error:', error);
+  return dispatch(deleteToken())
+    .then(() => {
+      console.log('[loginError] Token deleted, dispatching LOGIN_ERROR and redirecting to /auth');
+      return dispatch({ type: 'LOGIN_ERROR', error });
+    })
+    .then(() => {
+      console.log('[loginError] Redirecting to auth page');
+      return historyPushWithQueryParams('/auth');
+    });
+};
 
 export const getSchema = (type) => ({
   [CALL_API]: {
