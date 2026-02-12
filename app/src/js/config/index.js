@@ -32,8 +32,21 @@ const baseConfig = {
   // delay before UI/store updates after a successful command (ie PUT)
   updateDelay: 1000,
 
+  // token refresh threshold - refresh token when this many seconds or less remain
+  tokenRefreshThreshold: 300, // 5 minutes
+
   // session duration limit
   maxSessionDuration: 12 * 60 * 60 * 1000, // 12 hours in milliseconds
+
+  // session warning threshold - show warning modal when session is within this many seconds of reaching the max session duration
+  sessionWarningThreshold: 20, // 20 minutes
+
+  // For deugging: set mockTokenExpiration to Unix timestamp (seconds) to simulate token expiration
+  // Set to a time in the future when you want the token to expire
+  mockTokenExpiration: null,
+
+  // For debugging: mock the session start time so session duration is calculated from "now"
+  mockSessionStart: null,
 
   // inactivity limits
   inactivityWarningLimit: 15 * 60 * 1000, // 15 minutes in milliseconds
