@@ -33,25 +33,21 @@ const baseConfig = {
   updateDelay: 1000,
 
   // token refresh threshold - refresh token when this many seconds or less remain
-  tokenRefreshThreshold: 300, // 5 minutes
+  tokenRefreshThresholdSeconds: 5 * 60, // 5 minutes
 
   // session duration limit
-  maxSessionDuration: 12 * 60 * 60 * 1000, // 12 hours in milliseconds
+  maxSessionDurationSeconds: 12 * 60 * 60, // 12 hours
 
   // session warning threshold - show warning modal when session is within
   // this many seconds of reaching the max session duration
-  sessionWarningThreshold: 20 * 60, // 20 minutes
+  sessionWarningThresholdSeconds: 20 * 60, // 20 minutes
 
-  // For deugging: set mockTokenExpiration to Unix timestamp (seconds) to simulate token expiration
+  // For debugging: set mockTokenExpirationSeconds (in seconds since Unix epoch) to simulate token expiration
   // Set to a time in the future when you want the token to expire
-  mockTokenExpiration: null,
+  mockTokenExpirationSeconds: null,
 
-  // For debugging: mock the session start time so session duration is calculated from "now"
-  mockSessionStart: null,
-
-  // inactivity limits
-  inactivityWarningLimit: 15 * 60 * 1000, // 15 minutes in milliseconds
-  inactivityLogoutLimit: 20 * 60 * 1000, // 20 minutes in milliseconds
+  // For debugging: mock the session start time (in seconds since Unix epoch) for testing
+  mockSessionStartSeconds: null,
 };
 
 // eslint-disable-next-line prefer-object-spread

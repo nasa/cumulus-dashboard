@@ -29,9 +29,9 @@ export const refreshTokenMiddleware = ({ dispatch, getState }) => (next) => (act
 
     const currentTime = Math.ceil(Date.now() / 1000);
     const timeLeft = tokenExpiration - currentTime;
-    console.log('[refreshTokenMiddleware] Token check - timeLeft:', timeLeft, 'seconds, refreshThreshold:', config.tokenRefreshThreshold);
+    console.log('[refreshTokenMiddleware] Token check - timeLeft:', timeLeft, 'seconds, refreshThreshold:', config.tokenRefreshThresholdSeconds);
 
-    if (timeLeft <= config.tokenRefreshThreshold) {
+    if (timeLeft <= config.tokenRefreshThresholdSeconds) {
       console.log('[refreshTokenMiddleware] Token expiring soon, attempting refresh');
       const inflight = get(getState(), 'api.tokens.inflight');
       if (!inflight) {

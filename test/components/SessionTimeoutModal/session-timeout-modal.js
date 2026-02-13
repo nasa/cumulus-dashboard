@@ -12,9 +12,9 @@ import nock from 'nock';
 // Mock the config module before importing the component so it uses test values
 const configModule = require('../../../app/src/js/config');
 Object.assign(configModule, {
-  maxSessionDuration: 60 * 1000,
-  sessionWarningThreshold: 20,
-  tokenRefreshThreshold: 15,
+  maxSessionDurationSeconds: 60,
+  sessionWarningThresholdSeconds: 20,
+  tokenRefreshThresholdSeconds: 15,
 });
 
 import SessionTimeoutModal from '../../../app/src/js/components/SessionTimeoutModal/session-timeout-modal';

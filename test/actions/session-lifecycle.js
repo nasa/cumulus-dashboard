@@ -89,25 +89,25 @@ test('loginError dispatches correct actions', async (t) => {
 test('getSessionStart returns iat from token', (t) => {
   const iatSeconds = Math.floor(Date.now() / 1000);
   const token = createDummyToken(iatSeconds);
-  
+
   const sessionStart = getSessionStart(token);
-  t.is(sessionStart, iatSeconds * 1000);
+  t.is(sessionStart, iatSeconds);
 });
 
 test('token refresh with preserved iat maintains session start', (t) => {
   // Original token issued 2 hours ago
   const originalIat = Math.floor(Date.now() / 1000) - (2 * 60 * 60);
   const oldToken = createDummyToken(originalIat);
-  
+
   // New token with same iat (backend preserves it)
   const newToken = createDummyToken(originalIat);
-  
+
   const sessionStartOld = getSessionStart(oldToken);
   const sessionStartNew = getSessionStart(newToken);
-  
+
   // Both should have the same session start
   t.is(sessionStartOld, sessionStartNew);
-  t.is(sessionStartOld, originalIat * 1000);
+  t.is(sessionStartOld, originalIat);
 });
 
 test('refreshAccessToken rejects when session exceeds 12 hours', async (t) => {

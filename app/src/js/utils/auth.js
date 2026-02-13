@@ -19,12 +19,12 @@ export const get = () => {
 /**
  * Gets the session start time from the JWT token's iat (issued at) claim
  * @param {string} token - JWT token
- * @returns {number|null} - Session start timestamp in milliseconds, or null if not available
+ * @returns {number|null} - Session start timestamp in seconds since Unix epoch, or null if not available
  */
 export const getSessionStart = (token) => {
   // Allow mocking for testing
-  if (_config.mockSessionStart) {
-    return parseInt(_config.mockSessionStart, 10);
+  if (_config.mockSessionStartSeconds) {
+    return parseInt(_config.mockSessionStartSeconds, 10);
   }
 
   if (!token) {
@@ -34,8 +34,8 @@ export const getSessionStart = (token) => {
   try {
     const decoded = jwtDecode(token);
 
-    // iat is in seconds, convert to milliseconds
-    return decoded.iat ? decoded.iat * 1000 : null;
+    // iat is already in seconds
+    return decoded.iat ? decoded.iat : null;
   } catch (error) {
     return null;
   }
