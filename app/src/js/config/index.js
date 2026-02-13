@@ -38,8 +38,9 @@ const baseConfig = {
   // session duration limit
   maxSessionDuration: 12 * 60 * 60 * 1000, // 12 hours in milliseconds
 
-  // session warning threshold - show warning modal when session is within this many seconds of reaching the max session duration
-  sessionWarningThreshold: 20, // 20 minutes
+  // session warning threshold - show warning modal when session is within
+  // this many seconds of reaching the max session duration
+  sessionWarningThreshold: 20 * 60, // 20 minutes
 
   // For deugging: set mockTokenExpiration to Unix timestamp (seconds) to simulate token expiration
   // Set to a time in the future when you want the token to expire
