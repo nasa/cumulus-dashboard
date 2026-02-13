@@ -350,6 +350,57 @@ test.serial('Token expiring warning: has Dismiss button available', async (t) =>
   t.pass('Token expiring warning dismiss button available');
 });
 
+test.serial('Token expiring warning: dismissing warning does not prevent token expired modal from appearing', async (t) => {
+  const currentTime = Math.floor(Date.now() / 1000);
+  // Token expires in 8 seconds (within 20 second threshold for showing warning)
+  const futureExp = currentTime + 8;
+  // Session started 5 seconds ago
+  const iat = currentTime - 5;
+  const dummyToken = createDummyToken(futureExp, iat);
+
+  const store = mockStore({
+    api: {
+      tokens: { token: dummyToken },
+    },
+  });
+
+  render(
+    <Provider store={store}>
+      <SessionTimeoutModal />
+    </Provider>
+  );
+
+  // First tick: should attempt auto-refresh or show warning
+  await act(async () => {
+    clock.tick(1000);
+    await flushPromises();
+  });
+
+  // If a Dismiss button appeared (meaning a warning modal, not auto-refresh),
+  // click it to dismiss the warning
+  let dismissButton = screen.queryByText('Dismiss');
+  if (dismissButton) {
+    await act(async () => {
+      fireEvent.click(dismissButton);
+      await Promise.resolve();
+    });
+
+    // Verify warning is gone
+    t.falsy(screen.queryByText('Session Expiration Warning'));
+  }
+
+  // Advance time past token expiration (advance to 10 seconds, token expires at 8)
+  await act(async () => {
+    clock.tick(9000);
+    await flushPromises();
+  });
+
+  // The "Session Expired" modal should appear even though the warning was dismissed
+  t.truthy(screen.queryByText('Session Expired'));
+  // the modal should not have a dismiss button
+  t.falsy(screen.queryByText('Dismiss'));
+});
+
 // Valid Token Shows No Modal Tests
 test.serial('Component renders without error for valid token', async (t) => {
   const currentTime = Math.floor(Date.now() / 1000);
@@ -375,6 +426,145 @@ test.serial('Component renders without error for valid token', async (t) => {
   });
 
   t.pass('Component rendered successfully');
+});
+
+// Dismiss warning modal and ensure session cap or token expiration modals appear
+
+test.serial('Session cap warning: dismissing warning does NOT prevent cap reached modal from appearing', async (t) => {
+  const currentTime = Math.floor(Date.now() / 1000);
+  const futureExp = currentTime + 3600;
+  // Session started 55 seconds ago (will reach cap at 60 seconds)
+  const iat = currentTime - 55;
+  const dummyToken = createDummyToken(futureExp, iat);
+
+  const store = mockStore({
+    api: {
+      tokens: { token: dummyToken },
+    },
+  });
+
+  const { container } = render(
+    <Provider store={store}>
+      <SessionTimeoutModal />
+    </Provider>
+  );
+
+  // First tick: should show warning
+  await act(async () => {
+    clock.tick(1000);
+    await Promise.resolve();
+  });
+
+  t.truthy(screen.queryByText('Session Duration Warning'));
+
+  // User dismisses the warning modal
+  const dismissButton = screen.getByText('Dismiss');
+  await act(async () => {
+    fireEvent.click(dismissButton);
+    await Promise.resolve();
+  });
+
+  // Warning modal should close
+  t.falsy(screen.queryByText('Session Duration Warning'));
+
+  // Advance time past the cap (session now at 65 seconds)
+  await act(async () => {
+    clock.tick(10000);
+    await Promise.resolve();
+  });
+
+  // The "Maximum Session Duration Reached" modal should appear even though the warning was dismissed
+  t.truthy(screen.queryByText('Maximum Session Duration Reached'));
+  // the modal should not have a dismiss button
+  t.falsy(screen.queryByText('Dismiss'));
+});
+
+test.serial('Session cap warning: dismissed warning does not reappear if session stays in warning range', async (t) => {
+  const currentTime = Math.floor(Date.now() / 1000);
+  const futureExp = currentTime + 3600;
+  // Session started 55 seconds ago (in warning range: 20s before 60s cap)
+  const iat = currentTime - 55;
+  const dummyToken = createDummyToken(futureExp, iat);
+
+  const store = mockStore({
+    api: {
+      tokens: { token: dummyToken },
+    },
+  });
+
+  render(
+    <Provider store={store}>
+      <SessionTimeoutModal />
+    </Provider>
+  );
+
+  // First tick: should show warning
+  await act(async () => {
+    clock.tick(1000);
+    await Promise.resolve();
+  });
+
+  t.truthy(screen.queryByText('Session Duration Warning'));
+
+  // User dismisses the warning modal
+  const dismissButton = screen.getByText('Dismiss');
+  await act(async () => {
+    fireEvent.click(dismissButton);
+    await Promise.resolve();
+  });
+
+  t.falsy(screen.queryByText('Session Duration Warning'));
+
+  // Advance time slightly (still in warning range, but not at cap yet)
+  await act(async () => {
+    clock.tick(2000);
+    await Promise.resolve();
+  });
+
+  // Warning should not reappear (user dismissed it)
+  t.falsy(screen.queryByText('Session Duration Warning'));
+});
+
+test.serial('Polling continues after warning modal dismissal (session cap still detected)', async (t) => {
+  const currentTime = Math.floor(Date.now() / 1000);
+  const futureExp = currentTime + 3600;
+  const iat = currentTime - 55;
+  const dummyToken = createDummyToken(futureExp, iat);
+
+  const store = mockStore({
+    api: {
+      tokens: { token: dummyToken },
+    },
+  });
+
+  render(
+    <Provider store={store}>
+      <SessionTimeoutModal />
+    </Provider>
+  );
+
+  // First tick: should show warning
+  await act(async () => {
+    clock.tick(1000);
+    await Promise.resolve();
+  });
+
+  // Dismiss the warning
+  const dismissButton = screen.getByText('Dismiss');
+  await act(async () => {
+    fireEvent.click(dismissButton);
+    await Promise.resolve();
+  });
+
+  // Advance time by 15 seconds (will trigger cap reached at 60 seconds total)
+  // This verifies the polling loop continued after dismissal
+  await act(async () => {
+    clock.tick(15000);
+    await Promise.resolve();
+  });
+
+  // Should now show the maxim session duration reached modal
+  t.truthy(screen.queryByText('Maximum Session Duration Reached'));
 });
 
 // Token reset (new login) Tests

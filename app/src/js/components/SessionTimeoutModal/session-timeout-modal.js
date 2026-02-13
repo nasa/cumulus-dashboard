@@ -17,9 +17,9 @@ const SessionTimeoutModal = ({
   dispatch,
 }) => {
   const [hasModal, setHasModal] = useState(false);
-  const [modalClosed, setModalClosed] = useState(false);
   // 'sessionCapReached', 'sessionCapWarning', 'tokenExpired', 'tokenExpiringWarning'
   const [modalReason, setModalReason] = useState(null);
+  const modalClosedRef = useRef(false);
   const refreshAttemptedRef = useRef(false);
 
   console.log('[SessionTimeoutModal] Component rendered. Token exists:', !!token, 'tokenExpiration:', tokenExpiration, 'mockTokenExpirationSeconds:', _config.mockTokenExpirationSeconds);
@@ -73,13 +73,13 @@ const SessionTimeoutModal = ({
 
   const handleClose = () => {
     setHasModal(false);
-    setModalClosed(true);
+    modalClosedRef.current = true;
   };
 
   useEffect(() => {
-    // Reset modalClosed when token changes (new session)
+    // Reset modalClosed flag when token changes (new session)
     if (token) {
-      setModalClosed(false);
+      modalClosedRef.current = false;
       setModalReason(null);
       refreshAttemptedRef.current = false;
     }
@@ -87,7 +87,7 @@ const SessionTimeoutModal = ({
 
   useEffect(() => {
     const checkTimeout = () => {
-      if (!tokenExpiration || !token || modalClosed) {
+      if (!tokenExpiration || !token) {
         return;
       }
 
@@ -119,8 +119,8 @@ const SessionTimeoutModal = ({
         return;
       }
 
-      // If session cap will be reached soon, show warning modal (only once)
-      if (sessionCapWillBeReachedSoon && !hasModal) {
+      // If session cap will be reached soon, show warning modal (only once, unless dismissed)
+      if (sessionCapWillBeReachedSoon && !hasModal && !modalClosedRef.current) {
         console.log(`[SessionTimeoutModal] Session cap warning: will be reached in ${timeUntilSessionCapSeconds}s, token expires in ${tokenSecondsLeft}s`);
         setModalReason('sessionCapWarning');
         setHasModal(true);
@@ -143,7 +143,7 @@ const SessionTimeoutModal = ({
       if (tokenSecondsLeft <= _config.sessionWarningThresholdSeconds && tokenSecondsLeft > 0) {
         // If session cap not reached, auto-refresh
         // Note: Inactivity is handled separately by InactivityModal
-        if (!sessionCapReached && !refreshAttemptedRef.current && !hasModal) {
+        if (!sessionCapReached && !refreshAttemptedRef.current && !hasModal && !modalClosedRef.current) {
           console.log(`[SessionTimeoutModal] Token expiring warning: will expire in ${tokenSecondsLeft}s, session duration: ${sessionDurationSeconds}s`);
           refreshAttemptedRef.current = true;
           dispatch(refreshAccessToken(token))
@@ -164,7 +164,7 @@ const SessionTimeoutModal = ({
     const interval = setInterval(checkTimeout, 1000);
 
     return () => clearInterval(interval);
-  }, [tokenExpiration, token, hasModal, modalClosed, dispatch, handleLogout, modalReason]);
+  }, [tokenExpiration, token, hasModal, dispatch, handleLogout, modalReason]);
 
   const modalContent = getModalContent(modalReason);
 
