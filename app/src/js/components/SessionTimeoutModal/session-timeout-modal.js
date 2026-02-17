@@ -161,7 +161,7 @@ const SessionTimeoutModal = ({
     };
 
     checkTimeout();
-    const interval = setInterval(checkTimeout, 1000);
+    const interval = setInterval(checkTimeout, 10000); // 10 seconds
 
     return () => clearInterval(interval);
   }, [tokenExpiration, token, hasModal, dispatch, handleLogout, modalReason]);
