@@ -19,7 +19,7 @@ const DefaultModal = ({
   size = 'md',
   animation = true,
   backdrop = true,
-  closeButton = true
+  closeButton = false
 }) => {
   function handleCloseModal (e) {
     if (typeof onCloseModal === 'function') {
@@ -50,7 +50,7 @@ const DefaultModal = ({
       size={size}
       aria-labelledby={`modal__${className}`}
       animation={animation}
-      backdrop={backdrop === false ? 'static' : backdrop}
+      backdrop={backdrop}
     >
       <Modal.Header className={`${className}__header`} closeButton={closeButton}></Modal.Header>
       <Modal.Title id={`modal__${className}`} className={`${className}__title`}>

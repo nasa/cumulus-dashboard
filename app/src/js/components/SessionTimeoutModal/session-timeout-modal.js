@@ -181,7 +181,8 @@ const SessionTimeoutModal = ({
       cancelButtonText="Dismiss"
       confirmButtonText="Re-login"
       animation={process.env.NODE_ENV !== 'test'}
-      backdrop={!(modalReason === 'sessionCapReached' || modalReason === 'tokenExpired')}
+      // don't allow user to dismiss modal by clicking on backdrop if session cap is reached or token expired
+      backdrop={(modalReason === 'sessionCapReached' || modalReason === 'tokenExpired') ? 'static' : true}
       closeButton={modalReason !== 'sessionCapReached' && modalReason !== 'tokenExpired'}
     >
       {modalContent.message}
