@@ -17,7 +17,6 @@ const SessionTimeoutModal = ({
   dispatch,
 }) => {
   const [hasModal, setHasModal] = useState(false);
-  // 'sessionCapReached', 'sessionCapWarning', 'tokenExpired', 'tokenExpiringWarning'
   const [modalReason, setModalReason] = useState(null);
   const modalClosedRef = useRef(false);
   const refreshAttemptedRef = useRef(false);
