@@ -36,6 +36,7 @@ export const refreshAccessToken = (token) => (dispatch) => {
     return Promise.reject(error);
   }
 
+  const start = new Date();
   console.log('[refreshAccessToken] Token refresh initiated');
   dispatch({ type: types.REFRESH_TOKEN_INFLIGHT });
 
@@ -48,6 +49,8 @@ export const refreshAccessToken = (token) => (dispatch) => {
 
   return axios(requestConfig)
     .then((response) => {
+      const duration = new Date() - start;
+      console.log('[refreshAccessToken] Token refresh completed in', `${duration}ms`);
       const { data } = response;
       return dispatch({
         type: types.REFRESH_TOKEN,
@@ -55,6 +58,8 @@ export const refreshAccessToken = (token) => (dispatch) => {
       });
     })
     .catch(({ error }) => {
+      const duration = new Date() - start;
+      console.log('[refreshAccessToken] Token refresh failed after', `${duration}ms`);
       dispatch({
         type: types.REFRESH_TOKEN_ERROR,
         error
