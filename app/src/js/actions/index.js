@@ -36,6 +36,7 @@ export const refreshAccessToken = (token) => (dispatch) => {
     return Promise.reject(error);
   }
 
+  console.log('[refreshAccessToken] Token refresh initiated');
   dispatch({ type: types.REFRESH_TOKEN_INFLIGHT });
 
   // Backend /refresh endpoint handles both Earthdata and Launchpad auth methods
