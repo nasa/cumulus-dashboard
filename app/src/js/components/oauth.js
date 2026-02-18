@@ -26,7 +26,7 @@ const OAuth = ({
   const [token, setToken] = useState(null);
 
   useEffect(() => {
-    console.log('[OAuth] effect triggered - api.authenticated:', api.authenticated, 'token:', token);
+    console.log('[OAuth] effect triggered - api.authenticated:', api.authenticated, 'has token:', !!token);
     if (api.authenticated) {
       console.log('[OAuth] User authenticated, setting token state and redirecting');
       dispatch(setTokenState(token));
@@ -42,7 +42,7 @@ const OAuth = ({
   }, [api.authenticated, dispatch, location, token]);
 
   useEffect(() => {
-    console.log('[OAuth] queryParams changed:', queryParams);
+    console.log('[OAuth] queryParams changed');
     const { token: queryToken } = queryParams;
     if (queryToken) {
       console.log('[OAuth] Found token in query params, dispatching login');

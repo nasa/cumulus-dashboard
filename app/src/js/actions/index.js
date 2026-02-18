@@ -656,7 +656,7 @@ export const deleteToken = () => (dispatch, getState) => {
     method: 'DELETE',
     url: new URL(`tokenDelete/${token}`, root).href
   });
-  console.log('[deleteToken] Calling DELETE /tokenDelete with URL:', requestConfig.url);
+  console.log('[deleteToken] Calling DELETE /tokenDelete endpoint');
   return axios(requestConfig)
     .then(() => {
       console.log('[deleteToken] Successfully deleted token from backend');
