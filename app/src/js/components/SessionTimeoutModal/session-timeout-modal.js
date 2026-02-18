@@ -21,8 +21,6 @@ const SessionTimeoutModal = ({
   const modalClosedRef = useRef(false);
   const refreshAttemptedRef = useRef(false);
 
-  console.log('[SessionTimeoutModal] Component rendered. Token exists:', !!token, 'tokenExpiration:', tokenExpiration, 'mockTokenExpirationSeconds:', _config.mockTokenExpirationSeconds);
-
   // Get message content based on reason for showing modal
   const getModalContent = (reason) => {
     switch (reason) {
@@ -104,7 +102,6 @@ const SessionTimeoutModal = ({
       const timeUntilSessionCapSeconds = _config.maxSessionDurationSeconds - sessionDurationSeconds;
       const sessionCapWillBeReachedSoon = timeUntilSessionCapSeconds <= _config.sessionWarningThresholdSeconds &&
         timeUntilSessionCapSeconds > 0;
-      console.log(`[SessionTimeoutModal] tokenSecondsLeft: ${tokenSecondsLeft}, sessionDuration: ${sessionDurationSeconds}s, sessionCapReached: ${sessionCapReached}, timeUntilSessionCap: ${timeUntilSessionCapSeconds}s, threshold: ${_config.sessionWarningThresholdSeconds}`);
 
       // If session cap is reached (always update modal reason even if already showing)
       if (sessionCapReached) {
