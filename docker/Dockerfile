@@ -1,4 +1,4 @@
-FROM node:20.12.2 as build
+FROM node:22.21.1 as build
 WORKDIR /cumulus-dashboard
 COPY package.json package-lock.json ./
 RUN npm ci --legacy-peer-deps --no-optional 

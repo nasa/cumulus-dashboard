@@ -66,7 +66,7 @@ cd cumulus-dashboard
 3. [Create a branch](https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging) to develop your code in
 4. Install the correct version fo Node.js for the Cumulus Dashboard and set the version for this project
 ```bash
-nvm install v20.12.2
+nvm install v22.21.1
 ```
 ```bash
 nvm use
