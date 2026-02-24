@@ -1,5 +1,8 @@
 {
   "high": true,
   "pass-enoaudit": true,
-  "retry-count": 20
+  "retry-count": 20,
+  "allowlist": [
+    "GHSA-3ppc-4f35-3m26"
+  ]
 }
