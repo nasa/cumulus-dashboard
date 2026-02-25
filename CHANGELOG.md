@@ -28,7 +28,6 @@ This version of the dashboard requires Cumulus API >= v21.4.0 (TBD)
   - Updated the Cypress seed function to upload the reconciliation report in its original format.
 - **CUMULUS-4538**
   - Bumped node version from 20.12.2 to 22.21.1 to match Core
-  - Updated the dashboard to use `@cumulus/api@21.3.1` and `@cumulus/aws-client@21.3.1`.
   - Upgraded postgres image to postgres:17.4-alpine
 
 ## [v14.2.0] - 2026-01-27
