@@ -16,7 +16,10 @@ const DefaultModal = ({
   hasConfirmButton = true,
   confirmButtonClass = 'button--submit',
   cancelButtonClass = 'button--cancel',
-  size = 'md'
+  size = 'md',
+  animation = true,
+  backdrop = true,
+  closeButton = false
 }) => {
   function handleCloseModal (e) {
     if (typeof onCloseModal === 'function') {
@@ -46,8 +49,10 @@ const DefaultModal = ({
       centered
       size={size}
       aria-labelledby={`modal__${className}`}
+      animation={animation}
+      backdrop={backdrop}
     >
-      <Modal.Header className={`${className}__header`} closeButton></Modal.Header>
+      <Modal.Header className={`${className}__header`} closeButton={closeButton}></Modal.Header>
       <Modal.Title id={`modal__${className}`} className={`${className}__title`}>
         { title }
       </Modal.Title>
@@ -87,6 +92,9 @@ DefaultModal.propTypes = {
   confirmButtonClass: PropTypes.string,
   cancelButtonClass: PropTypes.string,
   size: PropTypes.string,
+  animation: PropTypes.bool,
+  backdrop: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  closeButton: PropTypes.bool,
 };
 
 export default DefaultModal;

@@ -11,37 +11,55 @@ import { configureRequest } from './helpers';
 import _config from '../config';
 import { getCollectionId, collectionNameVersion } from '../utils/format';
 import { fetchCurrentTimeFilters } from '../utils/datepicker';
-import log from '../utils/log';
 import * as types from './types';
 import { historyPushWithQueryParams } from '../utils/url-helper';
+import { getSessionStart } from '../utils/auth';
 
 const { CALL_API } = types;
 const {
   apiRoot: root,
   defaultPageLimit,
-  minCompatibleApiVersion
+  minCompatibleApiVersion,
+  maxSessionDurationSeconds
 } = _config;
 
 export const refreshAccessToken = (token) => (dispatch) => {
+  // Check if session has exceeded 12-hour cap using token's iat claim
+  const sessionStartSeconds = getSessionStart(token);
+
+  if (sessionStartSeconds && ((Math.ceil(Date.now() / 1000) - sessionStartSeconds) > maxSessionDurationSeconds)) {
+    const error = new Error('Session has exceeded maximum duration of 12 hours');
+    dispatch({
+      type: types.REFRESH_TOKEN_ERROR,
+      error
+    });
+    return Promise.reject(error);
+  }
+
   const start = new Date();
-  log('REFRESH_TOKEN_INFLIGHT');
+  console.log('[refreshAccessToken] Token refresh initiated');
   dispatch({ type: types.REFRESH_TOKEN_INFLIGHT });
 
+  // Backend /refresh endpoint handles both Earthdata and Launchpad auth methods
   const requestConfig = configureRequest({
     method: 'POST',
     url: new URL('refresh', root).href,
     data: { token },
   });
+
   return axios(requestConfig)
-    .then(({ body }) => {
+    .then((response) => {
       const duration = new Date() - start;
-      log('REFRESH_TOKEN', `${duration}ms`);
+      console.log('[refreshAccessToken] Token refresh completed in', `${duration}ms`);
+      const { data } = response;
       return dispatch({
         type: types.REFRESH_TOKEN,
-        token: body.token
+        token: data.token
       });
     })
     .catch(({ error }) => {
+      const duration = new Date() - start;
+      console.log('[refreshAccessToken] Token refresh failed after', `${duration}ms`);
       dispatch({
         type: types.REFRESH_TOKEN_ERROR,
         error
@@ -628,20 +646,40 @@ export const login = (token) => ({
 
 export const deleteToken = () => (dispatch, getState) => {
   const token = getProperty(getState(), 'api.tokens.token');
-  if (!token) return Promise.resolve();
+  console.log('[deleteToken] Attempting to delete token from backend');
+  if (!token) {
+    console.log('[deleteToken] No token found in state, skipping deletion');
+    return Promise.resolve();
+  }
 
   const requestConfig = configureRequest({
     method: 'DELETE',
     url: new URL(`tokenDelete/${token}`, root).href
   });
+  console.log('[deleteToken] Calling DELETE /tokenDelete endpoint');
   return axios(requestConfig)
-    .then(() => dispatch({ type: types.DELETE_TOKEN }))
-    .catch(() => dispatch({ type: types.DELETE_TOKEN }));
+    .then(() => {
+      console.log('[deleteToken] Successfully deleted token from backend');
+      return dispatch({ type: types.DELETE_TOKEN });
+    })
+    .catch((error) => {
+      console.error('[deleteToken] Failed to delete token:', error);
+      return dispatch({ type: types.DELETE_TOKEN });
+    });
 };
 
-export const loginError = (error) => (dispatch) => dispatch(deleteToken())
-  .then(() => dispatch({ type: 'LOGIN_ERROR', error }))
-  .then(() => historyPushWithQueryParams('/auth'));
+export const loginError = (error) => (dispatch) => {
+  console.error('[loginError] Login failed with error:', error);
+  return dispatch(deleteToken())
+    .then(() => {
+      console.log('[loginError] Token deleted, dispatching LOGIN_ERROR and redirecting to /auth');
+      return dispatch({ type: 'LOGIN_ERROR', error });
+    })
+    .then(() => {
+      console.log('[loginError] Redirecting to auth page');
+      return historyPushWithQueryParams('/auth');
+    });
+};
 
 export const getSchema = (type) => ({
   [CALL_API]: {

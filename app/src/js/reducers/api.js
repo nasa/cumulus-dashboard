@@ -12,14 +12,16 @@ import {
   SET_TOKEN,
 } from '../actions/types';
 
+const token = getToken();
+
 export const initialState = {
-  authenticated: getToken() !== null,
+  authenticated: token !== null && token !== '',
   inflight: false,
   error: null,
   tokens: {
     error: null,
     inflight: false,
-    token: getToken(),
+    token,
   },
 };
 
@@ -57,6 +59,7 @@ export default createReducer(initialState, {
     state.tokens.inflight = true;
   },
   [SET_TOKEN]: (state, action) => {
+    console.log('[SET_TOKEN] Setting token:', action.token ? 'present' : 'null/empty');
     setToken(action.token);
     state.tokens.token = action.token;
   },
