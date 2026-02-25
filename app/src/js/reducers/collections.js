@@ -59,11 +59,15 @@ export default createReducer(initialState, {
     const { name } = deconstructCollectionId(id);
     const collection = data.results.find((element) => element.name === name);
 
-    state.map[id] = {
-      inflight: false,
-      data: assignDate(collection),
-    };
-    delete state.deleted[id];
+    if (collection) {
+      state.map[id] = {
+        inflight: false,
+        data: assignDate(collection),
+      };
+      delete state.deleted[id];
+    } else {
+      state.map[id] = { ...state.map[id], inflight: false };
+    }
   },
   [COLLECTION_INFLIGHT]: (state, action) => {
     state.map[action.id] = { inflight: true };

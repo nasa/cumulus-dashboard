@@ -27,7 +27,7 @@ const CollectionIngest = () => {
 
   useEffect(() => {
     const decodedVersion = decodeURIComponent(version);
-    dispatch(getCollection(name, decodedVersion));
+    dispatch(getCollection(name, decodedVersion, false));
   }, [name, version, dispatch]);
 
   const renderReadOnlyJson = (dataName, data) => (
