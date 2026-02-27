@@ -3,7 +3,7 @@ module.exports = {
     [
       '@babel/preset-env', {
         targets: {
-          node: '20.12.2',
+          node: '22.21.1',
           esmodules: true
         }
       }

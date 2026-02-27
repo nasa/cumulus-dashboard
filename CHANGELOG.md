@@ -6,12 +6,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-- **CUMULUS-4298**
-  - Added checkbox to exclude collections from date filtering.
 
 ### Breaking Changes
 
 This version of the dashboard requires Cumulus API >= v21.4.0 (TBD)
+
+### Added
+
+- **CUMULUS-4298**
+  - Added checkbox to exclude collections from date filtering.
 
 ### Changed
 
@@ -23,6 +26,9 @@ This version of the dashboard requires Cumulus API >= v21.4.0 (TBD)
     `@cumulus/aws-client@21.3.1-alpha.0`
   - Updated the Cypress granules fixture due to the localApi update.
   - Updated the Cypress seed function to upload the reconciliation report in its original format.
+- **CUMULUS-4538**
+  - Bumped node version from 20.12.2 to 22.21.1 to match Core
+  - Upgraded postgres image to postgres:17.4-alpine
 
 ## [v14.2.0] - 2026-01-27
 
