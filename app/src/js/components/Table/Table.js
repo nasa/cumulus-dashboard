@@ -92,14 +92,6 @@ const List = ({
   const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
 
   useEffect(() => {
-    setQueryConfig((prevQueryConfig) => ({
-      ...prevQueryConfig,
-      ...getQueryConfig({}),
-    }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(query)]);
-
-  useEffect(() => {
     // Remove parameters with null or undefined values
     const newParams = omitBy(list.params, isNil);
 
@@ -115,7 +107,7 @@ const List = ({
       }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(list.params), JSON.stringify(params)]);
+  }, [JSON.stringify(list.params), JSON.stringify(params), JSON.stringify(query)]);
 
   useEffect(() => {
     setClearSelected(true);
