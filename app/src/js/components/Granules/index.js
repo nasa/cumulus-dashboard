@@ -5,7 +5,7 @@ import { get } from 'object-path';
 import { connect } from 'react-redux';
 import { withRouter, Redirect, Route, Switch } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
-import { getCount, listGranules } from '../../actions';
+import { getCount } from '../../actions';
 import { strings } from '../locale';
 import AllGranules from './list';
 import GranuleOverview from './granule';
@@ -24,10 +24,6 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
   const count = [...granulesCount, ...reportCount];
   const filteredQueryParams = filterQueryParams(queryParams);
 
-  function query() {
-    dispatch(listGranules(filteredQueryParams));
-  }
-
   useEffect(() => {
     dispatch(
       getCount({
@@ -43,7 +39,7 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
       <Helmet>
         <title> Granules </title>
       </Helmet>
-      <DatePickerHeader onChange={query} heading={strings.granules} />
+      <DatePickerHeader heading={strings.granules} />
       <div className="page__content">
         <div className="wrapper__sidebar">
           <Suspense fallback={<Loading/>}>

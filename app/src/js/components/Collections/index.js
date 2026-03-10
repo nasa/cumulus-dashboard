@@ -16,7 +16,7 @@ import CollectionLogs from './logs';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import { filterQueryParams } from '../../utils/url-helper';
 
-const Collections = ({ dispatch, location, logs, queryParams }) => {
+const Collections = ({ location, logs, queryParams }) => {
   const { pathname } = location;
   const existingCollection = pathname !== '/collections/add';
   const filteredQueryParams = filterQueryParams(queryParams);
@@ -121,7 +121,6 @@ const Collections = ({ dispatch, location, logs, queryParams }) => {
 Collections.displayName = strings.collection;
 
 Collections.propTypes = {
-  dispatch: PropTypes.func,
   location: PropTypes.object,
   logs: PropTypes.object,
   queryParams: PropTypes.object,

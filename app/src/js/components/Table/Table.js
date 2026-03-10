@@ -6,6 +6,7 @@ import isNil from 'lodash/isNil';
 import isEqual from 'lodash/isEqual';
 import omitBy from 'lodash/omitBy';
 import noop from 'lodash/noop';
+import _config from '../../config';
 import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
 import Pagination from '../Pagination/pagination';
@@ -22,6 +23,8 @@ function buildSortKey(sortProps) {
     .filter((item) => item.id)
     .map((item) => (item.desc === true ? `-${item.id}` : `+${item.id}`));
 }
+
+const { defaultPageLimit } = _config;
 
 const List = ({
   action,
@@ -100,6 +103,10 @@ const List = ({
     // Remove parameters with null or undefined values
     const newParams = omitBy(list.params, isNil);
 
+    // Set limit and page to default values when nil
+    if (newParams?.limit === undefined) newParams.limit = defaultPageLimit;
+    if (newParams?.page === undefined) newParams.page = 1;
+
     if (!isEqual(newParams, params)) {
       setParams(newParams);
       setQueryConfig((prevQueryConfig) => ({
@@ -139,7 +146,7 @@ const List = ({
     const newQueryConfig = getQueryConfig({
       sort_key: buildSortKey(sortProps),
     });
-    if (!isEqual(queryConfig, newQueryConfig)) {
+    if (!isEqual(queryConfig?.sort_key, newQueryConfig?.sort_key)) {
       setQueryConfig(newQueryConfig);
     }
   }

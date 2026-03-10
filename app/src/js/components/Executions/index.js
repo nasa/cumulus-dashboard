@@ -11,12 +11,10 @@ import ExecutionStatus from './execution-status';
 import ExecutionLogs from './execution-logs';
 import ExecutionEvents from './execution-events';
 import ExecutionsList from './executions-list';
-import { getCount, listExecutions } from '../../actions';
 import { strings } from '../locale';
 import { filterQueryParams } from '../../utils/url-helper';
 
 const Executions = ({
-  dispatch,
   location,
   queryParams
 }) => {
@@ -24,14 +22,6 @@ const Executions = ({
   const showDatePicker = pathname === '/executions';
   const [isArchivedSearch] = useState(false);
   const filteredQueryParams = filterQueryParams({ ...queryParams, archived: isArchivedSearch });
-  function query() {
-    dispatch(getCount({
-      type: 'executions',
-      field: 'status',
-      ...filteredQueryParams
-    }));
-    dispatch(listExecutions(filteredQueryParams));
-  }
 
   return (
     <div className='page__workflows'>
@@ -39,7 +29,7 @@ const Executions = ({
         <title> Cumulus Executions </title>
       </Helmet>
       {showDatePicker
-        ? <DatePickerHeader onChange={query} heading={strings.executions}/>
+        ? <DatePickerHeader heading={strings.executions}/>
         : <div className='content__header'>
           <div className='row'>
             <h1 className='heading--xlarge'>{strings.executions}</h1>
@@ -67,7 +57,6 @@ const Executions = ({
 };
 
 Executions.propTypes = {
-  dispatch: PropTypes.func,
   location: PropTypes.object,
   queryParams: PropTypes.object
 };
