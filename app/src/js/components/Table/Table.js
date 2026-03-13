@@ -138,7 +138,7 @@ const List = ({
     const newQueryConfig = getQueryConfig({
       sort_key: buildSortKey(sortProps),
     });
-    if (!isEqual(queryConfig?.sort_key, newQueryConfig?.sort_key)) {
+    if (!isEqual(queryConfig, newQueryConfig)) {
       setQueryConfig(newQueryConfig);
     }
   }
