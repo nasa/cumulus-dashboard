@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { withRouter, Route, Switch } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
+import { getCount } from '../../actions';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import Pdr from './pdr';
 import PdrOverview from './overview';
@@ -13,10 +14,21 @@ import PdrList from './list';
 import { strings } from '../locale';
 import { filterQueryParams } from '../../utils/url-helper';
 
-const Pdrs = ({ location, queryParams, params, stats }) => {
+const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
   const { pathname } = location;
   const count = get(stats, 'count.sidebar.pdrs.count');
   const filteredQueryParams = filterQueryParams(queryParams);
+
+  useEffect(() => {
+    console.log('index.js%%%%%');
+    dispatch(
+      getCount({
+        type: 'pdrs',
+        field: 'status',
+        sidebarCount: true
+      })
+    );
+  }, [dispatch]);
 
   return (
     <div className="page__pdrs">
@@ -57,6 +69,7 @@ const Pdrs = ({ location, queryParams, params, stats }) => {
 };
 
 Pdrs.propTypes = {
+  dispatch: PropTypes.object,
   location: PropTypes.object,
   params: PropTypes.object,
   queryParams: PropTypes.object,

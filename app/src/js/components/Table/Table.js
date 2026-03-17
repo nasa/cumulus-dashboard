@@ -5,6 +5,7 @@ import withQueryParams from 'react-router-query-params';
 import isNil from 'lodash/isNil';
 import isEqual from 'lodash/isEqual';
 import omitBy from 'lodash/omitBy';
+import omit from 'lodash/omit';
 import noop from 'lodash/noop';
 import _config from '../../config';
 import ErrorReport from '../Errors/report';
@@ -138,7 +139,7 @@ const List = ({
     const newQueryConfig = getQueryConfig({
       sort_key: buildSortKey(sortProps),
     });
-    if (!isEqual(queryConfig, newQueryConfig)) {
+    if (!isEqual(omit(queryConfig, ['startDateTime', 'endDateTime']), omit(newQueryConfig, ['startDateTime', 'endDateTime']))) {
       setQueryConfig(newQueryConfig);
     }
   }
