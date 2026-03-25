@@ -31,6 +31,8 @@ This version of the dashboard requires Cumulus API >= v21.3.2
   - Upgraded postgres image to postgres:17.4-alpine
 - **CUMULUS-4573**
   - updated cumulus api version: 21.3.1 to 21.3.2
+-**AUDIT-FIXES**
+  - updated versions of packages giving audit failures
 
 ## [v14.2.0] - 2026-01-27
 
