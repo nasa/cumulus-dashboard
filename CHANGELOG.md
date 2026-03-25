@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Breaking Changes
 
-This version of the dashboard requires Cumulus API >= v21.4.0 (TBD)
+This version of the dashboard requires Cumulus API >= v21.3.2
 
 ### Added
 
