@@ -29,6 +29,8 @@ This version of the dashboard requires Cumulus API >= v21.4.0 (TBD)
 - **CUMULUS-4538**
   - Bumped node version from 20.12.2 to 22.21.1 to match Core
   - Upgraded postgres image to postgres:17.4-alpine
+- **CUMULUS-4573**
+  - updated cumulus api version: 21.3.1 to 21.3.2
 
 ## [v14.2.0] - 2026-01-27
 
