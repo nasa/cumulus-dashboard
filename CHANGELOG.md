@@ -32,8 +32,9 @@ This version of the dashboard requires Cumulus API >= v21.3.2
 - **CUMULUS-4573**
   - updated minCompatibleApiVersion from 21.0.0 to 21.3.2
   - updated @cumulus/aws-client and @cumulus/api from 21.3.1-alpha.0 to 21.3.2
+  - added `picomatch` to overides to fix audit issues
 - **security vulnerabilities**
-  - added `minimatch`, `serialize-javascript`, and `tar` to ovverides to fix audit issues
+  - added `minimatch`, `serialize-javascript`, and `tar` to overides to fix audit issues
 
 ## [v14.2.0] - 2026-01-27
 
