@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Breaking Changes
 
-This version of the dashboard requires Cumulus API >= v21.4.0 (TBD)
+This version of the dashboard requires Cumulus API >= v21.3.2
 
 ### Added
 
@@ -29,6 +29,9 @@ This version of the dashboard requires Cumulus API >= v21.4.0 (TBD)
 - **CUMULUS-4538**
   - Bumped node version from 20.12.2 to 22.21.1 to match Core
   - Upgraded postgres image to postgres:17.4-alpine
+- **CUMULUS-4573**
+  - updated minCompatibleApiVersion from 21.0.0 to 21.3.2
+  - updated @cumulus/aws-client and @cumulus/api from 21.3.1-alpha.0 to 21.3.2
 - **security vulnerabilities**
   - added `minimatch`, `serialize-javascript`, and `tar` to ovverides to fix audit issues
 
