@@ -228,6 +228,11 @@
           "form-data": "^4.0.4"
         }
       }
-    }
+    },
+    "minimatch@3": "^3.1.5",
+    "minimatch@7": "^7.4.9",
+    "minimatch@10": "^10.2.4",
+    "serialize-javascript": "^7.0.3",
+    "tar": "^7.5.8"
   }
 }
