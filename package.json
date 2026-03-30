@@ -232,6 +232,8 @@
     "minimatch@3": "^3.1.5",
     "minimatch@7": "^7.4.9",
     "minimatch@10": "^10.2.4",
+    "node-forge": "^1.4.0",
+    "path-to-regexp": "^0.1.13",
     "picomatch": "^2.3.2",
     "serialize-javascript": "^7.0.3",
     "tar": "^7.5.8"
