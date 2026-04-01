@@ -260,7 +260,11 @@ describe('Rules page', () => {
 
       // Test error flow
       const errorRuleType = 'test';
-      const errMsgRegx = /The record has validation errors:.*rule.type.*should be equal to one of the allowed values/;
+      // new regex that matches new error message w/ array obj
+      const errMsgRegx = new RegExp('The record has validation errors:' +
+        '\\s*\\[\\s*\\{[\\s\\S]*?"allowedValues"\\s*:\\s*\\[[^\\]]*\\]' +
+        '[\\s\\S]*?"message"\\s*:\\s*"must be equal to one of the allowed values"' +
+        '[\\s\\S]*?\\}\\s*\\]');
       cy.contains('.ace_variable', 'name');
       cy.editJsonTextarea({ data: { rule: { type: errorRuleType } }, update: true });
 
