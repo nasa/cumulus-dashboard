@@ -31,10 +31,13 @@ This version of the dashboard requires Cumulus API >= v21.3.2
   - Upgraded postgres image to postgres:17.4-alpine
 - **CUMULUS-4573**
   - updated minCompatibleApiVersion from 21.0.0 to 21.3.2
-  - updated @cumulus/aws-client and @cumulus/api from 21.3.1-alpha.0 to 21.3.2
-  - added `picomatch` to overides to fix audit issues
+  - updated `queryGranulesWorkflows` to filter out empty strings and empty arrays
+  - changed cypress `errMsgRegx` in `rules.cy.js` to regex match the error message
+  - updated `@cumulus/aws-client` and `@cumulus/api` from 21.3.1-alpha.0 to 21.3.2
+  - pinned `lodash` to `^4.18.0` due to audit issues
+  - added `picomatch`, `lodash`, `lodash-es`, `node-forge`, `path-to-regexp`, `tar`, and `@xmldom/xmldom` to overides to fix audit issues
 - **security vulnerabilities**
-  - added `minimatch`, `serialize-javascript`, and `tar` to overides to fix audit issues
+  - added `minimatch` and `serialize-javascript`to overides to fix audit issues
 
 ## [v14.2.0] - 2026-01-27
 
