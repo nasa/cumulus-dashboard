@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Breaking Changes
 
-This version of the dashboard requires Cumulus API >= v21.4.0 (TBD)
+This version of the dashboard requires Cumulus API >= v21.3.2
 
 ### Added
 
@@ -29,8 +29,15 @@ This version of the dashboard requires Cumulus API >= v21.4.0 (TBD)
 - **CUMULUS-4538**
   - Bumped node version from 20.12.2 to 22.21.1 to match Core
   - Upgraded postgres image to postgres:17.4-alpine
+- **CUMULUS-4573**
+  - updated minCompatibleApiVersion from 21.0.0 to 21.3.2
+  - updated `queryGranulesWorkflows` to filter out empty strings and empty arrays
+  - changed cypress `errMsgRegx` in `rules.cy.js` to regex match the error message
+  - updated `@cumulus/aws-client` and `@cumulus/api` from 21.3.1-alpha.0 to 21.3.2
+  - pinned `lodash` to `^4.18.0` due to audit issues
+  - added `picomatch`, `lodash`, `lodash-es`, `node-forge`, `path-to-regexp`, `tar`, and `@xmldom/xmldom` to overides to fix audit issues
 - **security vulnerabilities**
-  - added `minimatch`, `serialize-javascript`, and `tar` to ovverides to fix audit issues
+  - added `minimatch` and `serialize-javascript`to overides to fix audit issues
 
 ## [v14.2.0] - 2026-01-27
 
