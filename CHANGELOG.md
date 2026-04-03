@@ -34,7 +34,7 @@ This version of the dashboard requires Cumulus API >= v21.3.2
   - updated `queryGranulesWorkflows` to filter out empty strings and empty arrays
   - changed cypress `errMsgRegx` in `rules.cy.js` to regex match the error message
   - updated `@cumulus/aws-client` and `@cumulus/api` from 21.3.1-alpha.0 to 21.3.2
-  - pinned `lodash` to `^4.18.0` due to audit issues
+  - pinned `lodash` to `^4.18.1` due to audit issues
   - added `picomatch`, `lodash`, `lodash-es`, `node-forge`, `path-to-regexp`, `tar`, and `@xmldom/xmldom` to overides to fix audit issues
 - **security vulnerabilities**
   - added `minimatch` and `serialize-javascript`to overides to fix audit issues
