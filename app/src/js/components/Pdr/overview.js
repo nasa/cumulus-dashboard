@@ -1,9 +1,9 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
-import { listPdrs, clearPdrsFilter, filterPdrs } from '../../actions';
+import { listPdrs, getCount, clearPdrsFilter, filterPdrs } from '../../actions';
 import { lastUpdated, tally } from '../../utils/format';
 import { bulkActions } from '../../utils/table-config/pdrs';
 import { tableColumns } from '../../utils/table-config/pdr-progress';
@@ -27,6 +27,21 @@ const breadcrumbConfig = [
 ];
 
 const PdrOverview = ({ queryParams }) => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const queryStats = () => {
+      dispatch(
+        getCount({
+          type: 'pdrs',
+          field: 'status',
+          ...queryParams,
+        })
+      );
+    };
+    queryStats();
+  }, [dispatch, queryParams]);
+
   const generateQuery = () => (
     { ...queryParams }
   );
