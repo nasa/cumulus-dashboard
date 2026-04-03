@@ -20,7 +20,6 @@ const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
   const filteredQueryParams = filterQueryParams(queryParams);
 
   useEffect(() => {
-    console.log('index.js%%%%%');
     dispatch(
       getCount({
         type: 'pdrs',
@@ -69,7 +68,7 @@ const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
 };
 
 Pdrs.propTypes = {
-  dispatch: PropTypes.object,
+  dispatch: PropTypes.func,
   location: PropTypes.object,
   params: PropTypes.object,
   queryParams: PropTypes.object,
