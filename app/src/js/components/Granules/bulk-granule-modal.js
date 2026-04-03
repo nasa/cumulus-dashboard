@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 import omitBy from 'lodash/omitBy';
+import isEmpty from 'lodash/isEmpty';
 
 import _config from '../../config';
 import DefaultModal from '../Modal/modal';
@@ -72,7 +73,19 @@ const BulkGranuleModal = ({
   function queryGranulesWorkflows(queryParams) {
     const { granules, index, query: esQuery, granuleInventoryReportName, s3GranuleIdInputFile } = queryParams;
     if ((index && esQuery) || granules.length > 0 || granuleInventoryReportName || s3GranuleIdInputFile) {
-      dispatch(getGranulesWorkflows(queryParams));
+      const fieldsToCheck = [
+        'granules',
+        'index',
+        'query',
+        'granuleInventoryReportName',
+        's3GranuleIdInputFile'
+      ];
+      const processedOmitedParams = { ...queryParams };
+
+      fieldsToCheck.forEach((key) => {
+        if (isEmpty(processedOmitedParams[key])) delete processedOmitedParams[key];
+      });
+      dispatch(getGranulesWorkflows(processedOmitedParams));
     }
   }
 
