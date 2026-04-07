@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Breaking Changes
 
+### Added
+
+### Changed
+
+### Fixed
+
+## [v14.2.1] - 2026-04-07
+
+### Breaking Changes
+
 This version of the dashboard requires Cumulus API >= v21.3.2
 
 ### Added
