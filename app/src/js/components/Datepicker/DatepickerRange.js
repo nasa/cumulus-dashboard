@@ -88,6 +88,7 @@ class DatepickerRange extends React.PureComponent {
       });
       const datepickerState = getState().datepicker;
       this.updateQueryParams(datepickerState);
+      this.onChange();
     };
   }
 
@@ -119,6 +120,7 @@ class DatepickerRange extends React.PureComponent {
     updatedProps.dateRange = findDateRangeByValue('Custom');
     this.props.dispatch({ type: DATEPICKER_DATECHANGE, data: updatedProps });
     this.updateQueryParams(updatedProps);
+    this.onChange();
   }
 
   updateQueryParams (newProps) {
