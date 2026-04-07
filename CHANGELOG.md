@@ -28,7 +28,9 @@ This version of the dashboard requires Cumulus API >= v21.3.2
 
 ### Changed
 
-- **CUMULUS-4484**
+- **CUMULUS-4087**
+  - Implemented automatic session extension for the Cumulus Dashboard. The JWT token and session will be automatically extended as long as the user is active. There is a corresponding CUMULUS-4087 PR for the Cumulus API to add support for this.
+- **CUMULUS-4474**
   - Updated bulk granule operation modal to:
     - Support `granuleInventoryReportName` and `s3GranuleIdInputFile` in the request payload.
     - Accept a list of granule IDs instead of granule objects in the request payload.
@@ -49,12 +51,15 @@ This version of the dashboard requires Cumulus API >= v21.3.2
 - **security vulnerabilities**
   - added `minimatch` and `serialize-javascript`to overides to fix audit issues
 
+### Fixed
+
+- **CUMULUS-4204**
+  - Add Error and Error Type column to granules list, and display error message on granule overview.
+
 ## [v14.2.0] - 2026-01-27
 
 ### Changed
 
-- **CUMULUS-4087**
-  - Implemented automatic session extension for the Cumulus Dashboard. The JWT token and session will be automatically extended as long as the user is active. There is a corresponding CUMULUS-4087 PR for the Cumulus API to add support for this.
 - **CUMULUS-4484**
   - Change INITIAL_DATE_RANGE_IN_DAYS default value to 1
 - **CUMULUS-4189**
@@ -67,8 +72,6 @@ This version of the dashboard requires Cumulus API >= v21.3.2
 
 - **CUMULUS-4461**
   - Address qs vulnerability by overriding its version to ^6.14.1
-- **CUMULUS-4204**
-  - Add Error and Error Type column to granules list, and display error message on granule overview.
 
 ## [v14.1.0] - 2025-12-22
 
