@@ -5,7 +5,9 @@ import withQueryParams from 'react-router-query-params';
 import isNil from 'lodash/isNil';
 import isEqual from 'lodash/isEqual';
 import omitBy from 'lodash/omitBy';
+import omit from 'lodash/omit';
 import noop from 'lodash/noop';
+import _config from '../../config';
 import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
 import Pagination from '../Pagination/pagination';
@@ -22,6 +24,8 @@ function buildSortKey(sortProps) {
     .filter((item) => item.id)
     .map((item) => (item.desc === true ? `-${item.id}` : `+${item.id}`));
 }
+
+const { defaultPageLimit } = _config;
 
 const List = ({
   action,
@@ -89,16 +93,12 @@ const List = ({
   const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
 
   useEffect(() => {
-    setQueryConfig((prevQueryConfig) => ({
-      ...prevQueryConfig,
-      ...getQueryConfig({}),
-    }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(query)]);
-
-  useEffect(() => {
     // Remove parameters with null or undefined values
     const newParams = omitBy(list.params, isNil);
+
+    // Set limit and page to default values when nil
+    if (newParams?.limit === undefined) newParams.limit = defaultPageLimit;
+    if (newParams?.page === undefined) newParams.page = 1;
 
     if (!isEqual(newParams, params)) {
       setParams(newParams);
@@ -108,7 +108,7 @@ const List = ({
       }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(list.params), JSON.stringify(params)]);
+  }, [JSON.stringify(list.params), JSON.stringify(params), JSON.stringify(query)]);
 
   useEffect(() => {
     setClearSelected(true);
@@ -139,7 +139,7 @@ const List = ({
     const newQueryConfig = getQueryConfig({
       sort_key: buildSortKey(sortProps),
     });
-    if (!isEqual(queryConfig, newQueryConfig)) {
+    if (!isEqual(omit(queryConfig, ['startDateTime', 'endDateTime']), omit(newQueryConfig, ['startDateTime', 'endDateTime']))) {
       setQueryConfig(newQueryConfig);
     }
   }

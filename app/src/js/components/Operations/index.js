@@ -8,24 +8,19 @@ import Sidebar from '../Sidebar/sidebar';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import OperationOverview from './overview';
 import OperationStatus from './operation-status';
-import { listOperations } from '../../actions';
 import { strings } from '../locale';
 import { filterQueryParams } from '../../utils/url-helper';
 
-const Operations = ({ dispatch, location, params, queryParams }) => {
+const Operations = ({ location, params, queryParams }) => {
   const { pathname } = location;
   const filteredQueryParams = filterQueryParams(queryParams);
-
-  function query() {
-    dispatch(listOperations(filteredQueryParams));
-  }
 
   return (
     <div className="page__workflows">
       <Helmet>
         <title> Cumulus Operations </title>
       </Helmet>
-      <DatePickerHeader onChange={query} heading={strings.operations} />
+      <DatePickerHeader heading={strings.operations} />
       <div className="page__content">
         <div className="wrapper__sidebar">
           <Sidebar currentPath={pathname} params={params} />
@@ -55,7 +50,6 @@ const Operations = ({ dispatch, location, params, queryParams }) => {
 };
 
 Operations.propTypes = {
-  dispatch: PropTypes.func,
   location: PropTypes.object,
   params: PropTypes.object,
   queryParams: PropTypes.object,
