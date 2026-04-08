@@ -1157,7 +1157,7 @@ describe('Dashboard Granules Page', () => {
 
       cy.get('.button__apply-filter').click();
 
-      const noErrorGranuleID = 'MOD09GQ.A1530852.CljGDp.006.2163412421938';
+      const noErrorGranuleID = 'test_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl2';
       const errorGranuleID = 'MOD09GQ.A2417309.YZ9tCV.006.4640974889044_ca2a8dfe';
       cy.get(`[data-value="${noErrorGranuleID}"]`).children().as('noErrorColumns');
       cy.get('@noErrorColumns').eq(4).invoke('text').should('be.eq', '--');
@@ -1168,7 +1168,7 @@ describe('Dashboard Granules Page', () => {
     });
 
     it('Should display error if available in granule overview page', () => {
-      const noErrorGranuleID = 'MOD09GQ.A1530852.CljGDp.006.2163412421938';
+      const noErrorGranuleID = 'test_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl2';
       const errorGranuleID = 'MOD09GQ.A2417309.YZ9tCV.006.4640974889044_ca2a8dfe';
       cy.visit(`/granules/granule/${errorGranuleID}`);
       cy.get('.heading--large').should('have.text', `Granule: ${errorGranuleID}`);
