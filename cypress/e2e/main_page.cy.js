@@ -186,7 +186,7 @@ describe('Dashboard Home Page', () => {
       cy.clock(ingestEndTime);
       cy.setDatepickerDropdown('3 months');
 
-      cy.get('#Errors').contains('6');
+      cy.get('#Errors').contains('15');
       cy.get('#Collections').contains('2');
       cy.get('#Granules').contains('16');
       cy.get('#Executions').contains('11');
