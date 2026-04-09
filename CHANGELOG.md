@@ -38,6 +38,11 @@ This version of the dashboard requires Cumulus API >= v21.3.2
     `@cumulus/aws-client@21.3.1-alpha.0`
   - Updated the Cypress granules fixture due to the localApi update.
   - Updated the Cypress seed function to upload the reconciliation report in its original format.
+- **CUMULUS-4485**
+  - Updated Table component:
+    - `queryNewSort` check now uses `sort_key`
+    - `useEffect` uses default values when limit or page is nil to prevent duplicate query updates
+  - Removed unused `onChange` function from `datePickerHeader` in multiple components
 - **CUMULUS-4538**
   - Bumped node version from 20.12.2 to 22.21.1 to match Core
   - Upgraded postgres image to postgres:17.4-alpine

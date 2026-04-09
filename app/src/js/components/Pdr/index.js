@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { withRouter, Route, Switch } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
-import { getCount, listPdrs } from '../../actions';
+import { getCount } from '../../actions';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import Pdr from './pdr';
 import PdrOverview from './overview';
@@ -18,10 +18,6 @@ const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
   const { pathname } = location;
   const count = get(stats, 'count.sidebar.pdrs.count');
   const filteredQueryParams = filterQueryParams(queryParams);
-
-  function query() {
-    dispatch(listPdrs(filteredQueryParams));
-  }
 
   useEffect(() => {
     dispatch(
@@ -38,7 +34,7 @@ const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
       <Helmet>
         <title> Cumulus PDRs </title>
       </Helmet>
-      <DatePickerHeader onChange={query} heading={strings.pdrs} />
+      <DatePickerHeader heading={strings.pdrs} />
       <div className="page__content">
         <div className="wrapper__sidebar">
           <Sidebar currentPath={pathname} params={params} count={count} />

@@ -6,7 +6,6 @@ import { withRouter, Route, Switch } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import { strings } from '../locale';
-import { getCount, listReconciliationReports } from '../../actions';
 import CreateReconciliationReport from './create';
 import ReconciliationReportList from './list';
 import ReconciliationReport from './reconciliation-report';
@@ -15,7 +14,6 @@ import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import { filterQueryParams } from '../../utils/url-helper';
 
 const ReconciliationReports = ({
-  dispatch,
   location,
   params,
   queryParams,
@@ -24,21 +22,12 @@ const ReconciliationReports = ({
   const showSidebar = pathname !== '/reconciliation-reports/create';
   const filteredQueryParams = filterQueryParams(queryParams);
 
-  function query() {
-    dispatch(listReconciliationReports(filteredQueryParams));
-    dispatch(getCount({
-      type: 'reconciliationReports',
-      field: 'status',
-      ...filteredQueryParams
-    }));
-  }
-
   return (
     <div className='page__reconciliations'>
       <Helmet>
         <title> Reconcilation Reports </title>
       </Helmet>
-      <DatePickerHeader onChange={query} heading={strings.reconciliation_reports} showDatePicker={showSidebar} />
+      <DatePickerHeader heading={strings.reconciliation_reports} showDatePicker={showSidebar} />
 
       <div className='page__content'>
         <div className="wrapper__sidebar">
@@ -62,7 +51,6 @@ const ReconciliationReports = ({
 };
 
 ReconciliationReports.propTypes = {
-  dispatch: PropTypes.func,
   location: PropTypes.object,
   params: PropTypes.object,
   queryParams: PropTypes.object,
