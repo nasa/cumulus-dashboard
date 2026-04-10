@@ -99,7 +99,7 @@ In this example, the dashboard would be available at `http://localhost:3000/` in
 
 ### Build the dashboard
 
-The dashboard uses node v20.12.2. To build/run the dashboard on your local machine, install [nvm](https://github.com/creationix/nvm) and run `nvm install v20.12.2`.
+The dashboard uses node v22.21.1. To build/run the dashboard on your local machine, install [nvm](https://github.com/creationix/nvm) and run `nvm install v22.21.1`.
 
 #### install requirements
 We use npm for local package management. To install the requirements:
@@ -387,7 +387,7 @@ Create a PR for the `release-vX.X.X` branch against the `develop` branch. Verify
 
 ### 9. Create a pull request against the master branch
 
-Create a PR for the `develop` branch against the `master` branch. Verify that the Earthdata Bamboo CI build for the PR succeeds and then merge to `master`.  Do not create a squash merge, but use a merge commit.
+Create a PR for the `develop` branch against the `master` branch. Verify that the Earthdata Bamboo CI build for the PR succeeds and then merge to `master`.  **Do not create a squash merge, but use a merge commit.**
 
 ### 10. Create a git tag for the release
 

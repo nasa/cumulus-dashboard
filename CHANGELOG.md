@@ -7,6 +7,60 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Breaking Changes
+
+### Added
+
+### Changed
+
+### Fixed
+
+## [v14.2.1] - 2026-04-07
+
+### Breaking Changes
+
+This version of the dashboard requires Cumulus API >= v21.3.2
+
+### Added
+
+- **CUMULUS-4298**
+  - Added checkbox to exclude collections from date filtering.
+
+### Changed
+
+- **CUMULUS-4087**
+  - Implemented automatic session extension for the Cumulus Dashboard. The JWT token and session will be automatically extended as long as the user is active. There is a corresponding CUMULUS-4087 PR for the Cumulus API to add support for this.
+- **CUMULUS-4474**
+  - Updated bulk granule operation modal to:
+    - Support `granuleInventoryReportName` and `s3GranuleIdInputFile` in the request payload.
+    - Accept a list of granule IDs instead of granule objects in the request payload.
+  - Updated the dashboard to use alpha version `@cumulus/api@21.3.1-alpha.0` and
+    `@cumulus/aws-client@21.3.1-alpha.0`
+  - Updated the Cypress granules fixture due to the localApi update.
+  - Updated the Cypress seed function to upload the reconciliation report in its original format.
+- **CUMULUS-4485**
+  - Updated Table component:
+    - `queryNewSort` check now uses `sort_key`
+    - `useEffect` uses default values when limit or page is nil to prevent duplicate query updates
+  - Removed unused `onChange` function from `datePickerHeader` in multiple components
+- **CUMULUS-4538**
+  - Bumped node version from 20.12.2 to 22.21.1 to match Core
+  - Upgraded postgres image to postgres:17.4-alpine
+- **CUMULUS-4573**
+  - updated minCompatibleApiVersion from 21.0.0 to 21.3.2
+  - updated `queryGranulesWorkflows` to filter out empty strings and empty arrays
+  - changed cypress `errMsgRegx` in `rules.cy.js` to regex match the error message
+  - updated `@cumulus/aws-client` and `@cumulus/api` from 21.3.1-alpha.0 to 21.3.2
+  - pinned `lodash` to `^4.18.1` due to audit issues
+  - added `picomatch`, `lodash`, `lodash-es`, `node-forge`, `path-to-regexp`, `tar`, and `@xmldom/xmldom` to overides to fix audit issues
+- **security vulnerabilities**
+  - added `minimatch` and `serialize-javascript`to overides to fix audit issues
+
+### Fixed
+
+- **CUMULUS-4204**
+  - Add Error and Error Type column to granules list, and display error message on granule overview.
+
 ## [v14.2.0] - 2026-01-27
 
 ### Changed

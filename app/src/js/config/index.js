@@ -8,7 +8,7 @@ const deploymentConfig = require('./config');
 const baseConfig = {
   environment: 'development',
   requireEarthdataLogin: false,
-  minCompatibleApiVersion: '21.0.0',
+  minCompatibleApiVersion: '21.3.2',
   oauthMethod: 'earthdata',
 
   graphicsPath: '/src/assets/images/',
@@ -30,7 +30,24 @@ const baseConfig = {
   recent: moment().subtract(1, 'day').format(),
 
   // delay before UI/store updates after a successful command (ie PUT)
-  updateDelay: 1000
+  updateDelay: 1000,
+
+  // token refresh threshold - refresh token when this many seconds or less remain
+  tokenRefreshThresholdSeconds: 5 * 60, // 5 minutes
+
+  // session duration limit
+  maxSessionDurationSeconds: 12 * 60 * 60, // 12 hours
+
+  // session warning threshold - show warning modal when session is within
+  // this many seconds of reaching the max session duration
+  sessionWarningThresholdSeconds: 20 * 60, // 20 minutes
+
+  // For debugging: set mockTokenExpirationSeconds (in seconds since Unix epoch) to simulate token expiration
+  // Set to a time in the future when you want the token to expire
+  mockTokenExpirationSeconds: null,
+
+  // For debugging: mock the session start time (in seconds since Unix epoch) for testing
+  mockSessionStartSeconds: null,
 };
 
 // eslint-disable-next-line prefer-object-spread

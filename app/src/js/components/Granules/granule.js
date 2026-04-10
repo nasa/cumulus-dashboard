@@ -4,7 +4,7 @@ import { withRouter, Link, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { get } from 'object-path';
-import pick from 'lodash/pick';
+import isEmpty from 'lodash/isEmpty';
 import {
   getGranule,
   getGranuleRecoveryStatus,
@@ -148,7 +148,7 @@ function GranuleOverview({ skipReloadOnMount = false }) {
 
   const loadGranule = useCallback(() => {
     dispatch(getGranule(granuleId)).then((granuleResponse) => {
-      const payload = { granules: [pick(granuleResponse.data, ['granuleId', 'collectionId'])] };
+      const payload = { granules: [granuleResponse.data.granuleId] };
       dispatch(listExecutionsByGranule(granuleId, payload, false));
     });
   }, [dispatch, granuleId]);
@@ -251,6 +251,7 @@ function GranuleOverview({ skipReloadOnMount = false }) {
     get(granules.removed, [granuleId, 'error']),
     get(granules.deleted, [granuleId, 'error']),
     get(recoveryStatusMap, [granuleId, 'error']),
+    (isEmpty(get(granules.map, [granuleId, 'data', 'error']))) ? undefined : get(granules.map, [granuleId, 'data', 'error']),
   ].filter(Boolean);
 
   if (!granuleRecord || (granuleRecord.inflight && !granule)) return <Loading />;

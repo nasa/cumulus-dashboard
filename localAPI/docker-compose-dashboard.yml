@@ -1,7 +1,7 @@
 version: "3"
 services:
   dashboard:
-    image: ${DOCKER_REPOSITORY}node:20.12.2
+    image: ${DOCKER_REPOSITORY}node:22.21.1
     depends_on:
       - serve_api
     network_mode: "service:shim"
@@ -20,7 +20,7 @@ services:
       - AUTH_METHOD=earthdata
       - INITIAL_DATE_RANGE_IN_DAYS=All
   shim:   # empty container to open ports
-    image: ${DOCKER_REPOSITORY}node:20.12.2
+    image: ${DOCKER_REPOSITORY}node:22.21.1
     command:
       bash -c "tail -f /dev/null"
     working_dir:

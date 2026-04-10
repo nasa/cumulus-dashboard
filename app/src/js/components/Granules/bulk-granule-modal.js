@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
+import omitBy from 'lodash/omitBy';
+import isEmpty from 'lodash/isEmpty';
 
 import _config from '../../config';
 import DefaultModal from '../Modal/modal';
@@ -60,7 +62,7 @@ const BulkGranuleModal = ({
     let json;
     if (!inflight) {
       try {
-        json = JSON.parse(query);
+        json = omitBy(JSON.parse(query), (v) => v === '');
       } catch (jsonError) {
         return setErrorState(`Syntax error in JSON ${jsonError.message}`);
       }
@@ -69,9 +71,21 @@ const BulkGranuleModal = ({
   }
 
   function queryGranulesWorkflows(queryParams) {
-    const { granules, index, query: esQuery } = queryParams;
-    if ((index && esQuery) || granules.length > 0) {
-      dispatch(getGranulesWorkflows(queryParams));
+    const { granules, index, query: esQuery, granuleInventoryReportName, s3GranuleIdInputFile } = queryParams;
+    if ((index && esQuery) || granules.length > 0 || granuleInventoryReportName || s3GranuleIdInputFile) {
+      const fieldsToCheck = [
+        'granules',
+        'index',
+        'query',
+        'granuleInventoryReportName',
+        's3GranuleIdInputFile'
+      ];
+      const processedOmitedParams = { ...queryParams };
+
+      fieldsToCheck.forEach((key) => {
+        if (isEmpty(processedOmitedParams[key])) delete processedOmitedParams[key];
+      });
+      dispatch(getGranulesWorkflows(processedOmitedParams));
     }
   }
 
@@ -154,7 +168,7 @@ const BulkGranuleModal = ({
           {selected &&
             <>
               <p>Selected granules:</p>
-              <p>[{selected.map((selection) => `{"granuleId": "${selection.granuleId}", "collectionId": "${selection.collectionId}"}`).join(', ')}]</p>
+              <p>[{selected.join(', ')}]</p>
             </>
           }
           <br/>
@@ -171,7 +185,7 @@ const BulkGranuleModal = ({
           </form>
           {selectWorkflow &&
           <>
-            <h4 className="modal_subtitle">Then select workflow to rerun for all the selected granules.</h4>
+            <h4 className="modal_subtitle">Select a workflow to rerun for all selected granules. If no workflow is provided or selected, the latest workflow for each granule will be executed.</h4>
             {get(granulesExecutions, 'workflows.error') &&
               <ErrorReport report={`Failed to get workflows: ${get(granulesExecutions, 'workflows.error')}`}/>}
             <div className='modal__internal modal__formcenter'>
@@ -212,10 +226,7 @@ BulkGranuleModal.propTypes = {
   // whether query workflow options for the selected granule
   queryWorkflowOptions: PropTypes.bool,
   requestId: PropTypes.string,
-  selected: PropTypes.arrayOf(PropTypes.shape({
-    granuleId: PropTypes.string,
-    collectionId: PropTypes.string,
-  })),
+  selected: PropTypes.array,
   // whether select a workflow from dropdown
   selectWorkflow: PropTypes.bool,
   showModal: PropTypes.bool,

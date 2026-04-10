@@ -14,22 +14,17 @@ import CollectionGranules from './granules';
 import CollectionIngest from './ingest';
 import CollectionLogs from './logs';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
-import { listCollections } from '../../actions';
 import { filterQueryParams } from '../../utils/url-helper';
 
-const Collections = ({ dispatch, location, logs, queryParams }) => {
+const Collections = ({ location, logs, queryParams }) => {
   const { pathname } = location;
   const existingCollection = pathname !== '/collections/add';
   const filteredQueryParams = filterQueryParams(queryParams);
   const { metricsNotConfigured } = logs;
 
-  function query() {
-    dispatch(listCollections(filteredQueryParams));
-  }
-
   return (
     <div className="page__collections">
-      <DatePickerHeader onChange={query} heading={strings.collections} />
+      <DatePickerHeader heading={strings.collections} />
       <div className="page__content">
         <Helmet>
           <title> Cumulus Collections </title>
@@ -126,7 +121,6 @@ const Collections = ({ dispatch, location, logs, queryParams }) => {
 Collections.displayName = strings.collection;
 
 Collections.propTypes = {
-  dispatch: PropTypes.func,
   location: PropTypes.object,
   logs: PropTypes.object,
   queryParams: PropTypes.object,

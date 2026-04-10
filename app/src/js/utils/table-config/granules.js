@@ -1,10 +1,10 @@
 import path from 'path';
-import pick from 'lodash/pick';
 import React from 'react';
 import { get } from 'object-path';
 import Collapsible from 'react-collapsible';
 import { Link } from 'react-router-dom';
 import noop from 'lodash/noop';
+import isEmpty from 'lodash/isEmpty';
 import {
   seconds,
   bool,
@@ -67,6 +67,25 @@ export const tableColumns = [
     )
   },
   {
+    Header: 'Error Type',
+    accessor: (row) => get(row, 'error.Error', nullValue),
+    Cell: ({ row: { original } }) => (
+      (isEmpty(get(original, ['error']))) ? nullValue : get(original, 'error.Error', nullValue)
+    ),
+    id: 'errorType',
+    width: 100
+  },
+  {
+    Header: 'Error',
+    accessor: (row) => get(row, 'error.Cause', nullValue),
+    id: 'error',
+    Cell: ({ row: { original } }) => ( // eslint-disable-line react/prop-types
+      (isEmpty(get(original, ['error']))) ? nullValue : <ErrorReport report={get(original, 'error', nullValue)} truncate={true} disableScroll={true} />
+    ),
+    disableSortBy: true,
+    width: 175
+  },
+  {
     Header: strings.collection_id,
     accessor: 'collectionId',
     // eslint-disable-next-line react/prop-types
@@ -114,7 +133,7 @@ export const tableColumns = [
   }
 ];
 
-export const defaultHiddenColumns = ['recoveryStatus'];
+export const defaultHiddenColumns = ['recoveryStatus', 'errorType', 'error'];
 
 export const errorTableColumns = [
   {
@@ -279,8 +298,7 @@ const granuleModalJourney = ({
       modalOptions.confirmButtonText = (selected.length > 1) ? 'View Running' : 'View Granule';
       modalOptions.cancelButtonClass = 'button--green';
       modalOptions.confirmButtonClass = 'button__goto';
-      const ids = selected.map((g) => g.granuleId);
-      modalOptions.onConfirm = setOnConfirm({ history, selected: ids, errorMessage, closeModal });
+      modalOptions.onConfirm = setOnConfirm({ history, selected, errorMessage, closeModal });
     }
   }
   return modalOptions;
@@ -308,7 +326,7 @@ export const reingestAction = (granules, selectedGranules) => ({
   confirm: confirmReingest,
   className: 'button--reingest',
   getModalOptions: granuleModalJourney,
-  selected: selectedGranules.map((g) => pick(g, ['granuleId', 'collectionId']))
+  selected: selectedGranules.map((g) => g.granuleId)
 });
 
 export const bulkActions = (granules, config, selectedGranules) => [
@@ -344,7 +362,7 @@ export const bulkActions = (granules, config, selectedGranules) => [
         element='button'
         className='button button__bulkgranules button--green button--small form-group__element'
         confirmAction={true}
-        selected={selectedGranules.map((g) => pick(g, ['granuleId', 'collectionId']))}
+        selected={selectedGranules.map((g) => g.granuleId)}
       />
   },
   {

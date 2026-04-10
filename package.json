@@ -1,6 +1,6 @@
 {
   "name": "@cumulus/cumulus-dashboard",
-  "version": "14.2.0",
+  "version": "14.2.1",
   "description": "A dashboard for Cumulus API",
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
   "homepage": "https://github.com/nasa/cumulus-dashboard",
   "private": true,
   "engines": {
-    "node": ">=20.12.2"
+    "node": ">=22.21.1"
   },
   "scripts": {
     "audit-ci": "audit-ci --config $(pwd)/audit-ci.json",
@@ -68,15 +68,15 @@
     "@babel/preset-react": "^7.16.5",
     "@babel/register": "^7.16.5",
     "@babel/runtime": "^7.16.5",
-    "@cumulus/api": "21.0.0",
-    "@cumulus/aws-client": "21.0.0",
+    "@cumulus/api": "21.3.2",
+    "@cumulus/aws-client": "21.3.2",
     "@cypress/webpack-preprocessor": "^5.11.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.0.1",
     "audit-ci": "^7.1.0",
     "autoprefixer": "^10.4.21",
     "ava": "^3.15.0",
-    "axios": "^1.12.0",
+    "axios": "^1.15.0",
     "babel-loader": "^8.2.1",
     "babel-plugin-rewire": "^1.2.0",
     "babel-plugin-webpack-alias-7": "^0.1.1",
@@ -161,7 +161,7 @@
     "jquery": "^3.6.0",
     "jsonwebtoken": "^9.0.0",
     "localized-strings": "^0.2.4",
-    "lodash": "^4.17.21",
+    "lodash": "^4.18.1",
     "moment": "^2.29.4",
     "normalize-opentype.css": "^0.2.4",
     "normalize.css": "^8.0.1",
@@ -228,6 +228,17 @@
           "form-data": "^4.0.4"
         }
       }
-    }
+    },
+    "minimatch@3": "^3.1.5",
+    "minimatch@7": "^7.4.9",
+    "minimatch@10": "^10.2.4",
+    "node-forge": "^1.4.0",
+    "path-to-regexp": "^0.1.13",
+    "picomatch": "^2.3.2",
+    "serialize-javascript": "^7.0.3",
+    "tar": "^7.5.8",
+    "@xmldom/xmldom": "0.8.12",
+    "lodash": "^4.18.1",
+    "lodash-es": "^4.18.1"
   }
 }

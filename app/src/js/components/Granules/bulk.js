@@ -26,35 +26,48 @@ const getRequestAsyncOpId = (request) => get(request, ['data', 'id']);
 const isStatusInflight = (status) => status === 'inflight';
 const isStatusSuccess = (status) => status === 'success';
 
-const granulesOrQueryDescription = 'add either an array of granule objects in the form:\n { "granuleId": "(value)", "collectionId": "(value)" } or an elasticsearch query and index.';
-const granulesOrQueryText = `In the box below, ${granulesOrQueryDescription}`;
+const granulesOrQueryText = 'In the box below, provide one of the following: an array of granule IDs, ' +
+  'a granule inventory report name, an S3 URI of a file containing granule IDs, ' +
+  'or an Elasticsearch query and index.';
 
 const bulkOperationsDefaultQuery = {
   workflowName: '',
   index: '',
   query: '',
   granules: [],
-  meta: {}
+  granuleInventoryReportName: '',
+  s3GranuleIdInputFile: '',
+  meta: {},
+  queueUrl: '',
 };
 
 const bulkDeleteDefaultQuery = {
   index: '',
   query: '',
   granules: [],
+  granuleInventoryReportName: '',
+  s3GranuleIdInputFile: '',
   forceRemoveFromCmr: false
 };
 
 const bulkReingestDefaultQuery = {
+  workflowName: '',
   index: '',
   query: '',
-  granules: []
+  granules: [],
+  granuleInventoryReportName: '',
+  s3GranuleIdInputFile: '',
+  queueUrl: '',
 };
 
 const bulkRecoveryDefaultQuery = {
   workflowName: '',
   index: '',
   query: '',
-  granules: []
+  granules: [],
+  granuleInventoryReportName: '',
+  s3GranuleIdInputFile: '',
+  queueUrl: '',
 };
 
 const BulkGranule = ({
@@ -272,6 +285,7 @@ const BulkGranule = ({
           <ol>
             <li>In the box below, enter the <strong>workflowName</strong>.</li>
             <li>Then {granulesOrQueryText}</li>
+            <li>Enter an optional queueUrl for the SQS queue used to schedule granule workflows.</li>
           </ol>
         </BulkGranuleModal>
         <BulkGranuleModal
@@ -328,9 +342,10 @@ const BulkGranule = ({
         >
           <h4 className="modal_subtitle">To run and complete your bulk reingest task:</h4>
           <ol>
-            <li>{granulesOrQueryText}.</li>
-            <li>Then select workflow to rerun for all the selected granules. The workflows listed are the
+            <li>{granulesOrQueryText}</li>
+            <li>Then enter or select workflow to rerun for all the selected granules. The workflows listed are the
               intersection of the selected granules' workflows.</li>
+            <li>Enter an optional queueUrl for the SQS queue used to schedule granule workflows.</li>
           </ol>
         </BulkGranuleModal>
         {config.enableRecovery &&
@@ -358,6 +373,7 @@ const BulkGranule = ({
           <ol>
             <li>In the box below, enter the <strong>workflowName</strong>.</li>
             <li>Then {granulesOrQueryText} (<i>see below</i>).</li>
+            <li>Enter an optional queueUrl for the SQS queue used to schedule granule workflows.</li>
           </ol>
         </BulkGranuleModal>
         }
@@ -374,10 +390,7 @@ BulkGranule.propTypes = {
   className: PropTypes.string,
   element: PropTypes.string,
   granules: PropTypes.object,
-  selected: PropTypes.arrayOf(PropTypes.shape({
-    granuleId: PropTypes.string,
-    collectionId: PropTypes.string,
-  }))
+  selected: PropTypes.array,
 };
 
 export { BulkGranule };
