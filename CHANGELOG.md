@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- **CSD-103**
+  - Fix granule getExecuteOptions selectHandler not setting workflow state data correctly
+
 ### Breaking Changes
 
 ### Added
