@@ -1034,7 +1034,6 @@ describe('Dashboard Granules Page', () => {
       cy.get('.modal-body .form__dropdown .dropdown__element .react-select__single-value').should('have.text', workflowNameTest);
       cy.get('.button--submit').click();
       cy.wait('@executeWorkflow').then(({ request }) => {
-        console.log('Request body:', request.body);
         expect(request.body.action).to.equal('applyWorkflow');
         expect(request.body.workflow).to.equal(workflowNameTest);
       });
