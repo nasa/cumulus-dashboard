@@ -1008,9 +1008,9 @@ describe('Dashboard Granules Page', () => {
 
     it('Should allow user to select execute workflow option from dropdown when from granule detail page', () => {
       const granuleId = 'test_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl2';
-      const workflowNameOneTest = 'SecondTestWorkflow';
-      const workflowNameTwoTest = 'HelloWorldWorkflow';
+      const workflowNameTest = 'SecondTestWorkflow';
       cy.intercept('GET', `/granules/${granuleId}*`).as('getGranule');
+      cy.intercept('PATCH', /\/granules\/.*/).as('executeWorkflow');
 
       cy.visit('/granules');
       cy.wait(1000);
@@ -1027,20 +1027,17 @@ describe('Dashboard Granules Page', () => {
       cy.get('.modal-body .form__dropdown .dropdown__element .react-select__menu').as('workflow-menu');
       cy.get('@workflow-menu').should('be.visible');
       cy.get('@workflow-menu').get('.react-select__option').each(($option) => {
-        if ($option.text() === workflowNameOneTest) {
+        if ($option.text() === workflowNameTest) {
           cy.wrap($option).click();
         }
       });
-      cy.get('.modal-body .form__dropdown .dropdown__element .react-select__single-value').should('have.text', workflowNameOneTest);
-      cy.get('@workflow-input').click({ force: true });
-      cy.get('@workflow-menu').get('.react-select__option').each(($option) => {
-        if ($option.text() === workflowNameTwoTest) {
-          cy.wrap($option).click();
-        }
+      cy.get('.modal-body .form__dropdown .dropdown__element .react-select__single-value').should('have.text', workflowNameTest);
+      cy.get('.button--submit').click();
+      cy.wait('@executeWorkflow').then(({ request }) => {
+        console.log('Request body:', request.body);
+        expect(request.body.action).to.equal('applyWorkflow');
+        expect(request.body.workflow).to.equal(workflowNameTest);
       });
-      cy.get('.modal-body .form__dropdown .dropdown__element .react-select__single-value').should('have.text', workflowNameTwoTest);
-      cy.get('.button--cancel').click();
-      cy.url().should('include', `granules/granule/${granuleId}`);
     });
   });
 
