@@ -1005,6 +1005,43 @@ describe('Dashboard Granules Page', () => {
         .and('include', `collectionId=${encodeURIComponent(collectionId)}`)
         .and('include', `search=${searchShort}`);
     });
+
+    it('Should allow user to select execute workflow option from dropdown when from granule detail page', () => {
+      const granuleId = 'test_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl2';
+      const workflowNameOneTest = 'SecondTestWorkflow';
+      const workflowNameTwoTest = 'HelloWorldWorkflow';
+      cy.intercept('GET', `/granules/${granuleId}*`).as('getGranule');
+
+      cy.visit('/granules');
+      cy.wait(1000);
+      cy.contains('.table .tbody .tr a', granuleId).then(($res) => {
+        expect($res).to.have.attr('href', `/granules/granule/${granuleId}`);
+        cy.wrap($res).click();
+      });
+      cy.wait('@getGranule');
+      cy.get('.heading--large').should('have.text', `Granule: ${granuleId}`);
+      cy.contains('button', 'Options').click();
+      cy.get('.dropdown__menu').contains('Execute').click();
+      cy.get('.modal-body .form__dropdown .dropdown__element input').as('workflow-input');
+      cy.get('@workflow-input').click({ force: true });
+      cy.get('.modal-body .form__dropdown .dropdown__element .react-select__menu').as('workflow-menu');
+      cy.get('@workflow-menu').should('be.visible');
+      cy.get('@workflow-menu').get('.react-select__option').each(($option) => {
+        if ($option.text() === workflowNameOneTest) {
+          cy.wrap($option).click();
+        }
+      });
+      cy.get('.modal-body .form__dropdown .dropdown__element .react-select__single-value').should('have.text', workflowNameOneTest);
+      cy.get('@workflow-input').click({ force: true });
+      cy.get('@workflow-menu').get('.react-select__option').each(($option) => {
+        if ($option.text() === workflowNameTwoTest) {
+          cy.wrap($option).click();
+        }
+      });
+      cy.get('.modal-body .form__dropdown .dropdown__element .react-select__single-value').should('have.text', workflowNameTwoTest);
+      cy.get('.button--cancel').click();
+      cy.url().should('include', `granules/granule/${granuleId}`);
+    });
   });
 
   describe('when ESTIMATE_TABLE_ROW_COUNT is false', () => {
