@@ -199,7 +199,7 @@ function GranuleOverview({ skipReloadOnMount = false }) {
 
   const getExecuteOptions = () => [
     executeDialog({
-      selectHandler: setWorkflow,
+      selectHandler: (_selector, newWorkflow) => setWorkflow(newWorkflow),
       label: 'workflow',
       value: workflow,
       options: workflowOptions,
