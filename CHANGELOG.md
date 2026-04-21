@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 - **CSD-103**
-  - Fix granule getExecuteOptions selectHandler not setting workflow state data correctly
+  - Fixed the getExecuteOptions select handler in the granule detail view modal to correctly set the workflow state data.
 
 ### Breaking Changes
 
