@@ -1190,7 +1190,7 @@ describe('Dashboard Granules Page', () => {
 
       cy.get('.button__apply-filter').click();
 
-      const noErrorGranuleID = 'test_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl2';
+      const noErrorGranuleID = 'MOD09GQ.A8022119.sk3Sph.006.0494433853533';
       const errorGranuleID = 'MOD09GQ.A2417309.YZ9tCV.006.4640974889044_ca2a8dfe';
       const unknownErrorGranuleID = 'coastal_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl3';
       cy.get(`[data-value="${noErrorGranuleID}"]`).children().as('noErrorColumns');
@@ -1200,12 +1200,12 @@ describe('Dashboard Granules Page', () => {
       cy.get('@errorColumns').eq(4).invoke('text').should('be.eq', 'UnexpectedFileSize');
       cy.get('@errorColumns').eq(5).invoke('text').should('match', /errorMessage/);
       cy.get(`[data-value="${unknownErrorGranuleID}"]`).children().as('unknownErrorColumns');
-      cy.get('@unknownErrorColumns').eq(4).invoke('text').should('be.eq', 'Unknown Error');
-      cy.get('@unknownErrorColumns').eq(5).invoke('text').should('match', /None/);
+      cy.get('@unknownErrorColumns').eq(4).invoke('text').should('be.eq', '--');
+      cy.get('@unknownErrorColumns').eq(5).invoke('text').should('be.eq', '--');
     });
 
     it('Should display error if available in granule overview page', () => {
-      const noErrorGranuleID = 'test_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl2';
+      const noErrorGranuleID = 'MOD09GQ.A8022119.sk3Sph.006.0494433853533';
       const errorGranuleID = 'MOD09GQ.A2417309.YZ9tCV.006.4640974889044_ca2a8dfe';
       const unknownErrorGranuleID = 'coastal_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl3';
       cy.visit(`/granules/granule/${errorGranuleID}`);
@@ -1217,8 +1217,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('.error__report').should('not.exist');
       cy.visit(`/granules/granule/${unknownErrorGranuleID}`);
       cy.get('.heading--large').should('have.text', `Granule: ${unknownErrorGranuleID}`);
-      cy.get('.error__report').should('be.visible');
-      cy.get('.error__report').should('contain.text', 'None');
+      cy.get('.error__report').should('not.exist');
     });
   });
 });

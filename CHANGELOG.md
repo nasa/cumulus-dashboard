@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CSD-103**
   - Fixed the getExecuteOptions select handler in the granule detail view modal to correctly set the workflow state data.
 
+- **CSD-106**
+  - Suppressed "None" and "Unknown" error messages in the Granule list and detail views when no actual failure exists.
+
 ### Breaking Changes
 
 ### Added

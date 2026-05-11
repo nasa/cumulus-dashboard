@@ -237,7 +237,7 @@
     "picomatch": "^2.3.2",
     "serialize-javascript": "^7.0.3",
     "tar": "^7.5.8",
-    "@xmldom/xmldom": "0.8.12",
+    "@xmldom/xmldom": "0.8.13",
     "lodash": "^4.18.1",
     "lodash-es": "^4.18.1"
   }
