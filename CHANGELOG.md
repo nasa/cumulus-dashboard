@@ -15,6 +15,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+## [v14.2.1] - 2026-05-11
+
+### Fixed
+
+- **CSD-103**
+  - Fixed the getExecuteOptions select handler in the granule detail view modal to correctly set the workflow state data.
+
+- **CSD-106**
+  - Suppressed "None" and "Unknown" error messages in the Granule list and detail views when no actual failure exists.
+
 ## [v14.2.1] - 2026-04-07
 
 ### Breaking Changes
@@ -1642,7 +1652,9 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
-  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v14.2.0...HEAD
+  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v14.2.2...HEAD
+  [v14.2.2]: https://github.com/nasa/cumulus-dashboard/compare/v14.2.1...v14.2.2
+  [v14.2.1]: https://github.com/nasa/cumulus-dashboard/compare/v14.2.0...v14.2.1
   [v14.2.0]: https://github.com/nasa/cumulus-dashboard/compare/v14.1.0...v14.2.0
   [v14.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v14.0.0...v14.1.0
   [v14.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v13.3.1...v14.0.0

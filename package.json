@@ -1,6 +1,6 @@
 {
   "name": "@cumulus/cumulus-dashboard",
-  "version": "14.2.1",
+  "version": "14.2.2",
   "description": "A dashboard for Cumulus API",
   "repository": {
     "type": "git",
@@ -68,8 +68,8 @@
     "@babel/preset-react": "^7.16.5",
     "@babel/register": "^7.16.5",
     "@babel/runtime": "^7.16.5",
-    "@cumulus/api": "21.3.2",
-    "@cumulus/aws-client": "21.3.2",
+    "@cumulus/api": "21.3.3",
+    "@cumulus/aws-client": "21.3.3",
     "@cypress/webpack-preprocessor": "^5.11.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.0.1",
@@ -237,7 +237,7 @@
     "picomatch": "^2.3.2",
     "serialize-javascript": "^7.0.3",
     "tar": "^7.5.8",
-    "@xmldom/xmldom": "0.8.12",
+    "@xmldom/xmldom": "0.8.13",
     "lodash": "^4.18.1",
     "lodash-es": "^4.18.1"
   }
