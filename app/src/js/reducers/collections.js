@@ -129,7 +129,14 @@ export default createReducer(initialState, {
     state.list.params[action.paramKey] = null;
   },
   [OPTIONS_COLLECTIONNAME]: (state, action) => {
-    const options = action.data.results.map(({ name, version }) => {
+    const sortedCollections = [...(action.data.results || [])].sort((a, b) => {
+      const firstDate = Date.parse(a.updatedAt || a.createdAt || 0) || 0;
+      const secondDate = Date.parse(b.updatedAt || b.createdAt || 0) || 0;
+
+      return secondDate - firstDate;
+    });
+
+    const options = sortedCollections.map(({ name, version }) => {
       const collectionId = getCollectionId({ name, version });
       return {
         id: collectionId,
