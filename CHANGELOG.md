@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- Bumped node version from 22.21.1 to 22.23.4 to pick up Node.js security releases
+- Updated `@cumulus/api` and `@cumulus/aws-client` to 21.3.5
+
+
 ### Fixed
 
 ## [v14.2.1] - 2026-05-11
