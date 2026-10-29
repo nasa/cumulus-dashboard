@@ -99,7 +99,7 @@ In this example, the dashboard would be available at `http://localhost:3000/` in
 
 ### Build the dashboard
 
-The dashboard uses node v22.21.1. To build/run the dashboard on your local machine, install [nvm](https://github.com/creationix/nvm) and run `nvm install v22.21.1`.
+The dashboard uses node v22.23.4. To build/run the dashboard on your local machine, install [nvm](https://github.com/creationix/nvm) and run `nvm install v22.23.4`.
 
 #### install requirements
 We use npm for local package management. To install the requirements:
