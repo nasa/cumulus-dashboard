@@ -1,10 +1,10 @@
-version: "3"
 services:
-  localstack:
-    image: ${DOCKER_REPOSITORY}localstack/localstack:4.0.3
+  ministack:
+    image: ministackorg/ministack:1.5.34-full
     network_mode: "service:shim"
     environment:
-      SERVICES: "cloudformation,cloudwatch,cloudwatchlogs,dynamodb,iam,kinesis,kms,lambda,s3,secretsmanager,sns,sqs,stepfunctions,ssm,logs"
+      - SFTP_ENABLED=0
+      - SERVICES=athena,cloudformation,cloudwatch,cloudwatchlogs,dynamodb,iam,kinesis,kms,lambda,logs,s3,secretsmanager,sns,sqs,ssm,stepfunctions
   shim:   # empty container to open ports
     image: ${DOCKER_REPOSITORY}node:22.21.1
     command:
