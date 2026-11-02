@@ -4,7 +4,7 @@ services:
     network_mode: "service:shim"
     environment:
       - SFTP_ENABLED=0
-      - SERVICES=athena,cloudformation,cloudwatch,cloudwatchlogs,dynamodb,iam,kinesis,kms,lambda,logs,s3,secretsmanager,sns,sqs,ssm,stepfunctions
+      - SERVICES=athena,cloudformation,cloudwatch,dynamodb,iam,kinesis,kms,lambda,logs,s3,secretsmanager,sns,sqs,ssm,stepfunctions
   shim:   # empty container to open ports
     image: ${DOCKER_REPOSITORY}node:22.21.1
     command:

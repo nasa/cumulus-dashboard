@@ -1,4 +1,3 @@
-version: "3"
 services:
   serve_api:
     image: ${DOCKER_REPOSITORY}node:22.21.1
