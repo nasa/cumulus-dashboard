@@ -3,6 +3,22 @@
   "pass-enoaudit": true,
   "retry-count": 20,
   "allowlist": [
-    "GHSA-3ppc-4f35-3m26"
+    {
+      "GHSA-3ppc-4f35-3m26": {
+        "active": true
+      }
+    },
+    {
+      "SNYK-JS-EXTRACTZIP-17660777": {
+        "active": true,
+        "notes": "There is no fixed version for extract-zip currently available"
+      }
+    },
+    {
+      "SNYK-JS-EXTRACTZIP-19653641": {
+        "active": true,
+        "notes": "There is no fixed version for extract-zip currently available"
+      }
+    }
   ]
 }
