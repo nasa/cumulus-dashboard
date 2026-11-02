@@ -9,13 +9,13 @@
       }
     },
     {
-      "SNYK-JS-EXTRACTZIP-17660777": {
+      "GHSA-7pqw-9j4j-h8q3": {
         "active": true,
         "notes": "There is no fixed version for extract-zip currently available"
       }
     },
     {
-      "SNYK-JS-EXTRACTZIP-19653641": {
+      "GHSA-jmr9-qjv8-65gv": {
         "active": true,
         "notes": "There is no fixed version for extract-zip currently available"
       }
