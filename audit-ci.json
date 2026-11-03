@@ -19,12 +19,6 @@
         "active": true,
         "notes": "There is no fixed version for extract-zip currently available"
       }
-    },
-    {
-      "GHSA-qr28-fpjm-wq7f": {
-        "active": true,
-        "notes": "patch requires an ESM architecture change that breaks the existing CommonJS test suite, and the vulnerability itself is a client-side ReDoS that poses no denial-of-service risk"
-      }
     }
   ]
 }
