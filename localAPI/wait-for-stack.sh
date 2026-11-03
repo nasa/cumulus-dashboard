@@ -7,8 +7,8 @@
 set -e
 
 # Wait for MiniStack
-until curl --connect-timeout 5 -sSI http://localhost:4566/ 2>&1 | grep -E -q "HTTP/[1.2]+"; do
-   >&2 echo "MiniStack application is still booting - sleeping"
+until curl --connect-timeout 5 -sSI http://localhost:4566/_ministack/ready 2> /dev/null | head -n 1 | grep '200' > /dev/null; do
+   >&2 echo "Ministack is unavailable - sleeping"
    sleep 2
 done
 
