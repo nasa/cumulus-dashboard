@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 ### Changed
+- **CUMULUS-5832**
+  - Bumped node version from 22.21.1 to 22.23.4 to pick up Node.js security releases
 
 ### Fixed
 

@@ -3,6 +3,28 @@
   "pass-enoaudit": true,
   "retry-count": 20,
   "allowlist": [
-    "GHSA-3ppc-4f35-3m26"
+    {
+      "GHSA-3ppc-4f35-3m26": {
+        "active": true
+      }
+    },
+    {
+      "GHSA-7pqw-9j4j-h8q3": {
+        "active": true,
+        "notes": "There is no fixed version for extract-zip currently available"
+      }
+    },
+    {
+      "GHSA-jmr9-qjv8-65gv": {
+        "active": true,
+        "notes": "There is no fixed version for extract-zip currently available"
+      }
+    },
+    {
+      "GHSA-qr28-fpjm-wq7f": {
+        "active": true,
+        "notes": "patch requires an ESM architecture change that breaks the existing CommonJS test suite, and the vulnerability itself is a client-side ReDoS that poses no denial-of-service risk"
+      }
+    }
   ]
 }
