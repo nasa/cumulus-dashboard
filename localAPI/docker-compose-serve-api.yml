@@ -1,10 +1,9 @@
-version: "3"
 services:
   serve_api:
     image: ${DOCKER_REPOSITORY}node:22.23.4
     network_mode: "service:shim"
     depends_on:
-      - localstack
+      - ministack
     command: [ "./localAPI/wait-for-stack.sh", "./node_modules/@cumulus/api/bin/cli.js", "serve", "--no-reseed" ]
     working_dir:
       /cumulus-dashboard
