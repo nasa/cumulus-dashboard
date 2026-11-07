@@ -466,7 +466,11 @@ export const getOptionsCollectionName = (options) => ({
     type: types.OPTIONS_COLLECTIONNAME,
     method: 'GET',
     url: new URL('collections', root).href,
-    params: { limit: 'null', fields: 'name,version', sort_key: ['-timestamp'] }
+    params: {
+      limit: 'null',
+      fields: 'name,version,updatedAt,createdAt',
+      sort_key: ['-updatedAt']
+    }
   }
 });
 
