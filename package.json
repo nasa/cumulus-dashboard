@@ -1,6 +1,6 @@
 {
   "name": "@cumulus/cumulus-dashboard",
-  "version": "14.2.2",
+  "version": "14.2.3",
   "description": "A dashboard for Cumulus API",
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
   "homepage": "https://github.com/nasa/cumulus-dashboard",
   "private": true,
   "engines": {
-    "node": ">=22.21.1"
+    "node": ">=22.23.4"
   },
   "scripts": {
     "audit-ci": "audit-ci --config $(pwd)/audit-ci.json",
@@ -123,7 +123,7 @@
     "postcss-loader": "^6.2.1",
     "postcss-scss": "^4.0.2",
     "redux-mock-store": "^1.5.3",
-    "resolve-url-loader": "^4.0.0",
+    "resolve-url-loader": "^5.0.0",
     "sass": "^1.45.1",
     "sass-loader": "^12.4.0",
     "sass-resources-loader": "^2.1.1",
@@ -134,8 +134,8 @@
     "vinyl-source-stream": "^2.0.0",
     "webpack": "^5.83.1",
     "webpack-bundle-analyzer": "^4.5.0",
-    "webpack-cli": "^4.9.0",
-    "webpack-dev-server": "^4.7.1",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.2.7",
     "webpack-merge": "^5.8.0",
     "webpackbar": "^5.0.2"
   },
@@ -237,8 +237,12 @@
     "picomatch": "^2.3.2",
     "serialize-javascript": "^7.0.3",
     "tar": "^7.5.8",
-    "@xmldom/xmldom": "0.8.13",
+    "@xmldom/xmldom": "^0.8.15",
     "lodash": "^4.18.1",
-    "lodash-es": "^4.18.1"
+    "lodash-es": "^4.18.1",
+    "xmlbuilder2": {
+      "js-yaml": "^3.15.2"
+    },
+    "zod": "^4.6.6"
   }
 }
