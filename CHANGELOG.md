@@ -12,6 +12,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 ### Changed
+
+### Fixed
+
+## [v14.2.3] - 2026-11-09
+
+### Changed
+
 - **CUMULUS-5832**
   - Bumped node version from 22.21.1 to 22.23.4 to pick up Node.js security releases
 
@@ -20,7 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-## [v14.2.1] - 2026-05-11
+## [v14.2.2] - 2026-05-11
 
 ### Fixed
 
@@ -1657,7 +1664,8 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
-  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v14.2.2...HEAD
+  [Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v14.2.3...HEAD
+  [v14.2.3]: https://github.com/nasa/cumulus-dashboard/compare/v14.2.2...v14.2.3
   [v14.2.2]: https://github.com/nasa/cumulus-dashboard/compare/v14.2.1...v14.2.2
   [v14.2.1]: https://github.com/nasa/cumulus-dashboard/compare/v14.2.0...v14.2.1
   [v14.2.0]: https://github.com/nasa/cumulus-dashboard/compare/v14.1.0...v14.2.0

@@ -1,6 +1,6 @@
 {
   "name": "@cumulus/cumulus-dashboard",
-  "version": "14.2.2",
+  "version": "14.2.3",
   "description": "A dashboard for Cumulus API",
   "repository": {
     "type": "git",
